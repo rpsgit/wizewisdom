@@ -18,11 +18,12 @@ title: "Wizewisdom World"
 ---
 
 <a href="/books/features.html">📚 Books</a> | 
-<a href="#quotes">💭 Quotes</a> | 
+<a href="/quotes/entry.html>💭 Quotes</a> | 
 <a href="https://www.facebook.com/groups/lemons2lemonades">👥 Group</a> | 
 <a href="#lifestyle">🌿 Lifestyle</a> | 
 <a href="#gallery">🎨 Gallery</a> | 
 <a href="#socials">🌐 Socials</a>  
+
 
 
 
