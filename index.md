@@ -1,5 +1,5 @@
 
-<!--# Wizewisdom World -->
+# Wizewisdom World
 Choose a blog
 
 <div class="links">
@@ -18,5 +18,6 @@ Choose a blog
 <a href="#lifestyle">🌿 Lifestyle</a>  
 <a href="#gallery">🎨 Gallery</a>  
 <a href="#socials">🌐 Socials</a>  
+
 
 
