@@ -1,28 +1,3 @@
-title: Wizewisdom World
-description: A place for books, lifestyle, and wisdom through experience
-baseurl: "" # leave blank if main domain
-url: "https://rpsgit.github.io" # change to your site
 
 theme: minima
-
-# Author info
-author:
-  name: "Aimer"
-  bio: "Sharing wisdom through books, lifestyle, and lived experience."
-  picture: /images/author.jpg
-
-# Navigation
-navigation:
-  - title: "Home"
-    url: /
-  - title: "Books"
-    url: /books/
-  - title: "Lifestyle"
-    url: /lifestyle/
-  - title: "Gallery"
-    url: /gallery/
-  - title: "Quotes"
-    url: /quotes/
-  - title: "Socials"
-    url: /socials/
 
