@@ -88,6 +88,9 @@ title: Quotes
   fetch(apiUrl)
     .then(response => response.json())
     .then(files => {
+      // Sort filenames in descending order
+      files.sort((a, b) => b.name.localeCompare(a.name));
+
       files.forEach(file => {
         if (file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
           const img = document.createElement("img");
@@ -121,14 +124,12 @@ title: Quotes
     modal.style.display = "none";
   }
 
-  // Close modal on click outside image
   modal.onclick = function(e) {
     if (e.target === modal) {
       modal.style.display = "none";
     }
   }
 
-  // Close modal on Esc key
   document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
       modal.style.display = "none";
