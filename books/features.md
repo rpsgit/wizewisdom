@@ -3,5 +3,6 @@ layout: default
 title: Book Feature
 ---
 
-# Title
-This will hold featured book
+#Book Feature
+
+This will contain featured books
