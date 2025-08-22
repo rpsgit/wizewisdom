@@ -17,13 +17,12 @@ title: "Wizewisdom World"
 
 ---
 
-## Categories  
-
 <a href="#books">📚 Books</a> | 
 <a href="#quotes">💭 Quotes</a> | 
 <a href="https://www.facebook.com/groups/lemons2lemonades">👥 Group</a> | 
 <a href="#lifestyle">🌿 Lifestyle</a> | 
 <a href="#gallery">🎨 Gallery</a> | 
 <a href="#socials">🌐 Socials</a>  
+
 
 
