@@ -3,21 +3,27 @@ layout: home
 title: "Wizewisdom World"
 ---
 
-<div style="text-align: center;">
+<div style="background: url('bg1.png') no-repeat center center; 
+            background-size: cover; 
+            padding: 60px 20px; 
+            border-radius: 12px;">
 
-Choose a blog  
+  <div style="text-align: center; background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 20px;">
 
-<div class="links">
-  <a href="https://lemons2lemonades.blogspot.com/">🌱 Lemons To Lemonades</a><br>
-  <a href="https://featuresofinterestcom.wordpress.com/">🌱 Features Of Interest</a><br>
-  <a href="https://notorandom.wordpress.com/">🌱 No To Random ()</a><br>
-</div>
+  <h2>Choose a blog</h2>  
+
+  <div class="links" style="margin-top: 15px;">
+    <a href="https://lemons2lemonades.blogspot.com/">🌱 Lemons To Lemonades</a><br>
+    <a href="https://featuresofinterestcom.wordpress.com/">🌱 Features Of Interest</a><br>
+    <a href="https://notorandom.wordpress.com/">🌱 No To Random ()</a><br>
+  </div>
+
+  </div>
 
 </div>
 
 ---
 
-  
 ## Categories  
 
 <a href="#books">📚 Books</a> | 
@@ -26,5 +32,3 @@ Choose a blog
 <a href="#lifestyle">🌿 Lifestyle</a> | 
 <a href="#gallery">🎨 Gallery</a> | 
 <a href="#socials">🌐 Socials</a>  
-
-
