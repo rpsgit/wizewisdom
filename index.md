@@ -1,7 +1,3 @@
----
-layout: home
-title: Wizewisdom World
----
 
 <!--# Wizewisdom World -->
 Choose a blog
@@ -22,4 +18,5 @@ Choose a blog
 <a href="#lifestyle">🌿 Lifestyle</a>  
 <a href="#gallery">🎨 Gallery</a>  
 <a href="#socials">🌐 Socials</a>  
+
 
