@@ -1,1 +1,28 @@
+title: Wizewisdom World
+description: A place for books, lifestyle, and wisdom through experience
+baseurl: "" # leave blank if main domain
+url: "https://yourusername.github.io" # change to your site
+
+theme: jekyll-theme-so-simple
+
+# Author info
+author:
+  name: "Your Name"
+  bio: "Sharing wisdom through books, lifestyle, and lived experience."
+  picture: /images/author.jpg
+
+# Navigation
+navigation:
+  - title: "Home"
+    url: /
+  - title: "Books"
+    url: /books/
+  - title: "Lifestyle"
+    url: /lifestyle/
+  - title: "Gallery"
+    url: /gallery/
+  - title: "Quotes"
+    url: /quotes/
+  - title: "Socials"
+    url: /socials/
 
