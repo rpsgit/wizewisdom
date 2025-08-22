@@ -3,11 +3,6 @@ layout: home
 title: "Wizewisdom World"
 ---
 
-<div style="background: url('bg1.png') no-repeat center center; 
-            background-size: cover; 
-            padding: 60px 20px; 
-            border-radius: 12px;">
-
   <div style="text-align: center; background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 20px;">
 
   <h2>Choose a blog</h2>  
@@ -20,8 +15,6 @@ title: "Wizewisdom World"
 
   </div>
 
-</div>
-
 ---
 
 ## Categories  
@@ -32,3 +25,4 @@ title: "Wizewisdom World"
 <a href="#lifestyle">🌿 Lifestyle</a> | 
 <a href="#gallery">🎨 Gallery</a> | 
 <a href="#socials">🌐 Socials</a>  
+
