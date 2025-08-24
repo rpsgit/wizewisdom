@@ -157,32 +157,49 @@ title: Quotes
   let images = [];
   let currentIndex = 0;
 
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(files => {
-      files.sort((a, b) => b.name.localeCompare(a.name));
-      files.forEach((file, index) => {
-        if (file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
-          const imgUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`;
-          images.push(imgUrl);
+  // Natural sort function (handles numbers properly)
+function naturalSort(a, b) {
+  return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+}
 
-          const img = document.createElement("img");
-          img.src = imgUrl;
-          img.alt = file.name;
-          img.addEventListener("click", () => openModal(index));
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(files => {
+    // Filter only image files
+    let imageFiles = files.filter(file => 
+      file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)
+    );
 
-          if (index === 0) {
-            latestImageDiv.appendChild(img);
-          } else {
-            gallery.appendChild(img);
-          }
-        }
-      });
-    })
-    .catch(error => {
-      gallery.innerHTML = "<p>⚠️ Could not load images. Check repo settings.</p>";
-      console.error("Error loading images:", error);
+    // Sort descending using natural sort
+    imageFiles.sort((a, b) => naturalSort(b, a));
+
+    // Build image URLs in sorted order
+    images = imageFiles.map(file => 
+      `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`
+    );
+
+    // Render latest image (first one)
+    if (images.length > 0) {
+      const latestImg = document.createElement("img");
+      latestImg.src = images[0];
+      latestImg.alt = imageFiles[0].name;
+      latestImg.addEventListener("click", () => openModal(0));
+      latestImageDiv.appendChild(latestImg);
+    }
+
+    // Render rest of the gallery
+    images.slice(1).forEach((imgUrl, index) => {
+      const img = document.createElement("img");
+      img.src = imgUrl;
+      img.alt = imageFiles[index + 1].name;
+      img.addEventListener("click", () => openModal(index + 1));
+      gallery.appendChild(img);
     });
+  })
+  .catch(error => {
+    gallery.innerHTML = "<p>⚠️ Could not load images. Check repo settings.</p>";
+    console.error("Error loading images:", error);
+  });
 
   const modal = document.getElementById("imgModal");
   const modalImg = document.getElementById("modalImg");
