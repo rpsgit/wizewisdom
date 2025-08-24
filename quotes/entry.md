@@ -5,27 +5,50 @@ title: Quotes
 
 # Quotes
 
+<div id="latest-image"></div>
 <div class="gallery" id="gallery"></div>
 
 <!-- Modal for full-size view -->
 <div id="imgModal" class="modal">
   <span class="close">&times;</span>
+  <span class="prev">&#10094;</span>
+  <span class="next">&#10095;</span>
   <img class="modal-content" id="modalImg">
   <div id="caption"></div>
+
+  <!-- Buttons -->
+  <div class="modal-actions">
+    <a id="downloadBtn" download class="download-btn">⬇ Download</a>
+    <button id="shareBtn" class="share-btn">🔗 Share</button>
+  </div>
 </div>
 
 <style>
+  /* Latest image styling */
+  #latest-image img {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+
+  /* Gallery */
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
-    padding: 20px;
+    padding: 10px;
     max-width: 1200px;
     margin: auto;
   }
   .gallery img {
     width: 100%;
-    height: auto;
+    height: 140px;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     cursor: pointer;
@@ -45,7 +68,7 @@ title: Quotes
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     background-color: rgba(0,0,0,0.9);
   }
   .modal-content {
@@ -54,6 +77,7 @@ title: Quotes
     max-width: 90%;
     max-height: 80vh;
     border-radius: 10px;
+    transition: transform 0.3s ease;
   }
   #caption {
     margin: 15px auto;
@@ -71,9 +95,53 @@ title: Quotes
     cursor: pointer;
     transition: color 0.3s;
   }
-  .close:hover {
-    color: #f00;
+  .close:hover { color: #f00; }
+
+  /* Arrows */
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    transition: 0.3s;
+    user-select: none;
   }
+  .prev { left: 20px; }
+  .next { right: 20px; }
+  .prev:hover, .next:hover { color: #f00; }
+
+  /* Action buttons (download + share) */
+  .modal-actions {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+  }
+  .download-btn, .share-btn {
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .download-btn {
+    background: #28a745;
+    color: white;
+  }
+  .download-btn:hover { background: #218838; }
+  .share-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+  }
+  .share-btn:hover { background: #0069d9; }
 </style>
 
 <script>
@@ -84,22 +152,30 @@ title: Quotes
 
   const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
   const gallery = document.getElementById("gallery");
+  const latestImageDiv = document.getElementById("latest-image");
+
+  let images = [];
+  let currentIndex = 0;
 
   fetch(apiUrl)
     .then(response => response.json())
     .then(files => {
-      // Sort filenames in descending order
       files.sort((a, b) => b.name.localeCompare(a.name));
-
-      files.forEach(file => {
+      files.forEach((file, index) => {
         if (file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
-          const img = document.createElement("img");
-          img.src = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`;
-          img.alt = file.name;
+          const imgUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`;
+          images.push(imgUrl);
 
-          // Add click event to open modal
-          img.addEventListener("click", () => openModal(img.src, img.alt));
-          gallery.appendChild(img);
+          const img = document.createElement("img");
+          img.src = imgUrl;
+          img.alt = file.name;
+          img.addEventListener("click", () => openModal(index));
+
+          if (index === 0) {
+            latestImageDiv.appendChild(img);
+          } else {
+            gallery.appendChild(img);
+          }
         }
       });
     })
@@ -108,31 +184,87 @@ title: Quotes
       console.error("Error loading images:", error);
     });
 
-  // Modal logic
   const modal = document.getElementById("imgModal");
   const modalImg = document.getElementById("modalImg");
   const captionText = document.getElementById("caption");
   const closeBtn = document.getElementsByClassName("close")[0];
+  const prevBtn = document.querySelector(".prev");
+  const nextBtn = document.querySelector(".next");
+  const downloadBtn = document.getElementById("downloadBtn");
+  const shareBtn = document.getElementById("shareBtn");
 
-  function openModal(src, alt) {
+  function openModal(index) {
     modal.style.display = "block";
-    modalImg.src = src;
-    captionText.innerHTML = alt;
+    currentIndex = index;
+    updateModalImage();
   }
 
-  closeBtn.onclick = function() {
-    modal.style.display = "none";
+  function updateModalImage() {
+    modalImg.src = images[currentIndex];
+    captionText.innerHTML = images[currentIndex].split("/").pop();
+    downloadBtn.href = images[currentIndex];
   }
 
-  modal.onclick = function(e) {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
-  }
+  closeBtn.onclick = () => modal.style.display = "none";
+  modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
   document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") {
-      modal.style.display = "none";
+    if (e.key === "Escape") modal.style.display = "none";
+    if (e.key === "ArrowRight") nextImage();
+    if (e.key === "ArrowLeft") prevImage();
+  });
+
+  prevBtn.onclick = prevImage;
+  nextBtn.onclick = nextImage;
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateModalImage();
+  }
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    updateModalImage();
+  }
+
+  // Share button logic
+  shareBtn.onclick = () => {
+    const url = images[currentIndex];
+    if (navigator.share) {
+      navigator.share({
+        title: "Check out this quote!",
+        text: "Found this inspiring quote image ✨",
+        url: url
+      }).catch(err => console.log("Share canceled", err));
+    } else {
+      // Fallback: prompt options
+      const shareOptions = `
+        Share this image:
+        🔗 Copy Link: ${url}
+        🐦 Twitter: https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}
+        📘 Facebook: https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}
+      `;
+      alert(shareOptions);
     }
+  };
+
+  // Swipe support (mobile)
+  let startX = 0, startY = 0;
+  modalImg.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
+  modalImg.addEventListener("touchend", (e) => {
+    if (!startX || !startY) return;
+    let endX = e.changedTouches[0].clientX;
+    let endY = e.changedTouches[0].clientY;
+    let diffX = endX - startX;
+    let diffY = endY - startY;
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 50) prevImage();
+      else if (diffX < -50) nextImage();
+    } else {
+      if (diffY > 50) modal.style.display = "none";
+    }
+    startX = 0; startY = 0;
   });
 </script>
