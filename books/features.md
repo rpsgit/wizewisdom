@@ -5,4 +5,4 @@ title: Book Feature
 
 # Book Feature
 
-{% include feature1.html %}
+[“Map of Consciousness” by David R. Hawkins](feature1.html)
