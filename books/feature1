@@ -1,3 +1,9 @@
+---
+layout: default
+title: Map of Consciousness
+permalink: /books/feature1/
+---
+
 # 📖 Summary: Map of Consciousness
 
 David R. Hawkins introduces a scale of human consciousness that ranks emotions, thoughts, and states of being on a logarithmic scale from **0 to 1000**, where higher levels represent greater truth, love, and spiritual awareness.
@@ -19,4 +25,4 @@ Progress upward, transcending fear, anger, pride, and guilt toward peace and enl
 
 ---
 
-![Map of Consciousness](assets/images/feature1.png)
+![Map of Consciousness](/assets/images/feature1.png)
