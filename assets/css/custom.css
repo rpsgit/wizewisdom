@@ -1,1 +1,9 @@
+/* Full-screen background for the entire page */
+body {
+  background: url('/assets/images/background.jpg') no-repeat center center fixed;
+  background-size: cover; /* Makes the image cover the whole screen */
+  background-attachment: fixed; /* Keeps it steady when scrolling */
+  margin: 0;
+  padding: 0;
+}
 
