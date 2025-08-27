@@ -1,9 +1,14 @@
 /* Full-screen background for the entire page */
 body {
   background: url('/assets/images/bg0.png') no-repeat center center fixed;
-  background-size: cover; /* Makes the image cover the whole screen */
-  background-attachment: fixed; /* Keeps it steady when scrolling */
+  background-size: cover;
   margin: 0;
   padding: 0;
 }
 
+/* Remove the white wrapper so background shows */
+.wrap,
+.site {
+  background: transparent !important;
+  box-shadow: none !important;
+}
