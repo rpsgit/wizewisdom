@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title }}</title>
+  <style>
+    body {
+      background-color: #111; /* dark background for contrast */
+      font-family: Arial, sans-serif;
+    }
+    .content {
+      color: white;           /* make text white */
+      max-width: 800px;       /* limit line length */
+      margin: 0 auto;         /* center the block */
+      padding: 40px 20px;     /* spacing around */
+      line-height: 1.6;       /* improve readability */
+    }
+    h1, h2, h3 {
+      color: #ffd700;         /* optional: headings in gold */
+    }
+  </style>
+</head>
+<body>
+  <main class="content">
+    {{ content }}
+  </main>
+</body>
+</html>
