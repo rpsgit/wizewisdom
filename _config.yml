@@ -3,6 +3,10 @@ plugins:
 
 remote_theme: mmistakes/so-simple-theme
 
+# Add custom head include
+head_scripts:
+  - head-custom.html
+
 sass:
   style: compressed
 
