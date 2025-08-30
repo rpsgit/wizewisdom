@@ -144,6 +144,33 @@ title: Quotes
   .share-btn:hover { background: #0069d9; }
 </style>
 
+<div style="display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+
+  <!-- Previous Button -->
+  <button style="background: #f4f4f4; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-right: 15px;">
+    ⬅ Previous
+  </button>
+
+  <!-- Highlighted Image -->
+  <div style="position: relative; display: inline-block;">
+    <img src="https://via.placeholder.com/400x250" alt="Highlighted Image" 
+         style="border-radius: 12px; 
+                border: 6px solid transparent; 
+                background: linear-gradient(white, rgba(255,255,255,0.6)) padding-box, 
+                            linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.4)) border-box; 
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+                max-width: 100%; 
+                height: auto;">
+  </div>
+
+  <!-- Next Button -->
+  <button style="background: #f4f4f4; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-left: 15px;">
+    Next ➡
+  </button>
+
+</div>
+
+
 <script>
   const username = "rpsgit";       
   const repo = "wizewisdom";       
