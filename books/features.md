@@ -44,7 +44,7 @@ title: Book Feature
 </style>
 
 <div class="content">
-  <h1>📚 Book Feature</h1>
+  <h1>Book Feature</h1>
 
   <div style="display: flex; justify-content: center; margin: 20px 0;">
     <table>
