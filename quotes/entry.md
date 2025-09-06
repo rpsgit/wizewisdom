@@ -17,63 +17,62 @@ title: Quotes
     color: #222;
   }
 
-  /* Image containers with action buttons */
-  .image-container {
-    position: relative;
-    display: inline-block;
-  }
-  .image-container img {
+  /* Latest image */
+  #latest-image img {
     width: 100%;
     height: auto;
-    border-radius: 10px;
-    display: block;
+    max-height: 70vh;
+    object-fit: contain;
+    justify-content: center;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-  .image-actions {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    display: flex;
-    gap: 6px;
-  }
-  .image-actions button, 
-  .image-actions a {
-    background: rgba(255,255,255,0.9);
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: background 0.2s;
-    text-decoration: none;
-    color: #222;
-    font-weight: bold;
-  }
-  .image-actions button:hover,
-  .image-actions a:hover {
-    background: #f0f0f0;
   }
 
-  /* Gallery grid */
+  /* Gallery */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     margin: auto;
   }
-  .gallery .image-container img {
+  .gallery img {
+    width: 100%;
     height: 140px;
     object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
   }
+  .gallery img:hover { transform: scale(1.05); }
 
-  /* Latest image styling */
-  #latest-image .image-container img {
-    width: 100%;
-    max-height: 70vh;
-    object-fit: contain;
-    margin-bottom: 30px;
+  /* Highlighted block */
+  .highlighted-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    gap: 15px;
+  }
+  .highlighted-block button {
+    background: #f4f4f4;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .highlighted-block img {
+    border-radius: 12px;
+    border: 6px solid transparent;
+    background: linear-gradient(white, rgba(255,255,255,0.6)) padding-box, 
+                linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.4)) border-box; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+    max-width: 100%; 
+    height: auto;
   }
 
   /* Modal */
@@ -92,6 +91,7 @@ title: Quotes
     max-width: 90%;
     max-height: 80vh;
     border-radius: 10px;
+    transition: transform 0.3s ease;
   }
   #caption {
     margin: 15px auto;
@@ -107,7 +107,7 @@ title: Quotes
     font-weight: bold;
     cursor: pointer;
   }
-  .close:hover { color: #f00; }
+  .close:hover { color: #1f9202ff; }
 
   /* Arrows */
   .prev, .next {
@@ -122,7 +122,7 @@ title: Quotes
   }
   .prev { left: 20px; }
   .next { right: 20px; }
-  .prev:hover, .next:hover { color: #f00; }
+  .prev:hover, .next:hover { color: #1f9202ff; }
 
   /* Modal buttons */
   .modal-actions {
@@ -141,10 +141,10 @@ title: Quotes
     text-decoration: none;
     cursor: pointer;
   }
-  .download-btn { background: #28a745; color: white; }
-  .download-btn:hover { background: #218838; }
-  .share-btn { background: #007bff; color: white; border: none; }
-  .share-btn:hover { background: #0069d9; }
+  .download-btn { background: #22a102e3; color: white; }
+  .download-btn:hover { background: #1f9202ff; }
+  .share-btn { background: #22a102e3; color: white; border: none; }
+  .share-btn:hover { background: #1f9202ff; }
 </style>
 
 <div class="content-box">
@@ -193,79 +193,26 @@ title: Quotes
       images = imageFiles.map(file => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`);
 
       if (images.length > 0) {
-        const latestImgContainer = document.createElement("div");
-        latestImgContainer.className = "image-container";
-        
         const latestImg = document.createElement("img");
         latestImg.src = images[0];
         latestImg.alt = imageFiles[0].name;
         latestImg.addEventListener("click", () => openModal(0));
-
-        const actions = createImageActions(images[0], 0);
-
-        latestImgContainer.appendChild(latestImg);
-        latestImgContainer.appendChild(actions);
-        latestImageDiv.appendChild(latestImgContainer);
+        latestImageDiv.appendChild(latestImg);
       }
 
       images.slice(1).forEach((imgUrl, index) => {
-        const container = document.createElement("div");
-        container.className = "image-container";
-
         const img = document.createElement("img");
         img.src = imgUrl;
         img.alt = imageFiles[index + 1].name;
         img.addEventListener("click", () => openModal(index + 1));
-
-        const actions = createImageActions(imgUrl, index + 1);
-
-        container.appendChild(img);
-        container.appendChild(actions);
-        gallery.appendChild(container);
+        gallery.appendChild(img);
       });
     })
     .catch(error => {
-      gallery.innerHTML = "<p>⚠️ Error loading images.</p>";
+      gallery.innerHTML = "<p>⚠️ Oops.. sorry love there seems to be an error.</p>";
       console.error("Error loading images:", error);
     });
 
-  function createImageActions(imgUrl, index) {
-    const actionsDiv = document.createElement("div");
-    actionsDiv.className = "image-actions";
-
-    const reactBtn = document.createElement("button");
-    reactBtn.innerHTML = "❤️";
-    reactBtn.onclick = (e) => {
-      e.stopPropagation();
-      alert("You reacted ❤️");
-    };
-
-    const downloadLink = document.createElement("a");
-    downloadLink.href = imgUrl;
-    downloadLink.download = "";
-    downloadLink.innerHTML = "⬇";
-
-    const shareBtn = document.createElement("button");
-    shareBtn.innerHTML = "🔗";
-    shareBtn.onclick = (e) => {
-      e.stopPropagation();
-      if (navigator.share) {
-        navigator.share({
-          title: "Check this out",
-          url: imgUrl
-        });
-      } else {
-        alert(`Share this link:\n${imgUrl}`);
-      }
-    };
-
-    actionsDiv.appendChild(reactBtn);
-    actionsDiv.appendChild(downloadLink);
-    actionsDiv.appendChild(shareBtn);
-    return actionsDiv;
-  }
-
-  // Modal logic
   const modal = document.getElementById("imgModal");
   const modalImg = document.getElementById("modalImg");
   const captionText = document.getElementById("caption");
@@ -289,6 +236,12 @@ title: Quotes
   closeBtn.onclick = () => modal.style.display = "none";
   modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") modal.style.display = "none";
+    if (e.key === "ArrowRight") nextImage();
+    if (e.key === "ArrowLeft") prevImage();
+  });
+
   prevBtn.onclick = prevImage;
   nextBtn.onclick = nextImage;
 
@@ -305,11 +258,30 @@ title: Quotes
     const url = images[currentIndex];
     if (navigator.share) {
       navigator.share({
-        title: "Check this out",
+        title: "Check out this quote!",
+        text: "Found this inspiring quote",
         url: url
-      });
+      }).catch(err => console.log("Share canceled", err));
     } else {
-      alert(`Share this link:\n${url}`);
+      alert(`Share this image:\n🔗 ${url}`);
     }
   };
+
+  // Mobile swipe
+  let startX = 0, startY = 0;
+  modalImg.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
+  modalImg.addEventListener("touchend", (e) => {
+    if (!startX || !startY) return;
+    let endX = e.changedTouches[0].clientX;
+    let endY = e.changedTouches[0].clientY;
+    let diffX = endX - startX, diffY = endY - startY;
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 50) prevImage();
+      else if (diffX < -50) nextImage();
+    } else if (diffY > 50) modal.style.display = "none";
+    startX = 0; startY = 0;
+  });
 </script>
