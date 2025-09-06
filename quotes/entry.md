@@ -171,7 +171,7 @@ title: Quotes
   const username = "rpsgit";       
   const repo = "wizewisdom";       
   const branch = "main";           
-  const folder = "assets/images";  
+  const folder = "assets/images/quotes";  
 
   const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
   const gallery = document.getElementById("gallery");
