@@ -3,28 +3,21 @@ layout: default
 title: Quotes
 ---
 
-# Quotes
-
-<div id="latest-image"></div>
-<div class="gallery" id="gallery"></div>
-
-<!-- Modal for full-size view -->
-<div id="imgModal" class="modal">
-  <span class="close">&times;</span>
-  <span class="prev">&#10094;</span>
-  <span class="next">&#10095;</span>
-  <img class="modal-content" id="modalImg">
-  <div id="caption"></div>
-
-  <!-- Buttons -->
-  <div class="modal-actions">
-    <a id="downloadBtn" download class="download-btn">⬇ Download</a>
-    <button id="shareBtn" class="share-btn">🔗 Share</button>
-  </div>
-</div>
-
 <style>
-  /* Latest image styling */
+  .content-box {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  h1 {
+    text-align: center;
+    color: #222;
+  }
+
+  /* Latest image */
   #latest-image img {
     width: 100%;
     height: auto;
@@ -41,8 +34,6 @@ title: Quotes
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
-    padding: 10px;
-    max-width: 1200px;
     margin: auto;
   }
   .gallery img {
@@ -54,21 +45,43 @@ title: Quotes
     cursor: pointer;
     transition: transform 0.2s;
   }
-  .gallery img:hover {
-    transform: scale(1.05);
+  .gallery img:hover { transform: scale(1.05); }
+
+  /* Highlighted block */
+  .highlighted-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    gap: 15px;
+  }
+  .highlighted-block button {
+    background: #f4f4f4;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .highlighted-block img {
+    border-radius: 12px;
+    border: 6px solid transparent;
+    background: linear-gradient(white, rgba(255,255,255,0.6)) padding-box, 
+                linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.4)) border-box; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+    max-width: 100%; 
+    height: auto;
   }
 
-  /* Modal styles */
+  /* Modal */
   .modal {
     display: none;
     position: fixed;
     z-index: 9999;
     padding-top: 60px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.9);
   }
   .modal-content {
@@ -87,13 +100,11 @@ title: Quotes
   }
   .close {
     position: absolute;
-    top: 15px;
-    right: 30px;
+    top: 15px; right: 30px;
     color: #fff;
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s;
   }
   .close:hover { color: #f00; }
 
@@ -106,14 +117,13 @@ title: Quotes
     color: white;
     font-weight: bold;
     font-size: 40px;
-    transition: 0.3s;
     user-select: none;
   }
   .prev { left: 20px; }
   .next { right: 20px; }
   .prev:hover, .next:hover { color: #f00; }
 
-  /* Action buttons (download + share) */
+  /* Modal buttons */
   .modal-actions {
     position: absolute;
     bottom: 40px;
@@ -129,47 +139,40 @@ title: Quotes
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.3s;
   }
-  .download-btn {
-    background: #28a745;
-    color: white;
-  }
+  .download-btn { background: #28a745; color: white; }
   .download-btn:hover { background: #218838; }
-  .share-btn {
-    background: #007bff;
-    color: white;
-    border: none;
-  }
+  .share-btn { background: #007bff; color: white; border: none; }
   .share-btn:hover { background: #0069d9; }
 </style>
 
-<div style="display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+<div class="content-box">
+  <h1>Quotes</h1>
 
-  <!-- Previous Button -->
-  <button style="background: #f4f4f4; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-right: 15px;">
-    ⬅ Previous
-  </button>
-
-  <!-- Highlighted Image -->
-  <div style="position: relative; display: inline-block;">
-    <img src="https://via.placeholder.com/400x250" alt="Highlighted Image" 
-         style="border-radius: 12px; 
-                border: 6px solid transparent; 
-                background: linear-gradient(white, rgba(255,255,255,0.6)) padding-box, 
-                            linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.4)) border-box; 
-                box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
-                max-width: 100%; 
-                height: auto;">
+  <!-- Highlighted Image with Prev/Next -->
+  <div class="highlighted-block">
+    <button>⬅ Previous</button>
+    <img src="https://via.placeholder.com/400x250" alt="Highlighted Image">
+    <button>Next ➡</button>
   </div>
 
-  <!-- Next Button -->
-  <button style="background: #f4f4f4; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-left: 15px;">
-    Next ➡
-  </button>
+  <!-- Latest + Gallery -->
+  <div id="latest-image"></div>
+  <div class="gallery" id="gallery"></div>
 
+  <!-- Modal -->
+  <div id="imgModal" class="modal">
+    <span class="close">&times;</span>
+    <span class="prev">&#10094;</span>
+    <span class="next">&#10095;</span>
+    <img class="modal-content" id="modalImg">
+    <div id="caption"></div>
+    <div class="modal-actions">
+      <a id="downloadBtn" download class="download-btn">⬇ Download</a>
+      <button id="shareBtn" class="share-btn">🔗 Share</button>
+    </div>
+  </div>
 </div>
-
 
 <script>
   const username = "rpsgit";       
@@ -184,49 +187,37 @@ title: Quotes
   let images = [];
   let currentIndex = 0;
 
-  // Natural sort function (handles numbers properly)
-function naturalSort(a, b) {
-  return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
-}
+  function naturalSort(a, b) {
+    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+  }
 
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(files => {
-    // Filter only image files
-    let imageFiles = files.filter(file => 
-      file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)
-    );
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(files => {
+      let imageFiles = files.filter(file => file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name));
+      imageFiles.sort((a, b) => naturalSort(b, a));
+      images = imageFiles.map(file => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`);
 
-    // Sort descending using natural sort
-    imageFiles.sort((a, b) => naturalSort(b, a));
+      if (images.length > 0) {
+        const latestImg = document.createElement("img");
+        latestImg.src = images[0];
+        latestImg.alt = imageFiles[0].name;
+        latestImg.addEventListener("click", () => openModal(0));
+        latestImageDiv.appendChild(latestImg);
+      }
 
-    // Build image URLs in sorted order
-    images = imageFiles.map(file => 
-      `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`
-    );
-
-    // Render latest image (first one)
-    if (images.length > 0) {
-      const latestImg = document.createElement("img");
-      latestImg.src = images[0];
-      latestImg.alt = imageFiles[0].name;
-      latestImg.addEventListener("click", () => openModal(0));
-      latestImageDiv.appendChild(latestImg);
-    }
-
-    // Render rest of the gallery
-    images.slice(1).forEach((imgUrl, index) => {
-      const img = document.createElement("img");
-      img.src = imgUrl;
-      img.alt = imageFiles[index + 1].name;
-      img.addEventListener("click", () => openModal(index + 1));
-      gallery.appendChild(img);
+      images.slice(1).forEach((imgUrl, index) => {
+        const img = document.createElement("img");
+        img.src = imgUrl;
+        img.alt = imageFiles[index + 1].name;
+        img.addEventListener("click", () => openModal(index + 1));
+        gallery.appendChild(img);
+      });
+    })
+    .catch(error => {
+      gallery.innerHTML = "<p>⚠️ Oops.. sorry love there seems to be an error.</p>";
+      console.error("Error loading images:", error);
     });
-  })
-  .catch(error => {
-    gallery.innerHTML = "<p>⚠️ Could not load images. Check repo settings.</p>";
-    console.error("Error loading images:", error);
-  });
 
   const modal = document.getElementById("imgModal");
   const modalImg = document.getElementById("modalImg");
@@ -242,7 +233,6 @@ fetch(apiUrl)
     currentIndex = index;
     updateModalImage();
   }
-
   function updateModalImage() {
     modalImg.src = images[currentIndex];
     captionText.innerHTML = images[currentIndex].split("/").pop();
@@ -252,7 +242,7 @@ fetch(apiUrl)
   closeBtn.onclick = () => modal.style.display = "none";
   modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
-  document.addEventListener("keydown", function(e) {
+  document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") modal.style.display = "none";
     if (e.key === "ArrowRight") nextImage();
     if (e.key === "ArrowLeft") prevImage();
@@ -270,7 +260,6 @@ fetch(apiUrl)
     updateModalImage();
   }
 
-  // Share button logic
   shareBtn.onclick = () => {
     const url = images[currentIndex];
     if (navigator.share) {
@@ -280,18 +269,11 @@ fetch(apiUrl)
         url: url
       }).catch(err => console.log("Share canceled", err));
     } else {
-      // Fallback: prompt options
-      const shareOptions = `
-        Share this image:
-        🔗 Copy Link: ${url}
-        🐦 Twitter: https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}
-        📘 Facebook: https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}
-      `;
-      alert(shareOptions);
+      alert(`Share this image:\n🔗 ${url}`);
     }
   };
 
-  // Swipe support (mobile)
+  // Mobile swipe
   let startX = 0, startY = 0;
   modalImg.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
@@ -301,14 +283,11 @@ fetch(apiUrl)
     if (!startX || !startY) return;
     let endX = e.changedTouches[0].clientX;
     let endY = e.changedTouches[0].clientY;
-    let diffX = endX - startX;
-    let diffY = endY - startY;
+    let diffX = endX - startX, diffY = endY - startY;
     if (Math.abs(diffX) > Math.abs(diffY)) {
       if (diffX > 50) prevImage();
       else if (diffX < -50) nextImage();
-    } else {
-      if (diffY > 50) modal.style.display = "none";
-    }
+    } else if (diffY > 50) modal.style.display = "none";
     startX = 0; startY = 0;
   });
 </script>
