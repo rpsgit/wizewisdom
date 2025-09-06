@@ -4,14 +4,7 @@ title: Book Feature
 ---
 
 <style>
-  body {
-    font-family: "Quicksand", Arial, sans-serif;
-    background: url('https://images.unsplash.com/photo-1502877338535-766e1452684a') no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
-    color: #333;
-  }
+
   .content {
     max-width: 900px;
     margin: 40px auto;
@@ -87,7 +80,6 @@ title: Book Feature
           <td><a href="/books/feature6.html">“My Big TOE”</a></td>
           <td>Thomas Campbell</td>
         </tr>
-      </tbody>
-    </table>
+     </table>
   </div>
 </div>
