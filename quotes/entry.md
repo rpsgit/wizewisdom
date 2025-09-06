@@ -23,7 +23,7 @@ title: Quotes
     height: auto;
     max-height: 70vh;
     object-fit: contain;
-    justify-content: center;
+    align-items: center;
     border-radius: 12px;
     margin-bottom: 30px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.15);
@@ -143,7 +143,7 @@ title: Quotes
   }
   .download-btn { background: #22a102e3; color: white; }
   .download-btn:hover { background: #1f9202ff; }
-  .share-btn { background: #22a102e3; color: white; border: none; }
+  .share-btn { background: #22a102e3; color: white; }
   .share-btn:hover { background: #1f9202ff; }
 </style>
 
