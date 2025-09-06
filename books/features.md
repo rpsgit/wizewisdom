@@ -4,7 +4,6 @@ title: Book Feature
 ---
 
 <style>
-
   .content {
     max-width: 900px;
     margin: 40px auto;
@@ -80,6 +79,7 @@ title: Book Feature
           <td><a href="/books/feature6.html">“My Big TOE”</a></td>
           <td>Thomas Campbell</td>
         </tr>
-     </table>
+      </tbody>
+    </table>
   </div>
 </div>
