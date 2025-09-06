@@ -149,13 +149,6 @@ title: Quotes
 <div class="content-box">
   <h1>Quotes</h1>
 
-  <!-- Highlighted Image with Prev/Next -->
-  <div class="highlighted-block">
-    <button>⬅ Previous</button>
-    <img src="https://via.placeholder.com/400x250" alt="Highlighted Image">
-    <button>Next ➡</button>
-  </div>
-
   <!-- Latest + Gallery -->
   <div id="latest-image"></div>
   <div class="gallery" id="gallery"></div>
