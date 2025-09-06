@@ -1,0 +1,72 @@
+---
+layout: default
+title: My Big TOE
+---
+
+<style>
+  .content-box {
+    max-width: 900px;
+    margin: 40px auto;
+    background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    color: #222;
+  }
+  ul {
+    margin: 15px 0;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 8px;
+  }
+  strong {
+    color: #2a5d9f;
+  }
+</style>
+
+<div class="content-box">
+  <h1>My Big TOE</h1>
+  <h2>by Thomas Campbell</h2>
+
+  <h3>Core Idea</h3>
+  <p>
+    Campbell, a physicist and consciousness explorer, proposes that <strong>reality is fundamentally made of consciousness</strong>, not matter. 
+    What we call the “physical world” is a kind of <em>virtual reality</em>, generated within a larger system he calls the 
+    <strong>Larger Consciousness System (LCS)</strong>.
+  </p>
+  <p>
+    His “TOE” explains everything—physics, metaphysics, spirituality—under one framework: 
+    <strong>we are individuated units of consciousness evolving toward love (lower entropy)</strong>.
+  </p>
+
+  <h3>Key Insights</h3>
+  <ul>
+    <li><strong>Consciousness is Primary:</strong> Matter is secondary, like pixels on a screen. Your awareness is the real “player.”</li>
+    <li><strong>Life as a Simulation:</strong> Physical reality is a training ground for consciousness to evolve.</li>
+    <li><strong>Entropy and Love:</strong> Lowering personal entropy (becoming more ordered, less selfish) = growing in love.</li>
+    <li><strong>Free Will is Central:</strong> Choice is the engine of growth; every decision shapes your consciousness.</li>
+    <li><strong>Multiple Realities:</strong> Dreams, out-of-body experiences, and non-physical realities are just different data streams within the LCS.</li>
+  </ul>
+
+  <h3>How to Apply Daily</h3>
+  <ul>
+    <li><strong>Make Choices Toward Love:</strong> Ask, “Am I acting out of fear, ego, or out of care and growth?”</li>
+    <li><strong>Reduce Entropy:</strong> Simplify life where possible—less chaos, more clarity, healthier systems.</li>
+    <li><strong>Meditate:</strong> Quiet the mind to access deeper levels of consciousness and intuition.</li>
+    <li><strong>Treat Life as Practice:</strong> Every interaction is an opportunity to evolve—especially difficult ones.</li>
+    <li><strong>Be Open to Experience:</strong> Don’t dismiss dreams, intuition, or “strange” perceptions—they may be data from beyond the physical.</li>
+    <li><strong>Live with Responsibility:</strong> Recognize that your choices ripple through the consciousness system.</li>
+  </ul>
+
+  <p>
+    <strong>Overall Takeaway</strong><em>My Big TOE</em> reframes life: you’re not just surviving in a random universe—you’re a 
+    <strong>consciousness evolving in a meaningful system</strong>. Every moment and choice is part of your growth 
+    toward love and higher awareness.
+  </p>
+</div>
