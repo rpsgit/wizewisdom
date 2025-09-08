@@ -24,7 +24,7 @@ title: "Wizewisdom World"
 
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 15vh;">
 
-  <a href="/books/features.html" style="flex: 1 1 120px; max-width: 200px; text-align: center; background: rgba(255,255,255,0.65); padding: 20px; border-radius: 20px; text-decoration: none; font-weight: bold; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
+  <a href="/books/feature.html" style="flex: 1 1 120px; max-width: 200px; text-align: center; background: rgba(255,255,255,0.65); padding: 20px; border-radius: 20px; text-decoration: none; font-weight: bold; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
     📚 <br> Books
   </a>
 
@@ -49,3 +49,4 @@ title: "Wizewisdom World"
   </a>
 
 </div>
+
