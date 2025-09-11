@@ -3,5 +3,45 @@ layout: default
 title: Private Page
 ---
 
-<h1>🔒 Private Page</h1>
-<p>This content is for me only!</p>
+<style>
+  .content-box {
+    max-width: 800px;
+    margin: 40px auto;
+    background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    text-align: center;
+  }
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  a.download-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #2a5d9f;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+  }
+  a.download-link:hover {
+    background: #1e4578;
+  }
+</style>
+
+<div class="content-box">
+  <h1>🔒 Private Page</h1>
+  <p>This content is for me only!</p>
+
+  <!-- Link to your PowerPoint file -->
+  <a href="/private/Home%20Network%20Setup.pptx" class="download-link" download>
+    📥 Download Home Network Setup
+  </a>
+</div>
