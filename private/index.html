@@ -3,27 +3,52 @@ layout: default
 title: Private Page
 ---
 
-<h1>🔒 Private Page</h1>
-<p>This content is for me only!</p>
+<style>
+  .content-box {
+    max-width: 800px;
+    margin: 40px auto;
+    background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    text-align: center;
+  }
 
-<p>
-  👇 Click below to view your file securely:
-</p>
+  .secure-link {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.2s ease;
+  }
 
-<a href="https://drive.google.com/file/d/10aZaGmhh0NsGFM9ffisj1vQCmMfa3rKw/preview" 
-   target="_blank" 
-   style="
-     display: inline-block;
-     background: rgba(255, 255, 255, 0.7);
-     padding: 12px 18px;
-     border-radius: 8px;
-     text-decoration: none;
-     color: #007bff;
-     font-weight: bold;
-     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-   ">
-   👀 View Home Network Setup
-</a>
+  .secure-link:hover {
+    background: rgba(255, 255, 255, 0.9);
+  }
 
-<p style="margin-top: 10px; font-size: 14px; color: #555;">
-</p>
+  p.note {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+</style>
+
+<div class="content-box">
+  <h1>🔒 Private Page</h1>
+  <p>This content is for me only!</p>
+
+  <p>👇 Click below to view your file securely:</p>
+
+  <a href="https://drive.google.com/file/d/10aZaGmhh0NsGFM9ffisj1vQCmMfa3rKw/preview" 
+     target="_blank"
+     class="secure-link">
+     👀 View Home Network Setup
+  </a>
+
+</div>
