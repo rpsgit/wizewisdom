@@ -44,9 +44,10 @@ title: "Wizewisdom World"
     🎨 <br> Gallery
   </a>
 
-  <a href="#socials" style="flex: 1 1 120px; max-width: 200px; text-align: center; background: rgba(255,255,255,0.65); padding: 20px; border-radius: 20px; text-decoration: none; font-weight: bold; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
-    🌐 <br> Socials
+  <a href="/private/index.html"  style="flex: 1 1 120px; max-width: 200px; text-align: center; background: rgba(255,255,255,0.65); padding: 20px; border-radius: 20px; text-decoration: none; font-weight: bold; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
+    🔒 <br> Personal
   </a>
 
 </div>
+
 
