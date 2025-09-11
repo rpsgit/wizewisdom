@@ -68,7 +68,7 @@ title: Image Gallery
 </style>
 
 <div class="gallery">
-  <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/EXr5D-UN5OBMvUTGkze6Qr4B2ONYjI8klBh0Bnvku15YQg?e=b373Ll" alt="Photo 1">
+  <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868" width="4000" height="1868" alt="Photo 1">
   <img src="https://onedrive.live.com/embed?resid=ABC123XYZ456!102&width=1024&height=768&cropmode=none" alt="Photo 2">
   <img src="https://onedrive.live.com/embed?resid=ABC123XYZ456!103&width=1024&height=768&cropmode=none" alt="Photo 3">
   <!-- Add more <img> lines here -->
