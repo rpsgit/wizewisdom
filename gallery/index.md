@@ -7,9 +7,9 @@ title: Image Gallery
 
 <!-- Navigation Links -->
 <nav style="text-align:center; margin-bottom: 20px;">
-  <a href="#leisure" style="margin: 0 10px;">🏠 Leisure</a>
-  <a href="#adventure" style="margin: 0 10px;">🖥️ Adventures</a>
-  <a href="#eatable" style="margin: 0 10px;">📷 Eatables</a>
+  <a href="#leisure" style="margin: 0 10px;">Leisure</a>
+  <a href="#adventure" style="margin: 0 10px;">Adventures</a>
+  <a href="#eatable" style="margin: 0 10px;">Eatables</a>
 </nav>
 
 <style>
@@ -156,10 +156,13 @@ title: Image Gallery
 
 <!-- Section 3 -->
 <div id="eatable" class="gallery-container">
-  <h3 class="section-title">📷 Eatables</h3>
+  <h3 class="section-title">Eatables</h3>
   <div class="gallery">
-    <img src="" alt="Photo 1">
-    <img src="" alt="Photo 2">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000" alt="Photo 1">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTFvXL2gU83TqpsZL-d0e5_AZ1SY8k0MBJJYJmRJO7vqqQ?width=4000&height=1868" alt="Photo 2">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRtitNAvF0jT6TzVPkIqTlsAQ3Lvvd8zY4YN54G_a71VNU?width=4000&height=1868" alt="Photo 3">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtq9aZVhVSSbhPJISxICYsAbpF6gCQkA6_yuVQKfMjMgg?width=4032&height=2268" alt="Photo 4">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQj-3t9zzCpQY6NX4EoUHbzAXfwhk4L3qIIa6x-LgnFQQA?width=4032&height=1908" alt="Photo 5">
 
   </div>
   <div class="lightbox">
