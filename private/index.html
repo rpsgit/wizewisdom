@@ -7,7 +7,7 @@ title: Private Page
   .content-box {
     max-width: 800px;
     margin: 40px auto;
-    background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+    background: rgba(255, 255, 255, 0.7);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -26,10 +26,71 @@ title: Private Page
     font-weight: bold;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     transition: background 0.2s ease;
+    margin: 15px 0;
   }
 
   .secure-link:hover {
     background: rgba(255, 255, 255, 0.9);
+  }
+
+  iframe {
+    border-radius: 8px;
+    width: 100%;
+    display: none;
+    border: none;
+  }
+
+  .separator {
+    margin: 30px auto;
+    border: 0;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    width: 80%;
+  }
+
+  /* Smooth slide animation */
+  .preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out, padding 0.3s ease-in-out;
+  }
+
+  .preview-container.open {
+    padding: 10px 0;
+  }
+
+  /* Spinner */
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #007bff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    margin: 20px auto;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .toggle-btn {
+    display: inline-block;
+    margin-top: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease;
+  }
+
+  .toggle-btn:hover {
+    background: #0056b3;
   }
 
   p.note {
@@ -43,9 +104,96 @@ title: Private Page
   <h1>🔒 My Private Page</h1>
   <p>This content is for me only!</p>
 
-<div class="secure-link">
-  <p>My Home Network Setup</p>
-  <iframe src="https://1drv.ms/p/c/6118ddcb5316a0a9/IQSZ6xWJ7fB_SoSC5RwwlliKAT8iwXyGjh6-ltOZlrmMaF4" width="402" height="327" frameborder="0" scrolling="no"></iframe>
+  <!-- Home Network Setup -->
+  <div>
+    <p><strong>My Home Network Setup</strong></p>
+    <button class="toggle-btn" data-target="network-container">▼ Show</button>
+    <div class="preview-container" id="network-container">
+      <div class="spinner" id="network-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Separator -->
+  <hr class="separator">
+
+  <!-- OneDrive Folder Preview -->
+  <div>
+    <p><strong>📁 My Shared Folder</strong></p>
+    <button class="toggle-btn" data-target="folder-container">▼ Show</button>
+    <div class="preview-container" id="folder-container">
+      <div class="spinner" id="folder-spinner"></div>
+    </div>
+
+    <!-- Backup link -->
+    <p>
+      <a href="https://1drv.ms/f/c/6118ddcb5316a0a9/Et3vZ-LYssROr-nYC-YiIZgBKFKguROcKC2FD73RqRJSZA"
+         target="_blank"
+         class="secure-link">
+         🔗 Open Folder in OneDrive
+      </a>
+    </p>
+    <p class="note">You can browse the folder here, or click to open it fully in OneDrive.</p>
+  </div>
 </div>
 
-</div>
+<script>
+  function lazyLoad(containerId, spinnerId, iframeSrc) {
+    const container = document.getElementById(containerId);
+    const spinner = document.getElementById(spinnerId);
+
+    if (container.dataset.loaded) return;
+    container.dataset.loaded = "true";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = iframeSrc;
+    iframe.style.display = "none";
+
+    iframe.onload = () => {
+      spinner.style.display = "none";
+      iframe.style.display = "block";
+      resizeIframe(iframe); // resize when loaded
+    };
+
+    container.appendChild(iframe);
+  }
+
+  function resizeIframe(iframe) {
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      if (iframeDoc) {
+        iframe.style.height = iframeDoc.body.scrollHeight + "px";
+      }
+    } catch (e) {
+      // If cross-origin (OneDrive), fallback to a default height
+      iframe.style.height = "500px";
+    }
+  }
+
+  document.querySelectorAll('.toggle-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const targetId = button.dataset.target;
+      const container = document.getElementById(targetId);
+
+      if (container.classList.contains("open")) {
+        container.style.maxHeight = "0";
+        container.classList.remove("open");
+        button.textContent = "▼ Show";
+      } else {
+        container.classList.add("open");
+        container.style.maxHeight = container.scrollHeight + "px";
+        button.textContent = "▲ Hide";
+
+        if (!container.dataset.loaded) {
+          if (targetId === "network-container") {
+            lazyLoad(targetId, "network-spinner",
+              "https://1drv.ms/p/c/6118ddcb5316a0a9/IQSZ6xWJ7fB_SoSC5RwwlliKAT8iwXyGjh6-ltOZlrmMaF4");
+          }
+          if (targetId === "folder-container") {
+            lazyLoad(targetId, "folder-spinner",
+              "https://onedrive.live.com/embed?resid=YOUR_FOLDER_RESID_HERE&authkey=YOUR_AUTH_KEY&em=2");
+          }
+        }
+      }
+    });
+  });
+</script>
