@@ -7,8 +7,8 @@ title: Image Gallery
 
 <!-- Navigation Links -->
 <nav style="text-align:center; margin-bottom: 20px;">
-  <a href="#leisure" style="margin: 0 10px;">Leisure</a>
-  <a href="#adventure" style="margin: 0 10px;">Adventures</a>
+  <a href="#play" style="margin: 0 10px;">Play</a>
+  <a href="#trip" style="margin: 0 10px;">Trip</a>
   <a href="#eatable" style="margin: 0 10px;">Eatables</a>
 </nav>
 
@@ -102,34 +102,19 @@ title: Image Gallery
   }
 </style>
 
-<!-- Leisure Section -->
-<div id="leisure" class="gallery-container">
-  <h3 class="section-title">Leisure</h3>
+<!-- Play Section -->
+<div id="play" class="gallery-container">
+  <h3 class="section-title">Play</h3>
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868" 
-         alt="Leisure 1" loading="lazy">
+         alt="Play 1" loading="lazy">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=4000&height=3000" 
-         alt="Leisure 2" loading="lazy">
+         alt="Play 2" loading="lazy">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=4000&height=1868" 
-         alt="Leisure 3" loading="lazy">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQREnYJzOGG5QKFqR0lI4V5yASEgyRuybjwEAGRATwiGhfs?width=400" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQREnYJzOGG5QKFqR0lI4V5yASEgyRuybjwEAGRATwiGhfs?width=4000&height=1868" 
-         alt="Leisure 4" loading="lazy">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQREnYJzOGG5QKFqR0lI4V5yASEgyRuybjwEAGRATwiGhfs?width=400" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQREnYJzOGG5QKFqR0lI4V5yASEgyRuybjwEAGRATwiGhfs?width=4000&height=1868" 
-         alt="Leisure 5" loading="lazy">
-   <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQHljFCCJ6xRaTiSmlcb3AiAd5iaK7v4b2_2-1bzWsgtho?width=4000&height=3000" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQHljFCCJ6xRaTiSmlcb3AiAd5iaK7v4b2_2-1bzWsgtho?width=4000&height=3000" 
-         alt="Leisure 6" loading="lazy">
-   <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQZjtGUJtUmSYnkoGskWQCBAQYfs87CMYLADBfw6c1KwHk?width=4000&height=3000" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQZjtGUJtUmSYnkoGskWQCBAQYfs87CMYLADBfw6c1KwHk?width=4000&height=3000" 
-         alt="Leisure 7" loading="lazy">
-   <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQhrBvnTbbRTa4mrzzlL2WqASPvdoV-cAvS0tqiXoF_uBQ?width=4000&height=3000" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQhrBvnTbbRTa4mrzzlL2WqASPvdoV-cAvS0tqiXoF_uBQ?width=4000&height=3000" 
-         alt="Leisure 8" loading="lazy">
+         alt="Play 3" loading="lazy">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -139,25 +124,19 @@ title: Image Gallery
   </div>
 </div>
 
-<!-- Adventure Section -->
-<div id="adventure" class="gallery-container">
-  <h3 class="section-title">Adventures</h3>
+<!-- Trip Section -->
+<div id="trip" class="gallery-container">
+  <h3 class="section-title">Trip</h3>
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204" 
-         alt="Adventure 1" loading="lazy">
+         alt="Trip 1" loading="lazy">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161" 
-         alt="Adventure 2" loading="lazy">
-    <img src="hhttps://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=400" 
+         alt="Trip 2" loading="lazy">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204" 
-         alt="Adventure 3" loading="lazy">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRn6TIri6CAS503qbdNEv6-AdoQRGifJjddtn_LDIafIOc?width=400" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRn6TIri6CAS503qbdNEv6-AdoQRGifJjddtn_LDIafIOc?width=3887&height=2521" 
-         alt="Adventure 4" loading="lazy">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQgIH2KQCOvTIMgoCjXKTwuATEOtRc4BwnT_cPsUH_Bmy8?width=400" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQgIH2KQCOvTIMgoCjXKTwuATEOtRc4BwnT_cPsUH_Bmy8?width=4096&height=2730" width="4096" height="2730" 
-         alt="Adventure 5" loading="lazy">
+         alt="Trip 3" loading="lazy">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -174,12 +153,6 @@ title: Image Gallery
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000" 
          alt="Eatable 1" loading="lazy">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTFvXL2gU83TqpsZL-d0e5_AZ1SY8k0MBJJYJmRJO7vqqQ?width=400" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTFvXL2gU83TqpsZL-d0e5_AZ1SY8k0MBJJYJmRJO7vqqQ?width=4000&height=1868" 
-         alt="Eatable 2" loading="lazy">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRtitNAvF0jT6TzVPkIqTlsAQ3Lvvd8zY4YN54G_a71VNU?width=400" 
-         data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRtitNAvF0jT6TzVPkIqTlsAQ3Lvvd8zY4YN54G_a71VNU?width=4000&height=1868" 
-         alt="Eatable 3" loading="lazy">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -219,10 +192,4 @@ document.querySelectorAll('.gallery-container').forEach(container => {
   lightbox.addEventListener('click', e => { if(e.target===lightbox) hideLightbox(); });
   document.addEventListener('keydown', e => {
     if(lightbox.style.display==='flex'){
-      if(e.key==='Escape') hideLightbox();
-      if(e.key==='ArrowLeft') currentIndex=(currentIndex-1+images.length)%images.length, showImage(currentIndex);
-      if(e.key==='ArrowRight') currentIndex=(currentIndex+1)%images.length, showImage(currentIndex);
-    }
-  });
-});
-</script>
+      if(e.key==='
