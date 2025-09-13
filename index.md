@@ -126,7 +126,7 @@ title: "Wizewisdom World"
     <img src="/assets/images/Tree.png" alt="Group Icon"><br> Group
   </a>
 
-  <a href="#lifestyle" class="icon-card">
+  <a href="lifestyle/lifestyle/index.html" class="icon-card">
     <img src="/assets/images/Tennis.png" alt="Lifestyle Icon"><br> Lifestyle
   </a>
 
@@ -153,3 +153,4 @@ title: "Wizewisdom World"
     });
   });
 </script>
+
