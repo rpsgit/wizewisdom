@@ -37,32 +37,13 @@ title: Synchronicity: An Acausal Connecting Principle
     margin: 24px 0;
     text-align: center;
   }
-  .archive-toggle {
-    display: inline-block;
-    margin-bottom: 8px;
-    font-size: 1em;
-    font-weight: 600;
-    background: #2a5d9f;
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  .archive-toggle:hover {
-    background: #1f4575;
-  }
   .archive-iframe {
     width: 100%;
     max-width: 800px;
-    height: 0; /* collapsed initially */
+    height: 600px; /* fixed height */
     border: none;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: height 0.3s ease;
-  }
-  .archive-iframe.expanded {
-    height: 600px;
   }
 </style>
 
@@ -77,10 +58,14 @@ title: Synchronicity: An Acausal Connecting Principle
     is not purely random—it’s also shaped by <strong>patterns of meaning</strong>.
   </p>
 
-  <!-- Click-to-toggle Internet Archive Embed -->
-  <div class="archive-inline" id="archive-container">
-    <div class="archive-toggle" id="archive-button">+ View Book</div>
-    <iframe src="https://archive.org/embed/synchronicityaca0000jung_e7s1" width="560" height="384" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+  <!-- Internet Archive Embed -->
+  <div class="archive-inline">
+    <iframe 
+      class="archive-iframe"
+      src="https://archive.org/embed/synchronicityaca0000jung_e7s1" 
+      allowfullscreen
+      title="Synchronicity: An Acausal Connecting Principle"
+    ></iframe>
   </div>
 
   <h2>Key Principles</h2>
@@ -111,21 +96,3 @@ title: Synchronicity: An Acausal Connecting Principle
     By noticing and reflecting on them, you can align choices with your inner truth and navigate with more confidence.
   </div>
 </div>
-
-<script>
-  const iframe = document.querySelector('.archive-iframe');
-  const button = document.getElementById('archive-button');
-  const container = document.getElementById('archive-container');
-
-  button.addEventListener('click', () => {
-    const isExpanded = iframe.classList.toggle('expanded');
-
-    // Update button text
-    button.textContent = isExpanded ? "− Hide Book" : "+ View Book";
-
-    if (isExpanded) {
-      // Smooth scroll to center iframe in viewport
-      container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  });
-</script>
