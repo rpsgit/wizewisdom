@@ -114,11 +114,11 @@ title: "Wizewisdom World"
 </div>
 
 <div class="icon-grid">
-  <a href="/books/feature.html" class="icon-card">
+  <a href="/books/index.html" class="icon-card">
     <img src="/assets/images/Reading.png" alt="Books Icon"><br> Books
   </a>
 
-  <a href="/quotes/entry.html" class="icon-card">
+  <a href="/quotes/index.html" class="icon-card">
     <img src="/assets/images/Quote.png" alt="Quotes Icon"><br> Quotes
   </a>
 
@@ -126,7 +126,7 @@ title: "Wizewisdom World"
     <img src="/assets/images/Tree.png" alt="Group Icon"><br> Group
   </a>
 
-  <a href="lifestyle/lifestyle/index.html" class="icon-card">
+  <a href="/lifestyle/index.html" class="icon-card">
     <img src="/assets/images/Tennis.png" alt="Lifestyle Icon"><br> Lifestyle
   </a>
 
@@ -153,4 +153,5 @@ title: "Wizewisdom World"
     });
   });
 </script>
+
 
