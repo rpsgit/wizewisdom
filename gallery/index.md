@@ -164,9 +164,7 @@ title: Image Gallery
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtq9aZVhVSSbhPJISxICYsAbpF6gCQkA6_yuVQKfMjMgg?width=4032&height=2268" alt="Photo 4">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQj-3t9zzCpQY6NX4EoUHbzAXfwhk4L3qIIa6x-LgnFQQA?width=4032&height=1908" alt="Photo 5">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRXz-3NuIFHQajUVuA9CfniAch43FTP_iwIp12GfmmsyGE?width=2048&height=1536" alt="Photo 6">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=0&height=auto" alt="Photo 7">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR-WGP4YU7uSpHBYyfV3ROLAYlbwtE5X-q2v1aG7pRP7JA?width=0&height=auto" alt="Photo 8">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRsEHuCoyTNS66LrIczUUC3AZ8mY9pHqsCCDFK1pW6YxvY?width=608&height=960" alt="Photo 9">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRsEHuCoyTNS66LrIczUUC3AZ8mY9pHqsCCDFK1pW6YxvY?width=608&height=960" alt="Photo 7">
 
   </div>
   <div class="lightbox">
