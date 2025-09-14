@@ -4,11 +4,20 @@ title: Lifestyle
 ---
 
 <style>
+.container {
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
 .grid {
   display: flex;
   flex-direction: column;
   gap: 25px;
-  margin-top: 30px;
+  margin-top: 20px;
   height: 100vh; /* Full screen height on desktops */
 }
 
@@ -62,21 +71,23 @@ title: Lifestyle
 }
 </style>
 
-<h2 style="text-align:center; margin-bottom:20px;">Lifestyle</h2>
+<div class="container">
+  <h2 style="text-align:center; margin-bottom:20px;">Lifestyle</h2>
 
-<div class="grid">
-  <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=800&height=600" alt="Recipes">
-    <div class="grid-text">🍳 Recipes</div>
-  </div>
+  <div class="grid">
+    <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=800&height=600" alt="Recipes">
+      <div class="grid-text">🍳 Recipes</div>
+    </div>
 
-  <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=800&height=600" alt="Tennis">
-    <div class="grid-text">🎾 Tennis</div>
-  </div>
+    <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=800&height=600" alt="Tennis">
+      <div class="grid-text">🎾 Tennis</div>
+    </div>
 
-  <div class="grid-item" onclick="window.location.href='/lifestyle/pickleball.html'">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQBVlpUl-cZT4yMuAvkWm-UARFv-Ku8ZQEGj3yNL2K3wrw?width=800&height=600" alt="Pickleball">
-    <div class="grid-text">🏓 Pickleball</div>
+    <div class="grid-item" onclick="window.location.href='/lifestyle/pickleball.html'">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQBVlpUl-cZT4yMuAvkWm-UARFv-Ku8ZQEGj3yNL2K3wrw?width=800&height=600" alt="Pickleball">
+      <div class="grid-text">🏓 Pickleball</div>
+    </div>
   </div>
 </div>
