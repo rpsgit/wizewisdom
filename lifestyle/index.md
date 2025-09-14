@@ -4,41 +4,17 @@ title: Lifestyle
 ---
 
 <style>
-.hero {
-  position: relative;
-  text-align: center;
-  color: white;
-  margin-bottom: 40px;
-}
-
-.hero img {
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
-  filter: brightness(0.7);
-  cursor: pointer;
-}
-
-.hero-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-}
-
-/* Change from grid to stacked vertical layout */
 .grid {
   display: flex;
   flex-direction: column;
   gap: 25px;
   margin-top: 30px;
+  height: 100vh; /* Full screen height on desktops */
 }
 
 .grid-item {
   position: relative;
+  flex: 1; /* Equal height distribution */
   overflow: hidden;
   border-radius: 16px;
   cursor: pointer;
@@ -48,7 +24,7 @@ title: Lifestyle
 
 .grid-item img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   filter: brightness(0.7);
   transition: transform 0.3s ease;
@@ -64,15 +40,30 @@ title: Lifestyle
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .grid {
+    height: auto; /* Let content define height on smaller screens */
+  }
+  .grid-item {
+    height: 220px; /* Fixed smaller height per section */
+  }
+  .grid-item img {
+    height: 100%;
+  }
+  .grid-text {
+    font-size: 1.5rem; /* Slightly smaller text for phones */
+  }
 }
 </style>
 
 <h2 style="text-align:center; margin-bottom:20px;">Lifestyle</h2>
 
-<!-- Stacked Links -->
 <div class="grid">
   <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=800&height=600" alt="Recipes">
