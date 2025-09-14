@@ -29,10 +29,11 @@ title: Lifestyle
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
+/* Change from grid to stacked vertical layout */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
   margin-top: 30px;
 }
 
@@ -47,14 +48,14 @@ title: Lifestyle
 
 .grid-item img {
   width: 100%;
-  height: 200px;
+  height: auto;
   object-fit: cover;
   filter: brightness(0.7);
   transition: transform 0.3s ease;
 }
 
 .grid-item:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .grid-text {
@@ -63,15 +64,15 @@ title: Lifestyle
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
 }
 </style>
 
-<h2> Lifestyle </h2>
+<h2 style="text-align:center; margin-bottom:20px;">Lifestyle</h2>
 
-<!-- Grid of Links -->
+<!-- Stacked Links -->
 <div class="grid">
   <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=800&height=600" alt="Recipes">
