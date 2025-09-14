@@ -53,11 +53,10 @@ title: Lifestyle
 
 <div class="hero" onclick="window.location.href='/lifestyle/recipes'">
   <img src="/assets/images/lifestyle-hero.jpg" alt="Lifestyle">
-  <div class="hero-text">Welcome to Lifestyle</div>
 </div>
 
 <div class="links">
-  <a href="/lifestyle/recipes">🍳 Recipes</a>
-  <a href="/lifestyle/tennis">🎾 Tennis</a>
-  <a href="/lifestyle/pickleball">🏓 Pickleball</a>
+  <a href="[/lifestyle/recipes](https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=1024&height=685)">🍳 Recipes</a>
+  <a href="/[lifestyle/tennis](https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868)">🎾 Tennis</a>
+  <a href="[/lifestyle/pickleball](https://1drv.ms/i/c/6118ddcb5316a0a9/IQQBVlpUl-cZT4yMuAvkWm-UARFv-Ku8ZQEGj3yNL2K3wrw?width=2271&height=1109)">🏓 Pickleball</a>
 </div>
