@@ -69,6 +69,8 @@ title: Lifestyle
 }
 </style>
 
+<h2> Lifestyle </h2>
+
 <!-- Grid of Links -->
 <div class="grid">
   <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
