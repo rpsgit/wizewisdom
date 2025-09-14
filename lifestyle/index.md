@@ -8,7 +8,7 @@ title: Lifestyle
   position: relative;
   text-align: center;
   color: white;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .hero img {
@@ -28,35 +28,61 @@ title: Lifestyle
   font-weight: bold;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
-.links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin-top: 20px;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
 }
-.links a {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 12px 20px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: #333;
+
+.grid-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+
+.grid-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  filter: brightness(0.7);
+  transition: transform 0.3s ease;
+}
+
+.grid-item:hover {
+  transform: scale(1.03);
+}
+
+.grid-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.5rem;
   font-weight: bold;
-  transition: 0.3s ease;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-}
-.links a:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: scale(1.05);
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
 }
 </style>
 
-<div class="hero" onclick="window.location.href='/lifestyle/recipes'">
-  <img src="/assets/images/lifestyle-hero.jpg" alt="Lifestyle">
-</div>
+<!-- Grid of Links -->
+<div class="grid">
+  <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=800&height=600" alt="Recipes">
+    <div class="grid-text">🍳 Recipes</div>
+  </div>
 
-<div class="links">
-  <a href="[/lifestyle/recipes](https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=1024&height=685)">🍳 Recipes</a>
-  <a href="/[lifestyle/tennis](https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868)">🎾 Tennis</a>
-  <a href="[/lifestyle/pickleball](https://1drv.ms/i/c/6118ddcb5316a0a9/IQQBVlpUl-cZT4yMuAvkWm-UARFv-Ku8ZQEGj3yNL2K3wrw?width=2271&height=1109)">🏓 Pickleball</a>
+  <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=800&height=600" alt="Tennis">
+    <div class="grid-text">🎾 Tennis</div>
+  </div>
+
+  <div class="grid-item" onclick="window.location.href='/lifestyle/pickleball.html'">
+    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQBVlpUl-cZT4yMuAvkWm-UARFv-Ku8ZQEGj3yNL2K3wrw?width=800&height=600" alt="Pickleball">
+    <div class="grid-text">🏓 Pickleball</div>
+  </div>
 </div>
