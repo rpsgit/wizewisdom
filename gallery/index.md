@@ -8,8 +8,8 @@ title: Image Gallery
 <!-- Navigation Links -->
 <nav style="text-align:center; margin-bottom: 20px;">
   <a href="#play" style="margin: 0 10px;">Play</a>
-  <a href="#trip" style="margin: 0 10px;">Trip</a>
-  <a href="#eatable" style="margin: 0 10px;">Eatables</a>
+  <a href="#wander" style="margin: 0 10px;">Wander</a>
+  <a href="#eat" style="margin: 0 10px;">Eat</a>
 </nav>
 
 <style>
@@ -124,19 +124,19 @@ title: Image Gallery
   </div>
 </div>
 
-<!-- Trip Section -->
-<div id="trip" class="gallery-container">
-  <h3 class="section-title">Trip</h3>
+<!-- Wander Section -->
+<div id="wander" class="gallery-container">
+  <h3 class="section-title">Wander</h3>
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204" 
-         alt="Trip 1" loading="lazy">
+         alt="Wander 1" loading="lazy">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161" 
-         alt="Trip 2" loading="lazy">
+         alt="Wander 2" loading="lazy">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204" 
-         alt="Trip 3" loading="lazy">
+         alt="Wander 3" loading="lazy">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -146,13 +146,13 @@ title: Image Gallery
   </div>
 </div>
 
-<!-- Eatable Section -->
-<div id="eatable" class="gallery-container">
-  <h3 class="section-title">Eatables</h3>
+<!-- Eat Section -->
+<div id="eat" class="gallery-container">
+  <h3 class="section-title">Eat</h3>
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000" 
-         alt="Eatable 1" loading="lazy">
+         alt="Eat 1" loading="lazy">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -192,4 +192,10 @@ document.querySelectorAll('.gallery-container').forEach(container => {
   lightbox.addEventListener('click', e => { if(e.target===lightbox) hideLightbox(); });
   document.addEventListener('keydown', e => {
     if(lightbox.style.display==='flex'){
-      if(e.key==='
+      if(e.key==='Escape') hideLightbox();
+      if(e.key==='ArrowLeft') { currentIndex = (currentIndex - 1 + images.length) % images.length; showImage(currentIndex); }
+      if(e.key==='ArrowRight') { currentIndex = (currentIndex + 1) % images.length; showImage(currentIndex); }
+    }
+  });
+});
+</script>
