@@ -132,21 +132,28 @@ h1 {
   </div>
 </div>
 
-<!-- ✅ Lightbox Views -->
-<!-- Just repeat this pattern and link them in a loop -->
-<!-- Example for 1st and 2nd photo -->
+<!-- Lightbox for all images -->
+<!-- The prev/next links loop from last to first -->
+<!-- Copy/paste pattern for each image -->
 <div id="img1" class="lightbox">
-  <a href="#img20" class="prev-btn">&#10094;</a>
+  <a href="#img20" class="nav-btn prev-btn">&#10094;</a>
   <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="Photo 1">
-  <a href="#img2" class="next-btn">&#10095;</a>
+  <a href="#img2" class="nav-btn next-btn">&#10095;</a>
   <a href="#" class="close-btn">&times;</a>
 </div>
 
 <div id="img2" class="lightbox">
-  <a href="#img1" class="prev-btn">&#10094;</a>
+  <a href="#img1" class="nav-btn prev-btn">&#10094;</a>
   <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQT6W9-o3JqDRb3nQeH1QmXOAcmduwEgVxmfK6OwwB8kK8o?width=1662&height=998" alt="Photo 2">
-  <a href="#img3" class="next-btn">&#10095;</a>
+  <a href="#img3" class="nav-btn next-btn">&#10095;</a>
   <a href="#" class="close-btn">&times;</a>
 </div>
 
-<!-- Continue same pattern until img20, making prev/next point to previous/next number (img19 <-> img20 <-> img1) -->
+<!-- ... repeat for all images until img20 ... -->
+
+<div id="img20" class="lightbox">
+  <a href="#img19" class="nav-btn prev-btn">&#10094;</a>
+  <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="Photo 20">
+  <a href="#img1" class="nav-btn next-btn">&#10095;</a>
+  <a href="#" class="close-btn">&times;</a>
+</div>
