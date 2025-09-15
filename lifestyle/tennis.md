@@ -61,7 +61,7 @@ h1 {
     <div class="section-title">UPDTC</div>
     <div class="links">
       <a href="/lifestyle/updtc-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/tennis/updtc-videos.html" target="_blank">📺 Videos</a>
+      <a href="/lifestyle/updtc-videos.html" target="_blank">📺 Videos</a>
     </div>
   </div>
 
