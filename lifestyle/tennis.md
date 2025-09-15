@@ -60,7 +60,7 @@ h1 {
   <div class="section">
     <div class="section-title">UPDTC</div>
     <div class="links">
-      <a href="/tennis/updtc-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/lifestyle/updtc-photos.html" target="_blank">📷 Photos</a> |
       <a href="/tennis/updtc-videos.html" target="_blank">📺 Videos</a>
     </div>
   </div>
@@ -68,24 +68,24 @@ h1 {
   <div class="section">
     <div class="section-title">Camp Aguinaldo</div>
     <div class="links">
-      <a href="/tennis/camp-aguinaldo-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/tennis/camp-aguinaldo-videos.html" target="_blank">📺 Videos</a>
+      <a href="/lifestyle/camp-aguinaldo-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/lifestyle/camp-aguinaldo-videos.html" target="_blank">📺 Videos</a>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Tournament, etc...</div>
     <div class="links">
-      <a href="/tennis/tournament-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/tennis/tournament-videos.html" target="_blank">📺 Videos</a>
+      <a href="/lifestyle/tournament-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/lifestyle/tournament-videos.html" target="_blank">📺 Videos</a>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Other Photos</div>
     <div class="links">
-      <a href="/tennis/other-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/tennis/other-videos.html" target="_blank">📺 Videos</a>
+      <a href="/lifestyle/other-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/lifestyle/other-videos.html" target="_blank">📺 Videos</a>
     </div>
   </div>
 </div>
