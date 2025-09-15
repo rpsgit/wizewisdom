@@ -41,34 +41,112 @@ h1 {
   transform: scale(1.03);
   cursor: pointer;
 }
+
+/* Lightbox Styles */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+  margin-bottom: 10px;
+}
+
+.lightbox:target {
+  display: flex;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2rem;
+  color: white;
+  text-decoration: none;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  padding: 5px 12px;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: white;
+  text-decoration: none;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  padding: 10px 15px;
+}
+
+.prev-btn { left: 30px; }
+.next-btn { right: 30px; }
 </style>
 
 <div class="page-container">
   <h1>📷 UPDTC Photos</h1>
 
-  <!-- ✅ Just add your individual photo links here -->
   <div class="photo-grid">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="Photo 1">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQT6W9-o3JqDRb3nQeH1QmXOAcmduwEgVxmfK6OwwB8kK8o?width=1662&height=998" alt="Photo 2">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTNykV7gCQvRqTLKWd-6F_CAXAP8nHP-hlTRoL-MtWyv30?width=4032&height=3024" alt="Photo 3">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQSh4Mq3dyIRaD034KTQeq3AaYKwCsx9gWFmr3AFt3hAqU?width=4032&height=3024" alt="Photo 4">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTdjWY-j1M_T41fAQ2QErAoAagrYTZ_aLfFL-ZPLb2YD2M?width=4000&height=1868" alt="Photo 5">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQDBH7uyAWwTaDQOc0PJJyQAZqXT-1iVdxLHXRq67LoGFE?width=3169&height=1567" alt="Photo 6">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSsTkNiEvSWSb2mGXV78BigAWSE54b6k4or7PKHeSdasiI?width=3715&height=1403" alt="Photo 7">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQThn61LUFSyTZLYzOCkpAisASzF2c5NdpW-YERzBbNvXsE?width=3968&height=2976" alt="Photo 8">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTz3A-1uerLRINFwBpSJDoZAZ_gosDdFHDMzYvdZvX7DmU?width=960&height=720" alt="Photo 9">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR5XtdKEAsDRK6FIaXs05K4Ac_tFVO5olHmbr9OHnT801g?width=960&height=601" alt="Photo 10">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRDDtUpAoBoT7tfJbYU3M_kAeiPfWpvnbWvNZqtMYOgzZE?width=1280&height=675" alt="Photo 11">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSNz3lLc2ggRL-pVzsGRXg_AQTgIGtSumZYpQHdQu1Bzss?width=960&height=533" alt="Photo 12">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQa6ynQFMMfTpTP-fG4uUoGATsgnxOo76GosK6586bSebo?width=2048&height=1462" alt="Photo 13">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTI6XYv5LERTYWBOX57bZ0KAWCn_4qsL1Nk8Akawpz0dSo?width=2048&height=1536" alt="Photo 14">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR0ZsMm_vtUSKj9N6Mg6ndpASDLAydU2l8lWsc2QtkNWrk?width=2048&height=1180" alt="Photo 15">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQS9CDruroJvR6nPIOPevcIZAeEl3PTeFz2z6T5L8h5zRzc?width=960&height=540" alt="Photo 16">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRwO72y07XySbhOVIgwEeH4AXxge8J1y7HymCEhSS0INOg?width=1080&height=565" alt="Photo 17">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="Photo 18">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR_r9hb05x-R6Z4g60UJbyFAfJnPirD_SGaGj1EkBVmqSs?width=1440&height=889" alt="Photo 19">
-    <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="Photo 20">
-    
-    <!-- ➕ Add more <img> lines for more photos -->
+    <a href="#img1"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="Photo 1"></a>
+    <a href="#img2"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQT6W9-o3JqDRb3nQeH1QmXOAcmduwEgVxmfK6OwwB8kK8o?width=1662&height=998" alt="Photo 2"></a>
+    <a href="#img3"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTNykV7gCQvRqTLKWd-6F_CAXAP8nHP-hlTRoL-MtWyv30?width=4032&height=3024" alt="Photo 3"></a>
+    <a href="#img4"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQSh4Mq3dyIRaD034KTQeq3AaYKwCsx9gWFmr3AFt3hAqU?width=4032&height=3024" alt="Photo 4"></a>
+    <a href="#img5"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTdjWY-j1M_T41fAQ2QErAoAagrYTZ_aLfFL-ZPLb2YD2M?width=4000&height=1868" alt="Photo 5"></a>
+    <a href="#img6"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQDBH7uyAWwTaDQOc0PJJyQAZqXT-1iVdxLHXRq67LoGFE?width=3169&height=1567" alt="Photo 6"></a>
+    <a href="#img7"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSsTkNiEvSWSb2mGXV78BigAWSE54b6k4or7PKHeSdasiI?width=3715&height=1403" alt="Photo 7"></a>
+    <a href="#img8"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQThn61LUFSyTZLYzOCkpAisASzF2c5NdpW-YERzBbNvXsE?width=3968&height=2976" alt="Photo 8"></a>
+    <a href="#img9"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTz3A-1uerLRINFwBpSJDoZAZ_gosDdFHDMzYvdZvX7DmU?width=960&height=720" alt="Photo 9"></a>
+    <a href="#img10"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR5XtdKEAsDRK6FIaXs05K4Ac_tFVO5olHmbr9OHnT801g?width=960&height=601" alt="Photo 10"></a>
+    <a href="#img11"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRDDtUpAoBoT7tfJbYU3M_kAeiPfWpvnbWvNZqtMYOgzZE?width=1280&height=675" alt="Photo 11"></a>
+    <a href="#img12"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSNz3lLc2ggRL-pVzsGRXg_AQTgIGtSumZYpQHdQu1Bzss?width=960&height=533" alt="Photo 12"></a>
+    <a href="#img13"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQa6ynQFMMfTpTP-fG4uUoGATsgnxOo76GosK6586bSebo?width=2048&height=1462" alt="Photo 13"></a>
+    <a href="#img14"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTI6XYv5LERTYWBOX57bZ0KAWCn_4qsL1Nk8Akawpz0dSo?width=2048&height=1536" alt="Photo 14"></a>
+    <a href="#img15"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR0ZsMm_vtUSKj9N6Mg6ndpASDLAydU2l8lWsc2QtkNWrk?width=2048&height=1180" alt="Photo 15"></a>
+    <a href="#img16"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQS9CDruroJvR6nPIOPevcIZAeEl3PTeFz2z6T5L8h5zRzc?width=960&height=540" alt="Photo 16"></a>
+    <a href="#img17"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRwO72y07XySbhOVIgwEeH4AXxge8J1y7HymCEhSS0INOg?width=1080&height=565" alt="Photo 17"></a>
+    <a href="#img18"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="Photo 18"></a>
+    <a href="#img19"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR_r9hb05x-R6Z4g60UJbyFAfJnPirD_SGaGj1EkBVmqSs?width=1440&height=889" alt="Photo 19"></a>
+    <a href="#img20"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="Photo 20"></a>
   </div>
 </div>
+
+<!-- ✅ Lightbox Views -->
+<!-- Just repeat this pattern and link them in a loop -->
+<!-- Example for 1st and 2nd photo -->
+<div id="img1" class="lightbox">
+  <a href="#img20" class="prev-btn">&#10094;</a>
+  <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="Photo 1">
+  <a href="#img2" class="next-btn">&#10095;</a>
+  <a href="#" class="close-btn">&times;</a>
+</div>
+
+<div id="img2" class="lightbox">
+  <a href="#img1" class="prev-btn">&#10094;</a>
+  <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQT6W9-o3JqDRb3nQeH1QmXOAcmduwEgVxmfK6OwwB8kK8o?width=1662&height=998" alt="Photo 2">
+  <a href="#img3" class="next-btn">&#10095;</a>
+  <a href="#" class="close-btn">&times;</a>
+</div>
+
+<!-- Continue same pattern until img20, making prev/next point to previous/next number (img19 <-> img20 <-> img1) -->
