@@ -14,15 +14,43 @@ title: Tennis
   font-family: Arial, sans-serif;
   line-height: 1.6;
 }
-h1, h2 {
+
+h1 {
   text-align: center;
   color: #222;
+  margin-bottom: 30px;
 }
+
 .section {
-  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 }
-ul {
-  padding-left: 20px;
+
+.section:hover {
+  transform: scale(1.02);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.links a {
+  margin-left: 10px;
+  text-decoration: none;
+  color: #0056b3;
+  font-weight: 500;
+}
+
+.links a:hover {
+  text-decoration: underline;
 }
 </style>
 
@@ -30,18 +58,34 @@ ul {
   <h1>🎾 Tennis</h1>
 
   <div class="section">
-    <h2>📺 Videos</h2>
-    <ul>
-      <li><a href="#" target="_blank">Tennis Training Drill</a></li>
-      <li><a href="#" target="_blank">Pro Match Highlight</a></li>
-    </ul>
+    <div class="section-title">UPDTC</div>
+    <div class="links">
+      <a href="/tennis/updtc-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/tennis/updtc-videos.html" target="_blank">📺 Videos</a>
+    </div>
   </div>
 
   <div class="section">
-    <h2>🔗 Links & Updates</h2>
-    <ul>
-      <li><a href="#" target="_blank">Local Court Finder</a></li>
-      <li><a href="#" target="_blank">Upcoming Tennis Events</a></li>
-    </ul>
+    <div class="section-title">Camp Aguinaldo</div>
+    <div class="links">
+      <a href="/tennis/camp-aguinaldo-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/tennis/camp-aguinaldo-videos.html" target="_blank">📺 Videos</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Tournament, etc...</div>
+    <div class="links">
+      <a href="/tennis/tournament-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/tennis/tournament-videos.html" target="_blank">📺 Videos</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Other Photos</div>
+    <div class="links">
+      <a href="/tennis/other-photos.html" target="_blank">📷 Photos</a> |
+      <a href="/tennis/other-videos.html" target="_blank">📺 Videos</a>
+    </div>
   </div>
 </div>
