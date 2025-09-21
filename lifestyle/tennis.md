@@ -18,11 +18,18 @@ body {
   text-align: center;
 }
 
+/* === PAGE TITLE === */
 h1 {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 15px 30px;
+  border-radius: 15px;
+  color: #111;
+  font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
-  color: #222;
   margin-bottom: 40px;
-  font-size: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 /* === CONTAINER FOR ALL TENNIS BALLS === */
@@ -30,10 +37,10 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 30px;
-  background: rgba(255, 255, 255, 0.6); /* translucent oblong background */
+  background: rgba(255, 255, 255, 0.7); /* increased translucence to 70% */
   padding: 25px 40px;
   border-radius: 25px;
-  flex-wrap: wrap; /* wraps on smaller screens */
+  flex-wrap: wrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
@@ -74,7 +81,6 @@ h1 {
 
 .section:hover {
   transform: scale(1.08);
-  /* Removed yellow glow box-shadow */
 }
 
 /* === RESPONSIVE === */
