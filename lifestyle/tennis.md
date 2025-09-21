@@ -4,57 +4,78 @@ title: Tennis
 ---
 
 <style>
-
 body {
   margin: 0;
   padding: 0;
   background: #f5f5f5 url('/assets/images/tennis-index.png') no-repeat center center fixed;
   background-size: cover;
+  font-family: Arial, sans-serif;
 }
 
 .page-container {
   max-width: 900px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
+  margin: 40px auto;
+  text-align: center;
 }
 
 h1 {
   text-align: center;
   color: #222;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  font-size: 2rem;
+}
+
+/* === GRID LAYOUT === */
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+/* === TENNIS BALL SECTIONS === */
+.section-link {
+  text-decoration: none;
 }
 
 .section {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 15px 20px;
-  margin-bottom: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
+  width: 180px;
+  height: 180px;
+  background: url('/assets/images/tennis-ball.png') no-repeat center center;
+  background-size: contain;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 50%;
 }
 
 .section:hover {
-  transform: scale(1.02);
+  transform: scale(1.08);
+  box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.6), 0 0 40px 10px rgba(255, 255, 0, 0.3);
 }
 
 .section-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+}
+
+.links {
+  font-size: 0.9rem;
 }
 
 .links a {
-  margin-left: 10px;
+  display: inline-block;
+  margin: 0 5px;
   text-decoration: none;
   color: #0056b3;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .links a:hover {
@@ -65,35 +86,47 @@ h1 {
 <div class="page-container">
   <h1>🎾 Tennis</h1>
 
-  <div class="section">
-    <div class="section-title">UPDTC</div>
-    <div class="links">
-      <a href="/lifestyle/updtc-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/lifestyle/updtc-videos.html" target="_blank">📺 Videos</a>
-    </div>
-  </div>
+  <div class="section-grid">
 
-  <div class="section">
-    <div class="section-title">Camp Aguinaldo</div>
-    <div class="links">
-      <a href="/lifestyle/camp-aguinaldo-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/lifestyle/camp-aguinaldo-videos.html" target="_blank">📺 Videos</a>
-    </div>
-  </div>
+    <a href="/lifestyle/updtc-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-title">UPDTC</div>
+        <div class="links">
+          <a href="/lifestyle/updtc-photos.html" target="_blank">📷</a>
+          <a href="/lifestyle/updtc-videos.html" target="_blank">📺</a>
+        </div>
+      </div>
+    </a>
 
-  <div class="section">
-    <div class="section-title">Tournament, etc...</div>
-    <div class="links">
-      <a href="/lifestyle/tournament-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/lifestyle/tournament-videos.html" target="_blank">📺 Videos</a>
-    </div>
-  </div>
+    <a href="/lifestyle/camp-aguinaldo-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-title">Camp Aguinaldo</div>
+        <div class="links">
+          <a href="/lifestyle/camp-aguinaldo-photos.html" target="_blank">📷</a>
+          <a href="/lifestyle/camp-aguinaldo-videos.html" target="_blank">📺</a>
+        </div>
+      </div>
+    </a>
 
-  <div class="section">
-    <div class="section-title">Other Photos</div>
-    <div class="links">
-      <a href="/lifestyle/other-photos.html" target="_blank">📷 Photos</a> |
-      <a href="/lifestyle/other-videos.html" target="_blank">📺 Videos</a>
-    </div>
+    <a href="/lifestyle/tournament-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-title">Tournament, etc...</div>
+        <div class="links">
+          <a href="/lifestyle/tournament-photos.html" target="_blank">📷</a>
+          <a href="/lifestyle/tournament-videos.html" target="_blank">📺</a>
+        </div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/other-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-title">Other Photos</div>
+        <div class="links">
+          <a href="/lifestyle/other-photos.html" target="_blank">📷</a>
+          <a href="/lifestyle/other-videos.html" target="_blank">📺</a>
+        </div>
+      </div>
+    </a>
+
   </div>
 </div>
