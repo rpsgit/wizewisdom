@@ -108,13 +108,13 @@ title: Image Gallery
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868" 
-         alt="Play 1" loading="lazy">
+         alt="Play 1">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=4000&height=3000" 
-         alt="Play 2" loading="lazy">
+         alt="Play 2">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=4000&height=1868" 
-         alt="Play 3" loading="lazy">
+         alt="Play 3">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -130,13 +130,13 @@ title: Image Gallery
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204" 
-         alt="Wander 1" loading="lazy">
+         alt="Wander 1">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161" 
-         alt="Wander 2" loading="lazy">
+         alt="Wander 2">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204" 
-         alt="Wander 3" loading="lazy">
+         alt="Wander 3">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
@@ -152,7 +152,7 @@ title: Image Gallery
   <div class="gallery">
     <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=400" 
          data-full="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000" 
-         alt="Eat 1" loading="lazy">
+         alt="Eat 1">
   </div>
   <div class="lightbox">
     <span class="close">✖</span>
