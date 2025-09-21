@@ -93,7 +93,7 @@ h1 {
 </style>
 
 <div class="page-container">
-  <h1>🎾 Pickleball</h1>
+  <h1>Pickleball</h1>
 
   <div class="pickle-container">
 
