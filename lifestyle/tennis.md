@@ -48,7 +48,7 @@ h1 {
   height: 140px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .section-ball {
@@ -74,7 +74,7 @@ h1 {
 
 .section:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 25px 8px rgba(255, 255, 200, 0.7), 0 0 50px 15px rgba(255, 255, 150, 0.5);
+  /* Removed yellow glow box-shadow */
 }
 
 /* === RESPONSIVE === */
