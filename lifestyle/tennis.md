@@ -46,43 +46,34 @@ h1 {
   align-items: center;
   width: 180px;
   height: 180px;
+  background: #ffffff; /* solid circle behind the ball */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-align: center;
+}
+
+.section-ball {
+  width: 120px;
+  height: 120px;
   background: url('/assets/images/tennis-ball.png') no-repeat center center;
   background-size: contain;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  z-index: 1;
+  margin-bottom: 10px;
 }
 
 .section:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.6), 0 0 40px 10px rgba(255, 255, 255, 0.3);
-}
-
-/* === GLASS EFFECT BEHIND TENNIS BALL === */
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(6px);
-  z-index: -1;
+  box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.6), 0 0 30px 10px rgba(255, 255, 0, 0.3);
 }
 
 .section-title {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #000;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
-  z-index: 2;
+  color: #222;
 }
 
 .links {
   font-size: 0.9rem;
-  z-index: 2;
 }
 
 .links a {
@@ -113,40 +104,40 @@ h1 {
 
     <a href="/lifestyle/updtc-photos.html" class="section-link">
       <div class="section">
+        <div class="section-ball"></div>
         <div class="section-title">UPDTC</div>
         <div class="links">
-          <a href="/lifestyle/updtc-photos.html" target="_blank">📷</a>
-          <a href="/lifestyle/updtc-videos.html" target="_blank">📺</a>
+          <a href="/lifestyle/updtc-photos.html" target="_blank"></a>
         </div>
       </div>
     </a>
 
     <a href="/lifestyle/camp.html" class="section-link">
       <div class="section">
+        <div class="section-ball"></div>
         <div class="section-title">CAMP</div>
         <div class="links">
-          <a href="/lifestyle/camp-photos.html" target="_blank">📷</a>
-          <a href="/lifestyle/camp-videos.html" target="_blank">📺</a>
+          <a href="/lifestyle/camp-photos.html" target="_blank"></a>
         </div>
       </div>
     </a>
 
     <a href="/lifestyle/tournament-photos.html" class="section-link">
       <div class="section">
+        <div class="section-ball"></div>
         <div class="section-title">TOURNEY</div>
         <div class="links">
-          <a href="/lifestyle/tournament-photos.html" target="_blank">📷</a>
-          <a href="/lifestyle/tournament-videos.html" target="_blank">📺</a>
+          <a href="/lifestyle/tournament-photos.html" target="_blank"></a>
         </div>
       </div>
     </a>
 
     <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
-        <div class="section-title">Other</div>
+        <div class="section-ball"></div>
+        <div class="section-title">OTHER</div>
         <div class="links">
-          <a href="/lifestyle/others.html" target="_blank">📷</a>
-          <a href="/lifestyle/other-videos.html" target="_blank">📺</a>
+          <a href="/lifestyle/others.html" target="_blank"></a>
         </div>
       </div>
     </a>
