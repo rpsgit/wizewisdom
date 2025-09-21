@@ -37,7 +37,7 @@ h1 {
 }
 
 /* === CONTAINER FOR ALL SPOONS === */
-.tennis-container {
+.recipe-container {
   display: flex;
   justify-content: center;
   gap: 36px; /* increased for bigger spoons */
@@ -89,7 +89,7 @@ h1 {
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .tennis-container {
+  .recipe-container {
     flex-direction: column;
     align-items: center;
   }
@@ -97,7 +97,7 @@ h1 {
 </style>
 
 <div class="page-container">
-  <h1>Tennis</h1>
+  <h1>Recipes</h1>
 
   <div class="spoon-container">
 
