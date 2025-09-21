@@ -35,65 +35,28 @@ title: Lifestyle
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   }
 
-  /* === IMAGE ANIMATION === */
+  /* === IMAGE === */
   .grid-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: brightness(0.7);
-    opacity: 0;
-    transform: scale(1.05);
-    transition: opacity 0.6s ease, transform 0.8s ease;
+    display: block;
+    opacity: 1; /* ✅ Fully visible right away */
+    transform: scale(1); /* ✅ No animation delay */
   }
 
-  .grid-item img.loaded {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  /* Stagger effect for images */
-  .grid-item:nth-child(1) img.loaded {
-    transition-delay: 0.1s;
-  }
-
-  .grid-item:nth-child(2) img.loaded {
-    transition-delay: 0.25s;
-  }
-
-  .grid-item:nth-child(3) img.loaded {
-    transition-delay: 0.4s;
-  }
-
-  /* === TEXT ANIMATION === */
+  /* === TEXT === */
   .grid-text {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -40%);
-    opacity: 0;
+    transform: translate(-50%, -50%);
+    opacity: 1; /* ✅ Show text immediately */
     color: white;
     font-size: 2rem;
     font-weight: bold;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-
-  .grid-item img.loaded + .grid-text {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-
-  /* Staggered delay for text (just after images) */
-  .grid-item:nth-child(1) img.loaded + .grid-text {
-    transition-delay: 0.3s;
-  }
-
-  .grid-item:nth-child(2) img.loaded + .grid-text {
-    transition-delay: 0.45s;
-  }
-
-  .grid-item:nth-child(3) img.loaded + .grid-text {
-    transition-delay: 0.6s;
   }
 
   @media (max-width: 768px) {
@@ -112,40 +75,18 @@ title: Lifestyle
 
   <div class="grid">
     <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
-      <img loading="lazy" src="assets/images/play.jpg" alt="Tennis">
+      <img src="/assets/images/play.jpg" alt="Tennis">
       <div class="grid-text">🎾 Tennis</div>
     </div>
 
     <div class="grid-item" onclick="window.location.href='/lifestyle/pickleball.html'">
-      <img loading="lazy" src="assets/images/pickle.jpg" alt="Pickleball">
+      <img src="/assets/images/pickle.jpg" alt="Pickleball">
       <div class="grid-text">🏓 Pickleball</div>
     </div>
 
     <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
-      <img loading="lazy" src="assets/images/eat.jpg" alt="Recipes">
+      <img src="/assets/images/eat.jpg" alt="Recipes">
       <div class="grid-text">🍳 Recipes</div>
     </div>
   </div>
 </div>
-
-<script>
-  document.querySelectorAll('.grid-item img').forEach(img => {
-    // Only load when image enters the viewport
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const image = entry.target;
-            image.src = image.dataset.src;
-            image.classList.add('loaded');
-            observer.unobserve(image);
-          }
-        });
-      });
-      observer.observe(img);
-    } else {
-      // Fallback for old browsers
-      img.classList.add('loaded');
-    }
-  });
-</script>
