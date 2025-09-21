@@ -4,6 +4,14 @@ title: Tennis
 ---
 
 <style>
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/tennis-index.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
 .page-container {
   max-width: 900px;
   margin: 30px auto;
