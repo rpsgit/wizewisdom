@@ -4,6 +4,14 @@ title: Book Feature
 ---
 
 <style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/book-feature.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
+
   .content {
     max-width: 900px;
     margin: 40px auto;
