@@ -13,7 +13,7 @@ body {
 }
 
 .page-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 40px auto;
   text-align: center;
 }
@@ -27,10 +27,10 @@ h1 {
 
 /* === GRID LAYOUT === */
 .section-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
   gap: 30px;
-  justify-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* allow wrapping on small screens */
 }
 
 /* === TENNIS BALL SECTIONS === */
@@ -39,6 +39,7 @@ h1 {
 }
 
 .section {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -49,13 +50,25 @@ h1 {
   background-size: contain;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
   border-radius: 50%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  z-index: 1;
 }
 
 .section:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.6), 0 0 40px 10px rgba(255, 255, 0, 0.3);
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.6), 0 0 40px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* === GLASS EFFECT BEHIND TENNIS BALL === */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
+  z-index: -1;
 }
 
 .section-title {
@@ -64,10 +77,12 @@ h1 {
   color: #000;
   margin-bottom: 10px;
   text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+  z-index: 2;
 }
 
 .links {
   font-size: 0.9rem;
+  z-index: 2;
 }
 
 .links a {
@@ -80,6 +95,14 @@ h1 {
 
 .links a:hover {
   text-decoration: underline;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .section-grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>
 
@@ -98,19 +121,19 @@ h1 {
       </div>
     </a>
 
-    <a href="/lifestyle/camp-aguinaldo-photos.html" class="section-link">
+    <a href="/lifestyle/camp.html" class="section-link">
       <div class="section">
-        <div class="section-title">Camp Aguinaldo</div>
+        <div class="section-title">CAMP</div>
         <div class="links">
-          <a href="/lifestyle/camp-aguinaldo-photos.html" target="_blank">📷</a>
-          <a href="/lifestyle/camp-aguinaldo-videos.html" target="_blank">📺</a>
+          <a href="/lifestyle/camp-photos.html" target="_blank">📷</a>
+          <a href="/lifestyle/camp-videos.html" target="_blank">📺</a>
         </div>
       </div>
     </a>
 
     <a href="/lifestyle/tournament-photos.html" class="section-link">
       <div class="section">
-        <div class="section-title">Tournament, etc...</div>
+        <div class="section-title">TOURNEY</div>
         <div class="links">
           <a href="/lifestyle/tournament-photos.html" target="_blank">📷</a>
           <a href="/lifestyle/tournament-videos.html" target="_blank">📺</a>
@@ -118,11 +141,11 @@ h1 {
       </div>
     </a>
 
-    <a href="/lifestyle/other-photos.html" class="section-link">
+    <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
-        <div class="section-title">Other Photos</div>
+        <div class="section-title">Other</div>
         <div class="links">
-          <a href="/lifestyle/other-photos.html" target="_blank">📷</a>
+          <a href="/lifestyle/others.html" target="_blank">📷</a>
           <a href="/lifestyle/other-videos.html" target="_blank">📺</a>
         </div>
       </div>
