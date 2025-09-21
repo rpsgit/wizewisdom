@@ -61,7 +61,7 @@ h1 {
 .section-ball {
   width: 100%;
   height: 100%;
-  background: url('/assets/images/pickleball.png') no-repeat center center;
+  background: url('/assets/images/pickle-ball.png') no-repeat center center;
   background-size: contain;
   position: relative;
   z-index: 0;
