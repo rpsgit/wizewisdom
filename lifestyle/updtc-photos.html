@@ -1,6 +1,6 @@
 ---
 layout: default
-title: UPDTC Photos
+title: Tennis
 ---
 
 <style>
@@ -11,167 +11,119 @@ body {
   background-size: cover;
   font-family: Arial, sans-serif;
 }
-  .page-container {
-  max-width: 1100px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-}
 
-h1 {
+.page-container {
+  max-width: 1000px;
+  margin: 40px auto;
   text-align: center;
-  color: #222;
-  margin-bottom: 20px;
 }
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 15px;
-  margin-top: 15px;
+/* === PAGE TITLE === */
+h1 {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 15px 30px;
+  border-radius: 15px;
+  color: #111;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-.gallery img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease-in-out;
+/* === CONTAINER FOR ALL TENNIS BALLS === */
+.tennis-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  background: rgba(255, 255, 255, 0.7); /* increased translucence to 70% */
+  padding: 25px 40px;
+  border-radius: 25px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* === INDIVIDUAL TENNIS BALL SECTIONS === */
+.section-link {
+  text-decoration: none;
+}
+
+.section {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  text-align: center;
   cursor: pointer;
-  object-fit: cover;
+  transition: transform 0.25s ease;
 }
 
-.gallery img:hover {
-  transform: scale(1.05);
-}
-
-.lightbox {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
+.section-ball {
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  background: url('/assets/images/tennis-ball.png') no-repeat center center;
+  background-size: contain;
+  position: relative;
+  z-index: 0;
 }
 
-.lightbox img {
-  max-width: 90%;
-  max-height: 80%;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
-.lightbox .nav-arrow {
+.section-title {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
-  color: white;
-  cursor: pointer;
-  user-select: none;
-  padding: 10px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+  text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  z-index: 1;
 }
 
-.lightbox .prev { left: 20px; }
-.lightbox .next { right: 20px; }
+.section:hover {
+  transform: scale(1.08);
+}
 
-.lightbox .close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  font-size: 2rem;
-  color: white;
-  cursor: pointer;
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .tennis-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>
 
 <div class="page-container">
-  <h1>📷 UPDTC Photos</h1>
-  <div class="gallery" id="gallery"></div>
+  <h1>🎾 Tennis</h1>
 
-  <div class="lightbox">
-    <span class="close">✖</span>
-    <span class="nav-arrow prev">⟨</span>
-    <img src="">
-    <span class="nav-arrow next">⟩</span>
+  <div class="tennis-container">
+
+    <a href="/lifestyle/updtc-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">UPDTC</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/camp.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">CAMP</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/tournament-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">TOURNEY</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/other.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">OTHER</div>
+      </div>
+    </a>
+
   </div>
 </div>
-
-<script>
-// List of full-size OneDrive images
-const imagesData = [
-  "https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps",
-  "https://1drv.ms/i/c/6118ddcb5316a0a9/IQT6W9-o3JqDRb3nQeH1QmXOAcmduwEgVxmfK6OwwB8kK8o",
-  "https://1drv.ms/i/c/6118ddcb5316a0a9/IQTNykV7gCQvRqTLKWd-6F_CAXAP8nHP-hlTRoL-MtWyv30",
-  "https://1drv.ms/i/c/6118ddcb5316a0a9/IQQSh4Mq3dyIRaD034KTQeq3AaYKwCsx9gWFmr3AFt3hAqU",
-  "https://1drv.ms/i/c/6118ddcb5316a0a9/IQTdjWY-j1M_T41fAQ2QErAoAagrYTZ_aLfFL-ZPLb2YD2M"
-  // Add more image URLs here
-];
-
-const gallery = document.getElementById('gallery');
-
-imagesData.forEach(url => {
-  // Create a smaller thumbnail URL (OneDrive supports resizing with "width" & "height" params)
-  const thumbUrl = url + "?width=400&height=300";
-
-  const img = document.createElement('img');
-  img.src = thumbUrl;
-  img.dataset.full = url + "?width=2048&height=1536"; // full-res for lightbox
-  img.alt = "UPDTC Photo";
-  img.loading = "lazy";
-
-  gallery.appendChild(img);
-});
-
-// Lightbox functionality
-const images = document.querySelectorAll('.gallery img');
-const lightbox = document.querySelector('.lightbox');
-const lightboxImg = lightbox.querySelector('img');
-const closeBtn = lightbox.querySelector('.close');
-const prevBtn = lightbox.querySelector('.prev');
-const nextBtn = lightbox.querySelector('.next');
-let currentIndex = 0;
-
-function showImage(index) {
-  currentIndex = index;
-  lightboxImg.src = images[currentIndex].dataset.full;
-  lightbox.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-
-function hideLightbox() {
-  lightbox.style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-images.forEach((img, index) => img.addEventListener('click', () => showImage(index)));
-closeBtn.addEventListener('click', hideLightbox);
-prevBtn.addEventListener('click', e => { 
-  e.stopPropagation();
-  currentIndex = (currentIndex - 1 + images.length) % images.length;
-  showImage(currentIndex);
-});
-nextBtn.addEventListener('click', e => { 
-  e.stopPropagation();
-  currentIndex = (currentIndex + 1) % images.length;
-  showImage(currentIndex);
-});
-lightbox.addEventListener('click', e => { if(e.target === lightbox) hideLightbox(); });
-
-document.addEventListener('keydown', e => {
-  if(lightbox.style.display === 'flex'){
-    if(e.key === 'Escape') hideLightbox();
-    if(e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + images.length) % images.length; showImage(currentIndex); }
-    if(e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % images.length; showImage(currentIndex); }
-  }
-});
-</script>
