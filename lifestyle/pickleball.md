@@ -1,48 +1,115 @@
-
 ---
 layout: default
 title: Pickleball
 ---
 
 <style>
-.page-container {
-  max-width: 900px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/pickleball.png') no-repeat center center fixed;
+  background-size: cover;
   font-family: Arial, sans-serif;
-  line-height: 1.6;
 }
-h1, h2 {
+
+.page-container {
+  max-width: 1000px;
+  margin: 40px auto;
   text-align: center;
-  color: #222;
 }
+
+/* === PAGE TITLE === */
+h1 {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 15px 30px;
+  border-radius: 15px;
+  color: #111;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* === CONTAINER FOR ALL PICKLE BALLS === */
+.pickle-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  background: rgba(255, 255, 255, 0.7); /* increased translucence to 70% */
+  padding: 25px 40px;
+  border-radius: 25px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* === INDIVIDUAL PICKLE BALL SECTIONS === */
+.section-link {
+  text-decoration: none;
+}
+
 .section {
-  margin-top: 25px;
+  position: relative;
+  width: 140px;
+  height: 140px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.25s ease;
 }
-ul {
-  padding-left: 20px;
+
+.section-ball {
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/pickleball.png') no-repeat center center;
+  background-size: contain;
+  position: relative;
+  z-index: 0;
+}
+
+.section-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+  text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+.section:hover {
+  transform: scale(1.08);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .pickle-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>
 
 <div class="page-container">
-  <h1>🏓 Pickleball</h1>
+  <h1>🎾 Pickleball</h1>
 
-  <div class="section">
-    <h2>📺 Videos</h2>
-    <ul>
-      <li><a href="#" target="_blank">Beginner Pickleball Lesson</a></li>
-      <li><a href="#" target="_blank">Pro Match Strategies</a></li>
-    </ul>
-  </div>
+  <div class="pickle-container">
 
-  <div class="section">
-    <h2>🔗 Links & Updates</h2>
-    <ul>
-      <li><a href="#" target="_blank">Rules & Scoring Guide</a></li>
-      <li><a href="#" target="_blank">Local Pickleball Clubs</a></li>
-    </ul>
+    <a href="/lifestyle/pickle-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">Tiende</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/other.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">OTHER</div>
+      </div>
+    </a>
+
   </div>
 </div>
