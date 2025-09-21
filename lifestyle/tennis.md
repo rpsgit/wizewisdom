@@ -25,48 +25,50 @@ h1 {
   font-size: 2rem;
 }
 
-/* === GRID LAYOUT === */
-.section-grid {
+/* === CONTAINER FOR ALL TENNIS BALLS === */
+.tennis-container {
   display: flex;
-  gap: 30px;
   justify-content: center;
-  flex-wrap: wrap; /* allow wrapping on small screens */
+  gap: 30px;
+  background: rgba(255, 255, 255, 0.6); /* translucent oblong background */
+  padding: 25px 40px;
+  border-radius: 25px;
+  flex-wrap: wrap; /* wraps on smaller screens */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
-/* === TENNIS BALL SECTIONS === */
+/* === INDIVIDUAL TENNIS BALL SECTIONS === */
 .section-link {
   text-decoration: none;
 }
 
 .section {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 180px;
-  height: 180px;
-  background: rgba(255, 255, 255, 0.6); /* 60% translucent */
-  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  text-align: center;
-  box-shadow: 0 0 15px rgba(255, 255, 200, 0.5), 0 0 30px rgba(255, 255, 150, 0.3);
 }
 
 .section-ball {
-  width: 140px; /* slightly bigger */
-  height: 140px; /* slightly bigger */
+  width: 100%;
+  height: 100%;
   background: url('/assets/images/tennis-ball.png') no-repeat center center;
   background-size: contain;
-  position: absolute; /* behind the text */
+  position: relative;
+  z-index: 0;
 }
 
 .section-title {
-  position: relative; /* on top of tennis ball */
-  font-size: 1.2rem; /* slightly bigger for visibility */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.1rem;
   font-weight: bold;
   color: #000;
-  text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
   z-index: 1;
 }
 
@@ -75,13 +77,9 @@ h1 {
   box-shadow: 0 0 25px 8px rgba(255, 255, 200, 0.7), 0 0 50px 15px rgba(255, 255, 150, 0.5);
 }
 
-.links {
-  display: none; /* hide links, optional */
-}
-
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .section-grid {
+  .tennis-container {
     flex-direction: column;
     align-items: center;
   }
@@ -91,7 +89,7 @@ h1 {
 <div class="page-container">
   <h1>🎾 Tennis</h1>
 
-  <div class="section-grid">
+  <div class="tennis-container">
 
     <a href="/lifestyle/updtc-photos.html" class="section-link">
       <div class="section">
