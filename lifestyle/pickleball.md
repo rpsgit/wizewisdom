@@ -27,7 +27,6 @@ h1 {
   color: #111;
   font-size: 2.5rem;
   font-weight: 700;
-  text-align: center;
   margin-bottom: 40px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
@@ -36,9 +35,9 @@ h1 {
 .pickle-container {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  background: rgba(255, 255, 255, 0.7); /* increased translucence to 70% */
-  padding: 25px 40px;
+  gap: 36px; /* increased for bigger balls */
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 30px 45px; /* increased padding */
   border-radius: 25px;
   flex-wrap: wrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -51,8 +50,8 @@ h1 {
 
 .section {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 168px;  /* 20% bigger */
+  height: 168px; /* 20% bigger */
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
@@ -72,7 +71,7 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.1rem;
+  font-size: 1.3rem; /* increased proportionally */
   font-weight: bold;
   color: #000;
   text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
