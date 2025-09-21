@@ -64,67 +64,32 @@ h1 {
   transform: scale(1.05);
 }
 
-/* Hover caption */
-.gallery-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 8px 0;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bold;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.gallery-item:hover .gallery-caption {
-  opacity: 1;
+.gallery-item:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
 
 /* === LIGHTBOX STYLES === */
-.lightbox {
-  opacity: 0;
-  visibility: hidden;
+#lightbox {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.85);
-  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  transition: opacity 0.4s ease;
 }
 
-.lightbox img {
+#lightbox img {
   max-width: 90%;
   max-height: 90%;
   border-radius: 10px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.5);
-  transform: scale(0.9);
-  transition: transform 0.4s ease;
-}
-
-.lightbox:target {
-  opacity: 1;
-  visibility: visible;
-}
-
-.lightbox:target img {
   transform: scale(1);
-}
-
-.lightbox a {
-  display: block;
-  width: 100%;
-  height: 100%;
+  transition: transform 0.3s ease;
+  cursor: zoom-out;
 }
 
 /* === RESPONSIVE === */
@@ -138,44 +103,38 @@ h1 {
 <div class="page-container">
   <h1>🎾 UPDTC Photos</h1>
 
-  <!-- === PHOTO GALLERY WITH CAPTIONS === -->
+  <!-- === PHOTO GALLERY === -->
   <div class="gallery-container">
-    <a href="#img1" class="gallery-item">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="UPDTC Photo 1">
-      <div class="gallery-caption">View Full Size</div>
-    </a>
-    <a href="#img2" class="gallery-item">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="UPDTC Photo 2">
-      <div class="gallery-caption">View Full Size</div>
-    </a>
-    <a href="#img3" class="gallery-item">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR_r9hb05x-R6Z4g60UJbyFAfJnPirD_SGaGj1EkBVmqSs?width=1440&height=889" alt="UPDTC Photo 3">
-      <div class="gallery-caption">View Full Size</div>
-    </a>
-    <a href="#img4" class="gallery-item">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRwO72y07XySbhOVIgwEeH4AXxge8J1y7HymCEhSS0INOg?width=1080&height=565" alt="UPDTC Photo 4">
-      <div class="gallery-caption">View Full Size</div>
-    </a>
-    <a href="#img5" class="gallery-item">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="UPDTC Photo 5">
-      <div class="gallery-caption">View Full Size</div>
-    </a>
+    <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="UPDTC Photo 1"></div>
+    <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="UPDTC Photo 2"></div>
+    <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR_r9hb05x-R6Z4g60UJbyFAfJnPirD_SGaGj1EkBVmqSs?width=1440&height=889" alt="UPDTC Photo 3"></div>
+    <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRwO72y07XySbhOVIgwEeH4AXxge8J1y7HymCEhSS0INOg?width=1080&height=565" alt="UPDTC Photo 4"></div>
+    <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="UPDTC Photo 5"></div>
   </div>
 </div>
 
-<!-- === LIGHTBOX OVERLAYS === -->
-<div id="img1" class="lightbox">
-  <a href="#"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="UPDTC Photo 1"></a>
+<!-- === LIGHTBOX OVERLAY === -->
+<div id="lightbox">
+  <img src="" alt="Full Size Image">
 </div>
-<div id="img2" class="lightbox">
-  <a href="#"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="UPDTC Photo 2"></a>
-</div>
-<div id="img3" class="lightbox">
-  <a href="#"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR_r9hb05x-R6Z4g60UJbyFAfJnPirD_SGaGj1EkBVmqSs?width=1440&height=889" alt="UPDTC Photo 3"></a>
-</div>
-<div id="img4" class="lightbox">
-  <a href="#"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRwO72y07XySbhOVIgwEeH4AXxge8J1y7HymCEhSS0INOg?width=1080&height=565" alt="UPDTC Photo 4"></a>
-</div>
-<div id="img5" class="lightbox">
-  <a href="#"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="UPDTC Photo 5"></a>
-</div>
+
+<script>
+// Select all gallery images
+const galleryImages = document.querySelectorAll('.gallery-item img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = lightbox.querySelector('img');
+
+// Open lightbox on double click
+galleryImages.forEach(img => {
+  img.addEventListener('dblclick', () => {
+    lightbox.style.display = 'flex';
+    lightboxImg.src = img.src;
+  });
+});
+
+// Close lightbox on click
+lightbox.addEventListener('click', () => {
+  lightbox.style.display = 'none';
+  lightboxImg.src = '';
+});
+</script>
