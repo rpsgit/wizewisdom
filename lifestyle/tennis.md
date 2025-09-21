@@ -41,51 +41,42 @@ h1 {
 .section {
   position: relative;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 180px;
   height: 180px;
-  background: #ffffff; /* solid circle behind the ball */
+  background: rgba(255, 255, 255, 0.6); /* 60% translucent */
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   text-align: center;
+  box-shadow: 0 0 15px rgba(255, 255, 200, 0.5), 0 0 30px rgba(255, 255, 150, 0.3);
 }
 
 .section-ball {
-  width: 120px;
-  height: 120px;
+  width: 140px; /* slightly bigger */
+  height: 140px; /* slightly bigger */
   background: url('/assets/images/tennis-ball.png') no-repeat center center;
   background-size: contain;
-  margin-bottom: 10px;
+  position: absolute; /* behind the text */
+}
+
+.section-title {
+  position: relative; /* on top of tennis ball */
+  font-size: 1.2rem; /* slightly bigger for visibility */
+  font-weight: bold;
+  color: #000;
+  text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  z-index: 1;
 }
 
 .section:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.6), 0 0 30px 10px rgba(255, 255, 0, 0.3);
-}
-
-.section-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #222;
+  box-shadow: 0 0 25px 8px rgba(255, 255, 200, 0.7), 0 0 50px 15px rgba(255, 255, 150, 0.5);
 }
 
 .links {
-  font-size: 0.9rem;
-}
-
-.links a {
-  display: inline-block;
-  margin: 0 5px;
-  text-decoration: none;
-  color: #0056b3;
-  font-weight: 600;
-}
-
-.links a:hover {
-  text-decoration: underline;
+  display: none; /* hide links, optional */
 }
 
 /* === RESPONSIVE === */
@@ -106,9 +97,6 @@ h1 {
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">UPDTC</div>
-        <div class="links">
-          <a href="/lifestyle/updtc-photos.html" target="_blank"></a>
-        </div>
       </div>
     </a>
 
@@ -116,9 +104,6 @@ h1 {
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">CAMP</div>
-        <div class="links">
-          <a href="/lifestyle/camp-photos.html" target="_blank"></a>
-        </div>
       </div>
     </a>
 
@@ -126,9 +111,6 @@ h1 {
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">TOURNEY</div>
-        <div class="links">
-          <a href="/lifestyle/tournament-photos.html" target="_blank"></a>
-        </div>
       </div>
     </a>
 
@@ -136,9 +118,6 @@ h1 {
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">OTHER</div>
-        <div class="links">
-          <a href="/lifestyle/others.html" target="_blank"></a>
-        </div>
       </div>
     </a>
 
