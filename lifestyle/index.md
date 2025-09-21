@@ -112,17 +112,17 @@ title: Lifestyle
 
   <div class="grid">
     <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
-      <img loading="lazy" src="<YOUR_OPTIMIZED_TENNIS_IMAGE_URL>" alt="Tennis">
+      <img loading="lazy" src="assets/images/play.jpg" alt="Tennis">
       <div class="grid-text">🎾 Tennis</div>
     </div>
 
     <div class="grid-item" onclick="window.location.href='/lifestyle/pickleball.html'">
-      <img loading="lazy" src="<YOUR_OPTIMIZED_PICKLEBALL_IMAGE_URL>" alt="Pickleball">
+      <img loading="lazy" src="assets/images/pickle.jpg" alt="Pickleball">
       <div class="grid-text">🏓 Pickleball</div>
     </div>
 
     <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
-      <img loading="lazy" src="<YOUR_OPTIMIZED_RECIPES_IMAGE_URL>" alt="Recipes">
+      <img loading="lazy" src="assets/images/eat.jpg" alt="Recipes">
       <div class="grid-text">🍳 Recipes</div>
     </div>
   </div>
