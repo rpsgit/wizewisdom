@@ -4,44 +4,117 @@ title: Recipes
 ---
 
 <style>
-.page-container {
-  max-width: 900px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/recipe-index.png') no-repeat center center fixed;
+  background-size: cover;
   font-family: Arial, sans-serif;
+}
+
+.page-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 40px;
+  border-radius: 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  text-align: center;
   line-height: 1.6;
 }
-h1, h2 {
-  text-align: center;
-  color: #222;
+
+/* === PAGE TITLE === */
+h1 {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 15px 30px;
+  border-radius: 15px;
+  color: #111;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
+
+/* === CONTAINER FOR ALL SPOONS === */
+.tennis-container {
+  display: flex;
+  justify-content: center;
+  gap: 36px; /* increased for bigger spoons */
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  padding: 30px 45px; /* increased for spacing */
+  border-radius: 25px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* === INDIVIDUAL SPOON SECTIONS === */
+.section-link {
+  text-decoration: none;
+}
+
 .section {
-  margin-top: 25px;
+  position: relative;
+  width: 168px;  /* 20% bigger */
+  height: 168px; /* 20% bigger */
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.25s ease;
 }
-ul {
-  padding-left: 20px;
+
+.section-spoon {
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/spoon.png') no-repeat center center;
+  background-size: contain;
+  position: relative;
+  z-index: 0;
+}
+
+.section-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.3rem; /* increased proportionally */
+  font-weight: bold;
+  color: #000;
+  text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+.section:hover {
+  transform: scale(1.08); /* keeps hover subtle */
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .tennis-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>
 
 <div class="page-container">
-  <h1>🍳 Recipes</h1>
+  <h1>Tennis</h1>
 
-  <div class="section">
-    <h2>📺 Videos</h2>
-    <ul>
-      <li><a href="#" target="_blank">Example Recipe Video 1</a></li>
-      <li><a href="#" target="_blank">Example Recipe Video 2</a></li>
-    </ul>
-  </div>
+  <div class="spoon-container">
 
-  <div class="section">
-    <h2>🔗 Links & Updates</h2>
-    <ul>
-      <li><a href="#" target="_blank">Recipe Blog Post</a></li>
-      <li><a href="#" target="_blank">Ingredient Substitution Guide</a></li>
-    </ul>
+    <a href="/lifestyle/recipe-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-spoon"></div>
+        <div class="section-title">Recipes</div>
+      </div>
+    </a>
+
+
+    <a href="/lifestyle/other.html" class="section-link">
+      <div class="section">
+        <div class="section-spoon"></div>
+        <div class="section-title">OTHER</div>
+      </div>
+    </a>
+
   </div>
 </div>
