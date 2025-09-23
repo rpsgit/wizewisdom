@@ -23,20 +23,19 @@ h1 {
   display: inline-block;
   padding: 15px 30px;
   border-radius: 15px;
-  color: #000; /* ✅ Black text */
+  color: #000; /* Black text */
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 40px;
-  text-shadow: none; /* removed shadow */
+  text-shadow: none;
   background: none;
   box-shadow: none;
 }
 
 /* === CONTAINER FOR ALL TENNIS BALLS === */
 .tennis-container {
-  display: flex;
-  flex-direction: column; /* ✅ vertical layout */
-  align-items: center;
+  display: flex; /* ✅ horizontal layout */
+  justify-content: center;
   gap: 50px; /* space between balls */
   background: rgba(255, 255, 255, 0.7);
   padding: 30px 45px;
@@ -51,8 +50,8 @@ h1 {
 
 .section {
   position: relative;
-  width: 200px;  /* ✅ 10% bigger from original 182px */
-  height: 200px; /* ✅ 10% bigger */
+  width: 200px;  /* Tennis ball size */
+  height: 200px; 
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
@@ -74,11 +73,11 @@ h1 {
   transform: translate(-50%, -50%);
   font-size: 1.4rem;
   font-weight: bold;
-  color: #fff; /* ✅ White text */
+  color: #fff; /* White text */
   text-shadow: 
-    0 0 6px #fff,   /* ✅ White glow */
-    0 0 10px #fff, 
-    2px 2px 6px rgba(0,0,0,0.2); /* subtle shadow for readability */
+    0 0 6px #00ff00,   /* ✅ Green glow */
+    0 0 10px #00ff00, 
+    2px 2px 6px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
