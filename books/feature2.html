@@ -2,6 +2,7 @@
 layout: default
 title: Zen and the Art of Motorcycle Maintenance
 ---
+
 <style>
 body {
   margin: 0;
@@ -9,78 +10,91 @@ body {
   background: #f5f5f5 url('/assets/images/book-feature.png') no-repeat center center fixed;
   background-size: cover;
   font-family: Arial, sans-serif;
+  color: #000; /* Force black text globally */
 }
-  
-<style>
-  .zamm-summary {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    max-width: 780px;
-    margin: 20px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.70); /* translucent white */
-    backdrop-filter: blur(6px); /* subtle blur for readability */
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(13, 38, 63, 0.1);
-    color: #111;
-    line-height: 1.6;
-  }
-  h1, h2, h3 {
-    text-align: center;
-    color: #222;
-  }
-  ul {
-    line-height: 1.7;
-  }
-  .archive-inline {
-    margin: 24px 0;
-    text-align: center;
-  }
-  .archive-iframe {
-    width: 100%;
-    max-width: 800px;
-    height: 600px;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
+
+.zamm-container {
+  max-width: 780px;
+  margin: 20px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.7); /* Single translucent box */
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  color: #000;
+  line-height: 1.6;
+}
+
+.zamm-container h1,
+.zamm-container h2,
+.zamm-container h3,
+.zamm-container p,
+.zamm-container ul,
+.zamm-container li,
+.zamm-container strong,
+.zamm-container em {
+  color: #000; /* Ensure all text is black */
+}
+
+.zamm-container h1,
+.zamm-container h2,
+.zamm-container h3 {
+  text-align: center;
+}
+
+.zamm-container ul {
+  line-height: 1.7;
+  padding-left: 20px;
+}
+
+.archive-inline {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.archive-iframe {
+  width: 100%;
+  max-width: 800px;
+  height: 600px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 </style>
 
-<section class="zamm-summary" aria-labelledby="zamm-heading">
-  <div class="content">
-    <h1 id="zamm-heading">Zen and the Art of Motorcycle Maintenance</h1>
+<section class="zamm-container" aria-labelledby="zamm-heading">
+  <h1 id="zamm-heading">Zen and the Art of Motorcycle Maintenance</h1>
 
-    <p>The book isn’t really about motorcycles—it’s about <strong>how we approach life, work, and meaning</strong>. 
-    Pirsig uses the metaphor of motorcycle maintenance to explore <strong>quality of living</strong>.</p>
+  <p>The book isn’t really about motorcycles—it’s about <strong>how we approach life, work, and meaning</strong>. 
+  Pirsig uses the metaphor of motorcycle maintenance to explore <strong>quality of living</strong>.</p>
 
-    <h2>3 Key Takeaways</h2>
+  <h2>3 Key Takeaways</h2>
 
-    <h3>1. Balance "Classical" and "Romantic" Thinking</h3>
-    <ul>
-      <li><strong>Classical:</strong> logical, step-by-step, focused on systems (e.g., fixing a bike by following the manual).</li>
-      <li><strong>Romantic:</strong> intuitive, emotional, focused on experience (e.g., enjoying the ride).</li>
-    </ul>
-    <p> <em>Lesson:</em> Don’t live only in logic or only in feeling—integrate both for better decisions and richer experiences.</p>
+  <h3>1. Balance "Classical" and "Romantic" Thinking</h3>
+  <ul>
+    <li><strong>Classical:</strong> logical, step-by-step, focused on systems (e.g., fixing a bike by following the manual).</li>
+    <li><strong>Romantic:</strong> intuitive, emotional, focused on experience (e.g., enjoying the ride).</li>
+  </ul>
+  <p><em>Lesson:</em> Don’t live only in logic or only in feeling—integrate both for better decisions and richer experiences.</p>
 
-    <h3>2. Quality as a Guiding Principle</h3>
-    <ul>
-      <li>"Quality" isn’t fully definable, but we recognize it in good work, good art, good living.</li>
-      <li>Striving for quality in everyday actions (whether repairing a bike, writing code, or raising kids) creates meaning.</li>
-    </ul>
-    <p> <em>Lesson:</em> Ask yourself, “Am I doing this with quality?” instead of just “Am I getting it done?”</p>
+  <h3>2. Quality as a Guiding Principle</h3>
+  <ul>
+    <li>"Quality" isn’t fully definable, but we recognize it in good work, good art, good living.</li>
+    <li>Striving for quality in everyday actions (whether repairing a bike, writing code, or raising kids) creates meaning.</li>
+  </ul>
+  <p><em>Lesson:</em> Ask yourself, “Am I doing this with quality?” instead of just “Am I getting it done?”</p>
 
-    <h3>3. Life is Maintenance</h3>
-    <ul>
-      <li>Motorcycle maintenance is a metaphor: life requires ongoing care, attention, and patience.</li>
-      <li>Rushing, ignoring details, or being careless leads to breakdown—whether in machines, relationships, or your own mind.</li>
-    </ul>
-    <p> <em>Lesson:</em> Slow down, notice problems early, and fix them with care.</p>
+  <h3>3. Life is Maintenance</h3>
+  <ul>
+    <li>Motorcycle maintenance is a metaphor: life requires ongoing care, attention, and patience.</li>
+    <li>Rushing, ignoring details, or being careless leads to breakdown—whether in machines, relationships, or your own mind.</li>
+  </ul>
+  <p><em>Lesson:</em> Slow down, notice problems early, and fix them with care.</p>
 
-    <div class="archive-inline">
-    <iframe src="https://archive.org/embed/zenartofmotorcyc0000pirs_n5n0" width="560" height="384" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-    </div>
-
-    <p><strong>Overall Takeaway:</strong> Pirsig teaches that a good life is about integrating reason and intuition, 
-      pursuing quality in everything, and treating life itself like a machine you lovingly maintain.</p>
-
+  <div class="archive-inline">
+    <iframe class="archive-iframe" src="https://archive.org/embed/zenartofmotorcyc0000pirs_n5n0" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
   </div>
+
+  <p><strong>Overall Takeaway:</strong> Pirsig teaches that a good life is about integrating reason and intuition, 
+    pursuing quality in everything, and treating life itself like a machine you lovingly maintain.</p>
 </section>
