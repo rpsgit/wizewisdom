@@ -15,36 +15,31 @@ body {
 .page-container {
   max-width: 1000px;
   margin: 40px auto;
-  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
-  padding: 40px;
-  border-radius: 25px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
   text-align: center;
-  line-height: 1.6;
 }
 
 /* === PAGE TITLE === */
 h1 {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
   padding: 15px 30px;
   border-radius: 15px;
-  color: #111;
+  color: #000; /* Black text */
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 40px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-shadow: none; /* removed shadow */
+  background: none;
+  box-shadow: none;
 }
 
 /* === CONTAINER FOR ALL SPOONS === */
 .recipe-container {
-  display: flex;
+  display: flex; /* horizontal layout */
   justify-content: center;
-  gap: 36px; /* increased for bigger spoons */
-  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
-  padding: 30px 45px; /* increased for spacing */
+  gap: 50px; /* space between items */
+  background: rgba(255, 255, 255, 0.7);
+  padding: 30px 45px;
   border-radius: 25px;
-  flex-wrap: wrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
@@ -55,8 +50,8 @@ h1 {
 
 .section {
   position: relative;
-  width: 168px;  /* 20% bigger */
-  height: 168px; /* 20% bigger */
+  width: 200px;  /* slightly bigger */
+  height: 200px; 
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
@@ -76,15 +71,15 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.3rem; /* increased proportionally */
+  font-size: 1.4rem;
   font-weight: bold;
-  color: #000;
-  text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  color: #fff; /* ✅ White text */
+  text-shadow: none; /* removed shadow */
   z-index: 1;
 }
 
 .section:hover {
-  transform: scale(1.08); /* keeps hover subtle */
+  transform: scale(1.08);
 }
 
 /* === RESPONSIVE === */
@@ -99,7 +94,7 @@ h1 {
 <div class="page-container">
   <h1>Recipes</h1>
 
-  <div class="spoon-container">
+  <div class="recipe-container">
 
     <a href="/lifestyle/recipe-photos.html" class="section-link">
       <div class="section">
@@ -107,7 +102,6 @@ h1 {
         <div class="section-title">Recipes</div>
       </div>
     </a>
-
 
     <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
