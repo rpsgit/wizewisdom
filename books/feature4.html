@@ -2,6 +2,7 @@
 layout: default
 title: The Hidden Messages in Water
 ---
+
 <style>
 body {
   margin: 0;
@@ -9,46 +10,69 @@ body {
   background: #f5f5f5 url('/assets/images/book-feature.png') no-repeat center center fixed;
   background-size: cover;
   font-family: Arial, sans-serif;
+  color: #000; /* Force global black text */
 }
-  
-<style>
-  .content-box {
-    max-width: 900px;
-    margin: 40px auto;
-    background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-  }
-  h1, h2, h3 {
-    text-align: center;
-    color: #222;
-  }
-  ul {
-    line-height: 1.7;
-  }
-  .bottom-line {
-    font-weight: bold;
-    margin-top: 20px;
-    padding: 15px;
-    border-left: 4px solid #666;
-    background: rgba(240, 240, 240, 0.8);
-    border-radius: 6px;
-  }
-  .archive-inline {
-    margin: 24px 0;
-    text-align: center;
-  }
-  .archive-iframe {
-    width: 100%;
-    max-width: 800px;
-    height: 600px;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
+
+.content-box {
+  max-width: 900px;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.7); /* Single translucent container */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  line-height: 1.6;
+  color: #000;
+}
+
+.content-box h1,
+.content-box h2,
+.content-box h3,
+.content-box p,
+.content-box ul,
+.content-box li,
+.content-box strong,
+.content-box em {
+  color: #000; /* Ensure everything is black text */
+}
+
+.content-box h1,
+.content-box h2,
+.content-box h3 {
+  text-align: center;
+}
+
+.content-box ul {
+  line-height: 1.7;
+  padding-left: 20px;
+}
+
+.content-box li {
+  margin-bottom: 10px;
+}
+
+.bottom-line {
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 15px;
+  border-left: 4px solid #000; /* Pure black accent */
+  background: rgba(255, 255, 255, 0.7); /* Match main box */
+  border-radius: 6px;
+  color: #000;
+}
+
+.archive-inline {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.archive-iframe {
+  width: 100%;
+  max-width: 800px;
+  height: 600px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 </style>
 
 <div class="content-box">
@@ -70,8 +94,8 @@ body {
     <li><strong>Collective Energy Matters:</strong> Group intentions (prayer, meditation, positive focus) can influence not just individuals but larger environments.</li>
   </ul>
 
-   <div class="archive-inline">
-<iframe src="https://archive.org/embed/hiddenmessagesin00emot" width="560" height="384" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+  <div class="archive-inline">
+    <iframe class="archive-iframe" src="https://archive.org/embed/hiddenmessagesin00emot" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
   </div>
 
   <h2>How to Apply Daily</h2>
@@ -84,7 +108,7 @@ body {
   </ul>
 
   <div class="bottom-line">
-    <p><strong>Overall Takeaway</strong>: If thoughts and words can change water crystals, they can change you. 
+    <p><strong>Overall Takeaway:</strong> If thoughts and words can change water crystals, they can change you. 
     Choose love, gratitude, and kindness as your daily vibration.</p>
   </div>
 </div>
