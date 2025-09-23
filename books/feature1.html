@@ -10,77 +10,57 @@ body {
   background: #f5f5f5 url('/assets/images/book-feature.png') no-repeat center center fixed;
   background-size: cover;
   font-family: Arial, sans-serif;
+  color: #000; /* Global black text */
 }
 
-<style>
-  .moc-summary {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    max-width: 780px;
-    margin: 20px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.70); /* translucent white */
-    backdrop-filter: blur(6px); /* subtle blur for readability */
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(13, 38, 63, 0.1);
-    color: #111;
-    line-height: 1.6;
-  }
+.moc-container {
+  max-width: 780px;
+  margin: 20px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.7); /* Single translucent container */
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  color: #000; /* Force black text */
+  line-height: 1.6;
+}
 
-  .moc-summary h2 {
-    margin: 0 0 8px 0;
-    font-size: 1.5rem;
-    letter-spacing: -0.2px;
-  }
+.moc-container h2,
+.moc-container h3,
+.moc-container p,
+.moc-container li,
+.moc-container strong {
+  color: #000; /* Force black for headings and text */
+}
 
-  .moc-summary .lead {
-    margin: 6px 0 18px 0;
-    color: #333;
-    font-size: 1rem;
-  }
+.moc-container .three-takeaways {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
 
-  .moc-summary .three-takeaways {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin: 12px 0 18px 0;
+@media (min-width: 720px) {
+  .moc-container .three-takeaways {
+    grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  @media (min-width: 720px) {
-    .moc-summary .three-takeaways {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
+.moc-container .card {
+  background: transparent; /* Remove individual card backgrounds */
+  border: none;
+  padding: 0;
+}
 
-  .moc-summary .card {
-    background: rgba(255, 255, 255, 0.6); /* translucent card */
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 14px;
-    border-radius: 8px;
-    min-height: 120px;
-    backdrop-filter: blur(4px);
-  }
-
-  .moc-summary .card h3 {
-    margin: 0 0 8px 0;
-    font-size: 1.02rem;
-  }
-
-  .moc-summary p { margin: 6px 0; }
-
-  .moc-summary .how-to {
-    margin-top: 14px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.60);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    backdrop-filter: blur(3px);
-  }
+.moc-container ol {
+  padding-left: 20px;
+}
 
 </style>
 
-<section class="moc-summary" aria-labelledby="moc-heading">
+<section class="moc-container" aria-labelledby="moc-heading">
   <h2 id="moc-heading">Map of Consciousness</h2>
-  <p class="lead">
+  <p>
     Hawkins maps human states from ~1–1000. Below 200 drains energy and fosters reactivity; above 200
     empowers growth, and 500+ opens to love, joy, and peace. Use this as a practical tool for daily self-check.
   </p>
@@ -102,7 +82,7 @@ body {
     </article>
   </div>
 
-  <div class="how-to">
+  <div>
     <h3 style="margin-top:0">How to use it?</h3>
     <ol>
       <li>Check your state: ask, “Am I below or above 200 right now?”</li>
@@ -113,5 +93,4 @@ body {
 
   <p><strong>Overall Takeaway</strong>: Spend more moments above 200 (courage)—that’s where true freedom, health, and authentic living begin.</p>
 
-  </section>
-
+</section>
