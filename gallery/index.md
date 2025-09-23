@@ -3,7 +3,16 @@ layout: default
 title: Image Gallery
 ---
 
-<h2 style="text-align:center;">📸 Gallery</h2>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/gallery-index.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
+
+<h2 style="text-align:center;">Gallery</h2>
 
 <!-- Navigation Links -->
 <nav style="text-align:center; margin-bottom: 20px;">
