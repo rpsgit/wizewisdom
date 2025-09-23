@@ -21,23 +21,24 @@ body {
 /* === PAGE TITLE === */
 h1 {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
   padding: 15px 30px;
   border-radius: 15px;
-  color: #111;
+  color: #fff; /* White text */
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 40px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* subtle dark shadow for contrast */
+  background: none; /* ✅ Removed white background */
+  box-shadow: none;
 }
 
 /* === CONTAINER FOR ALL TENNIS BALLS === */
 .tennis-container {
   display: flex;
   justify-content: center;
-  gap: 36px; /* increased for bigger balls */
-  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
-  padding: 30px 45px; /* increased for spacing */
+  gap: 40px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 30px 45px;
   border-radius: 25px;
   flex-wrap: wrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -50,8 +51,8 @@ h1 {
 
 .section {
   position: relative;
-  width: 168px;  /* 20% bigger */
-  height: 168px; /* 20% bigger */
+  width: 182px;  /* ✅ 30% bigger */
+  height: 182px; /* ✅ 30% bigger */
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
@@ -71,15 +72,18 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.3rem; /* increased proportionally */
+  font-size: 1.4rem; /* slightly bigger for balance */
   font-weight: bold;
-  color: #000;
-  text-shadow: 2px 2px 5px rgba(255,255,255,0.9), 1px 1px 3px rgba(0,0,0,0.5);
+  color: #fff; /* ✅ White text */
+  text-shadow: 
+    0 0 6px #adff2f,   /* ✅ Yellow-green glow */
+    0 0 10px #adff2f, 
+    2px 2px 6px rgba(0,0,0,0.6); /* slight dark shadow for readability */
   z-index: 1;
 }
 
 .section:hover {
-  transform: scale(1.08); /* keeps hover subtle */
+  transform: scale(1.08);
 }
 
 /* === RESPONSIVE === */
