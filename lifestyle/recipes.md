@@ -32,7 +32,7 @@ h1 {
   box-shadow: none;
 }
 
-/* === CONTAINER FOR ALL SPOONS === */
+/* === CONTAINER FOR ALL HATS === */
 .recipe-container {
   display: flex; /* horizontal layout */
   justify-content: center;
@@ -43,7 +43,7 @@ h1 {
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
-/* === INDIVIDUAL SPOON SECTIONS === */
+/* === INDIVIDUAL HATS SECTIONS === */
 .section-link {
   text-decoration: none;
 }
@@ -57,10 +57,10 @@ h1 {
   transition: transform 0.25s ease;
 }
 
-.section-spoon {
+.section-hat {
   width: 100%;
   height: 100%;
-  background: url('/assets/images/spoon.png') no-repeat center center;
+  background: url('/assets/images/hat.png') no-repeat center center;
   background-size: contain;
   position: relative;
   z-index: 0;
@@ -98,14 +98,14 @@ h1 {
 
     <a href="/lifestyle/recipe-photos.html" class="section-link">
       <div class="section">
-        <div class="section-spoon"></div>
+        <div class="section-hat"></div>
         <div class="section-title">Recipes</div>
       </div>
     </a>
 
     <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
-        <div class="section-spoon"></div>
+        <div class="section-hat"></div>
         <div class="section-title">OTHER</div>
       </div>
     </a>
