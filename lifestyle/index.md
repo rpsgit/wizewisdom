@@ -1,113 +1,106 @@
 ---
 layout: default
-title: Map of Consciousness
+title: Lifestyle
 ---
 
 <style>
 body {
   margin: 0;
   padding: 0;
-  background: #f5f5f5 url('/assets/images/book-feature.png') no-repeat center center fixed;
+  background: #f5f5f5 url('/assets/images/lifestyle-index.png') no-repeat center center fixed;
   background-size: cover;
   font-family: Arial, sans-serif;
-  color: #000; /* Global black text */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Full vertical centering */
-}
-
-.moc-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 780px;
-  margin: 20px;
-  padding: 30px;
-  background: rgba(255, 255, 255, 0.7); /* Single translucent container */
-  backdrop-filter: blur(6px);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   color: #000;
-  line-height: 1.6;
-  text-align: center; /* Center-align text */
 }
 
-.moc-container h2,
-.moc-container h3,
-.moc-container p,
-.moc-container li,
-.moc-container strong {
-  color: #000; /* Force black for headings and text */
+/* ✅ Single Translucent Container */
+.container {
+  background: rgba(255, 255, 255, 0.7); /* 70% translucent white */
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
-/* ✅ Stack takeaways vertically by default */
-.moc-container .three-takeaways {
+/* ✅ Heading inside the box */
+.container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+/* ✅ Vertical Layout */
+.grid {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
+  flex-direction: column; /* Stack vertically */
+  gap: 25px;
   align-items: center;
 }
 
-.moc-container .card {
-  background: transparent;
-  border: none;
-  max-width: 600px;
+/* ✅ Grid Item Styling (now full-width cards stacked) */
+.grid-item {
+  position: relative;
+  width: 100%;
+  max-width: 600px; /* keeps items nicely centered */
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.moc-container ol {
-  text-align: left;
-  padding-left: 20px;
-  margin: 10px auto;
-  max-width: 600px;
+.grid-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-@media (min-width: 720px) {
-  /* Optional: Keep them stacked even on larger screens for a vertical flow */
-  .moc-container .three-takeaways {
-    flex-direction: column;
+/* ✅ Image Styling */
+.grid-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  filter: brightness(0.7);
+  display: block;
+}
+
+/* ✅ Text Overlay Styling */
+.grid-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+@media (max-width: 768px) {
+  .grid-text {
+    font-size: 1.5rem;
   }
 }
 </style>
 
-<section class="moc-container" aria-labelledby="moc-heading">
-  <h3 id="moc-heading">Map of Consciousness</h3>
-  <hr>
-  <p><em>by David R. Hawkins</em></p>
-  
-  <p>
-    Hawkins maps human states from ~1–1000. Below 200 drains energy and fosters reactivity; above 200
-    empowers growth, and 500+ opens to love, joy, and peace. Use this as a practical tool for daily self-check.
-  </p>
+<div class="container">
+  <h2>Lifestyle</h2>
 
-  <div class="three-takeaways" role="list">
-    <article class="card" role="listitem" aria-labelledby="t1">
-      <h3 id="t1">1. Below 200 — Weakness & Suffering</h3>
-      <p>Shame, guilt, apathy, fear, anger, pride dominate. Life feels reactive and heavy. If you notice these states, name the feeling and avoid feeding it further.</p>
-    </article>
+  <div class="grid">
+    <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
+      <img src="/assets/images/play.jpg" alt="Tennis">
+      <div class="grid-text">Tennis</div>
+    </div>
 
-    <article class="card" role="listitem" aria-labelledby="t2">
-      <h3 id="t2">2. 200–499 — Personal Power & Growth</h3>
-      <p>Starting with <strong>courage (200)</strong>, you move into responsibility, willingness, acceptance, and reason—practical states for productivity, relationships, and resilience.</p>
-    </article>
+    <div class="grid-item" onclick="window.location.href='/lifestyle/pickleball.html'">
+      <img src="/assets/images/pickle.jpg" alt="Pickleball">
+      <div class="grid-text">Pickleball</div>
+    </div>
 
-    <article class="card" role="listitem" aria-labelledby="t3">
-      <h3 id="t3">3. 500+ — Higher Consciousness</h3>
-      <p>Love, joy, peace, and enlightenment. These levels are expansive and healing; daily practices like gratitude and compassion help you stabilize here.</p>
-    </article>
+    <div class="grid-item" onclick="window.location.href='/lifestyle/recipes.html'">
+      <img src="/assets/images/eat.jpg" alt="Recipes">
+      <div class="grid-text">Recipes</div>
+    </div>
   </div>
-
-  <div>
-    <h3 style="margin-top:0">How to use it?</h3>
-    <ol>
-      <li>Check your state: ask, “Am I below or above 200 right now?”</li>
-      <li>If below 200: pause, name the emotion (“I notice shame/fear”), breathe, and choose one small value-based action.</li>
-      <li>If above 200: lean into it—practice habits that deepen clarity (journaling, mindful action, service).</li>
-    </ol>
-  </div>
-
-  <p><strong>Overall Takeaway</strong>: Spend more moments above 200 (courage)—that’s where true freedom, health, and authentic living begin.</p>
-
-</section>
+</div>
