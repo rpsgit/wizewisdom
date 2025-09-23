@@ -34,7 +34,7 @@ h1 {
 
 /* === CONTAINER FOR ALL TENNIS BALLS === */
 .tennis-container {
-  display: flex; /* ✅ horizontal layout */
+  display: flex; /* horizontal layout */
   justify-content: center;
   gap: 50px; /* space between balls */
   background: rgba(255, 255, 255, 0.7);
@@ -74,10 +74,7 @@ h1 {
   font-size: 1.4rem;
   font-weight: bold;
   color: #fff; /* White text */
-  text-shadow: 
-    0 0 6px #00ff00,   /* ✅ Green glow */
-    0 0 10px #00ff00, 
-    2px 2px 6px rgba(0,0,0,0.2);
+  text-shadow: none; /* ✅ Shadow removed */
   z-index: 1;
 }
 
