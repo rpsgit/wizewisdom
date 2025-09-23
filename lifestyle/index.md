@@ -4,6 +4,15 @@ title: Lifestyle
 ---
 
 <style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/lifestyle-index.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
+
+<style>
   .container {
     background: rgba(255, 255, 255, 0.7);
     max-width: 1000px;
