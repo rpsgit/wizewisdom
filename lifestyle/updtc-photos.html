@@ -33,7 +33,7 @@ h1 {
 
 /* === SINGLE TRANSLUCENT GALLERY BOX === */
 .gallery-wrapper {
-  background: rgba(255, 255, 255, 0.7); /* 70% translucent */
+  background: rgba(255, 255, 255, 0.7);
   padding: 40px;
   border-radius: 25px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.35);
@@ -71,7 +71,7 @@ h1 {
   box-shadow: 0 6px 25px rgba(0,0,0,0.3);
 }
 
-/* === LIGHTBOX === */
+/* === LIGHTBOX STYLES === */
 #lightbox {
   display: none;
   position: fixed;
@@ -109,9 +109,17 @@ h1 {
 <div class="page-container">
   <h1>UPDTC</h1>
 
-  <!-- ✅ REPLACE THIS WITH YOUR CORRECT ONEDRIVE EMBED SRC -->
-  <iframe src="https://1drv.ms/f/c/6118ddcb5316a0a9/EsczSm-qfnBBqDtDbtc-dBkBLk0aLD29kKfNVPmcLSwjJA?e=4D6Umq" width="800" height="600" frameborder="0" scrolling="no" allowfullscreen></iframe>
-  
+  <!-- === OneDrive Folder Embed === -->
+  <iframe 
+    src="https://onedrive.live.com/embed?resid=6118DDCB5316A0A9%21209173&authkey=!EsczSm-qfnBBqDtD&em=2" 
+    width="100%" 
+    height="600" 
+    frameborder="0" 
+    scrolling="no" 
+    allowfullscreen>
+  </iframe>
+
+  <!-- === SINGLE TRANSLUCENT GALLERY BOX === -->
   <div class="gallery-wrapper">
     <div class="gallery-container">
       <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="UPDTC Photo 1"></div>
@@ -129,10 +137,12 @@ h1 {
 </div>
 
 <script>
+// Select all gallery images
 const galleryImages = document.querySelectorAll('.gallery-item img');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = lightbox.querySelector('img');
 
+// Open lightbox on double click
 galleryImages.forEach(img => {
   img.addEventListener('dblclick', () => {
     lightbox.style.display = 'flex';
@@ -140,6 +150,7 @@ galleryImages.forEach(img => {
   });
 });
 
+// Close lightbox on click
 lightbox.addEventListener('click', () => {
   lightbox.style.display = 'none';
   lightboxImg.src = '';
