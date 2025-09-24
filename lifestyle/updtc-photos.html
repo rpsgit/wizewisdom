@@ -109,12 +109,21 @@ h1 {
 <div class="page-container">
   <h1>UPDTC</h1>
 
-/* == BEGIN ONE DRIVE FETCH == */
-<div id="gallery" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;"></div>
+  <div class="gallery-wrapper">
+    <div id="gallery" class="gallery-container">
+      <!-- Images from OneDrive will be inserted here -->
+    </div>
+  </div>
+</div>
+
+<!-- === LIGHTBOX === -->
+<div id="lightbox">
+  <img src="" alt="Full Size Image">
+</div>
 
 <script>
+// OneDrive Fetch Script
 const base64Link = "aHR0cHM6Ly8xZHJ2Lm1zL2YvYy82MTE4ZGRjYjUzMTZhMGE5L0VzY3pTbS1xZm5CQnFEdERidGMtZEJrQkxrMGFMRDI5a0tmTlZQbWNMU3dqSkE/ZT1jbnNFZm4=";
-
 const apiURL = `https://api.onedrive.com/v1.0/shares/u!${base64Link}/root/children`;
 
 fetch(apiURL)
@@ -130,61 +139,42 @@ fetch(apiURL)
 
     data.value.forEach(item => {
       if (item.file && item.file.mimeType.startsWith("image/")) {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("gallery-item");
+
         const img = document.createElement("img");
         img.src = item["@microsoft.graph.downloadUrl"];
         img.alt = item.name;
-        img.style.maxWidth = "220px";
-        img.style.borderRadius = "12px";
-        img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-        img.style.transition = "transform 0.2s ease";
-        img.onmouseover = () => img.style.transform = "scale(1.05)";
-        img.onmouseout = () => img.style.transform = "scale(1)";
-        gallery.appendChild(img);
+
+        wrapper.appendChild(img);
+        gallery.appendChild(wrapper);
       }
     });
+
+    // Re-bind lightbox after images are loaded
+    bindLightbox();
   })
   .catch(err => {
     console.error("Error fetching OneDrive files:", err);
     document.getElementById("gallery").innerHTML = "<p style='color:red;'>Failed to load gallery.</p>";
   });
-</script>
 
-/* == END ONE DRIVE FETCH == */
+// Lightbox Functionality
+function bindLightbox() {
+  const galleryImages = document.querySelectorAll('.gallery-item img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = lightbox.querySelector('img');
 
-  <!-- === SINGLE TRANSLUCENT GALLERY BOX === -->
-  <div class="gallery-wrapper">
-    <div class="gallery-container">
-      <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRFTwwEkoJAR7GJjk7EggwFAei3L536HpoWLmT46plGSvs?width=1080&height=719" alt="UPDTC Photo 1"></div>
-      <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSou7VDzTg3T74XtBWVdk-lAZlsvaZDNDrDBmiidjW55AU?width=960&height=540" alt="UPDTC Photo 2"></div>
-      <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQR_r9hb05x-R6Z4g60UJbyFAfJnPirD_SGaGj1EkBVmqSs?width=1440&height=889" alt="UPDTC Photo 3"></div>
-      <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRwO72y07XySbhOVIgwEeH4AXxge8J1y7HymCEhSS0INOg?width=1080&height=565" alt="UPDTC Photo 4"></div>
-      <div class="gallery-item"><img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTPbYi_yDtkT5TeC5ERthSRAW49qVg8AMteJkm2NbPsBps?width=2048&height=1411" alt="UPDTC Photo 5"></div>
-    </div>
-  </div>
-</div>
-
-<!-- === LIGHTBOX === -->
-<div id="lightbox">
-  <img src="" alt="Full Size Image">
-</div>
-
-<script>
-// Select all gallery images
-const galleryImages = document.querySelectorAll('.gallery-item img');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = lightbox.querySelector('img');
-
-// Open lightbox on double click
-galleryImages.forEach(img => {
-  img.addEventListener('dblclick', () => {
-    lightbox.style.display = 'flex';
-    lightboxImg.src = img.src;
+  galleryImages.forEach(img => {
+    img.addEventListener('dblclick', () => {
+      lightbox.style.display = 'flex';
+      lightboxImg.src = img.src;
+    });
   });
-});
 
-// Close lightbox on click
-lightbox.addEventListener('click', () => {
-  lightbox.style.display = 'none';
-  lightboxImg.src = '';
-});
+  lightbox.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+    lightboxImg.src = '';
+  });
+}
 </script>
