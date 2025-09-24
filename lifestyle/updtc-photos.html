@@ -20,27 +20,28 @@ body {
 
 h1 {
   display: inline-block;
-  padding: 0; /* remove padding for transparent look */
+  padding: 0;
   border-radius: 0;
   color: #111;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 30px;
-  box-shadow: none; /* remove shadow */
-  background: none; /* remove any background */
+  box-shadow: none;
+  background: none;
 }
 
 .gallery-wrapper {
-  padding: 0; /* remove padding to maximize iframe space */
+  background: rgba(255, 255, 255, 0.7); /* restored translucent background */
+  padding: 20px; /* added padding inside gallery container */
+  border-radius: 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35); /* subtle shadow for depth */
   margin-bottom: 50px;
-  border-radius: 0;
-  box-shadow: none;
 }
 
 /* Make iframe take more space for larger thumbnails */
 .gallery-wrapper iframe {
   width: 100%;
-  height: 900px; /* increased height for bigger thumbnails */
+  height: 900px; /* maintain larger thumbnails */
   border: none;
 }
 </style>
