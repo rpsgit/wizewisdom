@@ -37,7 +37,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 50px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(128, 128, 128, 0.7); /* gray translucent */
   padding: 30px 45px;
   border-radius: 25px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -72,19 +72,13 @@ h1 {
   background-image: url('/assets/images/tech-index.png');
 }
 
-.section-quotes .section-geek {
+.section-science .section-geek {
   background-image: url('/assets/images/science-index.png');
 }
 
-.section-quotes .section-geek {
+.section-language .section-geek {
   background-image: url('/assets/images/language-index.png');
 }
-/* You can add more categories like this: */
-/*
-.section-movies .section-geek {
-  background-image: url('/assets/images/movies-icon.png');
-}
-*/
 
 .section-title {
   position: absolute;
@@ -112,7 +106,7 @@ h1 {
 </style>
 
 <div class="page-container">
-  <h1>geekvana</h1>
+  <h1>Geekosystem</h1>
 
   <div class="geek-container">
 
@@ -124,17 +118,17 @@ h1 {
     </a>
 
     <a href="/geekosystem/science/index.html" class="section-link">
-      <div class="section section-quotes">
+      <div class="section section-science">
         <div class="section-geek"></div>
         <div class="section-title">Science</div>
       </div>
+    </a>
 
     <a href="/geekosystem/language/index.html" class="section-link">
-      <div class="section section-quotes">
+      <div class="section section-language">
         <div class="section-geek"></div>
         <div class="section-title">Language</div>
       </div>
-  
     </a>
 
   </div>
