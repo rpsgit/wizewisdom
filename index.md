@@ -33,55 +33,44 @@ title: "Wizewisdom World"
     transition: 0.3s;
   }
 
-  /* Icon grid - single row */
+  /* Icon grid - show all in one row, wrap if needed */
   .icon-grid {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    flex-wrap: wrap;
+    gap: 25px;
     margin-top: 12vh;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 15px;
   }
 
-  /* Circle icon cards */
+  /* Rectangular translucent card */
   .icon-card {
     position: relative;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: rgba(255, 255, 0, 0.7); /* 70% translucent yellow */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 180px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.7); /* translucent white */
+    padding: 20px 15px;
+    border-radius: 20px;
     text-decoration: none;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
   }
 
   .icon-card img {
-    width: 70%;
-    height: 70%;
-    object-fit: contain;
-    z-index: 0;
+    width: 80px;
+    height: 80px;
+    display: block;
+    margin: 0 auto 10px auto;
   }
 
-  /* Foreground text overlay */
   .icon-card span {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #333;
-    font-size: 1rem;
+    display: block;
+    font-size: 1.1rem;
     font-weight: bold;
-    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
-    z-index: 1;
+    color: #333; /* dark gray */
   }
 
   .icon-card:hover {
-    transform: scale(1.15);
+    transform: scale(1.08);
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
 
@@ -102,29 +91,18 @@ title: "Wizewisdom World"
     }
   }
 
-  /* RESPONSIVENESS */
+  /* RESPONSIVE */
   @media (max-width: 768px) {
-    .icon-grid {
-      gap: 20px;
-      margin-top: 8vh;
-    }
-    .icon-card {
-      width: 110px;
-      height: 110px;
-    }
-    .icon-card span {
-      font-size: 0.9rem;
-    }
+    .icon-grid { gap: 15px; }
+    .icon-card { width: 150px; padding: 15px; }
+    .icon-card img { width: 65px; height: 65px; }
+    .icon-card span { font-size: 1rem; }
   }
 
   @media (max-width: 480px) {
-    .icon-card {
-      width: 90px;
-      height: 90px;
-    }
-    .icon-card span {
-      font-size: 0.8rem;
-    }
+    .icon-card { width: 130px; padding: 12px; }
+    .icon-card img { width: 55px; height: 55px; }
+    .icon-card span { font-size: 0.9rem; }
   }
 </style>
 
