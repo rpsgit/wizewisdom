@@ -42,77 +42,43 @@ title: "Wizewisdom World"
     margin-top: 15vh;
   }
 
-  /* Card style */
+  /* Unified icon-card styling */
   .icon-card {
     position: relative;
     overflow: hidden;
     flex: 1 1 120px;
-    max-width: 200px;
-    text-align: center;
-    background: rgba(255,255,255,0.65);
-    padding: 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    display: block;
-    transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .icon-card img {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 10px;
-  }
-
-  .icon-card:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25),
-                0 0 10px rgba(0, 123, 255, 0.25);
-  }
-
-  /* Special Styling for Nerdvana & Geekosystem */
-  .icon-card.nerdvana,
-  .icon-card.geekosystem {
-    background: none !important;
-    box-shadow: none;
     max-width: 250px;
+    text-align: center;
+    background: none;
+    box-shadow: none;
     padding: 0;
+    display: block;
+    text-decoration: none;
     transition: transform 0.25s ease, box-shadow 0.3s ease;
   }
 
-  .icon-card.nerdvana img,
-  .icon-card.geekosystem img {
+  .icon-card img {
     width: 100px;
     height: 100px;
     display: block;
     margin: 0 auto;
   }
 
-  /* Clean text style (no background) */
-  .icon-card.nerdvana span,
-  .icon-card.geekosystem span {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #000; /* black text */
+  .icon-card span {
+    display: block;
+    margin-top: 8px;
     font-size: 1.1rem;
     font-weight: bold;
-    background: none;
-    padding: 0;
-    border-radius: 0;
+    color: #333;
   }
 
-  /* Stronger Hover Zoom for Nerdvana & Geekosystem */
-  .icon-card.nerdvana:hover,
-  .icon-card.geekosystem:hover {
+  /* Hover effect */
+  .icon-card:hover {
     transform: scale(1.15);
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
 
-  /* Bright Ripple Effect */
+  /* Ripple effect */
   .ripple {
     position: absolute;
     border-radius: 50%;
@@ -134,17 +100,12 @@ title: "Wizewisdom World"
     .blog-container { padding: 20px; }
     .links a { width: 100%; text-align: center; }
     .icon-grid { gap: 15px; margin-top: 8vh; }
-    .icon-card { flex: 1 1 100%; max-width: 90%; margin: auto; padding: 15px; }
-    .icon-card img { width: 40px; height: 40px; }
-    .icon-card.nerdvana img,
-    .icon-card.geekosystem img { width: 80px; height: 80px; }
+    .icon-card img { width: 80px; height: 80px; }
   }
 
   @media (max-width: 480px) {
-    .icon-card { padding: 12px; font-size: 0.95rem; }
-    .icon-card img { width: 36px; height: 36px; }
-    .icon-card.nerdvana img,
-    .icon-card.geekosystem img { width: 70px; height: 70px; }
+    .icon-card img { width: 70px; height: 70px; }
+    .icon-card span { font-size: 1rem; }
   }
 </style>
 
@@ -158,30 +119,34 @@ title: "Wizewisdom World"
 </div>
 
 <div class="icon-grid">
-  <a href="/nerdvana/nerdvana-index.md" class="icon-card nerdvana">
+  <a href="/nerdvana/nerdvana-index.md" class="icon-card">
     <img src="/assets/images/nerdvana-icon.png" alt="Nerdvana Icon">
     <span>Nerdvana</span>
   </a>
 
-  <a href="/geekosystem/geekosystem-index.md" class="icon-card geekosystem">
+  <a href="/geekosystem/geekosystem-index.md" class="icon-card">
     <img src="/assets/images/geekosystem-icon.png" alt="Geekosystem Icon">
     <span>Geekosystem</span>
   </a>
 
   <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
-    <img src="/assets/images/group-icon.png" alt="Group Icon"><br> Group
+    <img src="/assets/images/group-icon.png" alt="Group Icon">
+    <span>Group</span>
   </a>
 
   <a href="/lifestyle/index.html" class="icon-card">
-    <img src="/assets/images/lifestyle-icon.png" alt="Lifestyle Icon"><br> Lifestyle
+    <img src="/assets/images/lifestyle-icon.png" alt="Lifestyle Icon">
+    <span>Lifestyle</span>
   </a>
 
   <a href="/gallery/index.html" class="icon-card">
-    <img src="/assets/images/gallery-icon.png" alt="Gallery Icon"><br> Gallery
+    <img src="/assets/images/gallery-icon.png" alt="Gallery Icon">
+    <span>Gallery</span>
   </a>
 
   <a href="/private/index.html" class="icon-card">
-    <img src="/assets/images/Heart.png" alt="Personal Icon"><br> Personal 🔒
+    <img src="/assets/images/personal-icon.png" alt="Personal Icon">
+    <span>Personal 🔒</span>
   </a>
 </div>
 
@@ -199,4 +164,3 @@ title: "Wizewisdom World"
     });
   });
 </script>
-
