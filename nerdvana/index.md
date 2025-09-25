@@ -109,7 +109,7 @@ body {
 </style>
 
  <div class="nerd-container">
-  <h1>Nerdvana</h1>
+  <h2>Nerdvana</h2>
 
   <div class="categories-wrapper" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 60px;">
     <a href="/books/index.html" class="section-link">
