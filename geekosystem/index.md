@@ -22,9 +22,9 @@ body {
   border-radius: 30px;
   box-shadow: 0 6px 25px rgba(0,0,0,0.2);
   display: flex;
-  flex-direction: column; /* title on top, categories below */
+  flex-direction: column;
   align-items: center;
-  gap: 50px; /* space between title and categories */
+  gap: 50px;
 }
 
 /* === PAGE TITLE INSIDE CONTAINER === */
@@ -35,20 +35,13 @@ body {
   margin: 0;
 }
 
-/* === CATEGORY WRAPPER === */
-.categories-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap; /* wrap on smaller screens */
-  gap: 60px;
-}
-
 /* === INDIVIDUAL CATEGORY SECTIONS === */
 .section-link {
   text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .section {
@@ -57,17 +50,17 @@ body {
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
+  position: relative;
 }
 
 .section-geek {
   width: 100%;
   height: 100%;
-  background-color: #333; /* dark gray background */
+  background-color: rgba(44, 122, 123, 0.85); /* semi-transparent blue-green */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 15px;
-  margin-bottom: 15px;
 }
 
 /* Category-specific images */
@@ -83,12 +76,18 @@ body {
   background-image: url('/assets/images/language-icon.png');
 }
 
-/* Category title below the icon */
+/* Category name overlay on top of icon */
 .section-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.5rem;
   font-weight: bold;
-  color: #000;
+  color: #fff;
   text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  pointer-events: none; /* clicks go to the icon */
 }
 
 .section-link:hover .section-geek {
@@ -97,10 +96,9 @@ body {
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .categories-wrapper {
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
+  .geek-container {
+    gap: 30px;
+    padding: 30px 20px;
   }
 
   .section {
