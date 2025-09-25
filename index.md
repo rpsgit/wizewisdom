@@ -72,6 +72,45 @@ title: "Wizewisdom World"
                 0 0 10px rgba(0, 123, 255, 0.25);
   }
 
+  /* Special Styling for Nerdvana & Geekosystem */
+  .icon-card.nerdvana,
+  .icon-card.geekosystem {
+    background: none !important;
+    box-shadow: none;
+    max-width: 250px;
+    padding: 0;
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
+  }
+
+  .icon-card.nerdvana img,
+  .icon-card.geekosystem img {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .icon-card.nerdvana span,
+  .icon-card.geekosystem span {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  /* Stronger Hover Zoom for Nerdvana & Geekosystem */
+  .icon-card.nerdvana:hover,
+  .icon-card.geekosystem:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
   /* Bright Ripple Effect */
   .ripple {
     position: absolute;
@@ -96,11 +135,15 @@ title: "Wizewisdom World"
     .icon-grid { gap: 15px; margin-top: 8vh; }
     .icon-card { flex: 1 1 100%; max-width: 90%; margin: auto; padding: 15px; }
     .icon-card img { width: 40px; height: 40px; }
+    .icon-card.nerdvana img,
+    .icon-card.geekosystem img { width: 80px; height: 80px; }
   }
 
   @media (max-width: 480px) {
     .icon-card { padding: 12px; font-size: 0.95rem; }
     .icon-card img { width: 36px; height: 36px; }
+    .icon-card.nerdvana img,
+    .icon-card.geekosystem img { width: 70px; height: 70px; }
   }
 </style>
 
@@ -114,12 +157,14 @@ title: "Wizewisdom World"
 </div>
 
 <div class="icon-grid">
-  <a href="/nerdvana/nerdvana-index.md" class="icon-card">
-    <img src="/assets/images/nerdvana-icon.png" alt="Nerdvana Icon"><br> Nerdvana
+  <a href="/nerdvana/nerdvana-index.md" class="icon-card nerdvana">
+    <img src="/assets/images/nerdvana-icon.png" alt="Nerdvana Icon">
+    <span>Nerdvana</span>
   </a>
 
-  <a href="/geekosystem/geekosystem-index.md" class="icon-card">
-    <img src="/assets/images/geekosystem-icon.png" alt="Geekosystem Icon"><br> Geekosystem
+  <a href="/geekosystem/geekosystem-index.md" class="icon-card geekosystem">
+    <img src="/assets/images/geekosystem-icon.png" alt="Geekosystem Icon">
+    <span>Geekosystem</span>
   </a>
 
   <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
@@ -153,8 +198,3 @@ title: "Wizewisdom World"
     });
   });
 </script>
-
-
-
-
-
