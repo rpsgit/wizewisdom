@@ -42,36 +42,38 @@ title: "Wizewisdom World"
     margin-top: 12vh;
   }
 
-  /* Rectangular translucent card */
+  /* Icon card */
   .icon-card {
     position: relative;
-    width: 180px;
+    width: 270px; /* 50% larger than before */
     text-align: center;
-    background: rgba(255, 255, 255, 0.7); /* translucent white */
-    padding: 20px 15px;
-    border-radius: 20px;
     text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     transition: transform 0.25s ease, box-shadow 0.3s ease;
   }
 
   .icon-card img {
-    width: 80px;
-    height: 80px;
+    width: 120px; /* 50% larger */
+    height: 120px;
     display: block;
-    margin: 0 auto 10px auto;
+    margin: 0 auto;
   }
 
+  /* Category name overlay */
   .icon-card span {
-    display: block;
-    font-size: 1.1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #333; /* dark gray */
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    pointer-events: none; /* click goes to icon */
+    text-align: center;
   }
 
-  .icon-card:hover {
+  .icon-card:hover img {
     transform: scale(1.08);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
 
   /* Ripple effect */
@@ -94,15 +96,15 @@ title: "Wizewisdom World"
   /* RESPONSIVE */
   @media (max-width: 768px) {
     .icon-grid { gap: 15px; }
-    .icon-card { width: 150px; padding: 15px; }
-    .icon-card img { width: 65px; height: 65px; }
-    .icon-card span { font-size: 1rem; }
+    .icon-card { width: 200px; }
+    .icon-card img { width: 90px; height: 90px; }
+    .icon-card span { font-size: 1.2rem; }
   }
 
   @media (max-width: 480px) {
-    .icon-card { width: 130px; padding: 12px; }
-    .icon-card img { width: 55px; height: 55px; }
-    .icon-card span { font-size: 0.9rem; }
+    .icon-card { width: 150px; }
+    .icon-card img { width: 70px; height: 70px; }
+    .icon-card span { font-size: 1rem; }
   }
 </style>
 
@@ -161,5 +163,3 @@ title: "Wizewisdom World"
     });
   });
 </script>
-
-
