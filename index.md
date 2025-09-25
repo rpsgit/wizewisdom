@@ -169,15 +169,15 @@ title: "Wizewisdom World"
   </a>
 
   <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
-    <img src="/assets/images/Tree.png" alt="Group Icon"><br> Group
+    <img src="/assets/images/group-icon.png" alt="Group Icon"><br> Group
   </a>
 
   <a href="/lifestyle/index.html" class="icon-card">
-    <img src="/assets/images/Tennis.png" alt="Lifestyle Icon"><br> Lifestyle
+    <img src="/assets/images/lifestyle-icon.png" alt="Lifestyle Icon"><br> Lifestyle
   </a>
 
   <a href="/gallery/index.html" class="icon-card">
-    <img src="/assets/images/Sun.png" alt="Gallery Icon"><br> Gallery
+    <img src="/assets/images/gallery-icon.png" alt="Gallery Icon"><br> Gallery
   </a>
 
   <a href="/private/index.html" class="icon-card">
@@ -199,3 +199,4 @@ title: "Wizewisdom World"
     });
   });
 </script>
+
