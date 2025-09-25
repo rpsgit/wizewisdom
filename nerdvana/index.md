@@ -37,7 +37,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 50px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(128, 128, 128, 0.7); /* gray translucent */
   padding: 30px 45px;
   border-radius: 25px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
