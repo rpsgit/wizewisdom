@@ -12,35 +12,35 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.page-container {
+/* === CONTAINER INCLUDING TITLE AND CATEGORIES === */
+.geek-container {
   max-width: 1200px;
   margin: 50px auto;
   text-align: center;
-}
-
-/* === PAGE TITLE === */
-h1 {
-  display: inline-block;
-  padding: 20px 40px;
-  border-radius: 15px;
-  color: #000;
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 50px;
-  text-shadow: none;
-  background: none;
-  box-shadow: none;
-}
-
-/* === CONTAINER FOR CATEGORIES === */
-.geek-container {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
   background: rgba(255, 255, 255, 0.7); /* white translucent */
   padding: 50px 60px;
   border-radius: 30px;
   box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column; /* title on top, categories below */
+  align-items: center;
+  gap: 50px; /* space between title and categories */
+}
+
+/* === PAGE TITLE INSIDE CONTAINER === */
+.geek-container h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+/* === CATEGORY WRAPPER === */
+.categories-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* wrap on smaller screens */
+  gap: 60px;
 }
 
 /* === INDIVIDUAL CATEGORY SECTIONS === */
@@ -62,7 +62,7 @@ h1 {
 .section-geek {
   width: 100%;
   height: 100%;
-  background-color: transparent; /* transparent background */
+  background-color: #333; /* dark gray background */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -97,9 +97,10 @@ h1 {
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .geek-container {
+  .categories-wrapper {
     flex-direction: column;
     align-items: center;
+    gap: 40px;
   }
 
   .section {
@@ -113,11 +114,10 @@ h1 {
 }
 </style>
 
-<div class="page-container">
+<div class="geek-container">
   <h1>Geekosystem</h1>
 
-  <div class="geek-container">
-
+  <div class="categories-wrapper">
     <a href="/geekosystem/tech/index.html" class="section-link">
       <div class="section section-books">
         <div class="section-geek"></div>
@@ -138,6 +138,5 @@ h1 {
         <div class="section-title">Language</div>
       </div>
     </a>
-
   </div>
 </div>
