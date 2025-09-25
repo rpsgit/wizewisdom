@@ -116,19 +116,14 @@ title: "Wizewisdom World"
 </div>
 
 <div class="icon-grid">
-  <a href="/nerdvana/nerdvana-index.md" class="icon-card">
+  <a href="/nerdvana/index.html" class="icon-card">
     <img src="/assets/images/nerdvana-icon.png" alt="Nerdvana Icon">
     <span>Nerdvana</span>
   </a>
 
-  <a href="/geekosystem/geekosystem-index.md" class="icon-card">
+  <a href="/geekosystem/index.html" class="icon-card">
     <img src="/assets/images/geekosystem-icon.png" alt="Geekosystem Icon">
     <span>Geekosystem</span>
-  </a>
-
-  <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
-    <img src="/assets/images/group-icon.png" alt="Group Icon">
-    <span>Lemonades</span>
   </a>
 
   <a href="/lifestyle/index.html" class="icon-card">
@@ -140,7 +135,12 @@ title: "Wizewisdom World"
     <img src="/assets/images/gallery-icon.png" alt="Gallery Icon">
     <span>Lenscape</span>
   </a>
-
+  
+  <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
+    <img src="/assets/images/group-icon.png" alt="Group Icon">
+    <span>Lemonades</span>
+  </a>
+  
   <a href="/private/index.html" class="icon-card">
     <img src="/assets/images/personal-icon.png" alt="Personal Icon">
     <span>Minevault 🔒</span>
@@ -161,4 +161,5 @@ title: "Wizewisdom World"
     });
   });
 </script>
+
 
