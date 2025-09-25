@@ -46,10 +46,12 @@ h1 {
 /* === INDIVIDUAL CATEGORY SECTIONS === */
 .section-link {
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section {
-  position: relative;
   width: 200px;
   height: 200px;
   text-align: center;
@@ -64,10 +66,9 @@ h1 {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  position: relative;
-  z-index: 0;
-  border-radius: 15px; /* optional: rounded corners for icons */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* subtle shadow for icons */
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 10px; /* spacing between icon and title */
 }
 
 /* Category-specific images */
@@ -80,18 +81,13 @@ h1 {
 }
 
 .section-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 1.4rem;
   font-weight: bold;
-  color: #000; /* changed to black to contrast white icon background */
-  text-shadow: none;
-  z-index: 1;
+  color: #000;
+  text-align: center;
 }
 
-.section:hover {
+.section-link:hover .section-nerd {
   transform: scale(1.08);
 }
 
