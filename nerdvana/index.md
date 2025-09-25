@@ -22,9 +22,9 @@ body {
   border-radius: 30px;
   box-shadow: 0 6px 25px rgba(0,0,0,0.2);
   display: flex;
-  flex-direction: column; /* title on top, categories below */
+  flex-direction: column;
   align-items: center;
-  gap: 50px; /* space between title and categories */
+  gap: 50px;
 }
 
 /* === PAGE TITLE INSIDE CONTAINER === */
@@ -35,12 +35,28 @@ body {
   margin: 0;
 }
 
-/* === CATEGORY WRAPPER === */
+/* === HORIZONTAL OBLONG BACKGROUND FOR CATEGORIES === */
 .categories-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* wrap on smaller screens */
+  flex-wrap: wrap;
   gap: 60px;
+  padding: 30px 20px;
+  border-radius: 50px;
+  background-color: #2C7A7B; /* single oblong bg for all icons */
+}
+
+/* Category title overlay */
+.categories-title {
+  position: absolute;
+  top: -25px; /* slightly above the oblong */
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* shadow to pop */
 }
 
 /* === INDIVIDUAL CATEGORY SECTIONS === */
@@ -62,7 +78,7 @@ body {
 .section-nerd {
   width: 100%;
   height: 100%;
-  background-color: #2C7A7B; /* sophisticated blue-green background */
+  background-color: transparent; /* no individual bg */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -79,12 +95,13 @@ body {
   background-image: url('/assets/images/quote-index.png');
 }
 
-/* Category title below the icon */
+/* Category name below icon */
 .section-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff; /* change text to white for contrast */
+  color: #fff; /* white for contrast on blue-green bg */
   text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
 }
 
 .section-link:hover .section-nerd {
@@ -96,7 +113,13 @@ body {
   .categories-wrapper {
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    padding: 20px;
+    border-radius: 30px;
+  }
+
+  .categories-title {
+    font-size: 1.8rem;
+    top: -20px;
   }
 
   .section {
@@ -114,6 +137,8 @@ body {
   <h1>Nerdvana</h1>
 
   <div class="categories-wrapper">
+    <div class="categories-title">Categories</div>
+
     <a href="/books/index.html" class="section-link">
       <div class="section section-books">
         <div class="section-nerd"></div>
