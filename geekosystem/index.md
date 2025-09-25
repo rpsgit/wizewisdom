@@ -113,7 +113,7 @@ body {
 </style>
 
 <div class="geek-container">
-  <h1>Geekosystem</h1>
+  <h2>Geekosystem</h2>
 
    <div class="categories-wrapper" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 60px;">
     <a href="/geekosystem/tech/index.html" class="section-link">
