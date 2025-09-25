@@ -13,20 +13,20 @@ body {
 }
 
 .page-container {
-  max-width: 1000px;
-  margin: 40px auto;
+  max-width: 1200px;
+  margin: 50px auto;
   text-align: center;
 }
 
 /* === PAGE TITLE === */
 h1 {
   display: inline-block;
-  padding: 15px 30px;
+  padding: 20px 40px;
   border-radius: 15px;
   color: #000;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   text-shadow: none;
   background: none;
   box-shadow: none;
@@ -36,22 +36,24 @@ h1 {
 .geek-container {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 60px;
   background: rgba(255, 255, 255, 0.7); /* white translucent */
-  padding: 30px 45px;
-  border-radius: 25px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 50px 60px;
+  border-radius: 30px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.2);
 }
 
 /* === INDIVIDUAL CATEGORY SECTIONS === */
 .section-link {
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section {
-  position: relative;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
@@ -60,42 +62,36 @@ h1 {
 .section-geek {
   width: 100%;
   height: 100%;
-  background-color: #fff; /* solid white background for icons */
+  background-color: transparent; /* transparent background */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  position: relative;
-  z-index: 0;
-  border-radius: 15px; /* optional rounded corners for icons */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* subtle shadow for icons */
+  border-radius: 15px;
+  margin-bottom: 15px;
 }
 
 /* Category-specific images */
 .section-books .section-geek {
-  background-image: url('/assets/images/tech-index.png');
+  background-image: url('/assets/images/tech-icon.png');
 }
 
 .section-science .section-geek {
-  background-image: url('/assets/images/science-index.png');
+  background-image: url('/assets/images/science-icon.png');
 }
 
 .section-language .section-geek {
-  background-image: url('/assets/images/language-index.png');
+  background-image: url('/assets/images/language-icon.png');
 }
 
+/* Category title below the icon */
 .section-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #000; /* black text to contrast white icon background */
-  text-shadow: none;
-  z-index: 1;
+  color: #000;
+  text-align: center;
 }
 
-.section:hover {
+.section-link:hover .section-geek {
   transform: scale(1.08);
 }
 
@@ -104,6 +100,15 @@ h1 {
   .geek-container {
     flex-direction: column;
     align-items: center;
+  }
+
+  .section {
+    width: 180px;
+    height: 180px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
   }
 }
 </style>
