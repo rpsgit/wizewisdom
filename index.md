@@ -114,11 +114,11 @@ title: "Wizewisdom World"
 </div>
 
 <div class="icon-grid">
-  <a href="/nerdvana/nerdvana-index.html" class="icon-card">
-    <img src="/assets/images/nerdvana-icon.png" alt="Nervana Icon"><br> Nerdvana
+  <a href="/nerdvana/nerdvana-index.md" class="icon-card">
+    <img src="/assets/images/nerdvana-icon.png" alt="Nerdvana Icon"><br> Nerdvana
   </a>
 
-  <a href="/geekosytem/geekosystem-index.html" class="icon-card">
+  <a href="/geekosystem/geekosystem-index.md" class="icon-card">
     <img src="/assets/images/geekosystem-icon.png" alt="Geekosystem Icon"><br> Geekosystem
   </a>
 
@@ -153,6 +153,7 @@ title: "Wizewisdom World"
     });
   });
 </script>
+
 
 
 
