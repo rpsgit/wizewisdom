@@ -108,9 +108,6 @@ body {
 }
 </style>
 
-<div class="nerd-container">
-  <h1>Nerdvana</h1>
-
  <div class="nerd-container">
   <h1>Nerdvana</h1>
 
