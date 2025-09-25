@@ -13,6 +13,7 @@ title: "Wizewisdom World"
     max-width: 700px;
     margin: auto;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
   }
 
   .links {
@@ -30,10 +31,14 @@ title: "Wizewisdom World"
     text-decoration: none;
     font-weight: bold;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: 0.3s;
+    transition: transform 0.25s ease;
   }
 
-  /* Icon grid - show all in one row, wrap if needed */
+  .links a:hover {
+    transform: scale(1.05);
+  }
+
+  /* Icon grid */
   .icon-grid {
     display: flex;
     justify-content: center;
@@ -42,23 +47,21 @@ title: "Wizewisdom World"
     margin-top: 12vh;
   }
 
-  /* Icon card */
   .icon-card {
     position: relative;
-    width: 270px; /* 50% larger than before */
+    width: 270px;
     text-align: center;
     text-decoration: none;
-    transition: transform 0.25s ease, box-shadow 0.3s ease;
+    transition: transform 0.25s ease;
   }
 
   .icon-card img {
-    width: 120px; /* 50% larger */
+    width: 120px;
     height: 120px;
     display: block;
-    margin: 0 auto;
+    margin: auto;
   }
 
-  /* Category name overlay */
   .icon-card span {
     position: absolute;
     top: 50%;
@@ -68,32 +71,14 @@ title: "Wizewisdom World"
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-    pointer-events: none; /* click goes to icon */
-    text-align: center;
+    pointer-events: none;
   }
 
   .icon-card:hover img {
     transform: scale(1.08);
   }
 
-  /* Ripple effect */
-  .ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    background: rgba(255, 255, 255, 0.6);
-    animation: ripple-animation 0.6s ease-out;
-    pointer-events: none;
-  }
-
-  @keyframes ripple-animation {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
-  }
-
-  /* RESPONSIVE */
+  /* Responsive */
   @media (max-width: 768px) {
     .icon-grid { gap: 15px; }
     .icon-card { width: 200px; }
@@ -148,18 +133,3 @@ title: "Wizewisdom World"
     <span>Minevault 🔒</span>
   </a>
 </div>
-
-<script>
-  document.querySelectorAll('.icon-card').forEach(card => {
-    card.addEventListener('click', function (e) {
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple');
-      const size = Math.max(card.clientWidth, card.clientHeight);
-      ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = e.clientX - card.getBoundingClientRect().left - size / 2 + 'px';
-      ripple.style.top = e.clientY - card.getBoundingClientRect().top - size / 2 + 'px';
-      card.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 600);
-    });
-  });
-</script>
