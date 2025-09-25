@@ -110,7 +110,7 @@ h1 {
       </div>
     </a>
 
-    <a href="/lifestyle/tournament-photos.html" class="section-link">
+    <a href="/lifestyle/tourney-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">TOURNEY</div>
