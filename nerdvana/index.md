@@ -111,7 +111,10 @@ body {
 <div class="nerd-container">
   <h1>Nerdvana</h1>
 
-  <div class="categories-wrapper">
+ <div class="nerd-container">
+  <h1>Nerdvana</h1>
+
+  <div class="categories-wrapper" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 60px;">
     <a href="/books/index.html" class="section-link">
       <div class="section section-books">
         <div class="section-nerd"></div>
