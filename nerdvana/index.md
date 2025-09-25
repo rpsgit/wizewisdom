@@ -35,36 +35,13 @@ body {
   margin: 0;
 }
 
-/* === HORIZONTAL OBLONG BACKGROUND FOR CATEGORIES === */
-.categories-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 60px;
-  padding: 30px 20px;
-  border-radius: 50px;
-  background-color: #2C7A7B; /* single oblong bg for all icons */
-}
-
-/* Category title overlay */
-.categories-title {
-  position: absolute;
-  top: -25px; /* slightly above the oblong */
-  width: 100%;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* shadow to pop */
-}
-
 /* === INDIVIDUAL CATEGORY SECTIONS === */
 .section-link {
   text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .section {
@@ -73,17 +50,17 @@ body {
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
+  position: relative;
 }
 
 .section-nerd {
   width: 100%;
   height: 100%;
-  background-color: transparent; /* no individual bg */
+  background-color: rgba(44, 122, 123, 0.85); /* semi-transparent sophisticated blue-green */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 15px;
-  margin-bottom: 15px;
 }
 
 /* Category-specific images */
@@ -95,13 +72,18 @@ body {
   background-image: url('/assets/images/quote-index.png');
 }
 
-/* Category name below icon */
+/* Category name overlay on top of icon */
 .section-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff; /* white for contrast on blue-green bg */
+  color: #fff;
   text-align: center;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  pointer-events: none; /* so clicks go to the icon */
 }
 
 .section-link:hover .section-nerd {
@@ -110,16 +92,9 @@ body {
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .categories-wrapper {
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 30px;
-  }
-
-  .categories-title {
-    font-size: 1.8rem;
-    top: -20px;
+  .nerd-container {
+    gap: 30px;
+    padding: 30px 20px;
   }
 
   .section {
@@ -137,8 +112,6 @@ body {
   <h1>Nerdvana</h1>
 
   <div class="categories-wrapper">
-    <div class="categories-title">Categories</div>
-
     <a href="/books/index.html" class="section-link">
       <div class="section section-books">
         <div class="section-nerd"></div>
