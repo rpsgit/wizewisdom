@@ -12,35 +12,35 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.page-container {
-  max-width: 1200px; /* made container wider */
+/* === CONTAINER INCLUDING TITLE AND CATEGORIES === */
+.nerd-container {
+  max-width: 1200px;
   margin: 50px auto;
   text-align: center;
+  background: rgba(255, 255, 255, 0.7); /* white translucent */
+  padding: 50px 60px;
+  border-radius: 30px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column; /* title on top, categories below */
+  align-items: center;
+  gap: 50px; /* space between title and categories */
 }
 
-/* === PAGE TITLE === */
-h1 {
-  display: inline-block;
-  padding: 20px 40px;
-  border-radius: 15px;
-  color: #000;
-  font-size: 3rem; /* larger font */
+/* === PAGE TITLE INSIDE CONTAINER === */
+.nerd-container h1 {
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 50px;
-  text-shadow: none;
-  background: none;
-  box-shadow: none;
+  color: #000;
+  margin: 0;
 }
 
-/* === CONTAINER FOR CATEGORIES === */
-.nerd-container {
+/* === CATEGORY WRAPPER === */
+.categories-wrapper {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap; /* wrap on smaller screens */
   gap: 60px;
-  background: rgba(255, 255, 255, 0.7); /* white translucent */
-  padding: 50px 60px; /* larger padding */
-  border-radius: 30px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.2); /* slightly stronger shadow */
 }
 
 /* === INDIVIDUAL CATEGORY SECTIONS === */
@@ -52,7 +52,7 @@ h1 {
 }
 
 .section {
-  width: 220px; /* larger icon container */
+  width: 220px;
   height: 220px;
   text-align: center;
   cursor: pointer;
@@ -62,7 +62,7 @@ h1 {
 .section-nerd {
   width: 100%;
   height: 100%;
-  background-color: transparent; /* removed white background */
+  background-color: #2C7A7B; /* sophisticated blue-green background */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -79,10 +79,11 @@ h1 {
   background-image: url('/assets/images/quote-index.png');
 }
 
+/* Category title below the icon */
 .section-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #000;
+  color: #fff; /* change text to white for contrast */
   text-align: center;
 }
 
@@ -92,9 +93,10 @@ h1 {
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .nerd-container {
+  .categories-wrapper {
     flex-direction: column;
     align-items: center;
+    gap: 40px;
   }
 
   .section {
@@ -108,11 +110,10 @@ h1 {
 }
 </style>
 
-<div class="page-container">
+<div class="nerd-container">
   <h1>Nerdvana</h1>
 
-  <div class="nerd-container">
-
+  <div class="categories-wrapper">
     <a href="/books/index.html" class="section-link">
       <div class="section section-books">
         <div class="section-nerd"></div>
@@ -126,6 +127,5 @@ h1 {
         <div class="section-title">Quotes</div>
       </div>
     </a>
-
   </div>
 </div>
