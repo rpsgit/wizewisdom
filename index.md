@@ -114,12 +114,12 @@ title: "Wizewisdom World"
 </div>
 
 <div class="icon-grid">
-  <a href="/books/index.html" class="icon-card">
-    <img src="/assets/images/Reading.png" alt="Books Icon"><br> Books
+  <a href="/nerdvana/nerdvana-index.html" class="icon-card">
+    <img src="/assets/images/nerdvana-index.png" alt="Nervana Icon"><br> Nerdvana
   </a>
 
-  <a href="/quotes/index.html" class="icon-card">
-    <img src="/assets/images/Quote.png" alt="Quotes Icon"><br> Quotes
+  <a href="/geekosytem/geekosystem-index.html" class="icon-card">
+    <img src="/assets/images/geekosystem.png" alt="Geekosystem Icon"><br> Geekosystem
   </a>
 
   <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
@@ -153,5 +153,6 @@ title: "Wizewisdom World"
     });
   });
 </script>
+
 
 
