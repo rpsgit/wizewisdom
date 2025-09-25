@@ -85,7 +85,6 @@ body {
 </style>
 
 <div class="container">
-  <h2>Lifestyle</h2>
 
   <div class="grid">
     <div class="grid-item" onclick="window.location.href='/lifestyle/tennis.html'">
