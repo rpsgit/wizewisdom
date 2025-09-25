@@ -37,7 +37,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 50px;
-  background: rgba(128, 128, 128, 0.7); /* gray translucent */
+  background: rgba(255, 255, 255, 0.7); /* white translucent */
   padding: 30px 45px;
   border-radius: 25px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -60,11 +60,14 @@ h1 {
 .section-geek {
   width: 100%;
   height: 100%;
+  background-color: #fff; /* solid white background for icons */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
   z-index: 0;
+  border-radius: 15px; /* optional rounded corners for icons */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* subtle shadow for icons */
 }
 
 /* Category-specific images */
@@ -87,7 +90,7 @@ h1 {
   transform: translate(-50%, -50%);
   font-size: 1.4rem;
   font-weight: bold;
-  color: #fff;
+  color: #000; /* black text to contrast white icon background */
   text-shadow: none;
   z-index: 1;
 }
