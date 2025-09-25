@@ -13,20 +13,20 @@ body {
 }
 
 .page-container {
-  max-width: 1000px;
-  margin: 40px auto;
+  max-width: 1200px; /* made container wider */
+  margin: 50px auto;
   text-align: center;
 }
 
 /* === PAGE TITLE === */
 h1 {
   display: inline-block;
-  padding: 15px 30px;
+  padding: 20px 40px;
   border-radius: 15px;
   color: #000;
-  font-size: 2.5rem;
+  font-size: 3rem; /* larger font */
   font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   text-shadow: none;
   background: none;
   box-shadow: none;
@@ -36,11 +36,11 @@ h1 {
 .nerd-container {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 60px;
   background: rgba(255, 255, 255, 0.7); /* white translucent */
-  padding: 30px 45px;
-  border-radius: 25px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 50px 60px; /* larger padding */
+  border-radius: 30px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.2); /* slightly stronger shadow */
 }
 
 /* === INDIVIDUAL CATEGORY SECTIONS === */
@@ -52,8 +52,8 @@ h1 {
 }
 
 .section {
-  width: 200px;
-  height: 200px;
+  width: 220px; /* larger icon container */
+  height: 220px;
   text-align: center;
   cursor: pointer;
   transition: transform 0.25s ease;
@@ -62,13 +62,12 @@ h1 {
 .section-nerd {
   width: 100%;
   height: 100%;
-  background-color: #fff; /* solid white background for icons */
+  background-color: transparent; /* removed white background */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  margin-bottom: 10px; /* spacing between icon and title */
+  margin-bottom: 15px;
 }
 
 /* Category-specific images */
@@ -81,7 +80,7 @@ h1 {
 }
 
 .section-title {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -96,6 +95,15 @@ h1 {
   .nerd-container {
     flex-direction: column;
     align-items: center;
+  }
+
+  .section {
+    width: 180px;
+    height: 180px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
   }
 }
 </style>
