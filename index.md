@@ -90,18 +90,19 @@ title: "Wizewisdom World"
     margin: 0 auto;
   }
 
+  /* Clean text style (no background) */
   .icon-card.nerdvana span,
   .icon-card.geekosystem span {
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding: 5px 12px;
-    border-radius: 10px;
+    color: #000; /* black text */
     font-size: 1.1rem;
     font-weight: bold;
+    background: none;
+    padding: 0;
+    border-radius: 0;
   }
 
   /* Stronger Hover Zoom for Nerdvana & Geekosystem */
