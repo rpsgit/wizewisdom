@@ -4,6 +4,7 @@ title: UPDTC
 ---
 
 <style>
+/* Base Styles */
 body {
   margin: 0;
   padding: 0;
@@ -12,12 +13,15 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* Page Container */
 .page-container {
   max-width: 1200px;
   margin: 40px auto;
   text-align: center;
+  padding: 0 15px; /* Padding for mobile */
 }
 
+/* Headings */
 h1 {
   display: inline-block;
   padding: 0;
@@ -30,6 +34,7 @@ h1 {
   background: none;
 }
 
+/* Gallery Wrapper */
 .gallery-wrapper {
   background: rgba(255, 255, 255, 0.7);
   padding: 20px;
@@ -38,10 +43,35 @@ h1 {
   margin-bottom: 50px;
 }
 
+/* Responsive Iframes */
 .gallery-wrapper iframe {
   width: 100%;
-  height: 900px;
+  height: 80vh; /* 80% of viewport height */
+  max-height: 1200px;
   border: none;
+}
+
+/* Tablet Adjustments */
+@media (max-width: 768px) {
+  .gallery-wrapper iframe {
+    height: 60vh;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+  .gallery-wrapper iframe {
+    height: 50vh;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .gallery-wrapper {
+    padding: 15px;
+  }
 }
 </style>
 
