@@ -131,7 +131,7 @@ title: Nerdvana
       </div>
     </a>
 
-    <a href="/quotes/quotes-index.md" class="section-link">
+    <a href="/quotes/quotes-index.html" class="section-link">
       <div class="section section-quotes">
         <div class="section-nerd"></div>
         <div class="section-title">Quotes</div>
