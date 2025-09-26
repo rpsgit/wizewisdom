@@ -29,17 +29,14 @@ title: Quotes
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
-  #latest-image img {
+  #latest-image img, .gallery img {
     width: 100%;
-    max-height: 70vh;
-    object-fit: contain;
     border-radius: 15px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-    margin-bottom: 30px;
     cursor: pointer;
     transition: transform 0.3s ease;
   }
-  #latest-image img:hover {
+  #latest-image img:hover, .gallery img:hover {
     transform: scale(1.02);
   }
 
@@ -47,19 +44,11 @@ title: Quotes
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
+    margin-top: 30px;
   }
   .gallery img {
-    width: 100%;
     height: 140px;
     object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .gallery img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
   }
 
   .modal {
@@ -174,36 +163,34 @@ title: Quotes
   let images = [];
   let currentIndex = 0;
 
-  function naturalSort(a, b) {
-    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
-  }
-
   fetch(apiUrl)
     .then(res => res.json())
     .then(files => {
       const imageFiles = files.filter(f => f.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name));
-      imageFiles.sort((a, b) => naturalSort(b, a));
-      images = imageFiles.map(file => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${file.name}`);
+      imageFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+      images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
 
-      if (images.length > 0) {
-        const latestImg = document.createElement("img");
-        latestImg.src = images[0];
-        latestImg.alt = imageFiles[0].name;
-        latestImg.addEventListener("click", () => openModal(0));
-        latestImageDiv.appendChild(latestImg);
+      if(images.length > 0){
+        // Show latest quote
+        const latest = document.createElement("img");
+        latest.src = images[0];
+        latest.alt = imageFiles[0].name;
+        latest.addEventListener("click", ()=>openModal(0));
+        latestImageDiv.appendChild(latest);
       }
 
-      images.slice(1).forEach((url, i) => {
+      // Gallery for remaining quotes
+      images.slice(1).forEach((url,i)=>{
         const img = document.createElement("img");
         img.src = url;
-        img.alt = imageFiles[i + 1].name;
-        img.addEventListener("click", () => openModal(i + 1));
+        img.alt = imageFiles[i+1].name;
+        img.addEventListener("click", ()=>openModal(i+1));
         gallery.appendChild(img);
       });
     })
     .catch(err => {
-      gallery.innerHTML = "<p>⚠️ Sorry, there was an error loading the images.</p>";
-      console.error("Error loading images:", err);
+      gallery.innerHTML = "<p>⚠️ Could not load quotes.</p>";
+      console.error(err);
     });
 
   const modal = document.getElementById("imgModal");
@@ -215,71 +202,67 @@ title: Quotes
   const downloadBtn = document.getElementById("downloadBtn");
   const shareBtn = document.getElementById("shareBtn");
 
-  function openModal(index) {
-    modal.style.display = "flex";
+  function openModal(index){
     currentIndex = index;
-    updateModal();
+    modalImg.src = images[currentIndex];
+    caption.textContent = images[currentIndex].split("/").pop();
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
   }
 
-  function updateModal() {
+  function closeModal(){
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  function prevImage(){
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
     modalImg.src = images[currentIndex];
     caption.textContent = images[currentIndex].split("/").pop();
   }
 
-  closeBtn.onclick = () => modal.style.display = "none";
-  modal.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+  function nextImage(){
+    currentIndex = (currentIndex + 1) % images.length;
+    modalImg.src = images[currentIndex];
+    caption.textContent = images[currentIndex].split("/").pop();
+  }
+
+  closeBtn.onclick = closeModal;
   prevBtn.onclick = prevImage;
   nextBtn.onclick = nextImage;
+  modal.onclick = e => { if(e.target===modal) closeModal(); };
 
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") modal.style.display = "none";
-    if (e.key === "ArrowRight") nextImage();
-    if (e.key === "ArrowLeft") prevImage();
-  });
-
-  function prevImage() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    updateModal();
-  }
-
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
-    updateModal();
-  }
-
-  downloadBtn.onclick = (e) => {
-    e.preventDefault();
+  downloadBtn.onclick = () => {
     const url = images[currentIndex];
-    fetch(url)
-      .then(resp => resp.blob())
-      .then(blob => {
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = url.split("/").pop();
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(blobUrl);
-      })
-      .catch(err => console.error("Download failed:", err));
-  };
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = url.split("/").pop();
+    a.click();
+  }
 
   shareBtn.onclick = () => {
     const url = images[currentIndex];
-    if (navigator.share) {
-      navigator.share({ title: "Check out this quote!", text: "Found this inspiring quote", url })
-        .catch(err => console.log("Share canceled", err));
+    if(navigator.share){
+      navigator.share({title:"Check this quote!",url});
     } else {
-      alert(`Share this image:\n🔗 ${url}`);
+      alert(`Share this image:\n${url}`);
     }
-  };
+  }
 
+  document.addEventListener("keydown", e => {
+    if(modal.style.display === "flex"){
+      if(e.key === "Escape") closeModal();
+      if(e.key === "ArrowLeft") prevImage();
+      if(e.key === "ArrowRight") nextImage();
+    }
+  });
+
+  // Swipe support for mobile
   let startX = 0;
   modalImg.addEventListener("touchstart", e => startX = e.touches[0].clientX);
   modalImg.addEventListener("touchend", e => {
-    const diffX = e.changedTouches[0].clientX - startX;
-    if (diffX > 50) prevImage();
-    else if (diffX < -50) nextImage();
+    const diff = e.changedTouches[0].clientX - startX;
+    if(diff>50) prevImage();
+    if(diff<-50) nextImage();
   });
 </script>
