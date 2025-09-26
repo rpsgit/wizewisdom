@@ -119,7 +119,7 @@ title: "Wizewisdom World"
   </a>
 
   <a href="/gallery/index.html" class="icon-card">
-    <img src="/assets/images/gallery-icon.png" alt="Gallery Icon">
+    <img src="/assets/images/lenscape-icon.png" alt="Gallery Icon">
     <span>Lenscape</span>
   </a>
   
@@ -133,5 +133,6 @@ title: "Wizewisdom World"
     <span>Minevault 🔒</span>
   </a>
 </div>
+
 
 
