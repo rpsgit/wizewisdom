@@ -12,7 +12,6 @@ title: Quotes
     font-family: Arial, sans-serif;
   }
 
-  /* === MAIN CONTENT BOX === */
   .content-box {
     max-width: 1000px;
     margin: 40px auto;
@@ -22,7 +21,6 @@ title: Quotes
     box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   }
 
-  /* === PAGE TITLE === */
   h1 {
     text-align: center;
     color: #000;
@@ -31,7 +29,6 @@ title: Quotes
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
-  /* === LATEST IMAGE === */
   #latest-image img {
     width: 100%;
     max-height: 70vh;
@@ -46,7 +43,6 @@ title: Quotes
     transform: scale(1.02);
   }
 
-  /* === GALLERY GRID === */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -66,7 +62,6 @@ title: Quotes
     box-shadow: 0 6px 14px rgba(0,0,0,0.25);
   }
 
-  /* === MODAL === */
   .modal {
     display: none;
     position: fixed;
@@ -93,7 +88,6 @@ title: Quotes
     font-size: 1rem;
   }
 
-  /* CLOSE BUTTON */
   .close {
     position: absolute;
     top: 20px; right: 30px;
@@ -105,7 +99,6 @@ title: Quotes
   }
   .close:hover { color: #1f9202ff; }
 
-  /* NAVIGATION ARROWS */
   .prev, .next {
     position: absolute;
     top: 50%;
@@ -122,7 +115,6 @@ title: Quotes
   .next { right: 20px; }
   .prev:hover, .next:hover { color: #1f9202ff; }
 
-  /* MODAL BUTTONS */
   .modal-actions {
     display: flex;
     gap: 15px;
@@ -143,7 +135,6 @@ title: Quotes
     background: rgba(30, 90, 91, 0.95);
   }
 
-  /* RESPONSIVE */
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
@@ -154,11 +145,9 @@ title: Quotes
 <div class="content-box">
   <h1>Quotes</h1>
 
-  <!-- Latest + Gallery -->
   <div id="latest-image"></div>
   <div class="gallery" id="gallery"></div>
 
-  <!-- Modal -->
   <div id="imgModal" class="modal">
     <span class="close">&times;</span>
     <span class="prev">&#10094;</span>
@@ -166,7 +155,7 @@ title: Quotes
     <img class="modal-content" id="modalImg">
     <div id="caption"></div>
     <div class="modal-actions">
-      <a id="downloadBtn" download class="download-btn">⬇ Download</a>
+      <button id="downloadBtn" class="download-btn">⬇ Download</button>
       <button id="shareBtn" class="share-btn">🔗 Share</button>
     </div>
   </div>
@@ -231,10 +220,10 @@ title: Quotes
     currentIndex = index;
     updateModal();
   }
+
   function updateModal() {
     modalImg.src = images[currentIndex];
     caption.textContent = images[currentIndex].split("/").pop();
-    downloadBtn.href = images[currentIndex];
   }
 
   closeBtn.onclick = () => modal.style.display = "none";
@@ -252,10 +241,29 @@ title: Quotes
     currentIndex = (currentIndex - 1 + images.length) % images.length;
     updateModal();
   }
+
   function nextImage() {
     currentIndex = (currentIndex + 1) % images.length;
     updateModal();
   }
+
+  downloadBtn.onclick = (e) => {
+    e.preventDefault();
+    const url = images[currentIndex];
+    fetch(url)
+      .then(resp => resp.blob())
+      .then(blob => {
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = url.split("/").pop();
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch(err => console.error("Download failed:", err));
+  };
 
   shareBtn.onclick = () => {
     const url = images[currentIndex];
@@ -267,7 +275,6 @@ title: Quotes
     }
   };
 
-  // Mobile swipe
   let startX = 0;
   modalImg.addEventListener("touchstart", e => startX = e.touches[0].clientX);
   modalImg.addEventListener("touchend", e => {
