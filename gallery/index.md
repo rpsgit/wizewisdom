@@ -107,37 +107,36 @@ h3.section-title {
   <a href="#eat">Eat</a>
 </nav>
 
-<!-- Helper function to generate sections -->
-{% assign sections = 
+{% assign sections_raw = 
   "play,https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868,https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=4000&height=3000,https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=4000&height=1868,
    wander,https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204,https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161,https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204,
    eat,https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000
 " | split: "," %}
 
-{% assign sec_index = 0 %}
-{% while sec_index < sections.size %}
-  {% assign sec_name = sections[sec_index] %}
-  {% assign sec_index = sec_index | plus: 1 %}
-  <div id="{{sec_name}}" class="gallery-container">
-    <h3 class="section-title">{{ sec_name | capitalize }}</h3>
-    <div class="gallery">
-      {% assign imgs = sections[sec_index] | split: "," %}
-      {% for img_pair in imgs %}
-        {% assign pair = img_pair | split: "|" %}
-        <img loading="lazy" src="{{ pair[0] }}" data-full="{{ pair[1] }}" alt="{{ sec_name }} image">
-      {% endfor %}
+{% for i in (0..sections_raw.size) %}
+  {% assign sec_name = sections_raw[i] %}
+  {% assign sec_images = sections_raw[i+1] | split: "," %}
+  {% if sec_name %}
+    <div id="{{ sec_name }}" class="gallery-container">
+      <h3 class="section-title">{{ sec_name | capitalize }}</h3>
+      <div class="gallery">
+        {% for img_pair in sec_images %}
+          {% assign pair = img_pair | split: "|" %}
+          <img loading="lazy" src="{{ pair[0] }}" data-full="{{ pair[1] }}" alt="{{ sec_name }} image">
+        {% endfor %}
+      </div>
+      <div class="lightbox">
+        <span class="close">✖</span>
+        <span class="nav-arrow prev">⟨</span>
+        <img src="">
+        <span class="nav-arrow next">⟩</span>
+      </div>
     </div>
-    <div class="lightbox">
-      <span class="close">✖</span>
-      <span class="nav-arrow prev">⟨</span>
-      <img src="">
-      <span class="nav-arrow next">⟩</span>
-    </div>
-  </div>
-  {% assign sec_index = sec_index | plus: 1 %}
-{% endwhile %}
+  {% endif %}
+{% endfor %}
 
 <script>
+// JavaScript stays the same as before
 document.querySelectorAll('.gallery-container').forEach(container => {
   const images = container.querySelectorAll('.gallery img');
   const lightbox = container.querySelector('.lightbox');
