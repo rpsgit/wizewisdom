@@ -104,26 +104,6 @@ title: Quotes
   .next { right: 20px; }
   .prev:hover, .next:hover { color: #1f9202ff; }
 
-  .modal-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-  }
-  .download-btn, .share-btn {
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-    cursor: pointer;
-    background: rgba(44, 122, 123, 0.85);
-    color: white;
-    transition: background 0.2s ease;
-  }
-  .download-btn:hover, .share-btn:hover {
-    background: rgba(30, 90, 91, 0.95);
-  }
-
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
@@ -143,10 +123,6 @@ title: Quotes
     <span class="next">&#10095;</span>
     <img class="modal-content" id="modalImg">
     <div id="caption"></div>
-    <div class="modal-actions">
-      <button id="downloadBtn" class="download-btn">⬇ Download</button>
-      <button id="shareBtn" class="share-btn">🔗 Share</button>
-    </div>
   </div>
 </div>
 
@@ -199,8 +175,6 @@ title: Quotes
   const closeBtn = document.querySelector(".close");
   const prevBtn = document.querySelector(".prev");
   const nextBtn = document.querySelector(".next");
-  const downloadBtn = document.getElementById("downloadBtn");
-  const shareBtn = document.getElementById("shareBtn");
 
   function openModal(index){
     currentIndex = index;
@@ -231,23 +205,6 @@ title: Quotes
   prevBtn.onclick = prevImage;
   nextBtn.onclick = nextImage;
   modal.onclick = e => { if(e.target===modal) closeModal(); };
-
-  downloadBtn.onclick = () => {
-    const url = images[currentIndex];
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = url.split("/").pop();
-    a.click();
-  }
-
-  shareBtn.onclick = () => {
-    const url = images[currentIndex];
-    if(navigator.share){
-      navigator.share({title:"Check this quote!",url});
-    } else {
-      alert(`Share this image:\n${url}`);
-    }
-  }
 
   document.addEventListener("keydown", e => {
     if(modal.style.display === "flex"){
