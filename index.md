@@ -67,7 +67,7 @@ title: "Wizewisdom World"
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.5rem;
+    font-size: 1.2rem; /* ✅ 20% smaller */
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
@@ -83,13 +83,13 @@ title: "Wizewisdom World"
     .icon-grid { gap: 15px; }
     .icon-card { width: 200px; }
     .icon-card img { width: 90px; height: 90px; }
-    .icon-card span { font-size: 1.2rem; }
+    .icon-card span { font-size: 1rem; }
   }
 
   @media (max-width: 480px) {
     .icon-card { width: 150px; }
     .icon-card img { width: 70px; height: 70px; }
-    .icon-card span { font-size: 1rem; }
+    .icon-card span { font-size: 0.85rem; }
   }
 </style>
 
@@ -133,6 +133,3 @@ title: "Wizewisdom World"
     <span>Minevault 🔒</span>
   </a>
 </div>
-
-
-
