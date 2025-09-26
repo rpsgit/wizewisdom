@@ -115,7 +115,7 @@ title: "Wizewisdom World"
 
   <a href="/lifestyle/index.html" class="icon-card">
     <img src="/assets/images/lifestyle-icon.png" alt="Lifestyle Icon">
-    <span>Lifelark</span>
+    <span>Lifesource</span>
   </a>
 
   <a href="/gallery/index.html" class="icon-card">
@@ -133,3 +133,4 @@ title: "Wizewisdom World"
     <span>Minevault 🔒</span>
   </a>
 </div>
+
