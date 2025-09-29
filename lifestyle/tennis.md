@@ -146,16 +146,17 @@ title: Tennis
 <div class="page-container">
   <h1>Tennis</h1>
 
-  <!-- === YOUTUBE PLACEHOLDER SECTION === -->
 <div class="youtube-placeholder">
   <h2>🎾 Aces & Lemons</h2>
   <div class="youtube-embed">
     <iframe 
-      src="https://www.youtube.com/embed/videoseries?list=UURFftbZgBfM9O2DNcS-Fbcw" 
+      src="https://www.youtube.com/embed/videoseries?list=UURFftbZgBfM9O2DNcS-Fbcw"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
   </div>
 </div>
+
 
   <div class="tennis-container">
 
