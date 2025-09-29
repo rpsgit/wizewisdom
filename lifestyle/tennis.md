@@ -16,7 +16,7 @@ title: Tennis
     max-width: 1000px;
     margin: 40px auto;
     text-align: center;
-    padding: 0 15px; /* ✅ Padding for smaller screens */
+    padding: 0 15px;
   }
 
   /* === PAGE TITLE === */
@@ -34,7 +34,7 @@ title: Tennis
   .tennis-container {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* ✅ Allows wrapping on smaller screens */
+    flex-wrap: wrap;
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
@@ -86,7 +86,7 @@ title: Tennis
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     max-width: 700px;
-    margin: 0 auto;
+    margin: 0 auto 40px auto;
   }
 
   .youtube-placeholder h2 {
@@ -145,13 +145,13 @@ title: Tennis
 
 <div class="page-container">
   <h1>Tennis</h1>
-  
+
   <!-- === YOUTUBE PLACEHOLDER SECTION === -->
   <div class="youtube-placeholder">
     <h2>🎾 Watch Our Tennis Highlights</h2>
     <div class="youtube-embed">
-      <!-- Replace "VIDEO_ID" with your YouTube channel's video ID -->
-      <iframe src="https://www.youtube.com/embed/@alemondrop" allowfullscreen></iframe>
+      <!-- Replace YOUR_PLAYLIST_ID with your actual Uploads playlist ID -->
+      <iframe src="https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID" allowfullscreen></iframe>
     </div>
   </div>
 
@@ -186,5 +186,4 @@ title: Tennis
     </a>
 
   </div>
-
 </div>
