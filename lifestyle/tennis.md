@@ -147,13 +147,15 @@ title: Tennis
   <h1>Tennis</h1>
 
   <!-- === YOUTUBE PLACEHOLDER SECTION === -->
-  <div class="youtube-placeholder">
-    <h2>🎾 Watch Our Tennis Highlights</h2>
-    <div class="youtube-embed">
-      <!-- Replace YOUR_PLAYLIST_ID with your actual Uploads playlist ID -->
-      <iframe src="https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID" allowfullscreen></iframe>
-    </div>
+<div class="youtube-placeholder">
+  <h2>🎾 Aces & Lemons</h2>
+  <div class="youtube-embed">
+    <iframe 
+      src="https://www.youtube.com/embed/videoseries?list=UURFftbZgBfM9O2DNcS-Fbcw" 
+      allowfullscreen>
+    </iframe>
   </div>
+</div>
 
   <div class="tennis-container">
 
