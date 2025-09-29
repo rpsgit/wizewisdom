@@ -40,6 +40,7 @@ title: Tennis
     padding: 30px 20px;
     border-radius: 25px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    margin-bottom: 30px;
   }
 
   /* === INDIVIDUAL TENNIS BALL SECTIONS === */
@@ -71,11 +72,43 @@ title: Tennis
     font-size: 1.3rem;
     font-weight: bold;
     color: #fff;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* ✅ Added back subtle shadow for readability */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
   }
 
   .section:hover {
     transform: scale(1.08);
+  }
+
+  /* === YOUTUBE PLACEHOLDER === */
+  .youtube-placeholder {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .youtube-placeholder h2 {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+
+  .youtube-embed {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .youtube-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
   /* === RESPONSIVE === */
@@ -112,6 +145,15 @@ title: Tennis
 
 <div class="page-container">
   <h1>Tennis</h1>
+  
+  <!-- === YOUTUBE PLACEHOLDER SECTION === -->
+  <div class="youtube-placeholder">
+    <h2>🎾 Watch Our Tennis Highlights</h2>
+    <div class="youtube-embed">
+      <!-- Replace "VIDEO_ID" with your YouTube channel's video ID -->
+      <iframe src="https://www.youtube.com/embed/@alemondrop" allowfullscreen></iframe>
+    </div>
+  </div>
 
   <div class="tennis-container">
 
@@ -144,4 +186,5 @@ title: Tennis
     </a>
 
   </div>
+
 </div>
