@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Tennis
+title: Pickleball
 ---
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/tennis-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/pickleball-index.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
@@ -19,7 +19,6 @@ title: Tennis
     padding: 0 15px;
   }
 
-  /* === PAGE TITLE === */
   h1 {
     display: inline-block;
     color: #000;
@@ -30,8 +29,8 @@ title: Tennis
     box-shadow: none;
   }
 
-  /* === CONTAINER FOR TENNIS BALLS === */
-  .tennis-container {
+  /* === CONTAINER FOR PICKLEBALL SECTIONS === */
+  .pickle-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -43,7 +42,6 @@ title: Tennis
     margin-bottom: 30px;
   }
 
-  /* === INDIVIDUAL TENNIS BALL SECTIONS === */
   .section-link {
     text-decoration: none;
   }
@@ -60,7 +58,7 @@ title: Tennis
   .section-ball {
     width: 100%;
     height: 100%;
-    background: url('/assets/images/tennis-ball.png') no-repeat center center;
+    background: url('/assets/images/pickle-ball.png') no-repeat center center;
     background-size: contain;
   }
 
@@ -111,7 +109,6 @@ title: Tennis
     border: none;
   }
 
-  /* === FALLBACK LINK === */
   .youtube-fallback {
     margin-top: 12px;
   }
@@ -135,7 +132,7 @@ title: Tennis
     h1 {
       font-size: 2.2rem;
     }
-    .tennis-container {
+    .pickle-container {
       gap: 30px;
       padding: 20px;
     }
@@ -163,48 +160,41 @@ title: Tennis
 </style>
 
 <div class="page-container">
-  <h1>Tennis</h1>
+  <h1>Pickleball</h1>
 
   <div class="youtube-placeholder">
-    <h2>Aces & Lemons</h2>
+    <h2>Lemon Drop</h2>
     <div class="youtube-embed">
-      <iframe 
-        src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
+      <iframe
+        src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
     </div>
     <div class="youtube-fallback">
-      <a href="https://www.youtube.com/channel/UCRFftbZgBfM9O2DNcS-Fbcw" target="_blank">
+      <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
         Watch on YouTube
       </a>
     </div>
   </div>
 
-  <div class="tennis-container">
+  <div class="pickle-container">
 
-    <a href="/lifestyle/updtc-photos.html" class="section-link">
+    <a href="/lifestyle/LSGH-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
-        <div class="section-title">UPDTC</div>
+        <div class="section-title">LSGH</div>
       </div>
     </a>
 
-    <a href="/lifestyle/camp-photos.html" class="section-link">
+    <a href="/lifestyle/tiende-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
-        <div class="section-title">CAMP</div>
+        <div class="section-title">TIENDE</div>
       </div>
     </a>
 
-    <a href="/lifestyle/tourney-photos.html" class="section-link">
-      <div class="section">
-        <div class="section-ball"></div>
-        <div class="section-title">TOURNEY</div>
-      </div>
-    </a>
-
-    <a href="/lifestyle/tennis-other.html" class="section-link">
+    <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">POTPOURRI</div>
