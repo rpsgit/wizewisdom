@@ -166,7 +166,7 @@ title: Pickleball
   <h1>Pickleball</h1>
 
   <div class="youtube-placeholder">
-    <h2>🏓 Pickleball Channel</h2>
+    <h2>🏓 Lemon Drop</h2>
     <div class="youtube-embed">
       <iframe
         src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
