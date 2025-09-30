@@ -96,7 +96,7 @@ title: Tennis
 
   .youtube-embed {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%; /* 16:9 */
     height: 0;
     overflow: hidden;
     border-radius: 12px;
@@ -109,6 +109,25 @@ title: Tennis
     width: 100%;
     height: 100%;
     border: none;
+  }
+
+  /* === FALLBACK LINK === */
+  .youtube-fallback {
+    margin-top: 12px;
+  }
+  .youtube-fallback a {
+    display: inline-block;
+    color: #ffdd57;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid #ffdd57;
+    border-radius: 8px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .youtube-fallback a:hover {
+    background: #ffdd57;
+    color: #000;
   }
 
   /* === RESPONSIVE === */
@@ -146,18 +165,21 @@ title: Tennis
 <div class="page-container">
   <h1>Tennis</h1>
 
-<div class="youtube-placeholder">
-  <h2>🎾 Aces & Lemons</h2>
-  <div class="youtube-embed">
-<iframe
-  src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
-</iframe>
-
+  <div class="youtube-placeholder">
+    <h2>🎾 Aces & Lemons</h2>
+    <div class="youtube-embed">
+      <iframe 
+        src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="youtube-fallback">
+      <a href="https://www.youtube.com/channel/UCRFftbZgBfM9O2DNcS-Fbcw" target="_blank">
+        📺 Watch on YouTube
+      </a>
+    </div>
   </div>
-</div>
-
 
   <div class="tennis-container">
 
