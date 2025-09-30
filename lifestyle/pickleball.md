@@ -182,10 +182,18 @@ title: Pickleball
   </div>
 
   <div class="pickle-container">
-    <a href="/lifestyle/pickle-photos.html" class="section-link">
+    <a href="/lifestyle/tiende-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">Tiende</div>
+      </div>
+    </a>
+
+  <div class="pickle-container">
+    <a href="/lifestyle/LSGH-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">LSGH</div>
       </div>
     </a>
 
