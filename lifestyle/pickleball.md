@@ -192,7 +192,7 @@ title: Pickleball
     <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
-        <div class="section-title">OTHER</div>
+        <div class="section-title">POTPOURRI</div>
       </div>
     </a>
   </div>
