@@ -30,11 +30,12 @@ title: Pickleball
     box-shadow: none;
   }
 
-  /* === CONTAINER FOR PICKLE BALLS === */
+  /* === FLEX CONTAINER FOR CATEGORIES === */
   .pickle-container {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: center;        /* center horizontally */
+    align-items: center;            /* center vertically in row */
+    flex-wrap: wrap;                /* wrap on smaller screens */
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
@@ -43,9 +44,13 @@ title: Pickleball
     margin-bottom: 30px;
   }
 
-  /* === INDIVIDUAL PICKLE BALL SECTIONS === */
+  /* === CATEGORY BALL === */
   .section-link {
     text-decoration: none;
+    flex: 1 1 200px;                /* flexible width, min 200px */
+    max-width: 220px;               /* prevents huge scaling on wide screens */
+    display: flex;
+    justify-content: center;
   }
 
   .section {
@@ -181,19 +186,19 @@ title: Pickleball
     </div>
   </div>
 
-  <div class="pickle-container">
-    <a href="/lifestyle/tiende-photos.html" class="section-link">
-      <div class="section">
-        <div class="section-ball"></div>
-        <div class="section-title">Tiende</div>
-      </div>
-    </a>
-
+  <!-- ✅ ONE ROW ON DESKTOP, WRAPS & CENTERS ON MOBILE -->
   <div class="pickle-container">
     <a href="/lifestyle/LSGH-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">LSGH</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/tiende-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">TIENDE</div>
       </div>
     </a>
 
