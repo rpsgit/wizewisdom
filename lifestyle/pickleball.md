@@ -4,6 +4,7 @@ title: Pickleball
 ---
 
 <style>
+  /* === BODY & PAGE CONTAINER === */
   body {
     margin: 0;
     padding: 0;
@@ -44,19 +45,18 @@ title: Pickleball
     margin-bottom: 30px;
   }
 
-  /* === CATEGORY BALL === */
+  /* === CATEGORY BALL WITH DYNAMIC SCALING === */
   .section-link {
     text-decoration: none;
-    flex: 1 1 260px;    /* min width updated */
-    max-width: 280px;   /* keep from growing too large */
+    flex: 1 1 clamp(180px, 25%, 308px); /* scales with container */
     display: flex;
     justify-content: center;
   }
 
   .section {
     position: relative;
-    width: 260px;       /* was 200px → 30% larger */
-    height: 260px;      /* was 200px → 30% larger */
+    width: clamp(180px, 25vw, 308px);  /* responsive width */
+    height: clamp(180px, 25vw, 308px); /* responsive height */
     text-align: center;
     cursor: pointer;
     transition: transform 0.25s ease;
@@ -74,7 +74,7 @@ title: Pickleball
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.6rem;  /* slightly larger text to match */
+    font-size: clamp(1rem, 1.5vw, 1.76rem); /* scales with ball */
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -101,7 +101,7 @@ title: Pickleball
 
   .youtube-embed {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%; /* 16:9 ratio */
     height: 0;
     overflow: hidden;
     border-radius: 12px;
@@ -135,43 +135,6 @@ title: Pickleball
     color: #000;
   }
 
-  /* === RESPONSIVE === */
-  @media (max-width: 1024px) {
-    h1 {
-      font-size: 2.2rem;
-    }
-    .pickle-container {
-      gap: 30px;
-      padding: 20px;
-    }
-    .section {
-      width: 220px;    /* scale down a bit for tablets */
-      height: 220px;
-    }
-    .section-title {
-      font-size: 1.4rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .section {
-      width: 180px;
-      height: 180px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .section {
-      width: 140px;
-      height: 140px;
-    }
-    .section-title {
-      font-size: 1rem;
-    }
-  }
 </style>
 
 <div class="page-container">
@@ -181,7 +144,7 @@ title: Pickleball
     <h2>Lemon Drop</h2>
     <div class="youtube-embed">
       <iframe
-        src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
+        src="https://www.youtube.com/embed/videoseries?list=UU3CbvjtmMUsmuSgBCWQh0Wg"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
