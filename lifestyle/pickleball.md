@@ -1,3 +1,8 @@
+---
+layout: default
+title: Pickleball
+---
+
 <style>
   /* === BODY & PAGE CONTAINER === */
   body {
@@ -28,14 +33,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: nowrap;  /* keep horizontal on desktop */
+    flex-wrap: nowrap; /* horizontal on desktop */
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
     border-radius: 25px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     margin-bottom: 30px;
-    overflow-x: auto;   /* allow horizontal scroll if needed */
+    overflow-x: auto; /* allow horizontal scroll if needed */
   }
 
   .section-link {
@@ -47,7 +52,7 @@
   /* === CATEGORY BALLS 20% SMALLER === */
   .section {
     position: relative;
-    width: 160px;
+    width: 160px; /* 200px × 0.8 */
     height: 160px;
     text-align: center;
     cursor: pointer;
@@ -67,7 +72,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.05rem;
+    font-size: 1.05rem; /* scaled down */
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -94,7 +99,7 @@
 
   .youtube-embed {
     position: relative;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.25%; /* 16:9 ratio */
     height: 0;
     overflow: hidden;
     border-radius: 12px;
@@ -132,7 +137,7 @@
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
     .pickle-container {
-      flex-wrap: wrap; /* allow wrapping on tablets */
+      flex-wrap: wrap; /* wrap on tablets */
       gap: 30px;
     }
   }
@@ -160,3 +165,46 @@
     }
   }
 </style>
+
+<div class="page-container">
+  <h1>Pickleball</h1>
+
+  <div class="youtube-placeholder">
+    <h2>Lemon Drop</h2>
+    <div class="youtube-embed">
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=UU3CbvjtmMUsmuSgBCWQh0Wg"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="youtube-fallback">
+      <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
+        Watch on YouTube
+      </a>
+    </div>
+  </div>
+
+  <div class="pickle-container">
+    <a href="/lifestyle/lsgh-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">LSGH</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/tiende-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">TIENDE</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/other.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">POTPOURRI</div>
+      </div>
+    </a>
+  </div>
+</div>
