@@ -166,7 +166,7 @@ title: Tennis
   <h1>Tennis</h1>
 
   <div class="youtube-placeholder">
-    <h2>🎾 Aces & Lemons</h2>
+    <h2>Aces & Lemons</h2>
     <div class="youtube-embed">
       <iframe 
         src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
@@ -176,7 +176,7 @@ title: Tennis
     </div>
     <div class="youtube-fallback">
       <a href="https://www.youtube.com/channel/UCRFftbZgBfM9O2DNcS-Fbcw" target="_blank">
-        📺 Watch on YouTube
+        Watch on YouTube
       </a>
     </div>
   </div>
