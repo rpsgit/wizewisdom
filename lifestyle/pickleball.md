@@ -166,7 +166,7 @@ title: Pickleball
   <h1>Pickleball</h1>
 
   <div class="youtube-placeholder">
-    <h2>🏓 Lemon Drop</h2>
+    <h2>Lemon Drop</h2>
     <div class="youtube-embed">
       <iframe
         src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
@@ -176,7 +176,7 @@ title: Pickleball
     </div>
     <div class="youtube-fallback">
       <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
-        📺 Watch on YouTube
+        Watch on YouTube
       </a>
     </div>
   </div>
