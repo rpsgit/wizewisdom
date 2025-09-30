@@ -33,9 +33,9 @@ title: Pickleball
   /* === FLEX CONTAINER FOR CATEGORIES === */
   .pickle-container {
     display: flex;
-    justify-content: center;        /* center horizontally */
-    align-items: center;            /* center vertically in row */
-    flex-wrap: wrap;                /* wrap on smaller screens */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
@@ -47,16 +47,16 @@ title: Pickleball
   /* === CATEGORY BALL === */
   .section-link {
     text-decoration: none;
-    flex: 1 1 200px;                /* flexible width, min 200px */
-    max-width: 220px;               /* prevents huge scaling on wide screens */
+    flex: 1 1 260px;    /* min width updated */
+    max-width: 280px;   /* keep from growing too large */
     display: flex;
     justify-content: center;
   }
 
   .section {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 260px;       /* was 200px → 30% larger */
+    height: 260px;      /* was 200px → 30% larger */
     text-align: center;
     cursor: pointer;
     transition: transform 0.25s ease;
@@ -74,7 +74,7 @@ title: Pickleball
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.3rem;
+    font-size: 1.6rem;  /* slightly larger text to match */
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -144,12 +144,19 @@ title: Pickleball
       gap: 30px;
       padding: 20px;
     }
+    .section {
+      width: 220px;    /* scale down a bit for tablets */
+      height: 220px;
+    }
+    .section-title {
+      font-size: 1.4rem;
+    }
   }
 
   @media (max-width: 768px) {
     .section {
-      width: 160px;
-      height: 160px;
+      width: 180px;
+      height: 180px;
     }
     .section-title {
       font-size: 1.2rem;
@@ -158,8 +165,8 @@ title: Pickleball
 
   @media (max-width: 480px) {
     .section {
-      width: 130px;
-      height: 130px;
+      width: 140px;
+      height: 140px;
     }
     .section-title {
       font-size: 1rem;
@@ -186,7 +193,6 @@ title: Pickleball
     </div>
   </div>
 
-  <!-- ✅ ONE ROW ON DESKTOP, WRAPS & CENTERS ON MOBILE -->
   <div class="pickle-container">
     <a href="/lifestyle/LSGH-photos.html" class="section-link">
       <div class="section">
