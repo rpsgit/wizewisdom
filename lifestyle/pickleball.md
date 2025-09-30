@@ -16,7 +16,7 @@ title: Pickleball
     max-width: 1000px;
     margin: 40px auto;
     text-align: center;
-    padding: 0 15px; /* ✅ Mobile padding */
+    padding: 0 15px;
   }
 
   /* === PAGE TITLE === */
@@ -34,12 +34,13 @@ title: Pickleball
   .pickle-container {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* ✅ Allows wrapping */
+    flex-wrap: wrap;
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
     border-radius: 25px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    margin-bottom: 30px;
   }
 
   /* === INDIVIDUAL PICKLE BALL SECTIONS === */
@@ -71,11 +72,62 @@ title: Pickleball
     font-size: 1.3rem;
     font-weight: bold;
     color: #fff;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* ✅ Added for readability */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
   }
 
   .section:hover {
     transform: scale(1.08);
+  }
+
+  /* === YOUTUBE PLACEHOLDER === */
+  .youtube-placeholder {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+  }
+
+  .youtube-placeholder h2 {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+
+  .youtube-embed {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .youtube-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* === FALLBACK LINK === */
+  .youtube-fallback {
+    margin-top: 12px;
+  }
+  .youtube-fallback a {
+    display: inline-block;
+    color: #ffdd57;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid #ffdd57;
+    border-radius: 8px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .youtube-fallback a:hover {
+    background: #ffdd57;
+    color: #000;
   }
 
   /* === RESPONSIVE === */
@@ -113,8 +165,23 @@ title: Pickleball
 <div class="page-container">
   <h1>Pickleball</h1>
 
-  <div class="pickle-container">
+  <div class="youtube-placeholder">
+    <h2>🏓 Pickleball Channel</h2>
+    <div class="youtube-embed">
+      <iframe
+        src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="youtube-fallback">
+      <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
+        📺 Watch on YouTube
+      </a>
+    </div>
+  </div>
 
+  <div class="pickle-container">
     <a href="/lifestyle/pickle-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
@@ -128,6 +195,5 @@ title: Pickleball
         <div class="section-title">OTHER</div>
       </div>
     </a>
-
   </div>
 </div>
