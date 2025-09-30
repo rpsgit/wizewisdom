@@ -157,7 +157,7 @@ title: Pickleball
   </div>
 
   <div class="pickle-container">
-    <a href="/lifestyle/LSGH-photos.html" class="section-link">
+    <a href="/lifestyle/lsgh-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">LSGH</div>
