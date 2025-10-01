@@ -27,6 +27,7 @@ nav a {
   text-decoration: none;
   color: #000;
   font-weight: bold;
+  text-transform: capitalize; /* Capitalize nav links */
 }
 
 nav a:hover {
@@ -47,6 +48,7 @@ h3.section-title {
   margin-top: 0;
   padding: 10px 0;
   border-bottom: 2px solid rgba(0,0,0,0.1);
+  text-transform: capitalize; /* Capitalize section titles */
 }
 
 /* Masonry-style collage */
@@ -164,7 +166,7 @@ Eat|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhu
   {% assign sec_name = parts[0] %}
   {% assign imgs = parts[1] | split: "," %}
   <div id="{{ sec_name }}" class="gallery-container">
-    <h3 class="section-title">{{ sec_name | capitalize }}</h3>
+    <h3 class="section-title">{{ sec_name }}</h3>
     <div class="gallery">
       {% for img_pair in imgs %}
         {% assign pair = img_pair | split: "|" %}
