@@ -21,7 +21,7 @@ nav a:hover { text-decoration: underline; }
   background: rgba(255, 255, 255, 0.85);
   border-radius: 15px;
   padding: 20px;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 30px auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -33,25 +33,25 @@ h3.section-title {
   border-bottom: 2px solid rgba(0,0,0,0.1);
 }
 
+/* Masonry-style collage */
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin-top: 15px;
+  column-count: 4;
+  column-gap: 12px;
 }
 
 .gallery img {
   width: 100%;
-  height: auto;
-  border-radius: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
-  object-fit: cover;
+  display: block;
 }
 
 .gallery img:hover { transform: scale(1.05); }
 
+/* Lightbox */
 .lightbox {
   display: none;
   position: fixed;
@@ -114,12 +114,10 @@ h3.section-title {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-@media (max-width: 768px) {
-  .gallery { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
-  .lightbox img { max-width: 95%; max-height: 85vh; }
-  .lightbox .nav-arrow { font-size: 2rem; }
-  .lightbox .close { font-size: 1.5rem; }
-}
+/* Responsive */
+@media (max-width: 1200px) { .gallery { column-count: 3; } }
+@media (max-width: 900px) { .gallery { column-count: 2; } }
+@media (max-width: 600px) { .gallery { column-count: 1; } }
 </style>
 
 <h2>Gallery</h2>
@@ -158,7 +156,7 @@ Eat|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhu
 {% endfor %}
 
 <script>
-// 📸 Preload full-size images AFTER page load
+// Preload full-size images
 window.addEventListener('load', () => {
   document.querySelectorAll('.gallery img').forEach(img => {
     const fullSrc = img.dataset.full;
@@ -169,7 +167,7 @@ window.addEventListener('load', () => {
   });
 });
 
-// 📦 Lightbox functionality + spinner
+// Lightbox functionality
 document.querySelectorAll('.gallery-container').forEach(container => {
   const images = container.querySelectorAll('.gallery img');
   const lightbox = container.querySelector('.lightbox');
