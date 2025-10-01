@@ -34,27 +34,50 @@ nav a {
 h3.section-title {
   font-size: 1.5rem;
   margin-top: 0;
-  padding: 10px 0;
-  border-bottom: 2px solid rgba(0,0,0,0.1);
+  padding: 10px 15px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.7); /* semi-transparent header */
   text-transform: capitalize;
+  display: inline-block;
+  border-bottom: 2px solid rgba(0,0,0,0.1);
 }
 
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 15px;
+  gap: 20px;
   margin-top: 20px;
 }
 
-.gallery img {
-  width: 100%;
-  border-radius: 8px;
+.gallery-item {
+  background-color: rgba(255, 255, 255, 0.7); /* 70% translucent box */
+  padding: 10px;
+  border-radius: 10px;
+  overflow: hidden;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   transition: transform 0.3s;
 }
 
-.gallery img:hover {
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.gallery-item:hover {
   transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  h3.section-title {
+    font-size: 1.2rem;
+    padding: 8px 12px;
+  }
 }
 </style>
 
@@ -94,7 +117,9 @@ https://1drv.ms/i/c/6118ddcb5316a0a9/IQRtitNAvF0jT6TzVPkIqTlsAQ3Lvvd8zY4YN54G_a7
         {% assign images = parts[1] | strip | split: "," %}
         {% for img in images %}
           {% if img != "" %}
-            <img src="{{ img | strip }}" alt="{{ sec_name }} image">
+            <div class="gallery-item">
+              <img src="{{ img | strip }}" alt="{{ sec_name }} image">
+            </div>
           {% endif %}
         {% endfor %}
       </div>
