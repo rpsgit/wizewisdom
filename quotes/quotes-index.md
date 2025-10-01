@@ -34,28 +34,61 @@ title: Quotes
     border-radius: 15px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
     transition: transform 0.3s ease;
+    cursor: pointer;
   }
 
   #latest-image img:hover, .gallery img:hover {
-    transform: scale(1.02);
+    transform: scale(1.03);
   }
 
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
     margin-top: 30px;
   }
 
   .gallery img {
-    height: 140px;
+    height: 160px;
     object-fit: cover;
+  }
+
+  /* Modal (fullscreen view) */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding: 20px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal img {
+    max-width: 95%;
+    max-height: 90%;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
   }
 
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
-    .gallery img { height: 120px; }
+    .gallery img { height: 130px; }
   }
 </style>
 
@@ -63,6 +96,12 @@ title: Quotes
   <h1>Quotes</h1>
   <div id="latest-image"></div>
   <div class="gallery" id="gallery"></div>
+</div>
+
+<!-- Modal for enlarged image -->
+<div class="modal" id="imageModal">
+  <span class="modal-close" id="modalClose">&times;</span>
+  <img id="modalImg" src="" alt="Enlarged view">
 </div>
 
 <script>
@@ -75,11 +114,18 @@ title: Quotes
   const gallery = document.getElementById("gallery");
   const latestImageDiv = document.getElementById("latest-image");
 
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImg");
+  const modalClose = document.getElementById("modalClose");
+
   fetch(apiUrl)
     .then(res => res.json())
     .then(files => {
       const imageFiles = files.filter(f => f.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name));
-      imageFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+      // Sort descending (newest first by name)
+      imageFiles.sort((a, b) => b.name.localeCompare(a.name, undefined, { numeric: true, sensitivity: 'base' }));
+
       const images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
 
       if (images.length > 0) {
@@ -87,6 +133,7 @@ title: Quotes
         const latest = document.createElement("img");
         latest.src = images[0];
         latest.alt = imageFiles[0].name;
+        latest.onclick = () => openModal(latest.src);
         latestImageDiv.appendChild(latest);
       }
 
@@ -95,6 +142,7 @@ title: Quotes
         const img = document.createElement("img");
         img.src = url;
         img.alt = imageFiles[i+1].name;
+        img.onclick = () => openModal(url);
         gallery.appendChild(img);
       });
     })
@@ -102,4 +150,12 @@ title: Quotes
       gallery.innerHTML = "<p>⚠️ Could not load quotes.</p>";
       console.error(err);
     });
+
+  function openModal(src) {
+    modal.style.display = "flex";
+    modalImg.src = src;
+  }
+
+  modalClose.onclick = () => { modal.style.display = "none"; }
+  modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; }
 </script>
