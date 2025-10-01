@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Pickleball
+title: Tennis
 ---
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/pickleball-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/tennis-index.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
@@ -19,6 +19,7 @@ title: Pickleball
     padding: 0 15px;
   }
 
+  /* === PAGE TITLE === */
   h1 {
     display: inline-block;
     color: #000;
@@ -29,8 +30,8 @@ title: Pickleball
     box-shadow: none;
   }
 
-  /* === CONTAINER FOR PICKLEBALL SECTIONS === */
-  .pickle-container {
+  /* === CONTAINER FOR TENNIS BALLS === */
+  .tennis-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -42,14 +43,15 @@ title: Pickleball
     margin-bottom: 30px;
   }
 
+  /* === INDIVIDUAL TENNIS BALL SECTIONS === */
   .section-link {
     text-decoration: none;
   }
 
   .section {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 180px;   /* was 200px */
+    height: 180px;  /* was 200px */
     text-align: center;
     cursor: pointer;
     transition: transform 0.25s ease;
@@ -58,7 +60,7 @@ title: Pickleball
   .section-ball {
     width: 100%;
     height: 100%;
-    background: url('/assets/images/pickle-ball.png') no-repeat center center;
+    background: url('/assets/images/tennis-ball.png') no-repeat center center;
     background-size: contain;
   }
 
@@ -67,7 +69,7 @@ title: Pickleball
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.3rem;
+    font-size: 1.2rem;  /* slightly reduced for balance */
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -109,6 +111,7 @@ title: Pickleball
     border: none;
   }
 
+  /* === FALLBACK LINK === */
   .youtube-fallback {
     margin-top: 12px;
   }
@@ -132,7 +135,7 @@ title: Pickleball
     h1 {
       font-size: 2.2rem;
     }
-    .pickle-container {
+    .tennis-container {
       gap: 30px;
       padding: 20px;
     }
@@ -140,61 +143,68 @@ title: Pickleball
 
   @media (max-width: 768px) {
     .section {
-      width: 160px;
-      height: 160px;
+      width: 144px;   /* was 160px */
+      height: 144px;  /* was 160px */
     }
     .section-title {
-      font-size: 1.2rem;
+      font-size: 1.05rem;
     }
   }
 
   @media (max-width: 480px) {
     .section {
-      width: 130px;
-      height: 130px;
+      width: 117px;   /* was 130px */
+      height: 117px;  /* was 130px */
     }
     .section-title {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
   }
 </style>
 
 <div class="page-container">
-  <h1>Pickleball</h1>
+  <h1>Tennis</h1>
 
   <div class="youtube-placeholder">
-    <h2>Lemon Drop</h2>
+    <h2>Aces & Lemons</h2>
     <div class="youtube-embed">
-      <iframe
-        src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
+      <iframe 
+        src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
     </div>
     <div class="youtube-fallback">
-      <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
+      <a href="https://www.youtube.com/channel/UCRFftbZgBfM9O2DNcS-Fbcw" target="_blank">
         Watch on YouTube
       </a>
     </div>
   </div>
 
-  <div class="pickle-container">
+  <div class="tennis-container">
 
-    <a href="/lifestyle/LSGH-photos.html" class="section-link">
+    <a href="/lifestyle/updtc-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
-        <div class="section-title">LSGH</div>
+        <div class="section-title">UPDTC</div>
       </div>
     </a>
 
-    <a href="/lifestyle/tiende-photos.html" class="section-link">
+    <a href="/lifestyle/camp-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
-        <div class="section-title">TIENDE</div>
+        <div class="section-title">CAMP</div>
       </div>
     </a>
 
-    <a href="/lifestyle/other.html" class="section-link">
+    <a href="/lifestyle/tourney-photos.html" class="section-link">
+      <div class="section">
+        <div class="section-ball"></div>
+        <div class="section-title">TOURNEY</div>
+      </div>
+    </a>
+
+    <a href="/lifestyle/tennis-other.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
         <div class="section-title">POTPOURRI</div>
