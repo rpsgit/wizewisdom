@@ -20,6 +20,7 @@ title: Pickleball
     padding: 0 15px;
   }
 
+  /* === PAGE TITLE === */
   h1 {
     display: inline-block;
     color: #000;
@@ -28,36 +29,32 @@ title: Pickleball
     margin-bottom: 30px;
   }
 
-  /* === FLEX CONTAINER FOR PICKLEBALL === */
+  /* === FLEX CONTAINER FOR PICKLEBALLS === */
   .pickle-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: nowrap; /* horizontal on desktop */
+    flex-wrap: wrap; /* allow wrapping */
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
     border-radius: 25px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     margin-bottom: 30px;
-    overflow-x: auto; /* allow horizontal scroll if needed */
   }
 
+  /* === INDIVIDUAL BALL SECTIONS === */
   .section-link {
     text-decoration: none;
-    display: flex;
-    justify-content: center;
   }
 
-  /* === CATEGORY BALLS 20% SMALLER === */
   .section {
     position: relative;
-    width: 160px; /* 200px × 0.8 */
+    width: 160px; /* 20% smaller than tennis (200px → 160px) */
     height: 160px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.25s ease;
-    flex-shrink: 0; /* prevent shrinking in horizontal layout */
   }
 
   .section-ball {
@@ -72,7 +69,7 @@ title: Pickleball
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.05rem; /* scaled down */
+    font-size: 1.05rem;
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -99,7 +96,7 @@ title: Pickleball
 
   .youtube-embed {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 ratio */
+    padding-bottom: 56.25%; /* 16:9 */
     height: 0;
     overflow: hidden;
     border-radius: 12px;
@@ -114,10 +111,10 @@ title: Pickleball
     border: none;
   }
 
+  /* === FALLBACK LINK === */
   .youtube-fallback {
     margin-top: 12px;
   }
-
   .youtube-fallback a {
     display: inline-block;
     color: #ffdd57;
@@ -128,7 +125,6 @@ title: Pickleball
     border-radius: 8px;
     transition: background 0.3s ease, color 0.3s ease;
   }
-
   .youtube-fallback a:hover {
     background: #ffdd57;
     color: #000;
@@ -136,9 +132,12 @@ title: Pickleball
 
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
+    h1 {
+      font-size: 2.2rem;
+    }
     .pickle-container {
-      flex-wrap: wrap; /* wrap on tablets */
       gap: 30px;
+      padding: 20px;
     }
   }
 
@@ -173,7 +172,7 @@ title: Pickleball
     <h2>Lemon Drop</h2>
     <div class="youtube-embed">
       <iframe
-        src="https://www.youtube.com/embed/videoseries?list=UU3CbvjtmMUsmuSgBCWQh0Wg"
+        src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
