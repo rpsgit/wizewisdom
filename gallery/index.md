@@ -1,257 +1,142 @@
 ---
 layout: default
-title: Image Gallery
+title: Gallery
 ---
 
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  background: #f5f5f5 url('/assets/images/gallery-index.png') no-repeat center center fixed;
-  background-size: cover;
-  font-family: Arial, sans-serif;
-}
+  body {
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5 url('/assets/images/gallery-index.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+  }
 
-h2 {
-  text-align: center;
-  margin-top: 20px;
-}
+  nav {
+    text-align: center;
+    padding: 20px;
+  }
 
-nav {
-  text-align: center;
-  margin-bottom: 20px;
-}
+  nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
 
-nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #000;
-  font-weight: bold;
-  text-transform: capitalize; /* Capitalize nav links */
-}
+  .section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
 
-nav a:hover {
-  text-decoration: underline;
-}
+  h3.section-title {
+    font-size: 1.5rem;
+    margin-top: 0;
+    padding: 10px 0;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+    text-transform: capitalize;
+  }
 
-.gallery-container {
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 15px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 30px auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
 
-h3.section-title {
-  font-size: 1.5rem;
-  margin-top: 0;
-  padding: 10px 0;
-  border-bottom: 2px solid rgba(0,0,0,0.1);
-  text-transform: capitalize; /* Capitalize section titles */
-}
+  .gallery img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
 
-/* Masonry-style collage */
-.gallery {
-  column-count: 4;
-  column-gap: 12px;
-}
+  .gallery img:hover {
+    transform: scale(1.05);
+  }
 
-.gallery img {
-  width: 100%;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease-in-out, filter 0.3s ease-in-out;
-  cursor: pointer;
-  display: block;
-  filter: blur(10px);
-  background: #ddd;
-}
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    padding: 20px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+  }
 
-.gallery img.loaded {
-  filter: blur(0);
-}
+  .lightbox img {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 80%;
+  }
 
-.gallery img:hover {
-  transform: scale(1.05);
-}
+  .lightbox:target {
+    display: block;
+  }
 
-/* Lightbox */
-.lightbox {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9);
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 10px;
-}
-
-.lightbox img {
-  max-width: 90%;
-  max-height: 85vh;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  display: none;
-}
-
-.lightbox .nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 2.5rem;
-  color: white;
-  cursor: pointer;
-  user-select: none;
-  padding: 10px;
-}
-
-.lightbox .prev { left: 10px; }
-.lightbox .next { right: 10px; }
-
-.lightbox .close {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 2rem;
-  color: white;
-  cursor: pointer;
-}
-
-.lightbox .spinner {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  border: 4px solid rgba(255,255,255,0.3);
-  border-top: 4px solid #fff;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  display: none;
-  z-index: 10000;
-}
-
-@keyframes spin {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Responsive */
-@media (max-width: 1200px) { .gallery { column-count: 3; } }
-@media (max-width: 900px)  { .gallery { column-count: 2; } }
-@media (max-width: 600px)  { .gallery { column-count: 1; } }
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+  }
 </style>
 
-<h2>Gallery</h2>
 <nav>
   <a href="#Play">Play</a>
   <a href="#Wander">Wander</a>
   <a href="#Eat">Eat</a>
 </nav>
 
-{% assign placeholder = '/assets/images/placeholder.png' %}
-
 {% assign gallery = "
-Play|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868,https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=4000&height=3000;
-Wander|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204,https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161;
-Eat|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000
+Play|
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=4000&height=1868|https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=4000&height=1868,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQREnYJzOGG5QKFqR0lI4V5yASEgyRuybjwEAGRATwiGhfs?width=4000&height=1868|https://1drv.ms/i/c/6118ddcb5316a0a9/IQREnYJzOGG5QKFqR0lI4V5yASEgyRuybjwEAGRATwiGhfs?width=4000&height=1868,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQQHljFCCJ6xRaTiSmlcb3AiAd5iaK7v4b2_2-1bzWsgtho?width=4000&height=3000|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQHljFCCJ6xRaTiSmlcb3AiAd5iaK7v4b2_2-1bzWsgtho?width=4000&height=3000,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQQZjtGUJtUmSYnkoGskWQCBAQYfs87CMYLADBfw6c1KwHk?width=4000&height=3000|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQZjtGUJtUmSYnkoGskWQCBAQYfs87CMYLADBfw6c1KwHk?width=4000&height=3000;
+
+Wander|
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204|https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQRn6TIri6CAS503qbdNEv6-AdoQRGifJjddtn_LDIafIOc?width=3887&height=2521|https://1drv.ms/i/c/6118ddcb5316a0a9/IQRn6TIri6CAS503qbdNEv6-AdoQRGifJjddtn_LDIafIOc?width=3887&height=2521;
+
+Eat|
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=1024&height=685|https://1drv.ms/i/c/6118ddcb5316a0a9/IQSOardx2EZRTLY_X7-H3Rl4AVrnu8fnNhaMfnGlBlXjGvw?width=1024&height=685,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQRXz-3NuIFHQajUVuA9CfniAch43FTP_iwIp12GfmmsyGE?width=2048&height=1536|https://1drv.ms/i/c/6118ddcb5316a0a9/IQRXz-3NuIFHQajUVuA9CfniAch43FTP_iwIp12GfmmsyGE?width=2048&height=1536,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQTFvXL2gU83TqpsZL-d0e5_AZ1SY8k0MBJJYJmRJO7vqqQ?width=4000&height=1868|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTFvXL2gU83TqpsZL-d0e5_AZ1SY8k0MBJJYJmRJO7vqqQ?width=4000&height=1868,
+https://1drv.ms/i/c/6118ddcb5316a0a9/IQRtitNAvF0jT6TzVPkIqTlsAQ3Lvvd8zY4YN54G_a71VNU?width=4000&height=1868|https://1drv.ms/i/c/6118ddcb5316a0a9/IQRtitNAvF0jT6TzVPkIqTlsAQ3Lvvd8zY4YN54G_a71VNU?width=4000&height=1868
 " | split: ";" %}
 
-{% for section in gallery %}
-  {% assign parts = section | split: "|" %}
+{% for sec in gallery %}
+  {% assign parts = sec | split: "|" %}
   {% assign sec_name = parts[0] %}
-  {% assign imgs = parts[1] | split: "," %}
-  <div id="{{ sec_name }}" class="gallery-container">
+  <div class="section" id="{{ sec_name }}">
     <h3 class="section-title">{{ sec_name }}</h3>
     <div class="gallery">
-      {% for img_pair in imgs %}
-        {% assign pair = img_pair | split: "|" %}
-        <img src="{{ placeholder }}" data-src="{{ pair[0] }}" data-full="{{ pair[1] }}" alt="{{ sec_name }} image" loading="lazy">
+      {% assign images = parts[1] | split: "," %}
+      {% for img in images %}
+        {% assign pair = img | split: "|" %}
+        <a href="#img{{ forloop.index0 }}-{{ sec_name }}">
+          <img src="{{ pair[0] }}" alt="{{ sec_name }} image">
+        </a>
+        <div id="img{{ forloop.index0 }}-{{ sec_name }}" class="lightbox">
+          <a href="#" class="close">&times;</a>
+          <img src="{{ pair[1] }}">
+        </div>
       {% endfor %}
-    </div>
-    <div class="lightbox">
-      <span class="close">✖</span>
-      <span class="nav-arrow prev">⟨</span>
-      <div class="spinner"></div>
-      <img src="">
-      <span class="nav-arrow next">⟩</span>
     </div>
   </div>
 {% endfor %}
-
-<script>
-// Lazy load thumbnails with blur placeholder
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.gallery img').forEach(img => {
-    const temp = new Image();
-    temp.src = img.dataset.src;
-    temp.onload = () => {
-      img.src = temp.src;
-      img.classList.add('loaded');
-    };
-  });
-});
-
-// Preload full-size images
-window.addEventListener('load', () => {
-  document.querySelectorAll('.gallery img').forEach(img => {
-    const fullSrc = img.dataset.full;
-    if (fullSrc) {
-      const preload = new Image();
-      preload.src = fullSrc;
-    }
-  });
-});
-
-// Lightbox functionality
-document.querySelectorAll('.gallery-container').forEach(container => {
-  const images = container.querySelectorAll('.gallery img');
-  const lightbox = container.querySelector('.lightbox');
-  const lightboxImg = lightbox.querySelector('img');
-  const closeBtn = lightbox.querySelector('.close');
-  const prevBtn = lightbox.querySelector('.prev');
-  const nextBtn = lightbox.querySelector('.next');
-  const spinner = lightbox.querySelector('.spinner');
-  let currentIndex = 0;
-
-  function showImage(index) {
-    currentIndex = index;
-    spinner.style.display = 'block';
-    lightboxImg.style.display = 'none';
-    lightbox.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-
-    const fullSrc = images[currentIndex].dataset.full;
-    const tempImg = new Image();
-    tempImg.src = fullSrc;
-    tempImg.onload = () => {
-      lightboxImg.src = fullSrc;
-      spinner.style.display = 'none';
-      lightboxImg.style.display = 'block';
-    };
-  }
-
-  function hideLightbox() {
-    lightbox.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  images.forEach((img, index) => img.addEventListener('click', () => showImage(index)));
-  closeBtn.addEventListener('click', hideLightbox);
-  prevBtn.addEventListener('click', e => { e.stopPropagation(); showImage((currentIndex - 1 + images.length) % images.length); });
-  nextBtn.addEventListener('click', e => { e.stopPropagation(); showImage((currentIndex + 1) % images.length); });
-
-  lightbox.addEventListener('click', e => { if (e.target === lightbox) hideLightbox(); });
-  document.addEventListener('keydown', e => {
-    if (lightbox.style.display === 'flex') {
-      if (e.key === 'Escape') hideLightbox();
-      if (e.key === 'ArrowLeft') showImage((currentIndex - 1 + images.length) % images.length);
-      if (e.key === 'ArrowRight') showImage((currentIndex + 1) % images.length);
-    }
-  });
-});
-</script>
