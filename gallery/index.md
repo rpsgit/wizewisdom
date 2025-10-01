@@ -12,10 +12,26 @@ body {
   font-family: Arial, sans-serif;
 }
 
-h2 { text-align:center; margin-top: 20px; }
-nav { text-align:center; margin-bottom: 20px; }
-nav a { margin: 0 10px; text-decoration: none; color: #000; font-weight: bold; }
-nav a:hover { text-decoration: underline; }
+h2 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
 
 .gallery-container {
   background: rgba(255, 255, 255, 0.85);
@@ -44,12 +60,20 @@ h3.section-title {
   margin-bottom: 12px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, filter 0.3s ease-in-out;
   cursor: pointer;
   display: block;
+  filter: blur(10px);
+  background: #ddd;
 }
 
-.gallery img:hover { transform: scale(1.05); }
+.gallery img.loaded {
+  filter: blur(0);
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
 
 /* Lightbox */
 .lightbox {
@@ -116,20 +140,22 @@ h3.section-title {
 
 /* Responsive */
 @media (max-width: 1200px) { .gallery { column-count: 3; } }
-@media (max-width: 900px) { .gallery { column-count: 2; } }
-@media (max-width: 600px) { .gallery { column-count: 1; } }
+@media (max-width: 900px)  { .gallery { column-count: 2; } }
+@media (max-width: 600px)  { .gallery { column-count: 1; } }
 </style>
 
 <h2>Gallery</h2>
 <nav>
-  <a href="#play">Play</a>
-  <a href="#wander">Wander</a>
-  <a href="#eat">Eat</a>
+  <a href="#Play">Play</a>
+  <a href="#Wander">Wander</a>
+  <a href="#Eat">Eat</a>
 </nav>
 
+{% assign placeholder = '/assets/images/placeholder.png' %}
+
 {% assign gallery = "
-Play|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868,https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=4000&height=3000,https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQRAMNKPCLSYTaE5vnCNgTWgAQ20oxXfsyUQA0apry-PI-w?width=4000&height=1868;
-Wander|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204,https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161,https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQSqEIPFgZ7_QqAxIav70E7TAU7EkbuOVCkXAogyim6y3x4?width=3920&height=2204;
+Play|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQR6-Q_lDeTgTL1ExpM3ukK-Ac68m5EqMxbAFlgyW8I5vs0?width=4000&height=1868,https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQdhWxz9pXQYGqN64XY2mCAfWR0tWHTOh03quOpKk04SE?width=4000&height=3000;
+Wander|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQtMLVRdoUvSbYfz9tnV3iBAezWbN4sS2aV5JbKANjFQoo?width=3920&height=2204,https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQQvIkPTK9UsTYQO1WcaYIA_AQujOHWcHwTIO4wJHnYXib8?width=3590&height=2161;
 Eat|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=400|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhuh9wP3L5g?width=4000&height=3000
 " | split: ";" %}
 
@@ -142,7 +168,7 @@ Eat|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhu
     <div class="gallery">
       {% for img_pair in imgs %}
         {% assign pair = img_pair | split: "|" %}
-        <img src="{{ pair[0] }}" data-full="{{ pair[1] }}" alt="{{ sec_name }} image" loading="eager">
+        <img src="{{ placeholder }}" data-src="{{ pair[0] }}" data-full="{{ pair[1] }}" alt="{{ sec_name }} image" loading="lazy">
       {% endfor %}
     </div>
     <div class="lightbox">
@@ -156,6 +182,18 @@ Eat|https://1drv.ms/i/c/6118ddcb5316a0a9/IQTgk1I9SwuXRbePfpaC8skMAcVdtaUvncNSxhu
 {% endfor %}
 
 <script>
+// Lazy load thumbnails with blur placeholder
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.gallery img').forEach(img => {
+    const temp = new Image();
+    temp.src = img.dataset.src;
+    temp.onload = () => {
+      img.src = temp.src;
+      img.classList.add('loaded');
+    };
+  });
+});
+
 // Preload full-size images
 window.addEventListener('load', () => {
   document.querySelectorAll('.gallery img').forEach(img => {
