@@ -4,7 +4,6 @@ title: Pickleball
 ---
 
 <style>
-  /* === BODY & PAGE CONTAINER === */
   body {
     margin: 0;
     padding: 0;
@@ -20,21 +19,21 @@ title: Pickleball
     padding: 0 15px;
   }
 
-  /* === PAGE TITLE === */
   h1 {
     display: inline-block;
     color: #000;
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 30px;
+    background: none;
+    box-shadow: none;
   }
 
-  /* === FLEX CONTAINER FOR PICKLEBALLS === */
+  /* === CONTAINER FOR PICKLEBALL BALLS === */
   .pickle-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-wrap: wrap; /* allow wrapping */
+    flex-wrap: wrap;
     gap: 40px;
     background: rgba(255, 255, 255, 0.7);
     padding: 30px 20px;
@@ -43,15 +42,14 @@ title: Pickleball
     margin-bottom: 30px;
   }
 
-  /* === INDIVIDUAL BALL SECTIONS === */
   .section-link {
     text-decoration: none;
   }
 
   .section {
     position: relative;
-    width: 160px; /* 20% smaller than tennis (200px → 160px) */
-    height: 160px;
+    width: 200px;
+    height: 200px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.25s ease;
@@ -69,7 +67,7 @@ title: Pickleball
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.05rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -79,7 +77,7 @@ title: Pickleball
     transform: scale(1.08);
   }
 
-  /* === YOUTUBE PLACEHOLDER === */
+  /* === YOUTUBE PLACEHOLDER (same as Tennis) === */
   .youtube-placeholder {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
@@ -111,10 +109,10 @@ title: Pickleball
     border: none;
   }
 
-  /* === FALLBACK LINK === */
   .youtube-fallback {
     margin-top: 12px;
   }
+
   .youtube-fallback a {
     display: inline-block;
     color: #ffdd57;
@@ -125,6 +123,7 @@ title: Pickleball
     border-radius: 8px;
     transition: background 0.3s ease, color 0.3s ease;
   }
+
   .youtube-fallback a:hover {
     background: #ffdd57;
     color: #000;
@@ -143,24 +142,21 @@ title: Pickleball
 
   @media (max-width: 768px) {
     .section {
-      width: 130px;
-      height: 130px;
+      width: 160px;
+      height: 160px;
     }
     .section-title {
-      font-size: 0.85rem;
+      font-size: 1.2rem;
     }
   }
 
   @media (max-width: 480px) {
-    .pickle-container {
-      gap: 20px;
-    }
     .section {
-      width: 100px;
-      height: 100px;
+      width: 130px;
+      height: 130px;
     }
     .section-title {
-      font-size: 0.7rem;
+      font-size: 1rem;
     }
   }
 </style>
