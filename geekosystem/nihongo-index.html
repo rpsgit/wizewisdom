@@ -28,13 +28,21 @@ title: Nihongo
     font-size: 1.5rem;
   }
 
-  /* Embed containers */
+  /* Side-by-side container for Todai and JLPT */
+  .embed-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+
   .embed-todai {
     position: relative;
     padding-bottom: 39%;
     height: 0;
     overflow: hidden;
-    margin: 20px 0;
+    flex: 0 1 48%; /* Side by side with some space */
     border-radius: 12px;
     background: rgba(255,255,255,0.7);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -51,6 +59,16 @@ title: Nihongo
   }
 
   /* OneDrive thumbnails */
+  .onedrive-title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.7);
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+
   .embed-onedrive {
     display: flex;
     gap: 15px;
@@ -123,30 +141,34 @@ title: Nihongo
   @media (max-width: 768px) {
     .page-container { padding: 15px; }
     h2 { font-size: 1.2rem; }
-    .embed-todai { padding-bottom: 50%; }
-    .embed-onedrive iframe { width: 144px; height: 86px; } /* 20% larger */
+    .embed-todai { flex: 0 1 100%; padding-bottom: 50%; }
+    .embed-onedrive iframe { width: 144px; height: 86px; }
     .modal-content { height: 70%; }
   }
 
   @media (max-width: 480px) {
     h2 { font-size: 1rem; }
     .embed-todai { padding-bottom: 60%; }
-    .embed-onedrive iframe { width: 120px; height: 72px; } /* 20% larger */
+    .embed-onedrive iframe { width: 120px; height: 72px; }
     .modal-content { height: 65%; }
   }
 </style>
 
 <div class="page-container">
 
-  <!-- Todai News -->
-  <div class="embed-todai">
-    <iframe src="https://japanese.todaiinews.com/?hl=en-US" title="Todai Easy Japanese News" allowfullscreen="true"></iframe>
+  <!-- Todai and JLPT side by side -->
+  <div class="embed-row">
+    <div class="embed-todai">
+      <iframe src="https://japanese.todaiinews.com/?hl=en-US" title="Todai Easy Japanese News" allowfullscreen="true"></iframe>
+    </div>
+
+    <div class="embed-todai">
+      <iframe src="https://jfmo.org.ph/jlpt/" title="JLPT Official Website" allowfullscreen="true"></iframe>
+    </div>
   </div>
 
-  <!-- JLPT Site -->
-  <div class="embed-todai">
-    <iframe src="https://jfmo.org.ph/jlpt/" title="JLPT Official Website" allowfullscreen="true"></iframe>
-  </div>
+  <!-- OneDrive Title -->
+  <div class="onedrive-title">Nihongo Study Resources</div>
 
   <!-- OneDrive Thumbnails -->
   <div class="embed-onedrive">
