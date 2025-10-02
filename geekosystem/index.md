@@ -12,6 +12,26 @@ title: Geekosystem
     font-family: Arial, sans-serif;
   }
 
+  /* === HOME BUTTON ICON === */
+  .home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    text-decoration: none;
+  }
+
+  .home-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: url('/assets/images/home-icon.png') no-repeat center center;
+    background-size: contain;
+  }
+
   /* === MAIN CONTAINER === */
   .geek-container {
     max-width: 1200px;
@@ -60,7 +80,7 @@ title: Geekosystem
   .section-geek {
     width: 100%;
     height: 100%;
-    background-color: rgba(44, 122, 123, 0.85); /* Sophisticated blue-green */
+    background-color: rgba(44, 122, 123, 0.85);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -70,15 +90,9 @@ title: Geekosystem
   }
 
   /* Category-specific background images */
-  .section-books .section-geek {
-    background-image: url('/assets/images/tech-icon.png');
-  }
-  .section-science .section-geek {
-    background-image: url('/assets/images/science-icon.png');
-  }
-  .section-language .section-geek {
-    background-image: url('/assets/images/nihongo-icon.png');
-  }
+  .section-books .section-geek { background-image: url('/assets/images/tech-icon.png'); }
+  .section-science .section-geek { background-image: url('/assets/images/science-icon.png'); }
+  .section-language .section-geek { background-image: url('/assets/images/nihongo-icon.png'); }
 
   /* Category Title Overlay */
   .section-title {
@@ -94,34 +108,25 @@ title: Geekosystem
   }
 
   /* Hover Effect */
-  .section-link:hover .section-geek {
-    transform: scale(1.08);
-  }
+  .section-link:hover .section-geek { transform: scale(1.08); }
 
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
-    .geek-container h2 {
-      font-size: 2.2rem;
-    }
-    .section {
-      width: 180px;
-      height: 180px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-    }
+    .geek-container h2 { font-size: 2.2rem; }
+    .section { width: 180px; height: 180px; }
+    .section-title { font-size: 1.2rem; }
   }
 
   @media (max-width: 600px) {
-    .section {
-      width: 150px;
-      height: 150px;
-    }
-    .section-title {
-      font-size: 1rem;
-    }
+    .section { width: 150px; height: 150px; }
+    .section-title { font-size: 1rem; }
   }
 </style>
+
+<!-- Home Button -->
+<a href="https://www.wizewisdom.com/" class="home-button">
+  <span class="home-icon"></span>
+</a>
 
 <div class="geek-container">
   <h2>Geekosystem</h2>
