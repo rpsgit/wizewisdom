@@ -71,13 +71,13 @@ title: Geekosystem
 
   /* Category-specific background images */
   .section-books .section-geek {
-    background-image: url('/assets/images/tech-icon.png');
+    background-image: url('/assets/images/tech-index.png');
   }
   .section-science .section-geek {
-    background-image: url('/assets/images/science-icon.png');
+    background-image: url('/assets/images/science-index.png');
   }
   .section-language .section-geek {
-    background-image: url('/assets/images/language-icon.png');
+    background-image: url('/assets/images/nihongo-index.png');
   }
 
   /* Category Title Overlay */
@@ -144,7 +144,7 @@ title: Geekosystem
     <a href="/geekosystem/language/index.html" class="section-link">
       <div class="section section-language">
         <div class="section-geek"></div>
-        <div class="section-title">Language</div>
+        <div class="section-title">Nihongo</div>
       </div>
     </a>
   </div>
