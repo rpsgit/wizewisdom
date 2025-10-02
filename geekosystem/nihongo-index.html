@@ -4,14 +4,17 @@ title: Nihongo
 ---
 
 <style>
-  body {
+  /* Ensure full-page background */
+  html, body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/nihongo-index.png') no-repeat center center fixed;
-    background-size: cover;
+    height: 100%;
     font-family: Arial, sans-serif;
+    background: #f5f5f5 url('{{ "/assets/images/nihongo-index.png" | relative_url }}') no-repeat center center fixed;
+    background-size: cover;
   }
 
+  /* Container for page content */
   .page-container {
     max-width: 1200px;
     margin: 40px auto;
@@ -24,9 +27,9 @@ title: Nihongo
     font-size: 1.5rem;
   }
 
-  /* Todai & JLPT wrapper */
+  /* Todai & JLPT box */
   .todai-jlpt-box {
-    background: rgba(255,255,255,0.7); /* 70% translucent white */
+    background: rgba(255,255,255,0.7);
     padding: 20px;
     border-radius: 12px;
     display: flex;
@@ -42,7 +45,7 @@ title: Nihongo
     padding-bottom: 39%;
     height: 0;
     overflow: hidden;
-    flex: 0 1 48%; /* Side by side */
+    flex: 0 1 48%;
     border-radius: 12px;
   }
 
@@ -56,9 +59,9 @@ title: Nihongo
     border-radius: 12px;
   }
 
-  /* OneDrive wrapper */
+  /* OneDrive box */
   .onedrive-box {
-    background: rgba(255,255,255,0.7); /* 70% translucent white */
+    background: rgba(255,255,255,0.7);
     padding: 30px 20px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -67,7 +70,7 @@ title: Nihongo
   }
 
   .onedrive-title {
-    font-size: 1.05rem; /* 70% of original 1.5rem */
+    font-size: 1.05rem;
     margin-bottom: 20px;
   }
 
@@ -80,8 +83,8 @@ title: Nihongo
 
   .embed-onedrive iframe {
     flex: 0 0 auto;
-    width: 216px;    /* Increased 20% from previous 180px */
-    height: 130px;   /* Increased 20% from previous 108px */
+    width: 216px;
+    height: 130px;
     border: none;
     border-radius: 8px;
     background: rgba(255,255,255,0.7);
@@ -138,7 +141,7 @@ title: Nihongo
     z-index: 10000;
   }
 
-  /* RESPONSIVENESS */
+  /* RESPONSIVE */
   @media (max-width: 768px) {
     .todai-jlpt-box { flex-direction: column; padding: 15px; }
     .embed-todai { flex: 0 1 100%; padding-bottom: 50%; }
@@ -157,37 +160,32 @@ title: Nihongo
 
 <div class="page-container">
 
-  <!-- Todai and JLPT inside a single translucent box -->
+  <!-- Todai & JLPT box -->
   <div class="todai-jlpt-box">
     <div class="embed-todai">
-      <iframe src="https://japanese.todaiinews.com/?hl=en-US" title="Todai Easy Japanese News" allowfullscreen="true"></iframe>
+      <iframe src="https://japanese.todaiinews.com/?hl=en-US" title="Todai Easy Japanese News" allowfullscreen></iframe>
     </div>
 
     <div class="embed-todai">
-      <iframe src="https://jfmo.org.ph/jlpt/" title="JLPT Official Website" allowfullscreen="true"></iframe>
+      <iframe src="https://jfmo.org.ph/jlpt/" title="JLPT Official Website" allowfullscreen></iframe>
     </div>
   </div>
 
-  <!-- OneDrive section in a separate translucent box -->
+  <!-- OneDrive Resources -->
   <div class="onedrive-box">
     <div class="onedrive-title">Nihongo Study Resources</div>
-
     <div class="embed-onedrive">
-      <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo" 
-              title="Nihongo File 1"
-              data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo"></iframe>
+      <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo"
+              data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo"
+              title="Nihongo File 1"></iframe>
 
       <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"
-              title="Nihongo File 2"
-              data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"></iframe>
+              data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"
+              title="Nihongo File 2"></iframe>
 
       <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"
-              title="Nihongo File 3"
-              data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"></iframe>
-      <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRbqc-TYlmhSrTr94DHCoa0AdnHojD2V7Gcnc89yfBYqxg" width="98" height="120" frameborder="0" scrolling="no"></iframe>
-
-      <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQSetM2NQ7UOT7O1b0iu_zhhAYB6uHTNcDr8pFDO1dS9i24" width="98" height="120" frameborder="0" scrolling="no"></iframe>
-      
+              data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"
+              title="Nihongo File 3"></iframe>
     </div>
   </div>
 
