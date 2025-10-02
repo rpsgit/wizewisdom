@@ -127,21 +127,21 @@ title: Geekosystem
   <h2>Geekosystem</h2>
 
   <div class="categories-wrapper">
-    <a href="/geekosystem/tech/index.html" class="section-link">
+    <a href="/geekosystem/tech-index.html" class="section-link">
       <div class="section section-books">
         <div class="section-geek"></div>
         <div class="section-title">Tech</div>
       </div>
     </a>
 
-    <a href="/geekosystem/science/index.html" class="section-link">
+    <a href="/geekosystem/science-index.html" class="section-link">
       <div class="section section-science">
         <div class="section-geek"></div>
         <div class="section-title">Science</div>
       </div>
     </a>
 
-    <a href="/geekosystem/language/index.html" class="section-link">
+    <a href="/geekosystem/nihongo-index.html" class="section-link">
       <div class="section section-language">
         <div class="section-geek"></div>
         <div class="section-title">Nihongo</div>
