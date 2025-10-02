@@ -28,7 +28,7 @@ title: Nihongo
     font-size: 1.5rem;
   }
 
-  /* Todai embed */
+  /* Embed containers */
   .embed-todai {
     position: relative;
     padding-bottom: 39%;
@@ -61,8 +61,8 @@ title: Nihongo
 
   .embed-onedrive iframe {
     flex: 0 0 auto;
-    width: 150px;
-    height: 90px;
+    width: 180px;    /* Increased by 20% */
+    height: 108px;   /* Increased by 20% */
     border: none;
     border-radius: 8px;
     background: rgba(255,255,255,0.7);
@@ -112,6 +112,9 @@ title: Nihongo
     font-size: 28px;
     font-weight: bold;
     color: #fff;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 10px;
+    border-radius: 6px;
     cursor: pointer;
     z-index: 10000;
   }
@@ -121,34 +124,43 @@ title: Nihongo
     .page-container { padding: 15px; }
     h2 { font-size: 1.2rem; }
     .embed-todai { padding-bottom: 50%; }
-    .embed-onedrive iframe { width: 120px; height: 72px; }
+    .embed-onedrive iframe { width: 144px; height: 86px; } /* 20% larger */
     .modal-content { height: 70%; }
   }
 
   @media (max-width: 480px) {
     h2 { font-size: 1rem; }
     .embed-todai { padding-bottom: 60%; }
-    .embed-onedrive iframe { width: 100px; height: 60px; }
+    .embed-onedrive iframe { width: 120px; height: 72px; } /* 20% larger */
     .modal-content { height: 65%; }
   }
 </style>
 
 <div class="page-container">
 
+  <!-- Todai News -->
   <div class="embed-todai">
-    <iframe src="https://japanese.todaiinews.com/?hl=en-US" allowfullscreen></iframe>
-  </div>
-  <div class="fallback">
-    <p>If the site doesn’t load, <a href="https://japanese.todaiinews.com/?hl=en-US" target="_blank">click here to view</a>.</p>
+    <iframe src="https://japanese.todaiinews.com/?hl=en-US" title="Todai Easy Japanese News" allowfullscreen="true"></iframe>
   </div>
 
-  <div class="embed-onedrive">
-    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo" data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo"></iframe>
-    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY" data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"></iframe>
-    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k" data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"></iframe>
+  <!-- JLPT Site -->
+  <div class="embed-todai">
+    <iframe src="https://jfmo.org.ph/jlpt/" title="JLPT Official Website" allowfullscreen="true"></iframe>
   </div>
-  <div class="fallback">
-    <p>If the folder doesn’t display, <a href="https://1drv.ms/f/c/6118ddcb5316a0a9/Ei-8azJXNytDi1iZZd7qFsgBs3FTNdjPQNdLyuX5kdv7iQ" target="_blank">open in OneDrive</a>.</p>
+
+  <!-- OneDrive Thumbnails -->
+  <div class="embed-onedrive">
+    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo" 
+            title="Nihongo File 1"
+            data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo"></iframe>
+
+    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"
+            title="Nihongo File 2"
+            data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"></iframe>
+
+    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"
+            title="Nihongo File 3"
+            data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"></iframe>
   </div>
 
 </div>
