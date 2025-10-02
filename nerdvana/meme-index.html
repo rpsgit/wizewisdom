@@ -15,7 +15,7 @@ title: Memes
   .content-box {
     max-width: 1000px;
     margin: 40px auto;
-    background: rgba(255, 255, 255, 0.2); /* reduced opacity to show background */
+    background: rgba(255, 255, 255, 0.2); /* translucent to show background */
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.25);
@@ -29,7 +29,7 @@ title: Memes
     text-shadow: 1px 1px 3px rgba(255,255,255,0.7);
   }
 
-  /* Featured (latest) meme */
+  /* Latest meme - big square */
   #latest-meme img {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -43,7 +43,7 @@ title: Memes
 
   #latest-meme img:hover { transform: scale(1.04); }
 
-  /* Meme gallery thumbnails */
+  /* Gallery thumbnails - smaller squares */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
