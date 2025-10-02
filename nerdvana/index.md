@@ -1,4 +1,4 @@
----
+va---
 layout: default
 title: Nerdvana
 ---
@@ -132,7 +132,7 @@ title: Nerdvana
     </a>
 
     <!-- Memes Section -->
-    <a href="/quotes/meme-index.html" class="section-link">
+    <a href="/nerdvana/meme-index.html" class="section-link">
       <div class="section section-meme">
         <div class="section-nerd"></div>
         <div class="section-title">Memes</div>
