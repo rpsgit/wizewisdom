@@ -25,11 +25,13 @@ title: Nihongo
     display: inline-block;
     padding: 10px 20px;
     border-radius: 10px;
+    font-size: 1.5rem;
   }
 
-  .embed-container {
+  /* Todai embed */
+  .embed-todai {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 ratio */
+    padding-bottom: 39%;
     height: 0;
     overflow: hidden;
     margin: 20px 0;
@@ -38,7 +40,7 @@ title: Nihongo
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
 
-  .embed-container iframe {
+  .embed-todai iframe {
     position: absolute;
     top: 0;
     left: 0;
@@ -48,45 +50,134 @@ title: Nihongo
     border-radius: 12px;
   }
 
-  .fallback {
-    text-align: center;
+  /* OneDrive thumbnails */
+  .embed-onedrive {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
     margin: 20px 0;
   }
 
-  .fallback a {
-    display: inline-block;
-    background: #333;
-    color: #fff;
-    padding: 10px 20px;
+  .embed-onedrive iframe {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 90px;
+    border: none;
     border-radius: 8px;
-    text-decoration: none;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
   }
 
-  .fallback a:hover {
-    background: #555;
+  .embed-onedrive iframe:hover {
+    transform: scale(1.05);
+  }
+
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    height: 80%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10000;
+  }
+
+  /* RESPONSIVENESS */
+  @media (max-width: 768px) {
+    .page-container { padding: 15px; }
+    h2 { font-size: 1.2rem; }
+    .embed-todai { padding-bottom: 50%; }
+    .embed-onedrive iframe { width: 120px; height: 72px; }
+    .modal-content { height: 70%; }
+  }
+
+  @media (max-width: 480px) {
+    h2 { font-size: 1rem; }
+    .embed-todai { padding-bottom: 60%; }
+    .embed-onedrive iframe { width: 100px; height: 60px; }
+    .modal-content { height: 65%; }
   }
 </style>
 
 <div class="page-container">
 
-  <h2>Website Embed</h2>
-  <div class="embed-container">
-    <!-- This may not show due to X-Frame-Options -->
+  <div class="embed-todai">
     <iframe src="https://japanese.todaiinews.com/?hl=en-US" allowfullscreen></iframe>
   </div>
   <div class="fallback">
     <p>If the site doesn’t load, <a href="https://japanese.todaiinews.com/?hl=en-US" target="_blank">click here to view</a>.</p>
   </div>
 
-  <h2>OneDrive Folder</h2>
-  <div class="embed-container">
-    <!-- Correct OneDrive embed link -->
-   <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo" width="98" height="120" frameborder="0" scrolling="no"></iframe>
-   <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY" width="98" height="120" frameborder="0" scrolling="no"></iframe>
-    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k" width="98" height="120" frameborder="0" scrolling="no"></iframe>
+  <div class="embed-onedrive">
+    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo" data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRT3bU6NzgKSpqzJEHcIDYUATiZy-j_k9VXdOm72M3aGqo"></iframe>
+    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY" data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQTiJm4Dx8ReT6K0f2qLEzlqAZE3p_8X_oK3_DLHKsKH9aY"></iframe>
+    <iframe src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k" data-src="https://1drv.ms/b/c/6118ddcb5316a0a9/IQRBWdat2MXdQa50FvsDvAGcAeMHqGlGNHHo4QfBFM6-z6k"></iframe>
   </div>
   <div class="fallback">
     <p>If the folder doesn’t display, <a href="https://1drv.ms/f/c/6118ddcb5316a0a9/Ei-8azJXNytDi1iZZd7qFsgBs3FTNdjPQNdLyuX5kdv7iQ" target="_blank">open in OneDrive</a>.</p>
   </div>
 
 </div>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+  <span class="close-btn" onclick="closeModal()">&times;</span>
+  <div class="modal-content">
+    <iframe id="modal-iframe" src=""></iframe>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("modal");
+  const modalIframe = document.getElementById("modal-iframe");
+
+  document.querySelectorAll(".embed-onedrive iframe").forEach(iframe => {
+    iframe.addEventListener("click", () => {
+      modal.style.display = "flex";
+      modalIframe.src = iframe.dataset.src;
+    });
+  });
+
+  function closeModal() {
+    modal.style.display = "none";
+    modalIframe.src = "";
+  }
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+</script>
