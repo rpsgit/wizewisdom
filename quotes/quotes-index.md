@@ -29,11 +29,11 @@ title: Quotes
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
-  /* Featured (latest) image */
+  /* Featured (latest) image - square version */
   #latest-image img {
     width: 100%;
-    height: auto;
-    max-height: 600px;
+    aspect-ratio: 1 / 1; /* make square */
+    object-fit: cover;   /* crop without distortion */
     border-radius: 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     margin-bottom: 40px;
@@ -55,7 +55,7 @@ title: Quotes
 
   .gallery img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* square */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
@@ -102,7 +102,6 @@ title: Quotes
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
-    #latest-image img { max-height: none; }
     .gallery {
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
