@@ -12,35 +12,22 @@ title: Nerdvana
     font-family: Arial, sans-serif;
   }
 
-  /* === HOME BUTTON === */
+  /* === HOME BUTTON ICON === */
   .home-button {
     position: fixed;
     top: 20px;
     left: 20px;
-    background: rgba(44, 122, 123, 0.85);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* space between icon and text */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: transform 0.2s ease, background 0.2s ease;
     z-index: 1000;
-  }
-
-  .home-button:hover {
-    transform: scale(1.05);
-    background: rgba(44, 122, 123, 1);
+    display: inline-block;
+    width: 40px;   /* adjust size if needed */
+    height: 40px;
+    text-decoration: none;
   }
 
   .home-icon {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    /* Placeholder for your icon background or image */
+    width: 100%;
+    height: 100%;
+    display: block;
     background: url('/assets/images/home-icon.png') no-repeat center center;
     background-size: contain;
   }
@@ -103,9 +90,15 @@ title: Nerdvana
   }
 
   /* Category-specific background images */
-  .section-books .section-nerd { background-image: url('/assets/images/book-icon.png'); }
-  .section-quotes .section-nerd { background-image: url('/assets/images/quote-icon.png'); }
-  .section-memes .section-nerd { background-image: url('/assets/images/meme-icon.png'); }
+  .section-books .section-nerd {
+    background-image: url('/assets/images/book-icon.png');
+  }
+  .section-quotes .section-nerd {
+    background-image: url('/assets/images/quote-icon.png');
+  }
+  .section-memes .section-nerd {
+    background-image: url('/assets/images/meme-icon.png');
+  }
 
   /* Category Title Overlay */
   .section-title {
@@ -121,7 +114,9 @@ title: Nerdvana
   }
 
   /* Hover Effect */
-  .section-link:hover .section-nerd { transform: scale(1.08); }
+  .section-link:hover .section-nerd {
+    transform: scale(1.08);
+  }
 
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
@@ -139,7 +134,6 @@ title: Nerdvana
 <!-- Home Button -->
 <a href="https://www.wizewisdom.com/" class="home-button">
   <span class="home-icon"></span>
-  Home
 </a>
 
 <div class="nerd-container">
