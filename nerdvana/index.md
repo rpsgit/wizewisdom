@@ -76,8 +76,8 @@ title: Nerdvana
   .section-quotes .section-nerd {
     background-image: url('/assets/images/quote-index.png');
   }
-  .section-memes .section-nerd {
-    background-image: url('/assets/images/memes-index.png');
+  .section-meme .section-nerd {
+    background-image: url('/assets/images/meme-index.png');
   }
 
   /* Category Title Overlay */
@@ -132,8 +132,8 @@ title: Nerdvana
     </a>
 
     <!-- Memes Section -->
-    <a href="/quotes/memes-index.html" class="section-link">
-      <div class="section section-memes">
+    <a href="/quotes/meme-index.html" class="section-link">
+      <div class="section section-meme">
         <div class="section-nerd"></div>
         <div class="section-title">Memes</div>
       </div>
