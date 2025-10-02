@@ -71,13 +71,13 @@ title: Geekosystem
 
   /* Category-specific background images */
   .section-books .section-geek {
-    background-image: url('/assets/images/tech-index.png');
+    background-image: url('/assets/images/tech-icon.png');
   }
   .section-science .section-geek {
-    background-image: url('/assets/images/science-index.png');
+    background-image: url('/assets/images/science-icon.png');
   }
   .section-language .section-geek {
-    background-image: url('/assets/images/nihongo-index.png');
+    background-image: url('/assets/images/nihongo-icon.png');
   }
 
   /* Category Title Overlay */
