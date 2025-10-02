@@ -116,7 +116,7 @@ title: Nerdvana
 
   <div class="categories-wrapper">
     <!-- Books Section -->
-    <a href="/books/index.html" class="section-link">
+    <a href="/books/book-index.html" class="section-link">
       <div class="section section-books">
         <div class="section-nerd"></div>
         <div class="section-title">Books</div>
@@ -124,7 +124,7 @@ title: Nerdvana
     </a>
 
     <!-- Quotes Section -->
-    <a href="/quotes/quotes-index.html" class="section-link">
+    <a href="/quotes/quote-index.html" class="section-link">
       <div class="section section-quotes">
         <div class="section-nerd"></div>
         <div class="section-title">Quotes</div>
