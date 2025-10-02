@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Quotes
+title: Memes
 ---
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/quotes-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/meme-index.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
@@ -29,11 +29,11 @@ title: Quotes
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
-  /* Featured (latest) image - square version */
-  #latest-image img {
+  /* Featured (latest) meme - square version */
+  #latest-meme img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* make square */
-    object-fit: cover;   /* crop without distortion */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     margin-bottom: 40px;
@@ -41,11 +41,9 @@ title: Quotes
     transition: transform 0.3s ease;
   }
 
-  #latest-image img:hover {
-    transform: scale(1.04);
-  }
+  #latest-meme img:hover { transform: scale(1.04); }
 
-  /* Gallery thumbnails - square version */
+  /* Meme gallery thumbnails - square version */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -63,11 +61,9 @@ title: Quotes
     transition: transform 0.3s ease;
   }
 
-  .gallery img:hover {
-    transform: scale(1.03);
-  }
+  .gallery img:hover { transform: scale(1.03); }
 
-  /* Modal for enlarged image */
+  /* Modal for enlarged meme */
   .modal {
     display: none;
     position: fixed;
@@ -102,42 +98,37 @@ title: Quotes
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
-    .gallery {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
+    .gallery { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
   }
 
   @media (max-width: 480px) {
-    .gallery {
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
-    }
+    .gallery { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
   }
 </style>
 
 <div class="content-box">
-  <h1>Quotes</h1>
-  <div id="latest-image"></div>
-  <div class="gallery" id="gallery"></div>
+  <h1>Memes</h1>
+  <div id="latest-meme"></div>
+  <div class="gallery" id="meme-gallery"></div>
 </div>
 
-<!-- Modal for enlarged image -->
-<div class="modal" id="imageModal">
+<!-- Modal for enlarged meme -->
+<div class="modal" id="memeModal">
   <span class="modal-close" id="modalClose">&times;</span>
-  <img id="modalImg" src="" alt="Enlarged view">
+  <img id="modalImg" src="" alt="Enlarged meme">
 </div>
 
 <script>
   const username = "rpsgit";
   const repo = "wizewisdom";
   const branch = "main";
-  const folder = "assets/images/quotes";
+  const folder = "assets/images/memes"; // updated folder
 
   const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
-  const gallery = document.getElementById("gallery");
-  const latestImageDiv = document.getElementById("latest-image");
+  const gallery = document.getElementById("meme-gallery");
+  const latestMemeDiv = document.getElementById("latest-meme");
 
-  const modal = document.getElementById("imageModal");
+  const modal = document.getElementById("memeModal");
   const modalImg = document.getElementById("modalImg");
   const modalClose = document.getElementById("modalClose");
 
@@ -152,15 +143,15 @@ title: Quotes
       const images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
 
       if (images.length > 0) {
-        // Featured latest image
+        // Featured latest meme
         const latest = document.createElement("img");
         latest.src = images[0];
         latest.alt = imageFiles[0].name;
         latest.onclick = () => openModal(latest.src);
-        latestImageDiv.appendChild(latest);
+        latestMemeDiv.appendChild(latest);
       }
 
-      // Remaining gallery images
+      // Remaining meme gallery
       images.slice(1).forEach((url, i) => {
         const img = document.createElement("img");
         img.src = url;
@@ -170,7 +161,7 @@ title: Quotes
       });
     })
     .catch(err => {
-      gallery.innerHTML = "<p>⚠️ Could not load quotes.</p>";
+      gallery.innerHTML = "<p>⚠️ Could not load memes.</p>";
       console.error(err);
     });
 
