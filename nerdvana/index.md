@@ -71,13 +71,13 @@ title: Nerdvana
 
   /* Category-specific background images */
   .section-books .section-nerd {
-    background-image: url('/assets/images/book-index.png');
+    background-image: url('/assets/images/book-icon.png');
   }
   .section-quotes .section-nerd {
-    background-image: url('/assets/images/quote-index.png');
+    background-image: url('/assets/images/quote-icon.png');
   }
   .section-meme .section-nerd {
-    background-image: url('/assets/images/meme-index.png');
+    background-image: url('/assets/images/meme-icon.png');
   }
 
   /* Category Title Overlay */
