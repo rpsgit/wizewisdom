@@ -35,7 +35,7 @@ title: Nerdvana
   .categories-wrapper {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* ✅ Wraps on smaller screens */
+    flex-wrap: wrap;
     gap: 50px;
   }
 
@@ -60,7 +60,7 @@ title: Nerdvana
   .section-nerd {
     width: 100%;
     height: 100%;
-    background-color: rgba(44, 122, 123, 0.85); /* Sophisticated blue-green */
+    background-color: rgba(44, 122, 123, 0.85);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -75,6 +75,9 @@ title: Nerdvana
   }
   .section-quotes .section-nerd {
     background-image: url('/assets/images/quote-index.png');
+  }
+  .section-memes .section-nerd {
+    background-image: url('/assets/images/memes-index.png');
   }
 
   /* Category Title Overlay */
@@ -97,26 +100,14 @@ title: Nerdvana
 
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
-    .nerd-container h2 {
-      font-size: 2.2rem;
-    }
-    .section {
-      width: 180px;
-      height: 180px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-    }
+    .nerd-container h2 { font-size: 2.2rem; }
+    .section { width: 180px; height: 180px; }
+    .section-title { font-size: 1.2rem; }
   }
 
   @media (max-width: 600px) {
-    .section {
-      width: 150px;
-      height: 150px;
-    }
-    .section-title {
-      font-size: 1rem;
-    }
+    .section { width: 150px; height: 150px; }
+    .section-title { font-size: 1rem; }
   }
 </style>
 
@@ -124,6 +115,7 @@ title: Nerdvana
   <h2>Nerdvana</h2>
 
   <div class="categories-wrapper">
+    <!-- Books Section -->
     <a href="/books/index.html" class="section-link">
       <div class="section section-books">
         <div class="section-nerd"></div>
@@ -131,10 +123,19 @@ title: Nerdvana
       </div>
     </a>
 
+    <!-- Quotes Section -->
     <a href="/quotes/quotes-index.html" class="section-link">
       <div class="section section-quotes">
         <div class="section-nerd"></div>
         <div class="section-title">Quotes</div>
+      </div>
+    </a>
+
+    <!-- Memes Section -->
+    <a href="/quotes/memes-index.html" class="section-link">
+      <div class="section section-memes">
+        <div class="section-nerd"></div>
+        <div class="section-title">Memes</div>
       </div>
     </a>
   </div>
