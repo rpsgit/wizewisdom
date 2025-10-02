@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Memes
+title: Quotes
 ---
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/meme-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/quotes-index.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
@@ -29,21 +29,24 @@ title: Memes
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
-  /* Featured (latest) meme - square version */
-  #latest-meme img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
+  /* Featured (latest) image - square version, 60% smaller */
+  #latest-image img {
+    width: 40%; /* 60% smaller than full width */
+    aspect-ratio: 1 / 1; /* keep square */
+    object-fit: cover;   /* crop without distortion */
     border-radius: 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    margin-bottom: 40px;
+    margin: 0 auto 40px; /* center horizontally */
+    display: block;
     cursor: pointer;
     transition: transform 0.3s ease;
   }
 
-  #latest-meme img:hover { transform: scale(1.04); }
+  #latest-image img:hover {
+    transform: scale(1.04);
+  }
 
-  /* Meme gallery thumbnails - square version */
+  /* Gallery thumbnails - square version */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -61,9 +64,11 @@ title: Memes
     transition: transform 0.3s ease;
   }
 
-  .gallery img:hover { transform: scale(1.03); }
+  .gallery img:hover {
+    transform: scale(1.03);
+  }
 
-  /* Modal for enlarged meme */
+  /* Modal for enlarged image */
   .modal {
     display: none;
     position: fixed;
@@ -98,37 +103,44 @@ title: Memes
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
-    .gallery { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    #latest-image img { width: 60%; } /* slightly larger on smaller screens */
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
   }
 
   @media (max-width: 480px) {
-    .gallery { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+    #latest-image img { width: 80%; } /* mobile-friendly */
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+    }
   }
 </style>
 
 <div class="content-box">
-  <h1>Memes</h1>
-  <div id="latest-meme"></div>
-  <div class="gallery" id="meme-gallery"></div>
+  <h1>Quotes</h1>
+  <div id="latest-image"></div>
+  <div class="gallery" id="gallery"></div>
 </div>
 
-<!-- Modal for enlarged meme -->
-<div class="modal" id="memeModal">
+<!-- Modal for enlarged image -->
+<div class="modal" id="imageModal">
   <span class="modal-close" id="modalClose">&times;</span>
-  <img id="modalImg" src="" alt="Enlarged meme">
+  <img id="modalImg" src="" alt="Enlarged view">
 </div>
 
 <script>
   const username = "rpsgit";
   const repo = "wizewisdom";
   const branch = "main";
-  const folder = "assets/images/memes"; // updated folder
+  const folder = "assets/images/quotes";
 
   const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
-  const gallery = document.getElementById("meme-gallery");
-  const latestMemeDiv = document.getElementById("latest-meme");
+  const gallery = document.getElementById("gallery");
+  const latestImageDiv = document.getElementById("latest-image");
 
-  const modal = document.getElementById("memeModal");
+  const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImg");
   const modalClose = document.getElementById("modalClose");
 
@@ -143,15 +155,15 @@ title: Memes
       const images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
 
       if (images.length > 0) {
-        // Featured latest meme
+        // Featured latest image
         const latest = document.createElement("img");
         latest.src = images[0];
         latest.alt = imageFiles[0].name;
         latest.onclick = () => openModal(latest.src);
-        latestMemeDiv.appendChild(latest);
+        latestImageDiv.appendChild(latest);
       }
 
-      // Remaining meme gallery
+      // Remaining gallery images
       images.slice(1).forEach((url, i) => {
         const img = document.createElement("img");
         img.src = url;
@@ -161,7 +173,7 @@ title: Memes
       });
     })
     .catch(err => {
-      gallery.innerHTML = "<p>⚠️ Could not load memes.</p>";
+      gallery.innerHTML = "<p>⚠️ Could not load quotes.</p>";
       console.error(err);
     });
 
