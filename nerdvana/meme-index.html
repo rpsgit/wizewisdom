@@ -1,184 +1,143 @@
 ---
 layout: default
-title: Memes
+title: Nerdvana
 ---
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/memes-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/nerdvana-index.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
 
-  .content-box {
-    max-width: 1000px;
-    margin: 40px auto;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  }
-
-  h1 {
+  /* === MAIN CONTAINER === */
+  .nerd-container {
+    max-width: 1200px;
+    margin: 50px auto;
     text-align: center;
-    color: #000;
-    font-size: 2.4rem;
-    margin-bottom: 30px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    background: rgba(255, 255, 255, 0.3); /* Reduced opacity for visibility */
+    padding: 40px 50px;
+    border-radius: 30px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
   }
 
-  /* Featured (latest) meme */
-  #latest-meme img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  /* === PAGE TITLE === */
+  .nerd-container h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
     margin-bottom: 40px;
+    color: #000;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8); /* optional for contrast */
+  }
+
+  /* === CATEGORY WRAPPER === */
+  .categories-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 50px;
+  }
+
+  /* === CATEGORY SECTIONS === */
+  .section-link {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .section {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    text-align: center;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.25s ease;
   }
 
-  #latest-meme img:hover {
-    transform: scale(1.04);
-  }
-
-  /* Meme gallery thumbnails */
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-top: 10px;
-  }
-
-  .gallery img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-
-  .gallery img:hover {
-    transform: scale(1.03);
-  }
-
-  /* Modal for enlarged meme */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
+  .section-nerd {
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    background-color: rgba(44, 122, 123, 0.85);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.25s ease;
   }
 
-  .modal img {
-    max-width: 95%;
-    max-height: 90%;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  /* Category-specific background images */
+  .section-books .section-nerd {
+    background-image: url('/assets/images/book-icon.png');
+  }
+  .section-quotes .section-nerd {
+    background-image: url('/assets/images/quote-icon.png');
+  }
+  .section-memes .section-nerd {
+    background-image: url('/assets/images/meme-icon.png');
   }
 
-  .modal-close {
+  /* Category Title Overlay */
+  .section-title {
     position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 2rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.4rem;
+    font-weight: bold;
     color: #fff;
-    cursor: pointer;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
   }
 
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .content-box { padding: 25px; }
-    h1 { font-size: 2rem; }
-    .gallery {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
+  /* Hover Effect */
+  .section-link:hover .section-nerd {
+    transform: scale(1.08);
   }
 
-  @media (max-width: 480px) {
-    .gallery {
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
-    }
+  /* === RESPONSIVE === */
+  @media (max-width: 1024px) {
+    .nerd-container h2 { font-size: 2.2rem; }
+    .section { width: 180px; height: 180px; }
+    .section-title { font-size: 1.2rem; }
+  }
+
+  @media (max-width: 600px) {
+    .section { width: 150px; height: 150px; }
+    .section-title { font-size: 1rem; }
   }
 </style>
 
-<div class="content-box">
-  <h1>Memes</h1>
-  <div id="latest-meme"></div>
-  <div class="gallery" id="meme-gallery"></div>
+<div class="nerd-container">
+  <h2>Nerdvana</h2>
+
+  <div class="categories-wrapper">
+    <!-- Books Section -->
+    <a href="/books/book-index.html" class="section-link">
+      <div class="section section-books">
+        <div class="section-nerd"></div>
+        <div class="section-title">Books</div>
+      </div>
+    </a>
+
+    <!-- Quotes Section -->
+    <a href="/quotes/quote-index.html" class="section-link">
+      <div class="section section-quotes">
+        <div class="section-nerd"></div>
+        <div class="section-title">Quotes</div>
+      </div>
+    </a>
+
+    <!-- Memes Section -->
+    <a href="/nerdvana/meme-index.html" class="section-link">
+      <div class="section section-memes">
+        <div class="section-nerd"></div>
+        <div class="section-title">Memes</div>
+      </div>
+    </a>
+  </div>
 </div>
-
-<!-- Modal for enlarged meme -->
-<div class="modal" id="memeModal">
-  <span class="modal-close" id="modalClose">&times;</span>
-  <img id="modalImg" src="" alt="Enlarged meme">
-</div>
-
-<script>
-  const username = "rpsgit";
-  const repo = "wizewisdom";
-  const branch = "main";
-  const folder = "assets/images/memes"; // updated folder
-
-  const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}?ref=${branch}`;
-  const gallery = document.getElementById("meme-gallery");
-  const latestMemeDiv = document.getElementById("latest-meme");
-
-  const modal = document.getElementById("memeModal");
-  const modalImg = document.getElementById("modalImg");
-  const modalClose = document.getElementById("modalClose");
-
-  fetch(apiUrl)
-    .then(res => res.json())
-    .then(files => {
-      const imageFiles = files.filter(f => f.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name));
-
-      // Sort descending (newest first by name)
-      imageFiles.sort((a, b) => b.name.localeCompare(a.name, undefined, { numeric: true, sensitivity: 'base' }));
-
-      const images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
-
-      if (images.length > 0) {
-        // Featured latest meme
-        const latest = document.createElement("img");
-        latest.src = images[0];
-        latest.alt = imageFiles[0].name;
-        latest.onclick = () => openModal(latest.src);
-        latestMemeDiv.appendChild(latest);
-      }
-
-      // Remaining meme gallery
-      images.slice(1).forEach((url, i) => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = imageFiles[i+1].name;
-        img.onclick = () => openModal(url);
-        gallery.appendChild(img);
-      });
-    })
-    .catch(err => {
-      gallery.innerHTML = "<p>⚠️ Could not load memes.</p>";
-      console.error(err);
-    });
-
-  function openModal(src) {
-    modal.style.display = "flex";
-    modalImg.src = src;
-  }
-
-  modalClose.onclick = () => { modal.style.display = "none"; }
-  modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; }
-</script>
