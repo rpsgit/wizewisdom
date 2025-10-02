@@ -29,11 +29,11 @@ title: Quotes
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
-  /* Latest (featured) image */
+  /* Featured (latest) image */
   #latest-image img {
     width: 100%;
     height: auto;
-    max-height: 600px; /* keep it elegant on large screens */
+    max-height: 600px;
     border-radius: 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     margin-bottom: 40px;
@@ -45,17 +45,17 @@ title: Quotes
     transform: scale(1.04);
   }
 
-  /* Gallery thumbnails */
+  /* Gallery thumbnails - square version */
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     margin-top: 10px;
   }
 
   .gallery img {
     width: 100%;
-    height: 160px;
+    aspect-ratio: 1 / 1; /* square */
     object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
@@ -67,20 +67,19 @@ title: Quotes
     transform: scale(1.03);
   }
 
-  /* Modal (fullscreen view) */
+  /* Modal for enlarged image */
   .modal {
     display: none;
     position: fixed;
     z-index: 1000;
-    padding: 20px;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background: rgba(0,0,0,0.85);
     justify-content: center;
     align-items: center;
+    padding: 20px;
   }
 
   .modal img {
@@ -99,24 +98,20 @@ title: Quotes
     cursor: pointer;
   }
 
-  /* Mobile view: show all full images stacked */
+  /* Mobile responsiveness */
   @media (max-width: 768px) {
     .content-box { padding: 25px; }
     h1 { font-size: 2rem; }
-
-    #latest-image img {
-      max-height: none; /* no height restriction */
-    }
-
+    #latest-image img { max-height: none; }
     .gallery {
-      display: block; /* stack images */
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
+  }
 
-    .gallery img {
-      width: 100%;
-      height: auto;   /* no cropping */
-      margin-bottom: 20px;
-      object-fit: contain;
+  @media (max-width: 480px) {
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
     }
   }
 </style>
@@ -158,7 +153,7 @@ title: Quotes
       const images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
 
       if (images.length > 0) {
-        // Show latest quote at the top (featured)
+        // Featured latest image
         const latest = document.createElement("img");
         latest.src = images[0];
         latest.alt = imageFiles[0].name;
@@ -166,7 +161,7 @@ title: Quotes
         latestImageDiv.appendChild(latest);
       }
 
-      // Show remaining quotes in the gallery
+      // Remaining gallery images
       images.slice(1).forEach((url, i) => {
         const img = document.createElement("img");
         img.src = url;
