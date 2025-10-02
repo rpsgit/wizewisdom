@@ -1,4 +1,4 @@
-va---
+---
 layout: default
 title: Nerdvana
 ---
@@ -76,7 +76,7 @@ title: Nerdvana
   .section-quotes .section-nerd {
     background-image: url('/assets/images/quote-icon.png');
   }
-  .section-meme .section-nerd {
+  .section-memes .section-nerd {
     background-image: url('/assets/images/meme-icon.png');
   }
 
@@ -133,7 +133,7 @@ title: Nerdvana
 
     <!-- Memes Section -->
     <a href="/nerdvana/meme-index.html" class="section-link">
-      <div class="section section-meme">
+      <div class="section section-memes">
         <div class="section-nerd"></div>
         <div class="section-title">Memes</div>
       </div>
