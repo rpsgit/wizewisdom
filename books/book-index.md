@@ -12,14 +12,30 @@ title: Book Feature
     font-family: Arial, sans-serif;
   }
 
-  /* === MAIN CONTENT CONTAINER === */
+  /* === BACK BUTTON === */
+  .back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    z-index: 1000;
+    text-decoration: none;
+  }
+
+  .back-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: url('/assets/images/back-icon.png') no-repeat center center;
+    background-size: contain;
+  }
+
+  /* === MAIN CONTENT CONTAINER (no translucent box now) === */
   .content {
     max-width: 900px;
-    margin: 40px auto;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    margin: 80px auto 40px;
+    padding: 20px;
   }
 
   /* === PAGE TITLE === */
@@ -45,7 +61,7 @@ title: Book Feature
   }
 
   thead tr {
-    background-color: rgba(44, 122, 123, 0.85); /* Sophisticated blue-green header */
+    background-color: rgba(44, 122, 123, 0.85);
     color: white;
     font-weight: bold;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
@@ -86,6 +102,11 @@ title: Book Feature
     }
   }
 </style>
+
+<!-- Back Button Placeholder -->
+<a href="/books/book-index.html" class="back-button">
+  <span class="back-icon"></span>
+</a>
 
 <div class="content">
   <h1>Book Feature</h1>
