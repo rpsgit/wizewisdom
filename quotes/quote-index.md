@@ -7,7 +7,7 @@ title: Quotes
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/quotes-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/nerdvana-bg.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
@@ -31,6 +31,7 @@ title: Quotes
     background-size: contain;
   }
 
+  /* Page Title */
   h1 {
     text-align: center;
     color: #000;
@@ -41,22 +42,23 @@ title: Quotes
 
   /* Featured (latest) image */
   #latest-image img {
-    width: 100%;
-    height: auto;
-    max-height: 600px;
+    display: block;
+    max-width: 100%;
+    height: auto;           /* keeps aspect ratio */
+    max-height: 600px;      /* prevents overly tall images */
+    margin: 0 auto 40px;
     border-radius: 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    margin: 0 auto 40px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    display: block;
+    object-fit: contain;    /* ensures no stretch/crop */
   }
 
   #latest-image img:hover {
     transform: scale(1.04);
   }
 
-  /* Gallery thumbnails - square version */
+  /* Gallery thumbnails - square */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -68,7 +70,7 @@ title: Quotes
 
   .gallery img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* square */
+    aspect-ratio: 1 / 1; /* square thumbnails */
     object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
@@ -98,8 +100,11 @@ title: Quotes
   .modal img {
     max-width: 95%;
     max-height: 90%;
+    height: auto;          /* natural proportions */
+    width: auto;           /* natural proportions */
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    object-fit: contain;   /* ensures no distortion */
   }
 
   .modal-close {
@@ -115,9 +120,7 @@ title: Quotes
   @media (max-width: 768px) {
     h1 { font-size: 2rem; }
     #latest-image img { max-height: none; }
-    .gallery {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
+    .gallery { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
   }
 
   @media (max-width: 480px) {
@@ -162,13 +165,13 @@ title: Quotes
     .then(files => {
       const imageFiles = files.filter(f => f.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name));
 
-      // Sort descending (newest first by name)
+      // Sort newest first
       imageFiles.sort((a, b) => b.name.localeCompare(a.name, undefined, { numeric: true, sensitivity: 'base' }));
 
       const images = imageFiles.map(f => `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${folder}/${f.name}`);
 
       if (images.length > 0) {
-        // Featured latest image
+        // Featured image
         const latest = document.createElement("img");
         latest.src = images[0];
         latest.alt = imageFiles[0].name;
@@ -176,7 +179,7 @@ title: Quotes
         latestImageDiv.appendChild(latest);
       }
 
-      // Remaining gallery images
+      // Gallery images
       images.slice(1).forEach((url, i) => {
         const img = document.createElement("img");
         img.src = url;
