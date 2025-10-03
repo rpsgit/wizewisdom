@@ -12,31 +12,44 @@ title: Memes
     font-family: Arial, sans-serif;
   }
 
-  .content-box {
-    max-width: 1000px;
-    margin: 40px auto;
-    background: rgba(255, 255, 255, 0.2); /* translucent to show background */
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  /* === HOME BUTTON === */
+  .home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    z-index: 1000;
+    text-decoration: none;
   }
 
+  .home-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: url('/assets/images/home-icon.png') no-repeat center center;
+    background-size: contain;
+  }
+
+  /* Page title */
   h1 {
     text-align: center;
     color: #000;
     font-size: 2.4rem;
-    margin-bottom: 30px;
+    margin: 60px auto 30px;
     text-shadow: 1px 1px 3px rgba(255,255,255,0.7);
   }
 
   /* Latest meme - big square */
   #latest-meme img {
     width: 100%;
+    max-width: 800px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 20px;
+    display: block;
+    margin: 0 auto 40px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    margin-bottom: 40px;
     cursor: pointer;
     transition: transform 0.3s ease;
   }
@@ -48,7 +61,9 @@ title: Memes
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
-    margin-top: 10px;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
   }
 
   .gallery img {
@@ -67,7 +82,7 @@ title: Memes
   .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 2000;
     left: 0;
     top: 0;
     width: 100%;
@@ -95,8 +110,7 @@ title: Memes
   }
 
   @media (max-width: 768px) {
-    .content-box { padding: 25px; }
-    h1 { font-size: 2rem; }
+    h1 { font-size: 2rem; margin-top: 70px; }
     .gallery { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
   }
 
@@ -105,11 +119,14 @@ title: Memes
   }
 </style>
 
-<div class="content-box">
-  <h1>Memes</h1>
-  <div id="latest-meme"></div>
-  <div class="gallery" id="meme-gallery"></div>
-</div>
+<!-- Home Button -->
+<a href="https://www.wizewisdom.com/" class="home-button">
+  <span class="home-icon"></span>
+</a>
+
+<h1>Memes</h1>
+<div id="latest-meme"></div>
+<div class="gallery" id="meme-gallery"></div>
 
 <!-- Modal for enlarged meme -->
 <div class="modal" id="memeModal">
