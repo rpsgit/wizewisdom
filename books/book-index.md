@@ -12,8 +12,8 @@ title: Book Feature
     font-family: Arial, sans-serif;
   }
 
-  /* === BACK BUTTON === */
-  .back-button {
+  /* === HOME BUTTON === */
+  .home-button {
     position: fixed;
     top: 20px;
     left: 20px;
@@ -23,11 +23,11 @@ title: Book Feature
     text-decoration: none;
   }
 
-  .back-icon {
+  .home-icon {
     width: 100%;
     height: 100%;
     display: block;
-    background: url('/assets/images/back-icon.png') no-repeat center center;
+    background: url('/assets/images/home-icon.png') no-repeat center center;
     background-size: contain;
   }
 
@@ -54,7 +54,7 @@ title: Book Feature
     max-width: 700px;
     margin: 0 auto;
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.7); /* 70% transparent */
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
@@ -103,9 +103,9 @@ title: Book Feature
   }
 </style>
 
-<!-- Back Button Placeholder -->
-<a href="/books/book-index.html" class="back-button">
-  <span class="back-icon"></span>
+<!-- Home Button -->
+<a href="https://www.wizewisdom.com/" class="home-button">
+  <span class="home-icon"></span>
 </a>
 
 <div class="content">
