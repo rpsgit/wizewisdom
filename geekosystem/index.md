@@ -69,9 +69,9 @@ title: Geekosystem
   }
 
   /* Category-specific background images */
-  .section-books .section-geek { background-image: url('/assets/images/tech-icon.png'); }
-  .section-science .section-geek { background-image: url('/assets/images/science-icon.png'); }
-  .section-language .section-geek { background-image: url('/assets/images/nihongo-icon.png'); }
+  .section-books .section-geek { background-image: url('/assets/images/tech-ic.png'); }
+  .section-science .section-geek { background-image: url('/assets/images/science-ic.png'); }
+  .section-language .section-geek { background-image: url('/assets/images/nihongo-ic.png'); }
 
   /* Category Title Overlay */
   .section-title {
