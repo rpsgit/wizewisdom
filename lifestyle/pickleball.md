@@ -19,6 +19,7 @@ title: Pickleball
     padding: 0 15px;
   }
 
+  /* === PAGE TITLE === */
   h1 {
     display: inline-block;
     color: #000;
@@ -42,14 +43,15 @@ title: Pickleball
     margin-bottom: 30px;
   }
 
+  /* === INDIVIDUAL PICKLEBALL SECTIONS === */
   .section-link {
     text-decoration: none;
   }
 
   .section {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.25s ease;
@@ -67,7 +69,7 @@ title: Pickleball
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: #fff;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
@@ -77,7 +79,7 @@ title: Pickleball
     transform: scale(1.08);
   }
 
-  /* === YOUTUBE PLACEHOLDER (same as Tennis) === */
+  /* === YOUTUBE PLACEHOLDER === */
   .youtube-placeholder {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
@@ -109,10 +111,10 @@ title: Pickleball
     border: none;
   }
 
+  /* === FALLBACK LINK === */
   .youtube-fallback {
     margin-top: 12px;
   }
-
   .youtube-fallback a {
     display: inline-block;
     color: #ffdd57;
@@ -123,7 +125,6 @@ title: Pickleball
     border-radius: 8px;
     transition: background 0.3s ease, color 0.3s ease;
   }
-
   .youtube-fallback a:hover {
     background: #ffdd57;
     color: #000;
@@ -142,21 +143,21 @@ title: Pickleball
 
   @media (max-width: 768px) {
     .section {
-      width: 160px;
-      height: 160px;
+      width: 144px;
+      height: 144px;
     }
     .section-title {
-      font-size: 1.2rem;
+      font-size: 1.05rem;
     }
   }
 
   @media (max-width: 480px) {
     .section {
-      width: 130px;
-      height: 130px;
+      width: 117px;
+      height: 117px;
     }
     .section-title {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
   }
 </style>
@@ -167,20 +168,21 @@ title: Pickleball
   <div class="youtube-placeholder">
     <h2>Lemon Drop</h2>
     <div class="youtube-embed">
-      <iframe
-        src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
+      <iframe 
+        src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
     </div>
     <div class="youtube-fallback">
-      <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
+      <a href="https://www.youtube.com/channel/UCRFftbZgBfM9O2DNcS-Fbcw" target="_blank">
         Watch on YouTube
       </a>
     </div>
   </div>
 
   <div class="pickle-container">
+
     <a href="/lifestyle/lsgh-photos.html" class="section-link">
       <div class="section">
         <div class="section-ball"></div>
@@ -201,5 +203,6 @@ title: Pickleball
         <div class="section-title">POTPOURRI</div>
       </div>
     </a>
+
   </div>
 </div>
