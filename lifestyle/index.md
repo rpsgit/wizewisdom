@@ -121,9 +121,9 @@ title: Lifestyle
     <span class="section-title">Pickleball</span>
   </a>
 
-  <!-- Recipes Section -->
+  <!-- Cooking & Baking Section -->
   <a href="/lifestyle/recipes.html" class="section-link">
     <img src="/assets/images/recipe-ico.png" alt="Recipes Icon">
-    <span class="section-title">Recipes</span>
+    <span class="section-title">Cooking & Baking</span>
   </a>
 </div>
