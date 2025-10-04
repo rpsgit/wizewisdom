@@ -16,137 +16,59 @@ body {
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 15px;
+  text-align: center;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   color: #111;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  justify-items: center;
-}
-
-.gallery-grid a {
+/* Responsive iframe wrapper */
+.gallery-wrapper {
   position: relative;
-  display: block;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  background: #fff;
-  text-decoration: none;
-}
-
-.gallery-grid a:hover {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
-}
-
-.gallery-grid img {
   width: 100%;
-  display: block;
-  object-fit: cover;
-  height: 180px;
-  transition: transform 0.25s ease;
+  padding-bottom: 75%; /* 4:3 ratio, adjust if needed */
+  margin-bottom: 50px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.7);
 }
 
-.gallery-grid a:hover img {
-  transform: scale(1.05);
-}
-
-.gallery-grid a span.caption {
+.gallery-wrapper iframe {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  padding: 8px;
-  background: rgba(0,0,0,0.4);
-  color: #fff;
-  font-size: 0.9rem;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  height: 100%;
+  border: none;
 }
 
-.gallery-grid a:hover span.caption {
-  opacity: 1;
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  h1 { font-size: 2.2rem; margin-bottom: 25px; }
+  .gallery-wrapper { padding-bottom: 80%; }
 }
 
-@media (max-width: 600px) {
-  h1 { font-size: 2rem; margin-bottom: 30px; }
-  .gallery-grid { gap: 15px; }
-  .gallery-grid img { height: 140px; }
-  .gallery-grid a span.caption { font-size: 0.8rem; padding: 5px; }
+@media (max-width: 480px) {
+  h1 { font-size: 2rem; margin-bottom: 20px; }
+  .gallery-wrapper { padding-bottom: 100%; }
 }
 </style>
 
 <div class="page-container">
   <h1>UPDTC</h1>
-  <div class="gallery-grid" id="galleryUPDTC"></div>
+  <div class="gallery-wrapper">
+    <iframe src="https://drive.google.com/embeddedfolderview?id=1m9zTqY-6RZ_Pcy8K5Iju3lRoY4PODDIa#grid" scrolling="auto"></iframe>
+  </div>
 </div>
 
 <div class="page-container">
   <h1>Members & Friends</h1>
-  <div class="gallery-grid" id="galleryMembers"></div>
+  <div class="gallery-wrapper">
+    <iframe src="https://drive.google.com/embeddedfolderview?id=18q1sNhfLQ36ETDAVlY1nAvyIuso84-pa#grid" scrolling="auto"></iframe>
+  </div>
 </div>
-
-<script>
-const folders = [
-  { id: "1m9zTqY-6RZ_Pcy8K5Iju3lRoY4PODDIa", containerId: "galleryUPDTC" },
-  { id: "18q1sNhfLQ36ETDAVlY1nAvyIuso84-pa", containerId: "galleryMembers" }
-];
-
-async function loadGallery(folderId, containerId) {
-  const container = document.getElementById(containerId);
-  const embedURL = `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
-
-  try {
-    const res = await fetch(embedURL);
-    const text = await res.text();
-
-    const thumbRegex = /"https:\/\/lh3\.googleusercontent\.com\/[^"]+/g;
-    const matches = text.match(thumbRegex);
-
-    if (!matches) {
-      container.innerHTML = "<p>No images found. Make sure the folder is public.</p>";
-      return;
-    }
-
-    matches.forEach(url => {
-      const link = document.createElement("a");
-      const fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      const fileId = fileIdMatch ? fileIdMatch[1] : null;
-      link.href = fileId ? `https://drive.google.com/file/d/${fileId}/view` : url;
-      link.target = "_blank";
-
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = "UPDTC Image";
-      img.loading = "lazy";
-
-      // Optional hover caption
-      const caption = document.createElement("span");
-      caption.className = "caption";
-      caption.textContent = "View Image";
-
-      link.appendChild(img);
-      link.appendChild(caption);
-      container.appendChild(link);
-    });
-
-  } catch (err) {
-    console.error("Error loading folder:", err);
-    container.innerHTML = "<p>Error loading gallery.</p>";
-  }
-}
-
-// Load both galleries
-folders.forEach(f => loadGallery(f.id, f.containerId));
-</script>
