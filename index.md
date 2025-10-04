@@ -104,34 +104,35 @@ title: "Wizewisdom World"
 
 <div class="icon-grid">
   <a href="/nerdvana/index.html" class="icon-card">
-    <img src="/assets/images/nerdvana-ic.png" alt="Nerdvana Icon">
+    <img src="/assets/images/nerdvana-ico.png" alt="Nerdvana Icon">
     <span>Nerdvana</span>
   </a>
 
   <a href="/geekosystem/index.html" class="icon-card">
-    <img src="/assets/images/geekosystem-ic.png" alt="Geekosystem Icon">
+    <img src="/assets/images/geekosystem-ico.png" alt="Geekosystem Icon">
     <span>Geekosystem</span>
   </a>
 
   <a href="/lifestyle/index.html" class="icon-card">
-    <img src="/assets/images/leisure-ic.png" alt="Lifestyle Icon">
+    <img src="/assets/images/leisure-ico.png" alt="Lifestyle Icon">
     <span>Leisure Lab</span>
   </a>
 
   <a href="/gallery/index.html" class="icon-card">
-    <img src="/assets/images/lenscape-ic.png" alt="Gallery Icon">
+    <img src="/assets/images/gallery-ico.png" alt="Gallery Icon">
     <span>Lenscape</span>
   </a>
   
   <a href="https://www.facebook.com/groups/lemons2lemonades" class="icon-card">
-    <img src="/assets/images/group-ic.png" alt="Group Icon">
+    <img src="/assets/images/group-ico.png" alt="Group Icon">
     <span>Lemonades</span>
   </a>
   
   <a href="/private/index.html" class="icon-card">
-    <img src="/assets/images/personal-ic.png" alt="Personal Icon">
+    <img src="/assets/images/personal-ico.png" alt="Personal Icon">
     <span>Minevault 🔒</span>
   </a>
 </div>
+
 
 
