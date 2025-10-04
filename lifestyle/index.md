@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Leisure Lab
+title: Lifestyle
 ---
 
 <style>
@@ -43,15 +43,26 @@ title: Leisure Lab
   }
 
   /* === ICON SECTIONS === */
+  .sections-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 50px;
+  }
+
   .section-link {
     text-decoration: none;
-    display: inline-block;
-    margin: 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transition: transform 0.25s ease;
+    flex: 1 1 200px; /* responsive width */
+    max-width: 220px;
   }
 
   .section-link img {
-    width: 200px;
+    width: 100%;
     height: auto;
     display: block;
     transition: transform 0.25s ease;
@@ -62,7 +73,8 @@ title: Leisure Lab
     font-size: 1.4rem;
     font-weight: bold;
     color: #000;
-    display: block; /* ensures proper spacing */
+    display: block;
+    text-align: center;
   }
 
   .section-link:hover img {
@@ -72,12 +84,18 @@ title: Leisure Lab
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
     h2 { font-size: 2.2rem; }
+    .section-link { max-width: 180px; }
     .section-link img { width: 160px; }
     .section-title { font-size: 1.2rem; }
   }
 
   @media (max-width: 600px) {
-    .section-link { margin: 0 20px 40px; display: block; }
+    .sections-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .section-link { max-width: 160px; }
     .section-link img { width: 140px; }
     .section-title { font-size: 1rem; }
   }
@@ -88,22 +106,24 @@ title: Leisure Lab
   <span class="home-icon"></span>
 </a>
 
-<h2>Lifestyle</h2>
+<h2>Leisure Lab</h2>
 
-<!-- Tennis Section -->
-<a href="/lifestyle/tennis.html" class="section-link">
-  <img src="/assets/images/tennis-ico.png" alt="Tennis Icon">
-  <span class="section-title">Tennis</span>
-</a>
+<div class="sections-container">
+  <!-- Tennis Section -->
+  <a href="/lifestyle/tennis.html" class="section-link">
+    <img src="/assets/images/tennis-ico.png" alt="Tennis Icon">
+    <span class="section-title">Tennis</span>
+  </a>
 
-<!-- Pickleball Section -->
-<a href="/lifestyle/pickleball.html" class="section-link">
-  <img src="/assets/images/pickle-ico.png" alt="Pickleball Icon">
-  <span class="section-title">Pickleball</span>
-</a>
+  <!-- Pickleball Section -->
+  <a href="/lifestyle/pickleball.html" class="section-link">
+    <img src="/assets/images/pickle-ico.png" alt="Pickleball Icon">
+    <span class="section-title">Pickleball</span>
+  </a>
 
-<!-- Recipes Section -->
-<a href="/lifestyle/recipes.html" class="section-link">
-  <img src="/assets/images/recipe-ico.png" alt="Recipes Icon">
-  <span class="section-title">Recipes</span>
-</a>
+  <!-- Recipes Section -->
+  <a href="/lifestyle/recipes.html" class="section-link">
+    <img src="/assets/images/recipe-ico.png" alt="Recipes Icon">
+    <span class="section-title">Recipes</span>
+  </a>
+</div>
