@@ -116,7 +116,7 @@ title: Lifestyle
     <!-- Tennis Section -->
     <a href="/lifestyle/tennis.html" class="section-link">
       <div class="section">
-        <img src="/assets/images/tennis-ic.png" alt="Tennis Icon">
+        <img src="/assets/images/tennis-ico.png" alt="Tennis Icon">
         <div class="section-title">Tennis</div>
       </div>
     </a>
@@ -124,7 +124,7 @@ title: Lifestyle
     <!-- Pickleball Section -->
     <a href="/lifestyle/pickleball.html" class="section-link">
       <div class="section">
-        <img src="/assets/images/pickle-ic.png" alt="Pickleball Icon">
+        <img src="/assets/images/pickle-ico.png" alt="Pickleball Icon">
         <div class="section-title">Pickleball</div>
       </div>
     </a>
@@ -132,7 +132,7 @@ title: Lifestyle
     <!-- Recipes Section -->
     <a href="/lifestyle/recipes.html" class="section-link">
       <div class="section">
-        <img src="/assets/images/recipe-ic.png" alt="Recipes Icon">
+        <img src="/assets/images/recipe-ico.png" alt="Recipes Icon">
         <div class="section-title">Recipes</div>
       </div>
     </a>
