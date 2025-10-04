@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Lifestyle
+title: Leisure Lab
 ---
 
 <style>
