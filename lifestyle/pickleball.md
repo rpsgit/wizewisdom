@@ -169,13 +169,13 @@ title: Pickleball
     <h2>Lemon Drop</h2>
     <div class="youtube-embed">
       <iframe 
-        src="https://www.youtube.com/embed?listType=playlist&list=UURFftbZgBfM9O2DNcS-Fbcw"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        src="https://www.youtube.com/embed?listType=playlist&list=UC3CbvjtmMUsmuSgBCWQh0Wg"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
     </div>
     <div class="youtube-fallback">
-      <a href="https://www.youtube.com/channel/UCRFftbZgBfM9O2DNcS-Fbcw" target="_blank">
+      <a href="https://www.youtube.com/channel/UC3CbvjtmMUsmuSgBCWQh0Wg" target="_blank">
         Watch on YouTube
       </a>
     </div>
