@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Lifestyle
+title: Nerdvana
 ---
 
 <style>
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/lifestyle-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/nerdvana-bg.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
   }
@@ -33,14 +33,14 @@ title: Lifestyle
   }
 
   /* === MAIN CONTAINER === */
-  .life-container {
+  .nerd-container {
     max-width: 1200px;
     margin: 50px auto;
     text-align: center;
   }
 
   /* === PAGE TITLE === */
-  .life-container h2 {
+  .nerd-container h2 {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 40px;
@@ -72,7 +72,6 @@ title: Lifestyle
     transition: transform 0.25s ease;
   }
 
-  /* === ICONS === */
   .section img {
     width: 100%;
     height: auto;
@@ -93,14 +92,24 @@ title: Lifestyle
 
   /* === RESPONSIVE === */
   @media (max-width: 1024px) {
-    .life-container h2 { font-size: 2.2rem; }
-    .section { width: 180px; }
-    .section-title { font-size: 1.2rem; }
+    .nerd-container h2 {
+      font-size: 2.2rem;
+    }
+    .section {
+      width: 180px;
+    }
+    .section-title {
+      font-size: 1.2rem;
+    }
   }
 
   @media (max-width: 600px) {
-    .section { width: 150px; }
-    .section-title { font-size: 1rem; }
+    .section {
+      width: 150px;
+    }
+    .section-title {
+      font-size: 1rem;
+    }
   }
 </style>
 
@@ -109,31 +118,31 @@ title: Lifestyle
   <span class="home-icon"></span>
 </a>
 
-<div class="life-container">
-  <h2>Lifestyle</h2>
+<div class="nerd-container">
+  <h2>Nerdvana</h2>
 
   <div class="categories-wrapper">
-    <!-- Tennis Section -->
-    <a href="/lifestyle/tennis.html" class="section-link">
+    <!-- Books Section -->
+    <a href="/books/book-index.html" class="section-link">
       <div class="section">
-        <img src="/assets/images/tennis-ico.png" alt="Tennis Icon">
-        <div class="section-title">Tennis</div>
+        <img src="/assets/images/book-ic.png" alt="Books">
+        <div class="section-title">Books</div>
       </div>
     </a>
 
-    <!-- Pickleball Section -->
-    <a href="/lifestyle/pickleball.html" class="section-link">
+    <!-- Quotes Section -->
+    <a href="/quotes/quote-index.html" class="section-link">
       <div class="section">
-        <img src="/assets/images/pickle-ico.png" alt="Pickleball Icon">
-        <div class="section-title">Pickleball</div>
+        <img src="/assets/images/quote-ic.png" alt="Quotes">
+        <div class="section-title">Quotes</div>
       </div>
     </a>
 
-    <!-- Recipes Section -->
-    <a href="/lifestyle/recipes.html" class="section-link">
+    <!-- Memes Section -->
+    <a href="/nerdvana/meme-index.html" class="section-link">
       <div class="section">
-        <img src="/assets/images/recipe-ico.png" alt="Recipes Icon">
-        <div class="section-title">Recipes</div>
+        <img src="/assets/images/meme-ic.png" alt="Memes">
+        <div class="section-title">Memes</div>
       </div>
     </a>
   </div>
