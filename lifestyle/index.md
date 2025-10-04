@@ -7,7 +7,7 @@ title: Lifestyle
   body {
     margin: 0;
     padding: 0;
-    background: #f5f5f5 url('/assets/images/lifestyle-index.png') no-repeat center center fixed;
+    background: #f5f5f5 url('/assets/images/leisure-index.png') no-repeat center center fixed;
     background-size: cover;
     font-family: Arial, sans-serif;
     text-align: center;
@@ -62,6 +62,7 @@ title: Lifestyle
     font-size: 1.4rem;
     font-weight: bold;
     color: #000;
+    display: block; /* ensures proper spacing */
   }
 
   .section-link:hover img {
@@ -92,17 +93,17 @@ title: Lifestyle
 <!-- Tennis Section -->
 <a href="/lifestyle/tennis.html" class="section-link">
   <img src="/assets/images/tennis-ico.png" alt="Tennis Icon">
-  <div class="section-title">Tennis</div>
+  <span class="section-title">Tennis</span>
 </a>
 
 <!-- Pickleball Section -->
 <a href="/lifestyle/pickleball.html" class="section-link">
   <img src="/assets/images/pickle-ico.png" alt="Pickleball Icon">
-  <div class="section-title">Pickleball</div>
+  <span class="section-title">Pickleball</span>
 </a>
 
 <!-- Recipes Section -->
 <a href="/lifestyle/recipes.html" class="section-link">
   <img src="/assets/images/recipe-ico.png" alt="Recipes Icon">
-  <div class="section-title">Recipes</div>
+  <span class="section-title">Recipes</span>
 </a>
