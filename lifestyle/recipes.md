@@ -13,121 +13,103 @@ title: Recipes
   }
 
   .page-container {
-    max-width: 1000px;
-    margin: 40px auto;
+    max-width: 800px;
+    margin: 60px auto;
     text-align: center;
-    padding: 0 15px; /* ✅ Mobile padding */
+    padding: 0 15px;
   }
 
   /* === PAGE TITLE === */
   h1 {
-    display: inline-block;
     color: #000;
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 30px;
-    background: none;
-    box-shadow: none;
+    margin-bottom: 40px;
   }
 
-  /* === CONTAINER FOR lemonS === */
-  .recipe-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap; /* ✅ Allows wrapping */
-    gap: 40px;
+  /* === RECIPE LIST CONTAINER === */
+  .recipe-list {
     background: rgba(255, 255, 255, 0.7);
-    padding: 30px 20px;
+    padding: 30px 25px;
     border-radius: 25px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    text-align: left;
   }
 
-  /* === INDIVIDUAL lemon SECTIONS === */
-  .section-link {
+  /* === INDIVIDUAL RECIPE LINKS === */
+  .recipe-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
     text-decoration: none;
+    transition: transform 0.2s ease;
   }
 
-  .section {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.25s ease;
+  .recipe-item:hover {
+    transform: translateX(5px);
   }
 
-  .section-lemon {
-    width: 100%;
-    height: 100%;
+  .recipe-icon {
+    width: 40px;
+    height: 40px;
     background: url('/assets/images/lemon-ico.png') no-repeat center center;
     background-size: contain;
+    margin-right: 15px;
+    flex-shrink: 0;
   }
 
-  .section-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .recipe-text {
     font-size: 1.3rem;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* ✅ Added for readability */
+    font-weight: 600;
+    color: #000;
   }
 
-  .section:hover {
-    transform: scale(1.08);
+  .recipe-item:hover .recipe-text {
+    color: #333;
   }
 
   /* === RESPONSIVE === */
-  @media (max-width: 1024px) {
-    h1 {
-      font-size: 2.2rem;
-    }
-    .recipe-container {
-      gap: 30px;
-      padding: 20px;
-    }
-  }
-
   @media (max-width: 768px) {
-    .section {
-      width: 160px;
-      height: 160px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-    }
+    .recipe-text { font-size: 1.1rem; }
+    .recipe-icon { width: 32px; height: 32px; }
   }
 
   @media (max-width: 480px) {
-    .section {
-      width: 130px;
-      height: 130px;
-    }
-    .section-title {
-      font-size: 1rem;
-    }
+    h1 { font-size: 2rem; }
+    .recipe-list { padding: 20px; }
+    .recipe-item { margin-bottom: 15px; }
+    .recipe-text { font-size: 1rem; }
+    .recipe-icon { width: 28px; height: 28px; }
   }
 </style>
 
 <div class="page-container">
   <h1>Recipes</h1>
 
-  <div class="recipe-container">
-
-    <a href="/lifestyle/recipe-photos.html" class="section-link">
-      <div class="section">
-        <div class="section-lemon"></div>
-        <div class="section-title">Recipes</div>
-      </div>
+  <div class="recipe-list">
+    <a href="/lifestyle/recipe-photos.html" class="recipe-item">
+      <div class="recipe-icon"></div>
+      <div class="recipe-text">Recipe Photos</div>
     </a>
 
-    <a href="/lifestyle/other.html" class="section-link">
-      <div class="section">
-        <div class="section-lemon"></div>
-        <div class="section-title">OTHER</div>
-      </div>
+    <a href="/lifestyle/desserts.html" class="recipe-item">
+      <div class="recipe-icon"></div>
+      <div class="recipe-text">Desserts</div>
     </a>
 
+    <a href="/lifestyle/savory.html" class="recipe-item">
+      <div class="recipe-icon"></div>
+      <div class="recipe-text">Savory Dishes</div>
+    </a>
+
+    <a href="/lifestyle/drinks.html" class="recipe-item">
+      <div class="recipe-icon"></div>
+      <div class="recipe-text">Drinks & Smoothies</div>
+    </a>
+
+    <a href="/lifestyle/other.html" class="recipe-item">
+      <div class="recipe-icon"></div>
+      <div class="recipe-text">Other Recipes</div>
+    </a>
   </div>
 </div>
