@@ -30,7 +30,7 @@ title: Recipes
     box-shadow: none;
   }
 
-  /* === CONTAINER FOR HATS === */
+  /* === CONTAINER FOR lemonS === */
   .recipe-container {
     display: flex;
     justify-content: center;
@@ -42,7 +42,7 @@ title: Recipes
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
 
-  /* === INDIVIDUAL HAT SECTIONS === */
+  /* === INDIVIDUAL lemon SECTIONS === */
   .section-link {
     text-decoration: none;
   }
@@ -56,10 +56,10 @@ title: Recipes
     transition: transform 0.25s ease;
   }
 
-  .section-hat {
+  .section-lemon {
     width: 100%;
     height: 100%;
-    background: url('/assets/images/hat.png') no-repeat center center;
+    background: url('/assets/images/lemon.png') no-repeat center center;
     background-size: contain;
   }
 
@@ -117,14 +117,14 @@ title: Recipes
 
     <a href="/lifestyle/recipe-photos.html" class="section-link">
       <div class="section">
-        <div class="section-hat"></div>
+        <div class="section-lemon"></div>
         <div class="section-title">Recipes</div>
       </div>
     </a>
 
     <a href="/lifestyle/other.html" class="section-link">
       <div class="section">
-        <div class="section-hat"></div>
+        <div class="section-lemon"></div>
         <div class="section-title">OTHER</div>
       </div>
     </a>
