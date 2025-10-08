@@ -1,3 +1,183 @@
+---
+layout: default
+title: Puto
+---
+
+<style>
+/* === BODY & PAGE CONTAINER === */
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/recipe-index.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+.page-container {
+  max-width: 900px;
+  margin: 50px auto;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 35px 25px;
+  border-radius: 25px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+}
+
+/* === FEATURED IMAGE === */
+.featured-image {
+  display: block;
+  margin: 0 auto 25px auto;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* === HEADINGS & TEXT === */
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #222;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+p {
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+ul, ol {
+  margin-left: 25px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* === CONVERSION TABLE === */
+.conversion-table-container {
+  max-width: 100%;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px;
+}
+
+table.conversion-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+table.conversion-table th,
+table.conversion-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+table.conversion-table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+table.conversion-table tr:hover {
+  background-color: rgba(255, 255, 153, 0.2);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 25px 15px;
+  }
+  h1 {
+    font-size: 2.4rem;
+  }
+  h2 {
+    font-size: 1.6rem;
+  }
+  table.conversion-table {
+    font-size: 0.85rem;
+    min-width: 600px;
+  }
+  .featured-image {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.4rem;
+  }
+  table.conversion-table {
+    font-size: 0.8rem;
+    min-width: 500px;
+  }
+}
+</style>
+
+<div class="page-container">
+
+  <img src="/assets/images/puto-cover.png" alt="Puto Steamed Rice Cake" class="featured-image">
+
+  <h1>Puto</h1>
+
+  <h2>What is Puto?</h2>
+  <p>
+    Puto is a classic Filipino steamed rice cake that’s soft, fluffy, and lightly sweet. Traditionally made from ground rice or rice flour, it’s a beloved merienda (snack) or breakfast staple often served with savory dishes like <em>dinuguan</em> (pork blood stew) or enjoyed on its own with a bit of butter or grated cheese on top.
+  </p>
+  <p>
+    This bite-sized treat perfectly balances sweetness and comfort — tender on the inside, slightly chewy on the edges, and subtly fragrant from the rice. Modern versions of puto use all-purpose flour or cake flour for a lighter, fluffier texture and can be flavored with pandan, ube, or coconut milk for a delicious twist.
+  </p>
+
+  <h2>🧂 Ingredients</h2>
+  <ul>
+    <li>1 kg All-Purpose Flour</li>
+    <li>½ kg White Sugar</li>
+    <li>8 tbsp Baking Powder</li>
+    <li>5 Large Eggs</li>
+    <li>½ cup Melted Butter</li>
+    <li>6 cups Water</li>
+    <li>Cheddar Cheese (Quick Melt preferred) for topping</li>
+  </ul>
+
+  <h2>🥣 Instructions</h2>
+  <ol>
+    <li><strong>Combine the dry ingredients.</strong><br>
+        In a mixing bowl, whisk together all the dry ingredients until well blended.</li>
+    <li><strong>Mix the wet ingredients.</strong><br>
+        In a separate bowl, combine all the wet ingredients and stir until smooth.</li>
+    <li><strong>Combine wet and dry mixtures.</strong><br>
+        Gradually pour the wet mixture into the dry ingredients while gently stirring. Avoid overmixing — a light hand keeps your puto soft and fluffy.</li>
+    <li><strong>Strain the batter.</strong><br>
+        Pour the batter through a fine sieve to remove any lumps and achieve a smoother texture.</li>
+    <li><strong>Steam the puto.</strong><br>
+        Pour the batter into greased molds, add sliced cheese on top, then steam for 8–15 minutes depending on mold size. Wrap the steamer lid with a clean cloth to prevent water from dripping onto the batter.</li>
+  </ol>
+  <p><strong>Optional:</strong> Assorted food coloring.</p>
+  <p><strong>Yields:</strong> Approximately 150 medium-sized puto cakes.</p>
+
+</div>
+
 <div class="conversion-table-container">
   <h2 class="conversion-table-title">🧁 Puto Recipe Conversion & Alternatives</h2>
   <div class="table-wrapper">
@@ -28,7 +208,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>Rice Flour (for traditional puto)</td>
+          <td>Rice Flour (traditional puto)</td>
           <td>8 cups</td>
           <td>1 kg</td>
         </tr>
@@ -37,7 +217,7 @@
           <td>White Sugar</td>
           <td>2 ½ cups</td>
           <td>500 g</td>
-          <td>Brown Sugar (adds caramel notes)</td>
+          <td>Brown Sugar</td>
           <td>2 ½ cups</td>
           <td>500 g</td>
         </tr>
@@ -47,7 +227,7 @@
           <td>8 tbsp (½ cup)</td>
           <td>120 g</td>
           <td>Baking Soda + Lemon Juice</td>
-          <td>2 tbsp baking soda + juice of 1 lemon</td>
+          <td>2 tbsp + juice of 1 lemon</td>
           <td>~60 g total</td>
         </tr>
         <tr>
@@ -73,7 +253,7 @@
           <td>Water</td>
           <td>6 cups</td>
           <td>1.42 L</td>
-          <td>Coconut Milk (richer flavor)</td>
+          <td>Coconut Milk</td>
           <td>6 cups</td>
           <td>1.42 L</td>
         </tr>
@@ -90,60 +270,3 @@
     </table>
   </div>
 </div>
-
-<style>
-.conversion-table-container {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  margin-top: 40px;
-}
-
-/* Table wrapper allows horizontal scroll on small screens */
-.table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
-  padding-bottom: 10px;
-}
-
-table.conversion-table {
-  width: 100%;
-  min-width: 700px; /* ensures full layout horizontally */
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  font-size: 0.95rem;
-  text-align: center;
-}
-
-table.conversion-table th,
-table.conversion-table td {
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-table.conversion-table th {
-  background-color: #f8f8f8;
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
-}
-
-table.conversion-table tr:hover {
-  background-color: rgba(255, 255, 153, 0.2);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  table.conversion-table {
-    font-size: 0.85rem;
-    min-width: 600px;
-  }
-}
-
-@media (max-width: 480px) {
-  table.conversion-table {
-    font-size: 0.8rem;
-    min-width: 500px;
-  }
-}
-</style>
