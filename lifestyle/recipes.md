@@ -59,7 +59,7 @@ title: Recipes
   .section-lemon {
     width: 100%;
     height: 100%;
-    background: url('/assets/images/lemon.png') no-repeat center center;
+    background: url('/assets/images/lemon-ico.png') no-repeat center center;
     background-size: contain;
   }
 
