@@ -1,310 +1,149 @@
----
-layout: default
-title: Puto
----
+<div class="conversion-table-container">
+  <h2 class="conversion-table-title">🧁 Puto Recipe Conversion & Alternatives</h2>
+  <div class="table-wrapper">
+    <table class="conversion-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Ingredient</th>
+          <th>Original (Volume)</th>
+          <th>Original (Weight)</th>
+          <th>Alternative Ingredient</th>
+          <th>Alternative (Volume)</th>
+          <th>Alternative (Weight)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dry</td>
+          <td>All-Purpose Flour</td>
+          <td>8 cups</td>
+          <td>1 kg</td>
+          <td>Cake Flour (for lighter texture)</td>
+          <td>8 ½ cups</td>
+          <td>950 g</td>
+        </tr>
+        <tr>
+          <td>Dry</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Rice Flour (for traditional puto)</td>
+          <td>8 cups</td>
+          <td>1 kg</td>
+        </tr>
+        <tr>
+          <td>Dry</td>
+          <td>White Sugar</td>
+          <td>2 ½ cups</td>
+          <td>500 g</td>
+          <td>Brown Sugar (adds caramel notes)</td>
+          <td>2 ½ cups</td>
+          <td>500 g</td>
+        </tr>
+        <tr>
+          <td>Dry</td>
+          <td>Baking Powder</td>
+          <td>8 tbsp (½ cup)</td>
+          <td>120 g</td>
+          <td>Baking Soda + Lemon Juice</td>
+          <td>2 tbsp baking soda + juice of 1 lemon</td>
+          <td>~60 g total</td>
+        </tr>
+        <tr>
+          <td>Wet</td>
+          <td>Large Eggs</td>
+          <td>5 pcs (~¾ cup)</td>
+          <td>250 g</td>
+          <td>Mashed Banana or Yogurt</td>
+          <td>¾ cup</td>
+          <td>125 g</td>
+        </tr>
+        <tr>
+          <td>Wet</td>
+          <td>Melted Butter</td>
+          <td>½ cup</td>
+          <td>115 g</td>
+          <td>Vegetable or Canola Oil</td>
+          <td>½ cup</td>
+          <td>100 ml</td>
+        </tr>
+        <tr>
+          <td>Wet</td>
+          <td>Water</td>
+          <td>6 cups</td>
+          <td>1.42 L</td>
+          <td>Coconut Milk (richer flavor)</td>
+          <td>6 cups</td>
+          <td>1.42 L</td>
+        </tr>
+        <tr>
+          <td>Topping</td>
+          <td>Cheddar Cheese (Quick Melt preferred)</td>
+          <td>—</td>
+          <td>—</td>
+          <td>Regular Cheddar or Edam</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    background: #f5f5f5 url('/assets/images/recipe-index.png') no-repeat center center fixed;
-    background-size: cover;
-    font-family: Arial, sans-serif;
-    color: #222;
-  }
+.conversion-table-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  margin-top: 40px;
+}
 
-  .page-container {
-    max-width: 900px;
-    margin: 50px auto;
-    background: rgba(255, 255, 255, 0.88);
-    padding: 40px 30px;
-    border-radius: 25px;
-    box-shadow: 0 4px 25px rgba(0,0,0,0.15);
-  }
+/* Table wrapper allows horizontal scroll on small screens */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  padding-bottom: 10px;
+}
 
-  .featured-image {
-    display: block;
-    margin: 0 auto 25px auto;
-    max-width: 420px;
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  }
+table.conversion-table {
+  width: 100%;
+  min-width: 700px; /* ensures full layout horizontally */
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 0.95rem;
+  text-align: center;
+}
 
-  h1 {
-    text-align: center;
-    font-size: 2.8rem;
-    color: #000;
-    margin-bottom: 15px;
-  }
+table.conversion-table th,
+table.conversion-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
 
-  h2 {
-    color: #222;
-    margin-top: 35px;
-    margin-bottom: 10px;
-    font-size: 1.6rem;
-  }
+table.conversion-table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
 
-  p {
-    line-height: 1.7;
-    font-size: 1.05rem;
-    margin-bottom: 15px;
-  }
+table.conversion-table tr:hover {
+  background-color: rgba(255, 255, 153, 0.2);
+}
 
-  ul, ol {
-    margin-left: 25px;
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-
-  /* === Conversion Table Styling === */
+/* Responsive adjustments */
+@media (max-width: 768px) {
   table.conversion-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    font-size: 0.95rem;
-    text-align: center;
-    margin-top: 25px;
+    font-size: 0.85rem;
+    min-width: 600px;
   }
+}
 
-  table.conversion-table th {
-    background-color: #f8f8f8;
-    color: #333;
-    font-weight: bold;
-    padding: 10px;
-    border-bottom: 2px solid #ddd;
+@media (max-width: 480px) {
+  table.conversion-table {
+    font-size: 0.8rem;
+    min-width: 500px;
   }
-
-  table.conversion-table td {
-    padding: 8px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  table.conversion-table tr:hover {
-    background-color: rgba(255, 255, 153, 0.2);
-  }
-
-  .conversion-table-title {
-    text-align: center;
-    font-size: 1.8rem;
-    color: #333;
-    margin-top: 40px;
-    margin-bottom: 20px;
-  }
-
-  /* === Responsive Adjustments === */
-  @media (max-width: 1024px) {
-    .page-container {
-      margin: 30px 40px;
-      padding: 30px 25px;
-      max-width: 95%;
-    }
-
-    h1 {
-      font-size: 2.4rem;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    p, ul, ol {
-      font-size: 1rem;
-    }
-
-    .featured-image {
-      max-width: 95%;
-    }
-
-    .conversion-table-title {
-      font-size: 1.6rem;
-    }
-
-    table.conversion-table {
-      font-size: 0.9rem;
-      min-width: 700px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .page-container {
-      margin: 20px 15px;
-      padding: 25px 18px;
-    }
-
-    h1 {
-      font-size: 2.2rem;
-    }
-
-    h2 {
-      font-size: 1.4rem;
-    }
-
-    p, ul, ol {
-      font-size: 0.95rem;
-    }
-
-    table.conversion-table {
-      font-size: 0.85rem;
-      min-width: 600px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    h1 {
-      font-size: 2rem;
-    }
-
-    h2 {
-      font-size: 1.3rem;
-    }
-
-    p, ul, ol {
-      font-size: 0.9rem;
-    }
-
-    table.conversion-table {
-      font-size: 0.8rem;
-      min-width: 500px;
-    }
-  }
+}
 </style>
-
-<div class="page-container">
-
-  <img src="/assets/images/puto-cover.png" alt="Puto Steamed Rice Cake" class="featured-image">
-
-  <h1>Puto</h1>
-
-  <h2>What is Puto?</h2>
-  <p>
-    Puto is a classic Filipino steamed rice cake that’s soft, fluffy, and lightly sweet. Traditionally made from ground rice or rice flour, it’s a beloved merienda (snack) or breakfast staple often served with savory dishes like <em>dinuguan</em> (pork blood stew) or enjoyed on its own with a bit of butter or grated cheese on top.
-  </p>
-  <p>
-    This bite-sized treat perfectly balances sweetness and comfort — tender on the inside, slightly chewy on the edges, and subtly fragrant from the rice. Modern versions of puto use all-purpose flour or cake flour for a lighter, fluffier texture and can be flavored with pandan, ube, or coconut milk for a delicious twist.
-  </p>
-
-  <h2>🧂 Ingredients</h2>
-  <ul>
-    <li>1 kg All-Purpose Flour</li>
-    <li>½ kg White Sugar</li>
-    <li>8 tbsp Baking Powder</li>
-    <li>5 Large Eggs</li>
-    <li>½ cup Melted Butter</li>
-    <li>6 cups Water</li>
-    <li>Cheddar Cheese (Quick Melt preferred) for topping</li>
-  </ul>
-
-  <h2>🥣 Instructions</h2>
-  <ol>
-    <li><strong>Combine the dry ingredients.</strong><br>
-        In a mixing bowl, whisk together all the dry ingredients until well blended.</li>
-
-    <li><strong>Mix the wet ingredients.</strong><br>
-        In a separate bowl, combine all the wet ingredients and stir until smooth.</li>
-
-    <li><strong>Combine wet and dry mixtures.</strong><br>
-        Gradually pour the wet mixture into the dry ingredients while gently stirring. Avoid overmixing — a light hand keeps your puto soft and fluffy.</li>
-
-    <li><strong>Strain the batter.</strong><br>
-        Pour the batter through a fine sieve to remove any lumps and achieve a smoother texture.</li>
-
-    <li><strong>Steam the puto.</strong><br>
-        Pour the batter into greased molds, add sliced cheese on top then steam for 8–15 minutes, depending on the size of your molds.
-        To prevent water from dripping onto the batter, wrap the steamer lid with a clean cloth before covering.</li>
-  </ol>
-
-  <p><strong>Optional:</strong> Add assorted food coloring.</p>
-  <p><strong>Yields:</strong> Approximately 150 medium-sized puto cakes.</p>
-
-  <div class="conversion-table-title">🧁 Puto Recipe Conversion & Alternatives</div>
-  <table class="conversion-table">
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Ingredient</th>
-        <th>Original (Volume)</th>
-        <th>Original (Weight)</th>
-        <th>Alternative Ingredient</th>
-        <th>Alternative (Volume)</th>
-        <th>Alternative (Weight)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Dry</td>
-        <td>All-Purpose Flour</td>
-        <td>8 cups</td>
-        <td>1 kg</td>
-        <td>Cake Flour (for lighter texture)</td>
-        <td>8 ½ cups</td>
-        <td>950 g</td>
-      </tr>
-      <tr>
-        <td>Dry</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Rice Flour (for traditional puto)</td>
-        <td>8 cups</td>
-        <td>1 kg</td>
-      </tr>
-      <tr>
-        <td>Dry</td>
-        <td>White Sugar</td>
-        <td>2 ½ cups</td>
-        <td>500 g</td>
-        <td>Brown Sugar (adds caramel notes)</td>
-        <td>2 ½ cups</td>
-        <td>500 g</td>
-      </tr>
-      <tr>
-        <td>Dry</td>
-        <td>Baking Powder</td>
-        <td>8 tbsp (½ cup)</td>
-        <td>120 g</td>
-        <td>Baking Soda + Lemon Juice</td>
-        <td>2 tbsp baking soda + juice of 1 lemon</td>
-        <td>~60 g total</td>
-      </tr>
-      <tr>
-        <td>Wet</td>
-        <td>Large Eggs</td>
-        <td>5 pcs (~¾ cup)</td>
-        <td>250 g</td>
-        <td>Mashed Banana or Yogurt</td>
-        <td>¾ cup</td>
-        <td>125 g</td>
-      </tr>
-      <tr>
-        <td>Wet</td>
-        <td>Melted Butter</td>
-        <td>½ cup</td>
-        <td>115 g</td>
-        <td>Vegetable or Canola Oil</td>
-        <td>½ cup</td>
-        <td>100 ml</td>
-      </tr>
-      <tr>
-        <td>Wet</td>
-        <td>Water</td>
-        <td>6 cups</td>
-        <td>1.42 L</td>
-        <td>Coconut Milk (richer flavor)</td>
-        <td>6 cups</td>
-        <td>1.42 L</td>
-      </tr>
-      <tr>
-        <td>Topping</td>
-        <td>Cheddar Cheese (Quick Melt preferred)</td>
-        <td>—</td>
-        <td>—</td>
-        <td>Regular Cheddar or Edam</td>
-        <td>—</td>
-        <td>—</td>
-      </tr>
-    </tbody>
-  </table>
-
-</div>
