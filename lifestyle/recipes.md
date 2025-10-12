@@ -162,7 +162,7 @@ title: Recipes
       <div class="recipe-text">Gallery</div>
     </a>
 
-    <a href="/lifestyle/desserts.html" class="recipe-item">
+    <a href="/lifestyle/recipe/desserts.html" class="recipe-item">
       <div class="recipe-icon"></div>
       <div class="recipe-text">Desserts</div>
     </a>
