@@ -24,53 +24,68 @@ body {
   text-align: center;
 }
 
-/* === HOME BUTTON ICON === */
-.home-button {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  text-decoration: none;
-}
-
-.home-icon {
-  width: 100%;
-  height: 100%;
-  display: block;
-  background: url('/assets/images/home-icon.png') no-repeat center center;
-  background-size: contain;
-}
-
-/* === BACK BUTTON ICON ONLY === */
+/* === HOME & BACK BUTTON ICONS === */
+.home-button,
 .back-button {
   position: fixed;
   top: 20px;
-  left: 70px; /* next to home button */
   width: 40px;
   height: 40px;
-  padding: 0;
-  background: transparent;
   border: none;
+  background: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
 }
 
-.back-button:hover {
-  transform: scale(1.1);
-}
+/* Separate positioning */
+.home-button { left: 20px; }
+.back-button { left: 70px; }
 
+/* Icon styles */
+.home-icon,
 .back-icon {
+  display: block;
   width: 100%;
   height: 100%;
-  display: inline-block;
-  background: url('/assets/images/back-ico.png') no-repeat center center;
   background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Assign images */
+.home-icon { background-image: url('/assets/images/home-icon.png'); }
+.back-icon { background-image: url('/assets/images/back-ico.png'); }
+
+/* Tooltip labels */
+.home-button[data-tooltip]:hover::after,
+.back-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  margin-top: 6px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  z-index: 1001;
+}
+
+.home-button[data-tooltip]::after,
+.back-button[data-tooltip]::after {
+  opacity: 0;
+}
+
+/* Show tooltip on hover */
+.home-button[data-tooltip]:hover::after,
+.back-button[data-tooltip]:hover::after {
+  opacity: 1;
 }
 
 /* === HEADINGS === */
@@ -116,19 +131,16 @@ h1 {
     max-width: 90%;
     margin: 10px auto;
   }
-  .back-button {
-    left: 20px;
-  }
 }
 </style>
 
 <!-- Home Button -->
-<a href="https://www.wizewisdom.com/" class="home-button">
+<a href="https://www.wizewisdom.com/" class="home-button" data-tooltip="Home">
   <span class="home-icon"></span>
 </a>
 
 <!-- Back Button -->
-<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}">
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back">
   <span class="back-icon"></span>
 </button>
 
@@ -136,12 +148,12 @@ h1 {
   <h1>Recipe Gallery</h1>
 
   <!-- Recipe Image Cards -->
-  <a href="/lifestyle/recipe/puto.html" class="recipe-card">
+  <a href="/recipes/puto.html" class="recipe-card">
     <img src="/assets/images/recipe/puto-cover.jpg" alt="Puto">
   </a>
 
-  <a href="/lifestyle/recipe/apple-crumble.html" class="recipe-card">
-    <img src="/assets/images/recipe/apple-crumble-cover.jpg" alt="Apple Crumble">
+  <a href="/recipes/apple-crumble.html" class="recipe-card">
+    <img src="//assets/images/recipe/apple-crumble-cover.jpg" alt="Apple Crumble">
   </a>
 
   <!-- Placeholder for Additional Recipes -->
