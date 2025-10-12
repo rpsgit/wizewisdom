@@ -4,197 +4,111 @@ title: Apple Crumble
 ---
 
 <style>
-/* === BODY & PAGE CONTAINER === */
-body {
-  margin: 0;
-  padding: 0;
-  background: #f5f5f5 url('/assets/images/apple-crumble-cover.jpg') no-repeat center center fixed;
-  background-size: cover;
-  font-family: Arial, sans-serif;
-  color: #222;
-}
+  /* === BODY & PAGE CONTAINER === */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #222;
+    background: #f5f5f5 url('/assets/images/apple-crumble-cover.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
 
-.page-container {
-  max-width: 900px;
-  margin: 50px auto;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 35px 25px;
-  border-radius: 25px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
-}
-
-/* === HOME & BACK BUTTON ICONS === */
-.home-button,
-.back-button {
-  position: fixed;
-  top: 20px;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-.home-button { left: 20px; }
-.back-button { left: 70px; }
-
-.home-icon,
-.back-icon {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-/* Assign images */
-.home-icon { background-image: url('/assets/images/home-icon.png'); }
-.back-icon { background-image: url('/assets/images/back-ico.png'); }
-
-/* Tooltip labels */
-.home-button[data-tooltip]:hover::after,
-.back-button[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0,0,0,0.75);
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  margin-top: 6px;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.2s ease;
-  z-index: 1001;
-}
-
-.home-button[data-tooltip]::after,
-.back-button[data-tooltip]::after {
-  opacity: 0;
-}
-
-.home-button[data-tooltip]:hover::after,
-.back-button[data-tooltip]:hover::after {
-  opacity: 1;
-}
-
-/* === FEATURED IMAGE === */
-.featured-image {
-  display: block;
-  margin: 0 auto 25px auto;
-  max-width: 400px;
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* === HEADINGS & TEXT === */
-h1 {
-  text-align: center;
-  font-size: 3rem;
-  color: #000;
-  margin-bottom: 20px;
-}
-
-h2 {
-  color: #222;
-  margin-top: 40px;
-  margin-bottom: 15px;
-  font-size: 1.8rem;
-}
-
-p {
-  line-height: 1.6;
-  font-size: 1.1rem;
-}
-
-ul, ol {
-  margin-left: 25px;
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-/* === CONVERSION TABLE === */
-.conversion-table-container {
-  max-width: 100%;
-  margin: 40px auto;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
-
-.table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 10px;
-}
-
-table.conversion-table {
-  width: 100%;
-  min-width: 700px;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  font-size: 0.95rem;
-  text-align: center;
-}
-
-table.conversion-table th,
-table.conversion-table td {
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-table.conversion-table th {
-  background-color: #f8f8f8;
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
-}
-
-table.conversion-table tr:hover {
-  background-color: rgba(255, 255, 153, 0.2);
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
   .page-container {
-    padding: 25px 15px;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 35px 25px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
-  h1 {
-    font-size: 2.4rem;
-  }
-  h2 {
-    font-size: 1.6rem;
-  }
-  table.conversion-table {
-    font-size: 0.85rem;
-    min-width: 600px;
-  }
-  .featured-image {
-    max-width: 90%;
-  }
-}
 
-@media (max-width: 480px) {
-  h1 {
-    font-size: 2rem;
+  /* === HOME & BACK BUTTONS === */
+  .home-button, .back-button {
+    position: fixed;
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 1000;
   }
-  h2 {
-    font-size: 1.4rem;
+  .home-button { left: 20px; }
+  .back-button { left: 70px; }
+
+  .home-icon, .back-icon {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+  }
+  .home-icon { background-image: url('/assets/images/home-icon.png'); }
+  .back-icon { background-image: url('/assets/images/back-ico.png'); }
+
+  /* Tooltip */
+  .home-button[data-tooltip]:hover::after,
+  .back-button[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    margin-top: 6px;
+    pointer-events: none;
+    opacity: 1;
+    z-index: 1001;
+  }
+  .home-button[data-tooltip]::after,
+  .back-button[data-tooltip]::after { opacity: 0; transition: opacity 0.2s ease; }
+  .home-button[data-tooltip]:hover::after,
+  .back-button[data-tooltip]:hover::after { opacity: 1; }
+
+  /* === HEADINGS & TEXT === */
+  h1 { text-align: center; font-size: 3rem; margin-bottom: 20px; color: #000; }
+  h2 { color: #222; margin: 40px 0 15px; font-size: 1.8rem; }
+  p, li { line-height: 1.6; font-size: 1.1rem; }
+  ul, ol { margin-left: 25px; font-size: 1.05rem; }
+
+  /* === TABLE === */
+  .conversion-table-container {
+    max-width: 100%;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    overflow-x: auto;
   }
   table.conversion-table {
-    font-size: 0.8rem;
-    min-width: 500px;
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    text-align: center;
   }
-}
+  table.conversion-table th,
+  table.conversion-table td { padding: 10px; border-bottom: 1px solid #e0e0e0; }
+  table.conversion-table th { background: #f8f8f8; font-weight: bold; border-bottom: 2px solid #ddd; }
+  table.conversion-table tr:hover { background-color: rgba(255, 255, 153, 0.2); }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .page-container { padding: 25px 15px; }
+    h1 { font-size: 2.4rem; } h2 { font-size: 1.6rem; }
+    table.conversion-table { font-size: 0.85rem; min-width: 600px; }
+  }
+  @media (max-width: 480px) {
+    h1 { font-size: 2rem; } h2 { font-size: 1.4rem; }
+    table.conversion-table { font-size: 0.8rem; min-width: 500px; }
+  }
 </style>
 
 <!-- Home Button -->
@@ -208,9 +122,6 @@ table.conversion-table tr:hover {
 </button>
 
 <div class="page-container">
-
-<!-- <img src="/assets/images/apple-crumble-cover.jpg" alt="Apple Crumble" class="featured-image"> -->
-
   <h1>Apple Crumble</h1>
 
   <h2>🧂 Ingredients</h2>
@@ -228,106 +139,35 @@ table.conversion-table tr:hover {
 
   <h2>🥣 Instructions</h2>
   <ol>
-    <li><strong>Preheat the oven:</strong><br>Preheat to 180°C (356°F).</li>
-    <li><strong>Prepare the baking pan:</strong><br>Grease an 8x8-inch pan with butter and set aside.</li>
-    <li><strong>Make the crust & topping:</strong><br>In a bowl, combine flour, ½ cup sugar, and baking powder. Add butter gradually while mixing, then blend in the egg until crumbly.</li>
-    <li><strong>Prepare the filling:</strong><br>In another bowl, mix diced apples, cornstarch, cinnamon, and the remaining ¼ cup sugar.</li>
-    <li><strong>Assemble:</strong><br>Press ⅔ of the crumb mixture into the pan as crust. Spread the apple filling on top, then sprinkle the remaining crumbs.</li>
-    <li><strong>Bake:</strong><br>Bake for 35–40 minutes or until golden. Ovens vary, so check occasionally.</li>
-    <li><strong>Serve:</strong><br>Let cool slightly and serve with vanilla ice cream.</li>
+    <li><strong>Preheat the oven:</strong> 180°C (356°F)</li>
+    <li><strong>Prepare the baking pan:</strong> Grease an 8x8-inch pan</li>
+    <li><strong>Make the crust & topping:</strong> Combine dry ingredients, add butter, then egg</li>
+    <li><strong>Prepare the filling:</strong> Mix apples, cornstarch, cinnamon, remaining sugar</li>
+    <li><strong>Assemble:</strong> Press ⅔ crumb mixture into pan, add filling, top with remaining crumbs</li>
+    <li><strong>Bake:</strong> 35–40 minutes or until golden</li>
+    <li><strong>Serve:</strong> Let cool and enjoy with ice cream</li>
   </ol>
-
 </div>
 
 <div class="conversion-table-container">
-  <h2 class="conversion-table-title">🧁 Ingredient Conversions & Alternatives</h2>
-  <div class="table-wrapper">
-    <table class="conversion-table">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Ingredient</th>
-          <th>Original (Volume)</th>
-          <th>Original (Weight)</th>
-          <th>Alternative Ingredient</th>
-          <th>Alternative (Volume)</th>
-          <th>Alternative (Weight)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Dry</td>
-          <td>All-Purpose Flour</td>
-          <td>12 cups</td>
-          <td>1,500 g (1.5 kg)</td>
-          <td>Cake Flour (for softer texture)</td>
-          <td>12 cups + 1½ cups (13½ cups total)</td>
-          <td>1,485 g</td>
-        </tr>
-        <tr>
-          <td>Dry</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>Rice Flour (gluten-free option)</td>
-          <td>11¾ cups</td>
-          <td>1,410 g</td>
-        </tr>
-        <tr>
-          <td>Dry</td>
-          <td>White Sugar</td>
-          <td>¾ cup</td>
-          <td>150 g</td>
-          <td>Brown Sugar</td>
-          <td>¾ cup (packed)</td>
-          <td>165 g</td>
-        </tr>
-        <tr>
-          <td>Dry</td>
-          <td>Baking Powder</td>
-          <td>½ tsp</td>
-          <td>2.3 g</td>
-          <td>Baking Soda + Lemon Juice</td>
-          <td>¼ tsp + ½ tsp juice</td>
-          <td>≈2 g total</td>
-        </tr>
-        <tr>
-          <td>Dry</td>
-          <td>Cornstarch</td>
-          <td>1½ tbsp</td>
-          <td>12 g</td>
-          <td>All-Purpose Flour (as thickener)</td>
-          <td>3 tbsp</td>
-          <td>24 g</td>
-        </tr>
-        <tr>
-          <td>Wet</td>
-          <td>Butter</td>
-          <td>½ cup (1 stick)</td>
-          <td>113 g</td>
-          <td>Margarine or Coconut Oil</td>
-          <td>½ cup</td>
-          <td>110 g</td>
-        </tr>
-        <tr>
-          <td>Wet</td>
-          <td>Large Egg</td>
-          <td>1 pc</td>
-          <td>50 g</td>
-          <td>¼ cup Yogurt or Mashed Banana</td>
-          <td>¼ cup</td>
-          <td>60 g</td>
-        </tr>
-        <tr>
-          <td>Fruit</td>
-          <td>Apples</td>
-          <td>¾ cup, diced</td>
-          <td>90 g</td>
-          <td>Pear or Peach</td>
-          <td>¾ cup</td>
-          <td>100 g</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <h2>🧁 Ingredient Conversions & Alternatives</h2>
+  <table class="conversion-table">
+    <thead>
+      <tr>
+        <th>Category</th><th>Ingredient</th><th>Original (Volume)</th>
+        <th>Original (Weight)</th><th>Alternative Ingredient</th>
+        <th>Alternative (Volume)</th><th>Alternative (Weight)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Dry</td><td>All-Purpose Flour</td><td>12 cups</td><td>1,500 g</td><td>Cake Flour</td><td>13½ cups</td><td>1,485 g</td></tr>
+      <tr><td>Dry</td><td></td><td></td><td></td><td>Rice Flour</td><td>11¾ cups</td><td>1,410 g</td></tr>
+      <tr><td>Dry</td><td>White Sugar</td><td>¾ cup</td><td>150 g</td><td>Brown Sugar</td><td>¾ cup</td><td>165 g</td></tr>
+      <tr><td>Dry</td><td>Baking Powder</td><td>½ tsp</td><td>2.3 g</td><td>Baking Soda + Lemon Juice</td><td>¼ tsp + ½ tsp juice</td><td>≈2 g</td></tr>
+      <tr><td>Dry</td><td>Cornstarch</td><td>1½ tbsp</td><td>12 g</td><td>All-Purpose Flour</td><td>3 tbsp</td><td>24 g</td></tr>
+      <tr><td>Wet</td><td>Butter</td><td>½ cup</td><td>113 g</td><td>Margarine/Coconut Oil</td><td>½ cup</td><td>110 g</td></tr>
+      <tr><td>Wet</td><td>Large Egg</td><td>1 pc</td><td>50 g</td><td>¼ cup Yogurt/Banana</td><td>¼ cup</td><td>60 g</td></tr>
+      <tr><td>Fruit</td><td>Apples</td><td>¾ cup</td><td>90 g</td><td>Pear/Peach</td><td>¾ cup</td><td>100 g</td></tr>
+    </tbody>
+  </table>
 </div>
