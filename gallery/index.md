@@ -102,8 +102,7 @@ h2 {
 </a>
 
 <div class="page-container">
-  <h1>📸 Gallery</h1>
-  <p>Explore our photo collections and media through embedded OneDrive galleries below.</p>
+  <h1>📸 Lenscape</h1>
 
   <!-- === OneDrive Embeds === -->
   <div class="embed-card">
