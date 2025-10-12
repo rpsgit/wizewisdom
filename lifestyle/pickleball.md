@@ -19,6 +19,7 @@ title: Pickleball
     padding: 0 15px;
   }
 
+  /* === PAGE TITLE === */
   h1 {
     display: inline-block;
     color: #000;
@@ -29,6 +30,7 @@ title: Pickleball
     box-shadow: none;
   }
 
+  /* === CONTAINER FOR PICKLEBALL SECTIONS === */
   .pickle-container {
     display: flex;
     justify-content: center;
@@ -76,6 +78,7 @@ title: Pickleball
     transform: scale(1.08);
   }
 
+  /* === YOUTUBE PLACEHOLDER === */
   .youtube-placeholder {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
@@ -107,6 +110,7 @@ title: Pickleball
     border: none;
   }
 
+  /* === FALLBACK LINK === */
   .youtube-fallback {
     margin-top: 12px;
   }
@@ -125,6 +129,7 @@ title: Pickleball
     color: #000;
   }
 
+  /* === RESPONSIVE === */
   @media (max-width: 1024px) {
     h1 { font-size: 2.2rem; }
     .pickle-container { gap: 30px; padding: 20px; }
@@ -147,9 +152,11 @@ title: Pickleball
   <div class="youtube-placeholder">
     <h2>Lemon Drop</h2>
     <div class="youtube-embed">
-      <iframe 
+      <iframe
         src="https://www.youtube.com/embed?listType=playlist&list=UU3CbvjtmMUsmuSgBCWQh0Wg"
-        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        title="Lemon Drop Pickleball Playlist"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen>
       </iframe>
     </div>
