@@ -162,4 +162,12 @@ h2 {
     />
   </div>
 
+  <div class="embed-card">
+    <img 
+    src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQoaS2qufA7QogW9jaNiQ5pAVZzTvpaSIpA-S_UhEh-TEU?width=4000&height=1868" 
+    alt="Landscape Collection 5" 
+      loading="lazy"
+    />
+  </div>
+  
 </div>
