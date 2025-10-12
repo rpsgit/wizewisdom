@@ -102,7 +102,7 @@ h2 {
 </a>
 
 <div class="page-container">
-  <h1>📸 Lenscape</h1>
+  <h2>Lenscape</h2>
 
   <!-- === OneDrive Embeds === -->
   <div class="embed-card">
