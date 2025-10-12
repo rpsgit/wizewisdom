@@ -89,7 +89,7 @@ title: Recipes
   <div class="recipe-list">
     <a href="/lifestyle/recipe/recipe-photos.html" class="recipe-item">
       <div class="recipe-icon"></div>
-      <div class="recipe-text">Recipe Photos</div>
+      <div class="recipe-text">Gallery</div>
     </a>
 
 
