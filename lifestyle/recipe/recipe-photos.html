@@ -44,16 +44,11 @@ body {
   background-size: contain;
 }
 
-<!-- Back Button with Custom Icon -->
-<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}">
-  <span class="back-icon"></span> Back
-</button>
-
-<style>
+/* === BACK BUTTON ICON === */
 .back-button {
   position: fixed;
   top: 20px;
-  left: 20px;
+  left: 70px; /* default next to home button */
   padding: 8px 16px;
   font-size: 1rem;
   background-color: #ffdd57;
@@ -64,7 +59,7 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
-  gap: 8px; /* space between icon and text */
+  gap: 8px; 
   transition: background 0.3s ease, transform 0.2s ease;
   z-index: 1000;
 }
@@ -76,20 +71,26 @@ body {
 
 .back-icon {
   display: inline-block;
-  width: 20px;  /* adjust as needed */
-  height: 20px; /* adjust as needed */
+  width: 20px;
+  height: 20px;
   background: url('/assets/images/back-ico.png') no-repeat center center;
   background-size: contain;
 }
-</style>
-<!-- End of Back Button with Custom Icon -->
-  
+
 /* === HEADINGS === */
-h1 {
+h1, h2 {
   text-align: center;
-  font-size: 3rem;
   color: #000;
+}
+
+h1 {
+  font-size: 3rem;
   margin-bottom: 30px;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 /* === RECIPE IMAGE CARDS === */
@@ -123,9 +124,18 @@ h1 {
   h1 {
     font-size: 2.2rem;
   }
+  h2 {
+    font-size: 1.6rem;
+  }
   .recipe-card {
     max-width: 90%;
     margin: 10px auto;
+  }
+  /* Move back button to top-right for mobile */
+  .back-button {
+    top: 20px;
+    right: 20px;
+    left: auto;
   }
 }
 </style>
@@ -135,8 +145,13 @@ h1 {
   <span class="home-icon"></span>
 </a>
 
+<!-- Back Button -->
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}">
+  <span class="back-icon"></span> Back
+</button>
+
 <div class="page-container">
-  <h2>Recipe Gallery</h2>
+  <h1>Recipe Gallery</h1>
 
   <!-- Recipe Image Cards -->
   <a href="/recipes/puto.html" class="recipe-card">
@@ -151,5 +166,4 @@ h1 {
   <a href="#" class="recipe-card">
     <img src="/assets/images/recipe/placeholder.jpg" alt="Coming Soon">
   </a>
-
 </div>
