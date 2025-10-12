@@ -138,4 +138,28 @@ h2 {
     />
   </div>
 
+  <div class="embed-card">
+    <img 
+      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTC09oKxZ0WS6QRNiqRBzTlAb8dyT2bQwV49nX8rpHNX3k?width=3460&height=1630" 
+      alt="Landscape Collection" 
+      loading="lazy"
+    />
+  </div>
+
+  <div class="embed-card">
+    <img 
+      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRR9bQSwm9YTqC8f2h2HapSAShJowxppxkFpbshJ4wfAi4?width=3835&height=1661" 
+      alt="Landscape Collection 3" 
+      loading="lazy"
+    />
+  </div>
+
+  <div class="embed-card">
+    <img 
+    src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSjaLvrPHZnR6WrJ2ztfoYiAQtvt1grXeOE3_EscFbe1QY?width=3915&height=1573" 
+    alt="Landscape Collection 4" 
+      loading="lazy"
+    />
+  </div>
+
 </div>
