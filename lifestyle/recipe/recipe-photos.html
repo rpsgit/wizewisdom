@@ -44,6 +44,46 @@ body {
   background-size: contain;
 }
 
+<!-- Back Button with Custom Icon -->
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}">
+  <span class="back-icon"></span> Back
+</button>
+
+<style>
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #ffdd57;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between icon and text */
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 1000;
+}
+
+.back-button:hover {
+  background-color: #ffc107;
+  transform: scale(1.05);
+}
+
+.back-icon {
+  display: inline-block;
+  width: 20px;  /* adjust as needed */
+  height: 20px; /* adjust as needed */
+  background: url('/assets/images/back-ico.png') no-repeat center center;
+  background-size: contain;
+}
+</style>
+<!-- End of Back Button with Custom Icon -->
+  
 /* === HEADINGS === */
 h1 {
   text-align: center;
@@ -104,7 +144,7 @@ h1 {
   </a>
 
   <a href="/recipes/apple-crumble.html" class="recipe-card">
-    <img src="/assets/images/recipe/apple-crumble-cover.jpg" alt="Apple Crumble">
+    <img src="/assets/images/apple-crumble-cover.jpg" alt="Apple Crumble">
   </a>
 
   <!-- Placeholder for Additional Recipes -->
