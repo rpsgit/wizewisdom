@@ -14,7 +14,7 @@ title: Recipes
 
   .page-container {
     max-width: 800px;
-    margin: 60px auto;
+    margin: 80px auto 60px auto;
     text-align: center;
     padding: 0 15px;
   }
@@ -68,6 +68,66 @@ title: Recipes
     color: #333;
   }
 
+  /* === HOME & BACK BUTTONS === */
+  .home-button,
+  .back-button {
+    position: fixed;
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .home-button { left: 20px; }
+  .back-button { left: 70px; }
+
+  .home-icon,
+  .back-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .home-icon { background-image: url('/assets/images/home-icon.png'); }
+  .back-icon { background-image: url('/assets/images/back-ico.png'); }
+
+  /* Tooltip labels */
+  .home-button[data-tooltip]:hover::after,
+  .back-button[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    margin-top: 6px;
+    pointer-events: none;
+    opacity: 1;
+    z-index: 1001;
+  }
+
+  .home-button[data-tooltip]::after,
+  .back-button[data-tooltip]::after {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .home-button[data-tooltip]:hover::after,
+  .back-button[data-tooltip]:hover::after {
+    opacity: 1;
+  }
+
   /* === RESPONSIVE === */
   @media (max-width: 768px) {
     .recipe-text { font-size: 1.1rem; }
@@ -83,6 +143,16 @@ title: Recipes
   }
 </style>
 
+<!-- Home Button -->
+<a href="/index.html" class="home-button" data-tooltip="Home">
+  <span class="home-icon"></span>
+</a>
+
+<!-- Back Button -->
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back">
+  <span class="back-icon"></span>
+</button>
+
 <div class="page-container">
   <h1>Recipes</h1>
 
@@ -91,7 +161,6 @@ title: Recipes
       <div class="recipe-icon"></div>
       <div class="recipe-text">Gallery</div>
     </a>
-
 
     <a href="/lifestyle/desserts.html" class="recipe-item">
       <div class="recipe-icon"></div>
