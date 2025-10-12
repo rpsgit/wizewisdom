@@ -87,10 +87,11 @@ title: Recipes
   <h1>Recipes</h1>
 
   <div class="recipe-list">
-    <a href="/lifestyle/recipe-photos.html" class="recipe-item">
+    <a href="/lifestyle/recipe/recipe-photos.html" class="recipe-item">
       <div class="recipe-icon"></div>
       <div class="recipe-text">Recipe Photos</div>
     </a>
+
 
     <a href="/lifestyle/desserts.html" class="recipe-item">
       <div class="recipe-icon"></div>
