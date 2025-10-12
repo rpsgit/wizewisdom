@@ -107,7 +107,6 @@ h2 {
 
   <!-- === OneDrive Embeds === -->
   <div class="embed-card">
-    <h2>🏞️ Landscape Collection</h2>
     <img 
       src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQ6Pc4rWAkS5Odign3w7yAAcSapN01g741NQenf6oGoNc?width=4000&height=1868" 
       alt="Landscape Collection" 
