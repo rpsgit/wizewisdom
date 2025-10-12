@@ -124,14 +124,6 @@ h2 {
 
   <div class="embed-card">
     <img 
-      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQS_c77d-ZL5QaVzc5JihRlKAai7mLU39Myiw0Mm16Vbj-Q?width=3679&height=1868" 
-      alt="Landscape Collection" 
-      loading="lazy"
-    />
-  </div>
-
-  <div class="embed-card">
-    <img 
       src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSnv4nA-7HpSq5qbowW7rdLASFCt3cWTbGqujq0F-23Bm0?width=4000&height=3000" 
       alt="Landscape Collection"
       loading="lazy"
