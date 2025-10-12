@@ -116,7 +116,7 @@ h2 {
   <!-- === OneDrive Embeds === -->
   <div class="embed-card">
     <img 
-      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQ6Pc4rWAkS5Odign3w7yAAcSapN01g741NQenf6oGoNc?width=4000&height=1868" 
+      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQS_c77d-ZL5QaVzc5JihRlKAai7mLU39Myiw0Mm16Vbj-Q?width=3679&height=1868" 
       alt="Landscape Collection" 
       loading="lazy"
     />
@@ -130,5 +130,12 @@ h2 {
     />
   </div>
 
+  <div class="embed-card">
+    <img 
+      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQSW8dr4WOtRTpomBuB8NXKaAR7XyRDCBXYdA3aISh4XEAY?width=4000&height=1868" 
+      alt="Landscape Collection" 
+      loading="lazy"
+    />
+  </div>
 
 </div>
