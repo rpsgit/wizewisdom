@@ -61,4 +61,58 @@ h2 {
 /* === EMBED CARDS === */
 .embed-card {
   background: rgba(255, 255, 255, 0.95);
-  border-rad
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 25px 0;
+  overflow: hidden;
+}
+
+.embed-card iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 15px;
+}
+
+.embed-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 25px 15px;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+  iframe {
+    height: 300px;
+  }
+}
+</style>
+
+<!-- Home Button -->
+<a href="https://www.wizewisdom.com/" class="home-button">
+  <span class="home-icon"></span>
+</a>
+
+<div class="page-container">
+  <h1>📸 Gallery</h1>
+  <p>Explore our photo collections and media through embedded OneDrive galleries below.</p>
+
+  <!-- === OneDrive Embeds === -->
+  <div class="embed-card">
+    <h2>🏞️ Landscape Collection</h2>
+    <img 
+      src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQTQ6Pc4rWAkS5Odign3w7yAAcSapN01g741NQenf6oGoNc?width=4000&height=1868" 
+      alt="Landscape Collection" 
+      loading="lazy"
+    />
+  </div>
+
+</div>
