@@ -4,87 +4,85 @@ title: Desserts
 ---
 
 <style>
-/* === BODY === */
-body{
-  margin:0;
-  padding:0;
-  background:#f5f5f5 url('/assets/images/recipe-index.png') no-repeat center center fixed;
+/* === BODY & PAGE CONTAINER === */
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/recipe-index.png') no-repeat center center fixed;
   background-size: cover;
   font-family: Arial, sans-serif;
-  color:#222;
+  color: #222;
 }
 
-/* === PAGE CONTAINER === */
-.page-container{
-  max-width:1000px;
-  margin:60px auto;
-  background:rgba(255,255,255,0.85);
-  padding:40px 30px;
-  border-radius:25px;
-  box-shadow:0 4px 25px rgba(0,0,0,0.15);
-  text-align:center;
-  position:relative;
+.page-container {
+  max-width: 1000px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 30px;
+  border-radius: 25px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+  text-align: center;
 }
 
-/* === NAV BUTTONS WRAPPER === */
-.nav-buttons {
+/* === HOME & BACK BUTTON ICONS === */
+.home-button,
+.back-button {
   position: fixed;
-  top: 16px;
-  left: 16px;
-  display:flex;
-  gap:12px;
-  z-index:1100;
-  pointer-events: none; /* allow individual buttons to control pointer-events */
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 1000;
 }
 
-/* === NAV BUTTONS === */
-.nav-btn {
-  pointer-events: auto;
-  width:44px;
-  height:44px;
-  border-radius:8px;
-  border: none;
-  background: transparent;
+.home-button { left: 20px; }
+.back-button { left: 70px; }
+
+.home-icon,
+.back-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  cursor: pointer;
-  display:inline-block;
-  transition: transform .14s ease, box-shadow .14s ease;
-  box-shadow: none;
 }
 
-/* modest hover effect */
-.nav-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-}
+/* Assign images */
+.home-icon { background-image: url('/assets/images/home-icon.png'); }
+.back-icon { background-image: url('/assets/images/back-ico.png'); }
 
-/* icon backgrounds (replace paths if needed) */
-.nav-btn.home { background-image: url('/assets/images/icons/home.png'); }
-.nav-btn.back { background-image: url('/assets/images/icons/back.png'); }
-
-/* tooltip (accessible, shown on hover or focus) */
-.nav-btn[data-label]::after{
-  content: attr(data-label);
+/* Tooltip labels */
+.home-button[data-tooltip]:hover::after,
+.back-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
   position: absolute;
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  top: calc(100% + 8px);
-  background: rgba(0,0,0,0.75);
+  background-color: rgba(0,0,0,0.75);
   color: #fff;
   padding: 4px 8px;
-  border-radius:6px;
-  font-size: 0.82rem;
-  white-space:nowrap;
-  opacity: 0;
-  pointer-events:none;
-  transition:opacity .12s ease;
-  z-index:1200;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  margin-top: 6px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  z-index: 1001;
 }
-.nav-btn:hover[data-label]::after,
-.nav-btn:focus[data-label]::after{
-  opacity:1;
+
+.home-button[data-tooltip]::after,
+.back-button[data-tooltip]::after {
+  opacity: 0;
+}
+
+.home-button[data-tooltip]:hover::after,
+.back-button[data-tooltip]:hover::after {
+  opacity: 1;
 }
 
 /* === TITLE === */
@@ -94,102 +92,100 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* === GRID === */
+/* === GRID OF RECIPE CARDS === */
 .recipe-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-  margin-top:20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
 }
 
-/* === CARD === */
-.recipe-card{
-  background:rgba(255,255,255,0.9);
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 4px 20px rgba(0,0,0,0.1);
-  text-decoration:none;
-  color:#222;
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-.recipe-card:hover{
-  transform: translateY(-6px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.18);
-}
-.recipe-card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-}
-.recipe-card h3{ font-size:1.2rem; margin:14px 12px 6px; }
-.recipe-card p{ font-size:0.95rem; padding:0 12px 16px; color:#444; }
-
-/* placeholder */
-.placeholder{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(255,255,255,0.75);
-  border:2px dashed #bbb;
-  border-radius:20px;
-  height:280px;
-  color:#777;
-  font-style:italic;
-  font-size:1rem;
+/* === RECIPE CARD === */
+.recipe-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: #222;
 }
 
-/* responsiveness */
-@media (max-width:600px){
-  h1{ font-size:2.2rem; }
-  .nav-buttons{ top:10px; left:10px; gap:8px; }
-  .nav-btn{ width:38px; height:38px; border-radius:6px; }
+.recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.recipe-card h3 {
+  font-size: 1.4rem;
+  margin: 15px 0 10px;
+}
+
+.recipe-card p {
+  font-size: 0.95rem;
+  padding: 0 15px 15px;
+  color: #444;
+}
+
+/* === PLACEHOLDER === */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  border: 2px dashed #bbb;
+  border-radius: 20px;
+  height: 280px;
+  color: #777;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  h1 { font-size: 2.2rem; }
+  .home-button { left: 10px; width: 35px; height: 35px; }
+  .back-button { left: 60px; width: 35px; height: 35px; }
 }
 </style>
 
-<!-- NAV BUTTONS (fixed, top-left) -->
-<div class="nav-buttons" aria-hidden="false">
-  <!-- Back (type=button prevents accidental form submit) -->
-  <button
-    type="button"
-    class="nav-btn back"
-    aria-label="Back"
-    data-label="Back"
-    onclick="(function(){ if(history.length>1){ history.back(); } else { window.location.href = '/'; } })();">
-  </button>
+<!-- Home Button -->
+<a href="https://www.wizewisdom.com/" class="home-button" data-tooltip="Home">
+  <span class="home-icon"></span>
+</a>
 
-  <!-- Home -->
-  <button
-    type="button"
-    class="nav-btn home"
-    aria-label="Home"
-    data-label="Home"
-    onclick="window.location.href='/'">
-  </button>
-</div>
+<!-- Back Button -->
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back">
+  <span class="back-icon"></span>
+</button>
 
 <div class="page-container">
   <h1>🍮 Desserts</h1>
-
+  
   <div class="recipe-grid">
-
-    <!-- PUTO -->
-    <a href="/lifestyle/recipe/puto.html" class="recipe-card" aria-label="Open Puto recipe">
+    <!-- === PUTO === -->
+    <a href="/lifestyle/recipe/puto.html" class="recipe-card">
       <img src="/assets/images/recipe/puto-cover.jpg" alt="Puto">
       <h3>Puto (Steamed Rice Cake)</h3>
-      <p>Soft, fluffy, and slightly sweet — a timeless Filipino favorite enjoyed for merienda or breakfast.</p>
+      <p>Soft, fluffy, and slightly sweet — a Filipino favorite for merienda or breakfast.</p>
     </a>
 
-    <!-- APPLE CRUMBLE -->
-    <a href="/lifestyle/recipe/apple-crumble.html" class="recipe-card" aria-label="Open Apple Crumble recipe">
+    <!-- === APPLE CRUMBLE === -->
+    <a href="/lifestyle/recipe/apple-crumble.html" class="recipe-card">
       <img src="/assets/images/apple-crumble-cover.jpg" alt="Apple Crumble">
       <h3>Apple Crumble</h3>
-      <p>Warm, buttery, and perfectly spiced — a comforting dessert topped with sweet, crisp crumbs.</p>
+      <p>Warm, buttery, and perfectly spiced — a comforting dessert with crisp crumbs.</p>
     </a>
 
-    <!-- placeholders -->
+    <!-- === PLACEHOLDERS === -->
     <div class="placeholder">New Recipe Coming Soon...</div>
     <div class="placeholder">New Recipe Coming Soon...</div>
     <div class="placeholder">New Recipe Coming Soon...</div>
-
   </div>
 </div>
