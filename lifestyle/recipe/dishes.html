@@ -1,0 +1,192 @@
+---
+layout: default
+title: Dishes
+---
+
+<style>
+/* === BODY === */
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5 url('/assets/images/recipe-index.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+/* === PAGE CONTAINER === */
+.page-container {
+  max-width: 1000px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 30px;
+  border-radius: 25px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+/* === HOME & BACK BUTTON ICONS === */
+.home-button,
+.back-button {
+  position: fixed;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.home-button { left: 20px; }
+.back-button { left: 70px; }
+
+.home-icon,
+.back-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Assign images (update paths as needed) */
+.home-icon { background-image: url('/assets/images/home-icon.png'); }
+.back-icon { background-image: url('/assets/images/back-ico.png'); }
+
+/* Tooltip labels */
+.home-button[data-tooltip]:hover::after,
+.back-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  margin-top: 6px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  z-index: 1001;
+}
+
+.home-button[data-tooltip]::after,
+.back-button[data-tooltip]::after {
+  opacity: 0;
+}
+
+.home-button[data-tooltip]:hover::after,
+.back-button[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* === TITLE === */
+h1 {
+  font-size: 3rem;
+  color: #000;
+  margin-bottom: 30px;
+}
+
+/* === GRID OF RECIPES === */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+/* === INDIVIDUAL RECIPE CARD === */
+.recipe-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: #222;
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.recipe-card h3 {
+  font-size: 1.4rem;
+  margin: 15px 0 10px;
+}
+
+.recipe-card p {
+  font-size: 0.95rem;
+  padding: 0 15px 15px;
+  color: #444;
+}
+
+/* === PLACEHOLDER CARD === */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  border: 2px dashed #bbb;
+  border-radius: 20px;
+  height: 280px;
+  color: #777;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  h1 { font-size: 2.2rem; }
+}
+</style>
+
+<!-- Home Button -->
+<a href="https://www.wizewisdom.com/" class="home-button" data-tooltip="Home">
+  <span class="home-icon"></span>
+</a>
+
+<!-- Back Button -->
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back">
+  <span class="back-icon"></span>
+</button>
+
+<div class="page-container">
+  <h1>🍲 Dishes</h1>
+  
+  <div class="recipe-grid">
+
+    <!-- === SAMPLE RECIPE CARD (replace as needed) === -->
+    <a href="/lifestyle/recipe/adobo.html" class="recipe-card">
+      <img src="/assets/images/recipe/adobo-cover.jpg" alt="Adobo">
+      <h3>Chicken Adobo</h3>
+      <p>A savory Filipino classic simmered in soy sauce, vinegar, and garlic.</p>
+    </a>
+
+    <!-- === ANOTHER SAMPLE RECIPE === -->
+    <a href="/lifestyle/recipe/sinigang.html" class="recipe-card">
+      <img src="/assets/images/recipe/sinigang-cover.jpg" alt="Sinigang">
+      <h3>Sinigang</h3>
+      <p>A tangy tamarind-based soup filled with meat and vegetables.</p>
+    </a>
+
+    <!-- === PLACEHOLDERS FOR FUTURE RECIPES === -->
+    <div class="placeholder">New Recipe Coming Soon...</div>
+    <div class="placeholder">New Recipe Coming Soon...</div>
+    <div class="placeholder">New Recipe Coming Soon...</div>
+
+  </div>
+</div>
