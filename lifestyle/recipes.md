@@ -167,17 +167,17 @@ title: Recipes
       <div class="recipe-text">Desserts</div>
     </a>
 
-    <a href="//lifestyle/recipe/dishes.html" class="recipe-item">
+    <a href="/lifestyle/recipe/dishes.html" class="recipe-item">
       <div class="recipe-icon"></div>
       <div class="recipe-text">Dishes</div>
     </a>
 
-    <a href="//lifestyle/recipe/drinks.html" class="recipe-item">
+    <a href="/lifestyle/recipe/drinks.html" class="recipe-item">
       <div class="recipe-icon"></div>
       <div class="recipe-text">Drinks & Smoothies</div>
     </a>
 
-    <a href="//lifestyle/recipe/other.html" class="recipe-item">
+    <a href="/lifestyle/recipe/other.html" class="recipe-item">
       <div class="recipe-icon"></div>
       <div class="recipe-text">Other Recipes</div>
     </a>
