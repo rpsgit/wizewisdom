@@ -23,6 +23,56 @@ body {
   border-radius: 25px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.15);
   text-align: center;
+  position: relative;
+}
+
+/* === NAV BUTTONS (HOME & BACK) === */
+.nav-buttons {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 20px;
+  z-index: 1000;
+}
+
+.nav-btn {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.nav-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Tooltip label */
+.nav-btn::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.nav-btn:hover::after {
+  opacity: 1;
 }
 
 /* === TITLE === */
@@ -89,35 +139,12 @@ h1 {
 
 /* === RESPONSIVE === */
 @media (max-width: 600px) {
-  h1 {
-    font-size: 2.2rem;
-  }
+  h1 { font-size: 2.2rem; }
+  .nav-buttons { top: 10px; left: 10px; gap: 10px; }
+  .nav-btn { width: 38px; height: 38px; }
 }
 </style>
 
-<div class="page-container">
-  <h1>🍮 Desserts</h1>
-  
-  <div class="recipe-grid">
-
-    <!-- === PUTO CARD === -->
-    <a href="/lifestyle/recipe/puto.html" class="recipe-card">
-      <img src="/assets/images/recipe/puto-cover.jpg" alt="Puto">
-      <h3>Puto (Steamed Rice Cake)</h3>
-      <p>Soft, fluffy, and slightly sweet — a timeless Filipino favorite enjoyed for merienda or breakfast.</p>
-    </a>
-
-    <!-- === APPLE CRUMBLE CARD === -->
-    <a href="/lifestyle/recipe/apple-crumble.html" class="recipe-card">
-      <img src="/assets/images/apple-crumble-cover.jpg" alt="Apple Crumble">
-      <h3>Apple Crumble</h3>
-      <p>Warm, buttery, and perfectly spiced — a comforting dessert topped with sweet, crisp crumbs.</p>
-    </a>
-
-    <!-- === PLACEHOLDERS FOR FUTURE RECIPES === -->
-    <div class="placeholder">New Recipe Coming Soon...</div>
-    <div class="placeholder">New Recipe Coming Soon...</div>
-    <div class="placeholder">New Recipe Coming Soon...</div>
-
-  </div>
-</div>
+<!-- === NAV BUTTONS === -->
+<div class="nav-buttons">
+  <button class="nav-btn" data-label="Back" style="background-image: url('/assets/images/icons/back.png');" onclick="window.history.back();">
