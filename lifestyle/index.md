@@ -13,24 +13,65 @@ title: Lifestyle
     text-align: center;
   }
 
-  /* === HOME BUTTON ICON === */
-  .home-button {
+  /* === HOME & BACK BUTTON ICONS === */
+  .home-button,
+  .back-button {
     position: fixed;
     top: 20px;
-    left: 20px;
-    z-index: 1000;
-    display: inline-block;
     width: 40px;
     height: 40px;
-    text-decoration: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 1000;
   }
 
-  .home-icon {
+  .home-button { left: 20px; }
+  .back-button { left: 70px; }
+
+  .home-icon,
+  .back-icon {
+    display: block;
     width: 100%;
     height: 100%;
-    display: block;
-    background: url('/assets/images/home-icon.png') no-repeat center center;
     background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* === ICON IMAGES (update paths as needed) === */
+  .home-icon { background-image: url('/assets/images/home-icon.png'); }
+  .back-icon { background-image: url('/assets/images/back-ico.png'); }
+
+  /* === TOOLTIP LABELS === */
+  .home-button[data-tooltip]:hover::after,
+  .back-button[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    margin-top: 6px;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+    z-index: 1001;
+  }
+
+  .home-button[data-tooltip]::after,
+  .back-button[data-tooltip]::after {
+    opacity: 0;
+  }
+
+  .home-button[data-tooltip]:hover::after,
+  .back-button[data-tooltip]:hover::after {
+    opacity: 1;
   }
 
   /* === PAGE TITLE === */
@@ -57,7 +98,7 @@ title: Lifestyle
     flex-direction: column;
     align-items: center;
     transition: transform 0.25s ease;
-    flex: 1 1 200px; /* responsive width */
+    flex: 1 1 200px;
     max-width: 220px;
   }
 
@@ -73,7 +114,6 @@ title: Lifestyle
     font-size: 1.4rem;
     font-weight: bold;
     color: #000;
-    display: block;
     text-align: center;
   }
 
@@ -102,9 +142,14 @@ title: Lifestyle
 </style>
 
 <!-- Home Button -->
-<a href="https://www.wizewisdom.com/" class="home-button">
+<a href="https://www.wizewisdom.com/" class="home-button" data-tooltip="Home">
   <span class="home-icon"></span>
 </a>
+
+<!-- Back Button -->
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back">
+  <span class="back-icon"></span>
+</button>
 
 <h2>Leisure Lab</h2>
 
