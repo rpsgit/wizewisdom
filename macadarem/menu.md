@@ -159,25 +159,41 @@ h2 {
 
 <!-- Main Container -->
 <div class="page-container">
-  <h1>Our Menu</h1>
+  <h1>Macadarem Menu</h1>
 
   <!-- === DRINKS SECTION === -->
   <h2>Drinks & Smoothies</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/drink1.jpg" alt="Iced Coffee">
-      <h3>Iced Coffee</h3>
-      <p>₱95</p>
+      <img src="/assets/images/milk-coffee.jpg" alt="Milk Coffee">
+      <h3>Milk Coffee 8oz</h3>
+      <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/drink2.jpg" alt="Mango Smoothie">
-      <h3>Mango Smoothie</h3>
-      <p>₱110</p>
+      <img src="/assets/images/matcha-latte.jpg" alt="Matcha Latte">
+      <h3>Matcha Latte 8oz</h3>
+      <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/drink3.jpg" alt="Matcha Latte">
-      <h3>Matcha Latte</h3>
-      <p>₱120</p>
+      <img src="/assets/images/ube-latte.jpg" alt="Ube Latte">
+      <h3>Ube Latte 8oz</h3>
+      <p>₱50</p>
+    </div>
+    </div>
+    <div class="menu-card">
+      <img src="/assets/images/houjicha-latte.jpg" alt="Houjicha Latte">
+      <h3>Houjicha Latte 8oz</h3>
+      <p>₱65</p>
+    </div>
+    <div class="menu-card">
+      <img src="/assets/images/kalamansi.jpg" alt="Kalamansi">
+      <h3>Kalamansi 16oz</h3>
+      <p>₱65</p>
+    </div>
+    <div class="menu-card">
+      <img src="/assets/images/lemonade.jpg" alt="Lemonade">
+      <h3>Lemonade 16oz</h3>
+      <p>₱65</p>
     </div>
   </div>
 
@@ -185,19 +201,19 @@ h2 {
   <h2>Meals</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/meal1.jpg" alt="Pork Sisig">
+      <img src="/assets/images/meal1.jpg" alt="Tapsilog">
       <h3>Pork Sisig</h3>
-      <p>₱180</p>
+      <p>₱110</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/meal2.jpg" alt="Chicken Adobo">
-      <h3>Chicken Adobo</h3>
-      <p>₱160</p>
+      <img src="/assets/images/meal2.jpg" alt="Longsilog">
+      <h3>Longsilog</h3>
+      <p>₱110</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/meal3.jpg" alt="Beef Tapa">
-      <h3>Beef Tapa</h3>
-      <p>₱190</p>
+      <img src="/assets/images/meal3.jpg" alt="Tocilog">
+      <h3>Tocilog</h3>
+      <p>₱110</p>
     </div>
   </div>
 
@@ -205,19 +221,19 @@ h2 {
   <h2>Desserts</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/dessert1.jpg" alt="Leche Flan">
+      <img src="/assets/images/dessert1.jpg" alt="Puto">
       <h3>Leche Flan</h3>
-      <p>₱85</p>
+      <p>₱110</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/dessert2.jpg" alt="Ube Halaya">
+      <img src="/assets/images/dessert2.jpg" alt="Maja Blanca">
       <h3>Ube Halaya</h3>
-      <p>₱95</p>
+      <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/dessert3.jpg" alt="Halo-Halo">
-      <h3>Halo-Halo</h3>
-      <p>₱120</p>
+      <img src="/assets/images/dessert3.jpg" alt="Apple Crumble">
+      <h3>Apple Crumble/h3>
+      <p>₱50</p>
     </div>
   </div>
 </div>
