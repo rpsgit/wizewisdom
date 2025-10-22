@@ -7,11 +7,10 @@
 <style>
   body { font-family: Arial, sans-serif; margin: 2rem; }
   form { max-width: 400px; }
-  input, textarea, select {
-    width: 100%; padding: 8px; margin: 6px 0; border-radius: 5px; border: 1px solid #ccc;
-  }
+  input, textarea, select { width: 100%; padding: 8px; margin: 6px 0; border-radius: 5px; border: 1px solid #ccc; }
   button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
   button:hover { background: #45a049; }
+  .category-label { font-weight: bold; margin-top: 15px; display: block; }
 </style>
 </head>
 <body>
@@ -24,13 +23,7 @@
   <label>Contact</label>
   <input type="text" name="contact" required>
 
-  <label>Item</label>
-  <select name="item" required>
-    <option value="">-- Choose an item --</option>
-    <option>Milk Coffee</option>
-    <option>Matcha Latte</option>
-    <option>Leche Flan</option>
-  </select>
+  <div id="menuContainer"></div>
 
   <label>Quantity</label>
   <input type="number" name="quantity" min="1" required>
@@ -44,33 +37,73 @@
 <p id="msg"></p>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbzDRo7RA4V0nEcNKDGdxODOQge6Ta73rh7i_P7LqR_4fo-kylbMBQ9MmE-sg1pHWKh1/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxsk2w_GOIjfs-oJNM_HtoDpvwA7TiPFaJZ4JOHFfehkYUuj7Q6wfXfj7oKZ8PYNZRs/exec";
+const menuURL = "https://script.google.com/macros/s/AKfycbxsk2w_GOIjfs-oJNM_HtoDpvwA7TiPFaJZ4JOHFfehkYUuj7Q6wfXfj7oKZ8PYNZRs/exec/dev?menu=true"; // optional: use separate function or endpoint for menu
 
-document.getElementById("orderForm").addEventListener("submit", e => {
+// Fetch menu items dynamically
+async function loadMenu() {
+  try {
+    const res = await fetch(menuURL);
+    const menu = await res.json();
+    const container = document.getElementById("menuContainer");
+
+    Object.keys(menu).forEach(category => {
+      const label = document.createElement("span");
+      label.className = "category-label";
+      label.textContent = category;
+      container.appendChild(label);
+
+      const select = document.createElement("select");
+      select.name = "item";
+      select.required = true;
+
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "-- Choose an item --";
+      select.appendChild(defaultOption);
+
+      menu[category].forEach(item => {
+        const option = document.createElement("option");
+        option.value = item.name;
+        option.textContent = `${item.name} ₱${item.price}`;
+        select.appendChild(option);
+      });
+
+      container.appendChild(select);
+    });
+  } catch (err) {
+    console.error("Error loading menu:", err);
+    document.getElementById("msg").textContent = "❌ Failed to load menu";
+  }
+}
+
+// Handle form submission
+document.getElementById("orderForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+  const formData = Object.fromEntries(new FormData(e.target).entries());
 
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
-
-  fetch(scriptURL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(response => {
-    document.getElementById("msg").textContent = "✅ Order submitted successfully!";
-    e.target.reset();
-  })
-  .catch(async err => {
-  const resText = await err.text?.();
-  console.error("Error:", err, resText);
-  document.getElementById("msg").textContent = "❌ Error sending order.";
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" }
+    });
+    const result = await res.json();
+    if (result.result === "success") {
+      document.getElementById("msg").textContent = "✅ Order submitted successfully!";
+      e.target.reset();
+    } else {
+      throw new Error(result.message || "Unknown error");
+    }
+  } catch (err) {
+    console.error(err);
+    document.getElementById("msg").textContent = "❌ Error sending order. Check console.";
+  }
 });
 
-});
+// Initialize
+loadMenu();
 </script>
-
 
 </body>
 </html>
