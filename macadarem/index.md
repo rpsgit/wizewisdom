@@ -170,12 +170,12 @@ h2 {
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQd3Xuzq8zxTo1NSVSGn196Af04C2zRTgko2DhwLtA8F0M?width=9000&height=12000 alt="Kalamansi">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQd3Xuzq8zxTo1NSVSGn196Af04C2zRTgko2DhwLtA8F0M?width=9000&height=12000" alt="Kalamansi">
       <h3>Kalamansi 16oz</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQd3Xuzq8zxTo1NSVSGn196Af04C2zRTgko2DhwLtA8F0M?width=9000&height=12000" alt="Lemonade">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRLgxOHFuCeRYVLM2CXPNbFAR3WEtH2fUU9BnqQF-vi6cY?width=9000&height=12000" alt="Lemonade">
       <h3>Lemonade 16oz</h3>
       <p>₱65</p>
     </div>
