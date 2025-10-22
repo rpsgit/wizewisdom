@@ -165,33 +165,23 @@ h2 {
   <h2>Drinks & Smoothies</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/menu/milk-coffee.jpg" alt="Milk Coffee" loading="lazy">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQocXR_zF_FTLZ1HpjiHNOgAbKAWg_4-gaUmJlzZqJH9Bo?width=8217&height=8605" alt="Milk Coffee">
       <h3>Milk Coffee 8oz</h3>
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/menu/matcha-latte.jpg" alt="Matcha Latte" loading="lazy">
-      <h3>Matcha Latte 8oz</h3>
-      <p>₱50</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images/menu/ube-latte.jpg" alt="Ube Latte" loading="lazy">
-      <h3>Ube Latte 8oz</h3>
-      <p>₱50</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images/menu/houjicha-latte.jpg" alt="Houjicha Latte" loading="lazy">
-      <h3>Houjicha Latte 8oz</h3>
-      <p>₱65</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images//menu/kalamansi.jpg" alt="Kalamansi" loading="lazy">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQd3Xuzq8zxTo1NSVSGn196Af04C2zRTgko2DhwLtA8F0M?width=9000&height=12000 alt="Kalamansi">
       <h3>Kalamansi 16oz</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/menu/lemonade.jpg" alt="Lemonade" loading="lazy">
+      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRLgxOHFuCeRYVLM2CXPNbFAR3WEtH2fUU9BnqQF-vi6cY?width=9000&height=12000" alt="Lemonade">
       <h3>Lemonade 16oz</h3>
+      <p>₱65</p>
+    </div>
+    <div class="menu-card">
+      <img src="https://onedrive.live.com/embed?resid=YOUR_IMAGE_ID4&authkey=!YOURKEY&width=400&height=300&format=jpg" alt="Houjicha Latte">
+      <h3>Houjicha Latte 8oz</h3>
       <p>₱65</p>
     </div>
   </div>
