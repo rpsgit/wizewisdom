@@ -44,7 +44,7 @@
 <p id="msg"></p>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbysQid0cPX4DUGkMpKeE57iOdesY8iLwEfsuS3Nfovy2zJOEzvaO_3yMgV_tRYb5jZV/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxCguiXi2ueVK5pfu0KiZ-3MMvmu_DE77gLhIH-zVbFlix3TN6DDa9fEXHwgYDvsyEO/exec";
 
 document.getElementById("orderForm").addEventListener("submit", e => {
   e.preventDefault();
@@ -54,6 +54,7 @@ document.getElementById("orderForm").addEventListener("submit", e => {
 
   fetch(scriptURL, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
   .then(res => res.json())
@@ -67,6 +68,7 @@ document.getElementById("orderForm").addEventListener("submit", e => {
   });
 });
 </script>
+
 
 </body>
 </html>
