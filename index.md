@@ -128,7 +128,7 @@ title: "Wizewisdom World"
     <span>Lemonades</span>
   </a>
 
-  <a href="/macadarem/menu.html" class="icon-card">
+  <a href="/macadarem/index.html" class="icon-card">
     <img src="/assets/images/menu-ico.png" alt="Group Icon">
     <span>MACADAREM</span>
   </a>
@@ -138,6 +138,7 @@ title: "Wizewisdom World"
     <span>Minevault 🔒</span>
   </a>
 </div>
+
 
 
 
