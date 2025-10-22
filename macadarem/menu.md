@@ -71,7 +71,7 @@ h2 {
 .home-icon { background-image: url('/assets/images/home-icon.png'); }
 .back-icon { background-image: url('/assets/images/back-ico.png'); }
 
-/* Tooltip */
+/* === TOOLTIP === */
 .home-button[data-tooltip]:hover::after,
 .back-button[data-tooltip]:hover::after {
   content: attr(data-tooltip);
@@ -128,7 +128,7 @@ h2 {
 }
 
 .menu-card h3 {
-  margin: 15px 0;
+  margin: 15px 0 8px;
   color: #333;
   font-size: 1.4rem;
 }
@@ -165,33 +165,32 @@ h2 {
   <h2>Drinks & Smoothies</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/milk-coffee.jpg" alt="Milk Coffee">
+      <img src="/assets/images/milk-coffee.jpg" alt="Milk Coffee" loading="lazy">
       <h3>Milk Coffee 8oz</h3>
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/matcha-latte.jpg" alt="Matcha Latte">
+      <img src="/assets/images/matcha-latte.jpg" alt="Matcha Latte" loading="lazy">
       <h3>Matcha Latte 8oz</h3>
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/ube-latte.jpg" alt="Ube Latte">
+      <img src="/assets/images/ube-latte.jpg" alt="Ube Latte" loading="lazy">
       <h3>Ube Latte 8oz</h3>
       <p>₱50</p>
     </div>
-    </div>
     <div class="menu-card">
-      <img src="/assets/images/houjicha-latte.jpg" alt="Houjicha Latte">
+      <img src="/assets/images/houjicha-latte.jpg" alt="Houjicha Latte" loading="lazy">
       <h3>Houjicha Latte 8oz</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/kalamansi.jpg" alt="Kalamansi">
+      <img src="/assets/images/kalamansi.jpg" alt="Kalamansi" loading="lazy">
       <h3>Kalamansi 16oz</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/lemonade.jpg" alt="Lemonade">
+      <img src="/assets/images/lemonade.jpg" alt="Lemonade" loading="lazy">
       <h3>Lemonade 16oz</h3>
       <p>₱65</p>
     </div>
@@ -201,17 +200,17 @@ h2 {
   <h2>Meals</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/meal1.jpg" alt="Tapsilog">
+      <img src="/assets/images/meal1.jpg" alt="Pork Sisig" loading="lazy">
       <h3>Pork Sisig</h3>
       <p>₱110</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/meal2.jpg" alt="Longsilog">
+      <img src="/assets/images/meal2.jpg" alt="Longsilog" loading="lazy">
       <h3>Longsilog</h3>
       <p>₱110</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/meal3.jpg" alt="Tocilog">
+      <img src="/assets/images/meal3.jpg" alt="Tocilog" loading="lazy">
       <h3>Tocilog</h3>
       <p>₱110</p>
     </div>
@@ -221,18 +220,18 @@ h2 {
   <h2>Desserts</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/dessert1.jpg" alt="Puto">
+      <img src="/assets/images/dessert1.jpg" alt="Leche Flan" loading="lazy">
       <h3>Leche Flan</h3>
       <p>₱110</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/dessert2.jpg" alt="Maja Blanca">
+      <img src="/assets/images/dessert2.jpg" alt="Ube Halaya" loading="lazy">
       <h3>Ube Halaya</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/dessert3.jpg" alt="Apple Crumble">
-      <h3>Apple Crumble/h3>
+      <img src="/assets/images/dessert3.jpg" alt="Apple Crumble" loading="lazy">
+      <h3>Apple Crumble</h3>
       <p>₱50</p>
     </div>
   </div>
