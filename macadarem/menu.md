@@ -185,7 +185,7 @@ h2 {
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images//menu/alamansi.jpg" alt="Kalamansi" loading="lazy">
+      <img src="/assets/images//menu/kalamansi.jpg" alt="Kalamansi" loading="lazy">
       <h3>Kalamansi 16oz</h3>
       <p>₱65</p>
     </div>
