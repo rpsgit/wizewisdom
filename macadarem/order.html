@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Order Form</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2rem; }
+  form { max-width: 400px; }
+  input, textarea, select {
+    width: 100%; padding: 8px; margin: 6px 0; border-radius: 5px; border: 1px solid #ccc;
+  }
+  button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+  button:hover { background: #45a049; }
+</style>
+</head>
+<body>
+
+<h2>Place Your Order</h2>
+<form id="orderForm">
+  <label>Name</label>
+  <input type="text" name="name" required>
+
+  <label>Contact</label>
+  <input type="text" name="contact" required>
+
+  <label>Item</label>
+  <select name="item" required>
+    <option value="">-- Choose an item --</option>
+    <option>Milk Coffee</option>
+    <option>Matcha Latte</option>
+    <option>Leche Flan</option>
+  </select>
+
+  <label>Quantity</label>
+  <input type="number" name="quantity" min="1" required>
+
+  <label>Notes</label>
+  <textarea name="notes"></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<p id="msg"></p>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
+
+document.getElementById("orderForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(response => {
+    document.getElementById("msg").textContent = "✅ Order submitted successfully!";
+    e.target.reset();
+  })
+  .catch(err => {
+    document.getElementById("msg").textContent = "❌ Error sending order.";
+    console.error(err);
+  });
+});
+</script>
+
+</body>
+</html>
