@@ -6,16 +6,18 @@
 <title>Order Form</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 2rem; }
-  form { max-width: 400px; }
+  form { max-width: 500px; margin: auto; }
   input, textarea, select { width: 100%; padding: 8px; margin: 6px 0; border-radius: 5px; border: 1px solid #ccc; }
-  button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+  button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
   button:hover { background: #45a049; }
   .category-label { font-weight: bold; margin-top: 15px; display: block; }
+  #msg { margin-top: 15px; font-weight: bold; }
 </style>
 </head>
 <body>
 
 <h2>Place Your Order</h2>
+
 <form id="orderForm">
   <label>Name</label>
   <input type="text" name="name" required>
@@ -23,7 +25,9 @@
   <label>Contact</label>
   <input type="text" name="contact" required>
 
-  <div id="menuContainer"></div>
+  <div id="menuContainer">
+    <p>Loading menu...</p>
+  </div>
 
   <label>Quantity</label>
   <input type="number" name="quantity" min="1" required>
@@ -37,15 +41,16 @@
 <p id="msg"></p>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxwGFYiKPdtOvIUyGzExTJKR2xK71or51tnqmkvScj6YjcjDGEGX54Iye4vjo3QeTdC/exec";
-const menuURL = "https://script.google.com/macros/s/AKfycbxwGFYiKPdtOvIUyGzExTJKR2xK71or51tnqmkvScj6YjcjDGEGX54Iye4vjo3QeTdC/exec/dev?menu=true"; // optional: use separate function or endpoint for menu
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdQHexaAyEnm7849Ia_DM2zRYI4S-vBsNl1MZijnUhhcC6-6-aZpAeMns-fH2RcbsT/exec"; // replace with your deployed Apps Script URL
+const menuURL = "https://script.google.com/macros/s/AKfycbwdQHexaAyEnm7849Ia_DM2zRYI4S-vBsNl1MZijnUhhcC6-6-aZpAeMns-fH2RcbsT/exec?menu=true";
 
-// Fetch menu items dynamically
+// Load menu dynamically
 async function loadMenu() {
+  const container = document.getElementById("menuContainer");
+  container.innerHTML = "";
   try {
     const res = await fetch(menuURL);
     const menu = await res.json();
-    const container = document.getElementById("menuContainer");
 
     Object.keys(menu).forEach(category => {
       const label = document.createElement("span");
@@ -72,32 +77,35 @@ async function loadMenu() {
       container.appendChild(select);
     });
   } catch (err) {
-    console.error("Error loading menu:", err);
-    document.getElementById("msg").textContent = "❌ Failed to load menu";
+    console.error(err);
+    container.innerHTML = "<p style='color:red;'>❌ Failed to load menu. Check console.</p>";
   }
 }
 
-// Handle form submission
+// Submit form
 document.getElementById("orderForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target).entries());
+  const msg = document.getElementById("msg");
 
   try {
-    const res = await fetch(scriptURL, {
+    const res = await fetch(WEB_APP_URL, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: { "Content-Type": "application/json" }
     });
     const result = await res.json();
     if (result.result === "success") {
-      document.getElementById("msg").textContent = "✅ Order submitted successfully!";
+      msg.textContent = "✅ Order submitted successfully!";
+      msg.style.color = "green";
       e.target.reset();
     } else {
       throw new Error(result.message || "Unknown error");
     }
   } catch (err) {
     console.error(err);
-    document.getElementById("msg").textContent = "❌ Error sending order. Check console.";
+    msg.textContent = "❌ Error sending order. Check console.";
+    msg.style.color = "red";
   }
 });
 
