@@ -165,32 +165,32 @@ h2 {
   <h2>Drinks & Smoothies</h2>
   <div class="menu-grid">
     <div class="menu-card">
-      <img src="/assets/images/milk-coffee.jpg" alt="Milk Coffee" loading="lazy">
+      <img src="/assets/images/menu/milk-coffee.jpg" alt="Milk Coffee" loading="lazy">
       <h3>Milk Coffee 8oz</h3>
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/matcha-latte.jpg" alt="Matcha Latte" loading="lazy">
+      <img src="/assets/images/menu/matcha-latte.jpg" alt="Matcha Latte" loading="lazy">
       <h3>Matcha Latte 8oz</h3>
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/ube-latte.jpg" alt="Ube Latte" loading="lazy">
+      <img src="/assets/images/menu/ube-latte.jpg" alt="Ube Latte" loading="lazy">
       <h3>Ube Latte 8oz</h3>
       <p>₱50</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/houjicha-latte.jpg" alt="Houjicha Latte" loading="lazy">
+      <img src="/assets/images/menu/houjicha-latte.jpg" alt="Houjicha Latte" loading="lazy">
       <h3>Houjicha Latte 8oz</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/kalamansi.jpg" alt="Kalamansi" loading="lazy">
+      <img src="/assets/images//menu/alamansi.jpg" alt="Kalamansi" loading="lazy">
       <h3>Kalamansi 16oz</h3>
       <p>₱65</p>
     </div>
     <div class="menu-card">
-      <img src="/assets/images/lemonade.jpg" alt="Lemonade" loading="lazy">
+      <img src="/assets/images/menu/lemonade.jpg" alt="Lemonade" loading="lazy">
       <h3>Lemonade 16oz</h3>
       <p>₱65</p>
     </div>
