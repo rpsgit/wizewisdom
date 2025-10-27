@@ -159,7 +159,7 @@ h2 {
 
 <!-- Main Container -->
 <div class="page-container">
-  <h1>Macadarem Menu</h1>
+  <h1>Makadarem Menu</h1>
 
   <!-- === DRINKS SECTION === -->
   <h2>Drinks & Smoothies</h2>
