@@ -9,7 +9,7 @@ body {
   padding: 0;
   background: #f5f5f5 url('/assets/images/menu/bg.png') no-repeat center center fixed;
   background-size: cover;
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   color: #222;
   display: flex;
   justify-content: center;
@@ -20,7 +20,7 @@ body {
 .page-container {
   width: 95%;
   max-width: 1000px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.15);
@@ -35,11 +35,12 @@ h1 {
   font-size: 2rem;
   margin-bottom: 20px;
   font-weight: bold;
+  color: #4b2e05;
 }
 
 .category-container {
   width: 100%;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   border-radius: 15px;
   padding: 15px;
   margin-bottom: 25px;
@@ -50,7 +51,10 @@ h1 {
   text-align: center;
   font-size: 1.4rem;
   margin-bottom: 10px;
-  color: #444;
+  color: #4b2e05;
+  border-bottom: 2px solid #ff7e5f;
+  display: inline-block;
+  padding-bottom: 4px;
 }
 
 .menu-grid {
@@ -82,7 +86,7 @@ h1 {
 
 .menu-card img {
   width: 100%;
-  height: 120px;
+  height: 130px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 5px;
@@ -145,7 +149,7 @@ h1 {
   padding: 10px 25px;
   border-radius: 20px;
   font-size: 1rem;
-  background: #ff7e5f;
+  background: linear-gradient(135deg, #ff7e5f, #ff5722);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -199,139 +203,4 @@ footer {
       <label>Name</label>
       <input type="text" name="name" required>
       <label>Contact</label>
-      <input type="text" name="contact" required>
-      <label>Notes</label>
-      <textarea name="notes" rows="3"></textarea>
-    </div>
-
-    <div class="total-price" id="totalPrice">Total: ₱0</div>
-
-    <button type="submit" class="order-button">Place Order</button>
-  </form>
-
-  <footer>
-    © 2025 Makadarem | Freshly Brewed. Locally Loved.
-  </footer>
-</div>
-
-<script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbz2vtrGCo-EZMkbSnqXMv7Q_J_dDv_3aOOC04ggTSiFPJDXzbq5Jv3fZS4RPC6y-hWU/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbz2vtrGCo-EZMkbSnqXMv7Q_J_dDv_3aOOC04ggTSiFPJDXzbq5Jv3fZS4RPC6y-hWU/exec;
-
-const menuContainer = document.getElementById('menuContainer');
-const form = document.getElementById('menuForm');
-const totalPriceEl = document.getElementById('totalPrice');
-
-let menuDataGlobal = {};
-
-function updateTotal() {
-  let total = 0;
-  Object.keys(menuDataGlobal).forEach(cat => {
-    menuDataGlobal[cat].forEach(item => {
-      const cb = form.querySelector(`input[name="item_${item.name}"]`);
-      const qty = form.querySelector(`input[name="qty_${item.name}"]`);
-      if(cb && cb.checked) {
-        total += Number(item.price) * (Number(qty.value) || 1);
-      }
-    });
-  });
-  totalPriceEl.textContent = `Total: ₱${total}`;
-  return total;
-}
-
-// Load menu dynamically
-fetch(menuURL)
-  .then(res => res.json())
-  .then(menuData => {
-    menuDataGlobal = menuData;
-    menuContainer.innerHTML = '';
-
-    for (const cat in menuData) {
-      const catBox = document.createElement('div');
-      catBox.className = 'category-container';
-
-      const catTitle = document.createElement('h2');
-      catTitle.textContent = cat;
-      catBox.appendChild(catTitle);
-
-      const grid = document.createElement('div');
-      grid.className = 'menu-grid';
-
-      menuData[cat].forEach(item => {
-        const label = document.createElement('label');
-        label.className = 'menu-card';
-        label.innerHTML = `
-          <input type="checkbox" name="item_${item.name}">
-          <img src="${item.img}" alt="${item.name}">
-          <h3>${item.name}</h3>
-          <p>₱${item.price}</p>
-          <input type="number" class="item-qty" name="qty_${item.name}" value="1" min="1">
-        `;
-        grid.appendChild(label);
-      });
-
-      catBox.appendChild(grid);
-      menuContainer.appendChild(catBox);
-    }
-
-    // Checkbox logic
-    document.querySelectorAll('.menu-card input[type="checkbox"]').forEach(cb => {
-      cb.addEventListener('change', e => {
-        const qty = e.target.parentElement.querySelector('.item-qty');
-        if(e.target.checked) {
-          qty.style.display = 'inline-block';
-          qty.required = true;
-          e.target.parentElement.style.border = '2px solid #ff7e5f';
-        } else {
-          qty.style.display = 'none';
-          qty.required = false;
-          qty.value = 1;
-          e.target.parentElement.style.border = 'none';
-        }
-        updateTotal();
-      });
-    });
-
-    document.querySelectorAll('.item-qty').forEach(q => q.addEventListener('input', updateTotal));
-  })
-  .catch(err => {
-    menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
-    console.error(err);
-  });
-
-// Submit order
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  const formData = new FormData(form);
-  const filteredData = new FormData();
-
-  filteredData.append('name', formData.get('name'));
-  filteredData.append('contact', formData.get('contact'));
-  filteredData.append('notes', formData.get('notes'));
-  filteredData.append('total', updateTotal());
-
-  formData.forEach((val, key) => {
-    if(key.startsWith('item_')) {
-      const cb = form.querySelector(`[name="${key}"]`);
-      if(cb.checked) {
-        const qty = formData.get(`qty_${key.replace('item_','')}`) || 1;
-        filteredData.append(key.replace('item_',''), qty);
-      }
-    }
-  });
-
-  fetch(orderURL, { method:'POST', body: filteredData })
-    .then(res => res.json())
-    .then(() => {
-      alert('✅ Your order has been placed!');
-      form.reset();
-      document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
-      document.querySelectorAll('.menu-card').forEach(card => card.style.border='none');
-      updateTotal();
-    })
-    .catch(err => {
-      alert('❌ Failed to submit order. Please try again.');
-      console.error(err);
-    });
-});
-</script>
+      <input type="text" name="contact
