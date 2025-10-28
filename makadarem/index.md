@@ -168,8 +168,8 @@ label {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbyqzykyyL-6mqdlkm_cUYNYX_Kh43CtRB-LwNslLcKxt3MObKgeSqCGI-yk9t0MSur6/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbyqzykyyL-6mqdlkm_cUYNYX_Kh43CtRB-LwNslLcKxt3MObKgeSqCGI-yk9t0MSur6/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbww2uoVcknl8zZD_s05clf2-n0mozADTo8TswkkhgSdoqh0l1T9yyo1umtFRu9NEqqA/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbww2uoVcknl8zZD_s05clf2-n0mozADTo8TswkkhgSdoqh0l1T9yyo1umtFRu9NEqqA/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
