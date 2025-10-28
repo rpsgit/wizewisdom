@@ -82,8 +82,8 @@ h2 {
 
 <script>
 // Replace with your Apps Script URLs
-const menuURL  = 'https://script.google.com/macros/s/AKfycbzWHRhArcoEu1gqeOfsBR3J-EyrqkBhwy72hPjOfuUecDkjBRoV2DajSVKNRrUQLs_Q/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbzWHRhArcoEu1gqeOfsBR3J-EyrqkBhwy72hPjOfuUecDkjBRoV2DajSVKNRrUQLs_Q/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbyqzykyyL-6mqdlkm_cUYNYX_Kh43CtRB-LwNslLcKxt3MObKgeSqCGI-yk9t0MSur6/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbyqzykyyL-6mqdlkm_cUYNYX_Kh43CtRB-LwNslLcKxt3MObKgeSqCGI-yk9t0MSur6/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
