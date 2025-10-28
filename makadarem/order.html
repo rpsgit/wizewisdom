@@ -1,32 +1,110 @@
-function doGet() {
-  return HtmlService.createHtmlOutputFromFile("order")
-                    .setTitle("Order Form");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Order Form</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2rem; background: #f7f7f7; }
+  h2 { text-align: center; }
+  form { max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  input, textarea, select {
+    width: 100%; padding: 8px; margin: 6px 0; border-radius: 5px; border: 1px solid #ccc;
+  }
+  button {
+    background: #4CAF50; color: white; border: none;
+    padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
+  }
+  button:hover { background: #45a049; }
+  .category-label { font-weight: bold; margin-top: 15px; display: block; }
+  #msg { margin-top: 15px; font-weight: bold; text-align: center; }
+</style>
+</head>
+<body>
+
+<h2>Place Your Order</h2>
+
+<form id="orderForm">
+  <label>Name</label>
+  <input type="text" name="name" required>
+
+  <label>Contact</label>
+  <input type="text" name="contact" required>
+
+  <div id="menuContainer">
+    <p>Loading menu...</p>
+  </div>
+
+  <label>Quantity</label>
+  <input type="number" name="quantity" min="1" required>
+
+  <label>Notes</label>
+  <textarea name="notes"></textarea>
+
+  <button type="submit">Submit Order</button>
+</form>
+
+<p id="msg"></p>
+
+<script>
+document.addEventListener("DOMContentLoaded", loadMenu);
+
+function loadMenu() {
+  const container = document.getElementById("menuContainer");
+  container.innerHTML = "Loading menu...";
+
+  google.script.run
+    .withSuccessHandler(menu => {
+      container.innerHTML = "";
+      Object.keys(menu).forEach(category => {
+        const label = document.createElement("span");
+        label.className = "category-label";
+        label.textContent = category;
+        container.appendChild(label);
+
+        const select = document.createElement("select");
+        select.name = "item";
+        select.required = true;
+
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "-- Choose an item --";
+        select.appendChild(defaultOption);
+
+        menu[category].forEach(item => {
+          const option = document.createElement("option");
+          option.value = item.name;
+          option.textContent = `${item.name} ₱${item.price}`;
+          select.appendChild(option);
+        });
+
+        container.appendChild(select);
+      });
+    })
+    .withFailureHandler(err => {
+      container.innerHTML = `<p style='color:red;'>❌ Failed to load menu: ${err.message}</p>`;
+    })
+    .getMenu();
 }
 
-function getMenu() {
-  return {
-    "Burgers": [
-      { name: "Classic Burger", price: 120 },
-      { name: "Cheese Burger", price: 140 },
-      { name: "Bacon Burger", price: 160 }
-    ],
-    "Drinks": [
-      { name: "Iced Tea", price: 40 },
-      { name: "Lemonade", price: 50 },
-      { name: "Cola", price: 45 }
-    ]
-  };
-}
+document.getElementById("orderForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  const msg = document.getElementById("msg");
 
-function saveOrder(data) {
-  const ss = SpreadsheetApp.openById("YOUR_SHEET_ID_HERE");
-  const sheet = ss.getSheetByName("Orders");
-  sheet.appendRow([
-    new Date(),
-    data.name,
-    data.item,
-    data.quantity,
-    data.notes
-  ]);
-  return "Order saved!";
-}
+  google.script.run
+    .withSuccessHandler(result => {
+      msg.textContent = "✅ Order submitted successfully!";
+      msg.style.color = "green";
+      e.target.reset();
+    })
+    .withFailureHandler(err => {
+      msg.textContent = `❌ Error sending order: ${err.message}`;
+      msg.style.color = "red";
+    })
+    .saveOrder(data);
+});
+</script>
+
+</body>
+</html>
