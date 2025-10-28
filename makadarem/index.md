@@ -279,4 +279,16 @@ form.addEventListener('submit', e => {
       msg.textContent = '✅ Your order has been placed!';
       msg.style.color = 'green';
       form.reset();
-     
+      document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
+      document.querySelectorAll('.menu-card').forEach(card => card.style.border='none');
+      updateTotal();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(()=> msg.textContent='', 5000);
+    })
+    .catch(err => {
+      msg.textContent = '❌ Failed to submit order. Please try again.';
+      msg.style.color = 'red';
+      console.error(err);
+    });
+});
+</script>
