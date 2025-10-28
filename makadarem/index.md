@@ -139,6 +139,25 @@ h2 {
   margin-bottom: 15px;
 }
 
+/* === ORDER BUTTON === */
+.order-button {
+  display: inline-block;
+  background-color: #ff7e5f;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 30px;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 40px;
+}
+
+.order-button:hover {
+  background-color: #ff5722;
+  transform: scale(1.05);
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
   .page-container { padding: 25px 15px; }
@@ -224,5 +243,14 @@ h2 {
       <h3>Apple Crumble</h3>
       <p>₱50</p>
     </div>
+  </div>
+
+  <!-- === ORDER BUTTON === -->
+  <div style="text-align: center;">
+    <a href="https://script.google.com/macros/s/AKfycbxOqfxBSRMLRQsDG9Rn0iE8XyJmLxXvKmMrH_OR0kkOydvoNlisdBvBln0ME6xP1fuU/exec" 
+       target="_blank" 
+       class="order-button">
+      Order Now
+    </a>
   </div>
 </div>
