@@ -19,7 +19,7 @@ function getMenu() {
 }
 
 function saveOrder(data) {
-  const ss = SpreadsheetApp.openById("1epqhMsq9cA1_2g6VnyKUfw0HsiDYAy56_LFYDYqZIkI");
+  const ss = SpreadsheetApp.openById("YOUR_SHEET_ID_HERE");
   const sheet = ss.getSheetByName("Orders");
   sheet.appendRow([
     new Date(),
