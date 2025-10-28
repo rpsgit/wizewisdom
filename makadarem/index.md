@@ -214,7 +214,7 @@ fetch(menuURL)
         label.className = 'menu-card';
         label.innerHTML = `
           <input type="checkbox" name="item_${item.name}">
-          <img src="${item.img}" alt="${item.name}">
+          <img src="${item.img || '/assets/images/menu-placeholder.png'}" alt="${item.name}">
           <h3>${item.name}</h3>
           <p>₱${item.price}</p>
           <input type="number" class="item-qty" name="qty_${item.name}" value="1" min="1">
@@ -276,18 +276,14 @@ form.addEventListener('submit', e => {
   fetch(orderURL, { method:'POST', body: filteredData })
     .then(res => res.json())
     .then(() => {
-      msg.textContent = '✅ Your order has been placed!';
-      msg.style.color = 'green';
+      alert('✅ Your order has been placed!'); // <-- now a pop-up
       form.reset();
       document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
       document.querySelectorAll('.menu-card').forEach(card => card.style.border='none');
       updateTotal();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(()=> msg.textContent='', 5000);
     })
     .catch(err => {
-      msg.textContent = '❌ Failed to submit order. Please try again.';
-      msg.style.color = 'red';
+      alert('❌ Failed to submit order. Please try again.');
       console.error(err);
     });
 });
