@@ -13,17 +13,18 @@ body {
   color: #222;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
 }
 
 .page-container {
-  width: 100%;
+  width: 95%;
   max-width: 1000px;
-  background: rgba(255,255,255,0.95);
-  padding: 30px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+  margin: 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,29 +32,46 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.category-container {
+  width: 100%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.category-container h2 {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #444;
 }
 
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 12px;
   justify-items: center;
   width: 100%;
 }
 
 .menu-card {
   background: #fff;
-  border-radius: 15px;
+  border-radius: 12px;
   overflow: hidden;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   width: 100%;
-  max-width: 300px;
+  max-width: 220px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -64,36 +82,38 @@ h1 {
 
 .menu-card img {
   width: 100%;
-  height: 180px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 8px;
+  border-radius: 8px;
+  margin-bottom: 5px;
 }
 
 .menu-card h3 {
   margin: 5px 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #333;
 }
 
 .menu-card p {
   margin: 3px 0;
+  font-size: 0.9rem;
   color: #555;
 }
 
 .menu-card input[type="checkbox"] {
   margin-top: 5px;
-  transform: scale(1.2);
+  transform: scale(1.1);
   cursor: pointer;
 }
 
 .menu-card input[type="number"] {
-  width: 50px;
-  margin-top: 5px;
-  padding: 4px;
+  width: 45px;
+  margin-top: 4px;
+  padding: 3px;
   border-radius: 5px;
   border: 1px solid #ccc;
   display: none;
+  font-size: 0.9rem;
 }
 
 .order-form-section {
@@ -101,28 +121,30 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .order-form-section label {
   width: 90%;
-  margin-top: 10px;
+  margin-top: 8px;
+  font-size: 0.9rem;
 }
 
 .order-form-section input,
 .order-form-section textarea {
   width: 90%;
-  padding: 8px;
-  margin-top: 5px;
+  padding: 6px;
+  margin-top: 3px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  font-size: 0.9rem;
 }
 
 .order-button {
-  margin-top: 25px;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-size: 1.2rem;
+  margin-top: 20px;
+  padding: 10px 25px;
+  border-radius: 20px;
+  font-size: 1rem;
   background: #ff7e5f;
   color: #fff;
   border: none;
@@ -137,10 +159,17 @@ h1 {
 
 .total-price {
   font-weight: bold;
-  font-size: 1.5rem;
-  margin-top: 15px;
+  font-size: 1.2rem;
+  margin-top: 10px;
   color: #ff5722;
   text-align: center;
+}
+
+footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 @media (max-width: 900px) {
@@ -152,6 +181,10 @@ h1 {
 @media (max-width: 600px) {
   .menu-grid {
     grid-template-columns: 1fr;
+  }
+
+  .menu-card {
+    max-width: 100%;
   }
 }
 </style>
@@ -175,6 +208,10 @@ h1 {
 
     <button type="submit" class="order-button">Place Order</button>
   </form>
+
+  <footer>
+    © 2025 Makadarem | Freshly Brewed. Locally Loved.
+  </footer>
 </div>
 
 <script>
@@ -187,7 +224,6 @@ const totalPriceEl = document.getElementById('totalPrice');
 
 let menuDataGlobal = {};
 
-// Update total
 function updateTotal() {
   let total = 0;
   Object.keys(menuDataGlobal).forEach(cat => {
@@ -211,9 +247,12 @@ fetch(menuURL)
     menuContainer.innerHTML = '';
 
     for (const cat in menuData) {
+      const catBox = document.createElement('div');
+      catBox.className = 'category-container';
+
       const catTitle = document.createElement('h2');
       catTitle.textContent = cat;
-      menuContainer.appendChild(catTitle);
+      catBox.appendChild(catTitle);
 
       const grid = document.createElement('div');
       grid.className = 'menu-grid';
@@ -231,7 +270,8 @@ fetch(menuURL)
         grid.appendChild(label);
       });
 
-      menuContainer.appendChild(grid);
+      catBox.appendChild(grid);
+      menuContainer.appendChild(catBox);
     }
 
     // Checkbox logic
@@ -241,7 +281,7 @@ fetch(menuURL)
         if(e.target.checked) {
           qty.style.display = 'inline-block';
           qty.required = true;
-          e.target.parentElement.style.border = '3px solid #ff7e5f';
+          e.target.parentElement.style.border = '2px solid #ff7e5f';
         } else {
           qty.style.display = 'none';
           qty.required = false;
@@ -252,10 +292,9 @@ fetch(menuURL)
       });
     });
 
-    // Quantity change
     document.querySelectorAll('.item-qty').forEach(q => q.addEventListener('input', updateTotal));
-
-  }).catch(err => {
+  })
+  .catch(err => {
     menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
     console.error(err);
   });
@@ -271,7 +310,6 @@ form.addEventListener('submit', e => {
   filteredData.append('notes', formData.get('notes'));
   filteredData.append('total', updateTotal());
 
-  // Only include checked items
   formData.forEach((val, key) => {
     if(key.startsWith('item_')) {
       const cb = form.querySelector(`[name="${key}"]`);
