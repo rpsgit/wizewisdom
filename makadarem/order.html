@@ -1,117 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Order Form</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 2rem; }
-  form { max-width: 500px; margin: auto; }
-  input, textarea, select { width: 100%; padding: 8px; margin: 6px 0; border-radius: 5px; border: 1px solid #ccc; }
-  button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-  button:hover { background: #45a049; }
-  .category-label { font-weight: bold; margin-top: 15px; display: block; }
-  #msg { margin-top: 15px; font-weight: bold; }
-</style>
-</head>
-<body>
-
-<h2>Place Your Order</h2>
-
-<form id="orderForm">
-  <label>Name</label>
-  <input type="text" name="name" required>
-
-  <label>Contact</label>
-  <input type="text" name="contact" required>
-
-  <div id="menuContainer">
-    <p>Loading menu...</p>
-  </div>
-
-  <label>Quantity</label>
-  <input type="number" name="quantity" min="1" required>
-
-  <label>Notes</label>
-  <textarea name="notes"></textarea>
-
-  <button type="submit">Submit</button>
-</form>
-
-<p id="msg"></p>
-
-<script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdQHexaAyEnm7849Ia_DM2zRYI4S-vBsNl1MZijnUhhcC6-6-aZpAeMns-fH2RcbsT/exec"; // replace with your deployed Apps Script URL
-const menuURL = "https://script.google.com/macros/s/AKfycbwdQHexaAyEnm7849Ia_DM2zRYI4S-vBsNl1MZijnUhhcC6-6-aZpAeMns-fH2RcbsT/exec?menu=true";
-
-// Load menu dynamically
-async function loadMenu() {
-  const container = document.getElementById("menuContainer");
-  container.innerHTML = "";
-  try {
-    const res = await fetch(menuURL);
-    const menu = await res.json();
-
-    Object.keys(menu).forEach(category => {
-      const label = document.createElement("span");
-      label.className = "category-label";
-      label.textContent = category;
-      container.appendChild(label);
-
-      const select = document.createElement("select");
-      select.name = "item";
-      select.required = true;
-
-      const defaultOption = document.createElement("option");
-      defaultOption.value = "";
-      defaultOption.textContent = "-- Choose an item --";
-      select.appendChild(defaultOption);
-
-      menu[category].forEach(item => {
-        const option = document.createElement("option");
-        option.value = item.name;
-        option.textContent = `${item.name} ₱${item.price}`;
-        select.appendChild(option);
-      });
-
-      container.appendChild(select);
-    });
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = "<p style='color:red;'>❌ Failed to load menu. Check console.</p>";
-  }
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile("order")
+                    .setTitle("Order Form");
 }
 
-// Submit form
-document.getElementById("orderForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target).entries());
-  const msg = document.getElementById("msg");
+function getMenu() {
+  return {
+    "Burgers": [
+      { name: "Classic Burger", price: 120 },
+      { name: "Cheese Burger", price: 140 },
+      { name: "Bacon Burger", price: 160 }
+    ],
+    "Drinks": [
+      { name: "Iced Tea", price: 40 },
+      { name: "Lemonade", price: 50 },
+      { name: "Cola", price: 45 }
+    ]
+  };
+}
 
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: { "Content-Type": "application/json" }
-    });
-    const result = await res.json();
-    if (result.result === "success") {
-      msg.textContent = "✅ Order submitted successfully!";
-      msg.style.color = "green";
-      e.target.reset();
-    } else {
-      throw new Error(result.message || "Unknown error");
-    }
-  } catch (err) {
-    console.error(err);
-    msg.textContent = "❌ Error sending order. Check console.";
-    msg.style.color = "red";
-  }
-});
-
-// Initialize
-loadMenu();
-</script>
-
-</body>
-</html>
+function saveOrder(data) {
+  const ss = SpreadsheetApp.openById("1epqhMsq9cA1_2g6VnyKUfw0HsiDYAy56_LFYDYqZIkI");
+  const sheet = ss.getSheetByName("Orders");
+  sheet.appendRow([
+    new Date(),
+    data.name,
+    data.item,
+    data.quantity,
+    data.notes
+  ]);
+  return "Order saved!";
+}
