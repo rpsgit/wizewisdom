@@ -16,9 +16,10 @@ body {
   align-items: center;
   min-height: 100vh;
 }
+
 .page-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   background: rgba(255,255,255,0.95);
   padding: 30px;
   border-radius: 20px;
@@ -27,18 +28,21 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
 h1 {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 30px;
 }
+
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   justify-items: center;
   width: 100%;
 }
+
 .menu-card {
   background: #fff;
   border-radius: 15px;
@@ -48,34 +52,41 @@ h1 {
   flex-direction: column;
   align-items: center;
   padding-bottom: 10px;
-  width: 220px;
+  width: 100%;
+  max-width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .menu-card:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 25px rgba(0,0,0,0.2);
 }
+
 .menu-card img {
   width: 100%;
-  height: 140px;
+  height: 180px;
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 8px;
 }
+
 .menu-card h3 {
   margin: 5px 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #333;
 }
+
 .menu-card p {
   margin: 3px 0;
   color: #555;
 }
+
 .menu-card input[type="checkbox"] {
   margin-top: 5px;
   transform: scale(1.2);
   cursor: pointer;
 }
+
 .menu-card input[type="number"] {
   width: 50px;
   margin-top: 5px;
@@ -84,9 +95,7 @@ h1 {
   border: 1px solid #ccc;
   display: none;
 }
-label {
-  width: 100%;
-}
+
 .order-form-section {
   width: 100%;
   display: flex;
@@ -94,10 +103,12 @@ label {
   align-items: center;
   margin-top: 20px;
 }
+
 .order-form-section label {
   width: 90%;
   margin-top: 10px;
 }
+
 .order-form-section input,
 .order-form-section textarea {
   width: 90%;
@@ -106,6 +117,7 @@ label {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
 .order-button {
   margin-top: 25px;
   padding: 12px 30px;
@@ -117,10 +129,12 @@ label {
   cursor: pointer;
   transition: 0.3s ease;
 }
+
 .order-button:hover {
   background: #ff5722;
   transform: scale(1.05);
 }
+
 .total-price {
   font-weight: bold;
   font-size: 1.5rem;
@@ -128,19 +142,16 @@ label {
   color: #ff5722;
   text-align: center;
 }
-#msg {
-  font-weight: bold;
-  margin-top: 15px;
-  font-size: 1.2rem;
-  text-align: center;
+
+@media (max-width: 900px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 600px) {
   .menu-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-  .menu-card {
-    width: 180px;
+    grid-template-columns: 1fr;
   }
 }
 </style>
@@ -163,17 +174,15 @@ label {
     <div class="total-price" id="totalPrice">Total: ₱0</div>
 
     <button type="submit" class="order-button">Place Order</button>
-    <p id="msg"></p>
   </form>
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbww2uoVcknl8zZD_s05clf2-n0mozADTo8TswkkhgSdoqh0l1T9yyo1umtFRu9NEqqA/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbww2uoVcknl8zZD_s05clf2-n0mozADTo8TswkkhgSdoqh0l1T9yyo1umtFRu9NEqqA/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbxt0A7BkjjORQqUBXgBLtp90r01_JYzslo8f5y0Xcs3ZWvr2xTe3i-Swra7hGaI5Hjo/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbxt0A7BkjjORQqUBXgBLtp90r01_JYzslo8f5y0Xcs3ZWvr2xTe3i-Swra7hGaI5Hjo/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
-const msg = document.getElementById('msg');
 const totalPriceEl = document.getElementById('totalPrice');
 
 let menuDataGlobal = {};
@@ -194,7 +203,7 @@ function updateTotal() {
   return total;
 }
 
-// Load menu
+// Load menu dynamically
 fetch(menuURL)
   .then(res => res.json())
   .then(menuData => {
@@ -214,7 +223,7 @@ fetch(menuURL)
         label.className = 'menu-card';
         label.innerHTML = `
           <input type="checkbox" name="item_${item.name}">
-          <img src="${item.img || '/assets/images/menu-placeholder.png'}" alt="${item.name}">
+          <img src="${item.img}" alt="${item.name}">
           <h3>${item.name}</h3>
           <p>₱${item.price}</p>
           <input type="number" class="item-qty" name="qty_${item.name}" value="1" min="1">
@@ -243,7 +252,7 @@ fetch(menuURL)
       });
     });
 
-    // Qty input change
+    // Quantity change
     document.querySelectorAll('.item-qty').forEach(q => q.addEventListener('input', updateTotal));
 
   }).catch(err => {
@@ -260,7 +269,7 @@ form.addEventListener('submit', e => {
   filteredData.append('name', formData.get('name'));
   filteredData.append('contact', formData.get('contact'));
   filteredData.append('notes', formData.get('notes'));
-  filteredData.append('total', updateTotal()); // save total
+  filteredData.append('total', updateTotal());
 
   // Only include checked items
   formData.forEach((val, key) => {
@@ -276,7 +285,7 @@ form.addEventListener('submit', e => {
   fetch(orderURL, { method:'POST', body: filteredData })
     .then(res => res.json())
     .then(() => {
-      alert('✅ Your order has been placed!'); // <-- now a pop-up
+      alert('✅ Your order has been placed!');
       form.reset();
       document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
       document.querySelectorAll('.menu-card').forEach(card => card.style.border='none');
