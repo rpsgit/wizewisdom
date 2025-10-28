@@ -4,7 +4,6 @@ title: Menu
 ---
 
 <style>
-/* === GENERAL PAGE STYLE === */
 body {
   margin: 0;
   padding: 0;
@@ -13,8 +12,6 @@ body {
   font-family: Arial, sans-serif;
   color: #222;
 }
-
-/* === PAGE CONTAINER === */
 .page-container {
   max-width: 1000px;
   margin: 60px auto;
@@ -23,142 +20,53 @@ body {
   border-radius: 25px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.15);
 }
-
-/* === HEADER === */
-h1 {
-  text-align: center;
-  font-size: 2.8rem;
-  color: #000;
-  margin-bottom: 40px;
-}
-
-/* === CATEGORY HEADINGS === */
+h1 { text-align: center; font-size: 2.8rem; color: #000; margin-bottom: 40px; }
 h2 {
-  text-align: left;
-  font-size: 2rem;
-  color: #333;
-  margin: 50px 0 20px 10px;
-  border-left: 6px solid #ff7e5f;
-  padding-left: 12px;
+  text-align: left; font-size: 2rem; color: #333; margin: 50px 0 20px 10px;
+  border-left: 6px solid #ff7e5f; padding-left: 12px;
 }
-
-/* === HOME & BACK BUTTONS === */
-.home-button,
-.back-button {
-  position: fixed;
-  top: 20px;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  z-index: 1000;
+.home-button, .back-button {
+  position: fixed; top: 20px; width: 40px; height: 40px;
+  border: none; background: none; cursor: pointer; z-index: 1000;
 }
-
 .home-button { left: 20px; }
 .back-button { left: 70px; }
-
-.home-icon,
-.back-icon {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background-size: contain;
-  background-repeat: no-repeat;
+.home-icon, .back-icon {
+  display: block; width: 100%; height: 100%;
+  background-size: contain; background-repeat: no-repeat;
   background-position: center;
 }
-
 .home-icon { background-image: url('/assets/images/home-icon.png'); }
 .back-icon { background-image: url('/assets/images/back-ico.png'); }
-
-/* === TOOLTIP === */
-.home-button[data-tooltip]:hover::after,
-.back-button[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0,0,0,0.75);
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  margin-top: 6px;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.2s ease;
-}
-
-/* === MENU GRID === */
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  justify-items: center;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px; justify-items: center;
 }
-
 .menu-card {
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
+  background: #fff; border-radius: 20px; overflow: hidden;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 250px;
-  text-align: center;
-  cursor: pointer;
+  width: 250px; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; padding-bottom: 10px;
 }
-
-.menu-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+.menu-card:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(0,0,0,0.2); }
+.menu-card img { width: 100%; height: 180px; object-fit: cover; display: block; transition: transform 0.3s ease; }
+.menu-card:hover img { transform: scale(1.08); }
+.menu-card h3 { margin: 10px 0 5px; color: #333; font-size: 1.4rem; }
+.menu-card p { font-size: 0.95rem; color: #555; margin-bottom: 5px; }
+.menu-card input[type="checkbox"] { margin-top: 5px; transform: scale(1.2); cursor: pointer; }
+.menu-card input[type="number"] {
+  width: 60px; margin-top: 5px; padding: 4px; border-radius: 5px; border: 1px solid #ccc;
+  display: none;
 }
-
-.menu-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.menu-card:hover img {
-  transform: scale(1.08);
-}
-
-.menu-card h3 {
-  margin: 15px 0 8px;
-  color: #333;
-  font-size: 1.4rem;
-}
-
-.menu-card p {
-  font-size: 0.95rem;
-  color: #555;
-  margin-bottom: 15px;
-}
-
-/* === ORDER BUTTON === */
 .order-button {
-  display: inline-block;
-  background-color: #ff7e5f;
-  color: #fff;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 12px 30px;
-  border-radius: 25px;
-  text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-top: 40px;
+  display: inline-block; background-color: #ff7e5f; color: #fff;
+  font-size: 1.2rem; font-weight: bold; padding: 12px 30px;
+  border-radius: 25px; text-decoration: none; transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 40px; cursor: pointer; border: none;
 }
-
-.order-button:hover {
-  background-color: #ff5722;
-  transform: scale(1.05);
-}
-
-/* === RESPONSIVE === */
+.order-button:hover { background-color: #ff5722; transform: scale(1.05); }
+#msg { text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.2rem; }
 @media (max-width: 768px) {
   .page-container { padding: 25px 15px; }
   h1 { font-size: 2.2rem; }
@@ -167,90 +75,103 @@ h2 {
 }
 </style>
 
-<!-- Home & Back Buttons -->
-<a href="https://www.wizewisdom.com/" class="home-button" data-tooltip="Home">
-  <span class="home-icon"></span>
-</a>
+<a href="https://www.wizewisdom.com/" class="home-button" data-tooltip="Home"><span class="home-icon"></span></a>
+<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back"><span class="back-icon"></span></button>
 
-<button class="back-button" onclick="if(history.length>1){history.back();}else{window.location='/index.html';}" data-tooltip="Back">
-  <span class="back-icon"></span>
-</button>
-
-<!-- Main Container -->
 <div class="page-container">
   <h1>Makadarem Menu</h1>
-
-  <!-- === DRINKS SECTION === -->
-  <h2>Drinks & Smoothies</h2>
-  <div class="menu-grid">
-    <div class="menu-card">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQocXR_zF_FTLZ1HpjiHNOgAbKAWg_4-gaUmJlzZqJH9Bo?width=8217&height=8605" alt="Milk Coffee">
-      <h3>Milk Coffee 8oz</h3>
-      <p>₱50</p>
+  <form id="menuForm">
+    <div id="menuContainer">Loading menu...</div>
+    <div style="text-align: center;">
+      <button type="submit" class="order-button">Order Now</button>
     </div>
-    <div class="menu-card">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQQd3Xuzq8zxTo1NSVSGn196Af04C2zRTgko2DhwLtA8F0M?width=9000&height=12000" alt="Kalamansi">
-      <h3>Kalamansi 16oz</h3>
-      <p>₱65</p>
-    </div>
-    <div class="menu-card">
-      <img src="https://1drv.ms/i/c/6118ddcb5316a0a9/IQRLgxOHFuCeRYVLM2CXPNbFAR3WEtH2fUU9BnqQF-vi6cY?width=9000&height=12000" alt="Lemonade">
-      <h3>Lemonade 16oz</h3>
-      <p>₱65</p>
-    </div>
-    <div class="menu-card">
-      <img src="https://onedrive.live.com/embed?resid=YOUR_IMAGE_ID4&authkey=!YOURKEY&width=400&height=300&format=jpg" alt="Houjicha Latte">
-      <h3>Houjicha Latte 8oz</h3>
-      <p>₱65</p>
-    </div>
-  </div>
-
-  <!-- === MEALS SECTION === -->
-  <h2>Meals</h2>
-  <div class="menu-grid">
-    <div class="menu-card">
-      <img src="/assets/images/meal1.jpg" alt="Pork Sisig" loading="lazy">
-      <h3>Pork Sisig</h3>
-      <p>₱110</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images/meal2.jpg" alt="Longsilog" loading="lazy">
-      <h3>Longsilog</h3>
-      <p>₱110</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images/meal3.jpg" alt="Tocilog" loading="lazy">
-      <h3>Tocilog</h3>
-      <p>₱110</p>
-    </div>
-  </div>
-
-  <!-- === DESSERTS SECTION === -->
-  <h2>Desserts</h2>
-  <div class="menu-grid">
-    <div class="menu-card">
-      <img src="/assets/images/dessert1.jpg" alt="Leche Flan" loading="lazy">
-      <h3>Leche Flan</h3>
-      <p>₱110</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images/dessert2.jpg" alt="Ube Halaya" loading="lazy">
-      <h3>Ube Halaya</h3>
-      <p>₱65</p>
-    </div>
-    <div class="menu-card">
-      <img src="/assets/images/dessert3.jpg" alt="Apple Crumble" loading="lazy">
-      <h3>Apple Crumble</h3>
-      <p>₱50</p>
-    </div>
-  </div>
-
-  <!-- === ORDER BUTTON === -->
-  <div style="text-align: center;">
-    <a href="https://script.google.com/macros/s/AKfycbxPB1F-WTLgT3_eOzCt0mSr-UOdqz3EfGed_EyA-YybZOjslP6t_FhjDluoF2M5xD9G/exec" 
-       target="_blank" 
-       class="order-button">
-      Order Now
-    </a>
-  </div>
+    <p id="msg"></p>
+  </form>
 </div>
+
+<script>
+const menuContainer = document.getElementById('menuContainer');
+const form = document.getElementById('menuForm');
+const msg = document.getElementById('msg');
+
+// Replace with your Apps Script URLs
+const menuURL = 'https://script.google.com/macros/s/YOUR_MENU_SCRIPT_ID/exec';
+const orderURL = 'https://script.google.com/macros/s/YOUR_ORDER_SCRIPT_ID/exec';
+
+// Fetch menu dynamically
+fetch(menuURL)
+  .then(res => res.json())
+  .then(menuData => {
+    menuContainer.innerHTML = '';
+    for (const category in menuData) {
+      const catTitle = document.createElement('h2');
+      catTitle.textContent = category;
+      menuContainer.appendChild(catTitle);
+
+      const grid = document.createElement('div');
+      grid.className = 'menu-grid';
+
+      menuData[category].forEach(item => {
+        const label = document.createElement('label');
+        label.className = 'menu-card';
+
+        label.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>₱${item.price}</p>
+          <input type="checkbox" class="item-checkbox" name="${category}_${item.name}">
+          <input type="number" class="item-qty" name="qty_${item.name}" value="1" min="1">
+        `;
+
+        grid.appendChild(label);
+      });
+
+      menuContainer.appendChild(grid);
+    }
+  })
+  .catch(err => {
+    menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
+    console.error(err);
+  });
+
+// Show/hide quantity input
+document.addEventListener('change', e => {
+  if(e.target.classList.contains('item-checkbox')) {
+    const qty = e.target.parentElement.querySelector('.item-qty');
+    qty.style.display = e.target.checked ? 'inline-block' : 'none';
+  }
+});
+
+// Submit order
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const filteredData = new FormData();
+
+  formData.forEach((value, key) => {
+    if(key.includes('_')) {
+      const checked = formData.get(key);
+      const qtyKey = 'qty_' + key.split('_').slice(1).join('_');
+      const qty = formData.get(qtyKey);
+      if(checked && Number(qty) > 0) {
+        const itemName = key.split('_').slice(1).join(' ');
+        filteredData.append(itemName, qty);
+      }
+    }
+  });
+
+  fetch(`${orderURL}?${new URLSearchParams(filteredData)}`)
+    .then(res => {
+      msg.textContent = '✅ Your order has been placed!';
+      msg.style.color = 'green';
+      form.reset();
+      document.querySelectorAll('.item-qty').forEach(i => i.style.display = 'none');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(err => {
+      msg.textContent = '❌ Failed to submit order. Please try again.';
+      msg.style.color = 'red';
+      console.error(err);
+    });
+});
+</script>
