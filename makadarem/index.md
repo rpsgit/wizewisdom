@@ -209,8 +209,8 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycby7gTnUYDog-a02twbiMhva7ugCPQjRZgWnDy6vNrH3toYH_KMCbKcsf_Tu4o7m6mtX/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycby7gTnUYDog-a02twbiMhva7ugCPQjRZgWnDy6vNrH3toYH_KMCbKcsf_Tu4o7m6mtX/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbzDGszpVyi_AF2_YhNrsdwvmGabXxhS0BHQwhk-K9wIegXLNzeX5Y7z_NhEDKZday2C/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbzDGszpVyi_AF2_YhNrsdwvmGabXxhS0BHQwhk-K9wIegXLNzeX5Y7z_NhEDKZday2C/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
