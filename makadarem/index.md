@@ -20,22 +20,20 @@ body {
 .page-container {
   width: 95%;
   max-width: 1000px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 25px;
   border-radius: 20px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.15);
   margin: 40px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 h1 {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 20px;
-  font-weight: bold;
+  margin-bottom: 25px;
+  font-weight: 700;
   color: #4b2e05;
+  letter-spacing: 0.5px;
 }
 
 .category-container {
@@ -49,8 +47,8 @@ h1 {
 
 .category-container h2 {
   text-align: center;
-  font-size: 1.4rem;
-  margin-bottom: 10px;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
   color: #4b2e05;
   border-bottom: 2px solid #ff7e5f;
   display: inline-block;
@@ -59,10 +57,9 @@ h1 {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
   justify-items: center;
-  width: 100%;
 }
 
 .menu-card {
@@ -73,14 +70,12 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 5px;
-  width: 100%;
-  max-width: 220px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 8px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
 }
 
 .menu-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
   box-shadow: 0 6px 25px rgba(0,0,0,0.2);
 }
 
@@ -88,18 +83,17 @@ h1 {
   width: 100%;
   height: 130px;
   object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 5px;
+  border-radius: 10px;
 }
 
 .menu-card h3 {
-  margin: 5px 0;
+  margin: 6px 0 3px;
   font-size: 1rem;
   color: #333;
 }
 
 .menu-card p {
-  margin: 3px 0;
+  margin: 2px 0 5px;
   font-size: 0.9rem;
   color: #555;
 }
@@ -111,9 +105,9 @@ h1 {
 }
 
 .menu-card input[type="number"] {
-  width: 45px;
-  margin-top: 4px;
-  padding: 3px;
+  width: 50px;
+  margin-top: 5px;
+  padding: 4px;
   border-radius: 5px;
   border: 1px solid #ccc;
   display: none;
@@ -125,7 +119,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .order-form-section label {
@@ -146,8 +140,8 @@ h1 {
 
 .order-button {
   margin-top: 20px;
-  padding: 10px 25px;
-  border-radius: 20px;
+  padding: 12px 25px;
+  border-radius: 25px;
   font-size: 1rem;
   background: linear-gradient(135deg, #ff7e5f, #ff5722);
   color: #fff;
@@ -186,10 +180,6 @@ footer {
   .menu-grid {
     grid-template-columns: 1fr;
   }
-
-  .menu-card {
-    max-width: 100%;
-  }
 }
 </style>
 
@@ -219,8 +209,8 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbz2vtrGCo-EZMkbSnqXMv7Q_J_dDv_3aOOC04ggTSiFPJDXzbq5Jv3fZS4RPC6y-hWU/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbz2vtrGCo-EZMkbSnqXMv7Q_J_dDv_3aOOC04ggTSiFPJDXzbq5Jv3fZS4RPC6y-hWU/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbzAD23bHFO7DGZX9IlzGnqKQUlQZTiwcNeNQIXEQ_kOhgIk_8wMg33fXYiVaAZRsEcn/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbzAD23bHFO7DGZX9IlzGnqKQUlQZTiwcNeNQIXEQ_kOhgIk_8wMg33fXYiVaAZRsEcn/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
@@ -234,12 +224,12 @@ function updateTotal() {
     menuDataGlobal[cat].forEach(item => {
       const cb = form.querySelector(`input[name="item_${item.name}"]`);
       const qty = form.querySelector(`input[name="qty_${item.name}"]`);
-      if(cb && cb.checked) {
+      if (cb && cb.checked) {
         total += Number(item.price) * (Number(qty.value) || 1);
       }
     });
   });
-  totalPriceEl.textContent = `Total: ₱${total}`;
+  totalPriceEl.textContent = `Total: ₱${total.toLocaleString()}`;
   return total;
 }
 
@@ -264,9 +254,10 @@ fetch(menuURL)
       menuData[cat].forEach(item => {
         const card = document.createElement('label');
         card.className = 'menu-card';
+        const imgSrc = item.img ? item.img : 'https://via.placeholder.com/220x130?text=No+Image';
         card.innerHTML = `
           <input type="checkbox" name="item_${item.name}">
-          <img src="${item.img}" alt="${item.name}">
+          <img src="${imgSrc}" alt="${item.name}">
           <h3>${item.name}</h3>
           <p>₱${item.price}</p>
           <input type="number" class="item-qty" name="qty_${item.name}" value="1" min="1">
@@ -278,17 +269,15 @@ fetch(menuURL)
       menuContainer.appendChild(catBox);
     }
 
-    // Checkbox logic
+    // Checkbox + quantity logic
     document.querySelectorAll('.menu-card input[type="checkbox"]').forEach(cb => {
       cb.addEventListener('change', e => {
         const qty = e.target.parentElement.querySelector('.item-qty');
-        if(e.target.checked) {
+        if (e.target.checked) {
           qty.style.display = 'inline-block';
-          qty.required = true;
           e.target.parentElement.style.border = '2px solid #ff7e5f';
         } else {
           qty.style.display = 'none';
-          qty.required = false;
           qty.value = 1;
           e.target.parentElement.style.border = 'none';
         }
@@ -315,22 +304,26 @@ form.addEventListener('submit', e => {
   filteredData.append('total', updateTotal());
 
   formData.forEach((val, key) => {
-    if(key.startsWith('item_')) {
+    if (key.startsWith('item_')) {
       const cb = form.querySelector(`[name="${key}"]`);
-      if(cb.checked) {
-        const qty = formData.get(`qty_${key.replace('item_','')}`) || 1;
-        filteredData.append(key.replace('item_',''), qty);
+      if (cb.checked) {
+        const qty = formData.get(`qty_${key.replace('item_', '')}`) || 1;
+        filteredData.append(key.replace('item_', ''), qty);
       }
     }
   });
 
-  fetch(orderURL, { method:'POST', body: filteredData })
+  fetch(orderURL, { method: 'POST', body: filteredData })
     .then(res => res.json())
-    .then(() => {
-      alert('✅ Your order has been placed!');
+    .then(data => {
+      if (data.success) {
+        alert('✅ Your order has been placed successfully!');
+      } else {
+        alert('⚠️ Order saved but with a warning: ' + data.message);
+      }
       form.reset();
-      document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
-      document.querySelectorAll('.menu-card').forEach(card => card.style.border='none');
+      document.querySelectorAll('.item-qty').forEach(i => i.style.display = 'none');
+      document.querySelectorAll('.menu-card').forEach(card => card.style.border = 'none');
       updateTotal();
     })
     .catch(err => {
