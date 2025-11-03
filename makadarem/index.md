@@ -34,8 +34,8 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
     <div class="order-form-section">
       <label>Name</label>
       <input type="text" name="name" required>
-      <label>Contact</label>
-      <input type="text" name="contact" required>
+      <label>Contact (09#########)</label>
+      <input type="text" name="contact" placeholder="09#########" required>
       <label>Unit No.</label>
       <input type="text" name="unit_no" required>
       <label>Notes</label>
@@ -73,6 +73,7 @@ function updateTotal() {
   return total;
 }
 
+// Load menu
 fetch(menuURL)
 .then(res=>res.json())
 .then(menuData=>{
@@ -105,6 +106,8 @@ fetch(menuURL)
   });
   menuContainer.appendChild(frag);
   menuContainer.querySelectorAll('img[data-src]').forEach(img=>img.src=img.dataset.src);
+
+  // Checkbox toggle for quantity
   menuContainer.querySelectorAll('.menu-card input[type="checkbox"]').forEach(cb=>{
     cb.addEventListener('change', e=>{
       const qty=e.target.parentElement.querySelector('.item-qty');
@@ -122,15 +125,27 @@ form.addEventListener('submit', e=>{
   const formData=new FormData(form);
 
   // Validation
-  if(!formData.get('name') || !formData.get('contact') || !formData.get('unit_no')){ alert("Name, Contact, and Unit No. are required."); return; }
-  if(isNaN(formData.get('contact'))){ alert("Contact must be numeric."); return; }
+  const name = formData.get('name');
+  const contact = formData.get('contact');
+  const unitNo = formData.get('unit_no');
+
+  if(!name || !contact || !unitNo){
+    alert("Name, Contact, and Unit No. are required.");
+    return;
+  }
+
+  if(!/^\d{11}$/.test(contact)){
+    alert("Contact number must be exactly 11 digits. Format: 09#########");
+    return;
+  }
+
   const anyChecked=Array.from(form.querySelectorAll('input[type="checkbox"]')).some(cb=>cb.checked);
   if(!anyChecked){ alert("Please select at least one menu item."); return; }
 
   const filteredData=new FormData();
-  filteredData.append('name', formData.get('name'));
-  filteredData.append('contact', formData.get('contact'));
-  filteredData.append('unit_no', formData.get('unit_no'));
+  filteredData.append('name', name);
+  filteredData.append('contact', contact);
+  filteredData.append('unit_no', unitNo);
   filteredData.append('notes', formData.get('notes'));
   filteredData.append('total', updateTotal());
 
@@ -153,7 +168,7 @@ form.addEventListener('submit', e=>{
       menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
       menuContainer.querySelectorAll('.menu-card').forEach(card=>card.style.border='none');
       updateTotal();
-    }else alert('❌ Failed: '+resp.message);
+    } else alert('❌ Failed: '+resp.message);
   })
   .catch(err=>{ alert('❌ Failed to submit order.'); console.error(err); });
 });
