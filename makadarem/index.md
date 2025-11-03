@@ -214,13 +214,13 @@ footer {
   </form>
 
   <footer>
-    © 2025 Makadarem | Freshly Brewed. Locally Loved.
+    © 2025 Makadarem | Comfort home-cooking delivered to your doorstep.
   </footer>
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbxOITTEHIiCBABYVqaMvr65QO1O7I7VW3-n899SKxsiMvbN-_0CJd8h7xqcnOQ1KvfD/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbxOITTEHIiCBABYVqaMvr65QO1O7I7VW3-n899SKxsiMvbN-_0CJd8h7xqcnOQ1KvfD/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycby_ritfKqrJhUaQ-Vl9ULuWB-qFmkiP95MzhukBxM01hO1oOCfvrNzFY6fHmlfjZLPy/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycby_ritfKqrJhUaQ-Vl9ULuWB-qFmkiP95MzhukBxM01hO1oOCfvrNzFY6fHmlfjZLPy/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
