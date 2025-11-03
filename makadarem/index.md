@@ -48,7 +48,7 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
       <label>Name</label>
       <input type="text" name="name" required>
       <label>Contact</label>
-      <input type="text" name="contact" placeholder="09#########" required>
+      <input type="text" name="contact" placeholder="09000000000" required>
       <label>Unit No.</label>
       <input type="text" name="unit_no" required>
       <label>Notes</label>
