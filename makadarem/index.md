@@ -11,40 +11,28 @@ body {
   background-size: cover;
   font-family: "Poppins", Arial, sans-serif;
   color: #222;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
 }
 
 .page-container {
-  width: 95%;
+  width: 100%;
   max-width: 1000px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.9);
+  padding: 15px;
   border-radius: 20px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
-  margin: 40px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 h1 {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin: 20px 0;
   font-weight: bold;
   color: #4b2e05;
 }
 
 .category-container {
-  width: 100%;
-  background: rgba(255,255,255,0.95);
-  border-radius: 15px;
-  padding: 15px;
   margin-bottom: 25px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .category-container h2 {
@@ -59,37 +47,34 @@ h1 {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
-  justify-items: center;
   width: 100%;
 }
 
 .menu-card {
   background: #fff;
   border-radius: 12px;
-  overflow: hidden;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-bottom: 5px;
-  width: 100%;
-  max-width: 220px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .menu-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
 .menu-card img {
   width: 100%;
-  height: 130px;
+  height: 120px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 5px;
+  display: block;
 }
 
 .menu-card h3 {
@@ -99,7 +84,7 @@ h1 {
 }
 
 .menu-card p {
-  margin: 3px 0;
+  margin: 2px 0 5px;
   font-size: 0.9rem;
   color: #555;
 }
@@ -117,7 +102,6 @@ h1 {
   border-radius: 5px;
   border: 1px solid #ccc;
   display: none;
-  font-size: 0.9rem;
 }
 
 .order-form-section {
@@ -175,22 +159,6 @@ footer {
   font-size: 0.9rem;
   color: #555;
 }
-
-@media (max-width: 900px) {
-  .menu-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .menu-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .menu-card {
-    max-width: 100%;
-  }
-}
 </style>
 
 <div class="page-container">
@@ -228,11 +196,10 @@ const totalPriceEl = document.getElementById('totalPrice');
 
 let menuDataGlobal = {};
 
-// Calculate total
 function updateTotal() {
   let total = 0;
-  Object.keys(menuDataGlobal).forEach(cat => {
-    menuDataGlobal[cat].forEach(item => {
+  Object.values(menuDataGlobal).forEach(category => {
+    category.forEach(item => {
       const cb = form.querySelector(`input[name="item_${item.name}"]`);
       const qty = form.querySelector(`input[name="qty_${item.name}"]`);
       if(cb && cb.checked) {
@@ -244,14 +211,16 @@ function updateTotal() {
   return total;
 }
 
-// Load menu dynamically
+// Optimized menu loader
 fetch(menuURL)
   .then(res => res.json())
   .then(menuData => {
     menuDataGlobal = menuData;
     menuContainer.innerHTML = '';
 
-    for (const cat in menuData) {
+    const fragment = document.createDocumentFragment(); // Faster DOM updates
+
+    Object.keys(menuData).forEach(cat => {
       const catBox = document.createElement('div');
       catBox.className = 'category-container';
 
@@ -266,12 +235,12 @@ fetch(menuURL)
         const card = document.createElement('label');
         card.className = 'menu-card';
 
-        // If image is empty, use placeholder
-        const imgSrc = item.img && item.img.trim() !== "" ? item.img : "https://via.placeholder.com/220x130?text=No+Image";
+        const imgSrc = item.img && item.img.trim() ? item.img : "https://via.placeholder.com/220x130?text=No+Image";
 
+        // Lazy-load image
         card.innerHTML = `
           <input type="checkbox" name="item_${item.name}">
-          <img src="${imgSrc}" alt="${item.name}">
+          <img data-src="${imgSrc}" alt="${item.name}" loading="lazy">
           <h3>${item.name}</h3>
           <p>₱${item.price}</p>
           <input type="number" class="item-qty" name="qty_${item.name}" value="1" min="1">
@@ -281,14 +250,20 @@ fetch(menuURL)
       });
 
       catBox.appendChild(grid);
-      menuContainer.appendChild(catBox);
-    }
+      fragment.appendChild(catBox);
+    });
+
+    menuContainer.appendChild(fragment);
+
+    // Lazy-load images
+    const images = menuContainer.querySelectorAll('img[data-src]');
+    images.forEach(img => { img.src = img.dataset.src; });
 
     // Checkbox logic
-    document.querySelectorAll('.menu-card input[type="checkbox"]').forEach(cb => {
+    menuContainer.querySelectorAll('.menu-card input[type="checkbox"]').forEach(cb => {
       cb.addEventListener('change', e => {
         const qty = e.target.parentElement.querySelector('.item-qty');
-        if(e.target.checked) {
+        if(e.target.checked){
           qty.style.display = 'inline-block';
           qty.required = true;
           e.target.parentElement.style.border = '2px solid #ff7e5f';
@@ -302,7 +277,8 @@ fetch(menuURL)
       });
     });
 
-    document.querySelectorAll('.item-qty').forEach(q => q.addEventListener('input', updateTotal));
+    menuContainer.querySelectorAll('.item-qty').forEach(q => q.addEventListener('input', updateTotal));
+
   })
   .catch(err => {
     menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
@@ -320,10 +296,10 @@ form.addEventListener('submit', e => {
   filteredData.append('notes', formData.get('notes'));
   filteredData.append('total', updateTotal());
 
-  formData.forEach((val, key) => {
-    if(key.startsWith('item_')) {
+  formData.forEach((val,key) => {
+    if(key.startsWith('item_')){
       const cb = form.querySelector(`[name="${key}"]`);
-      if(cb.checked) {
+      if(cb.checked){
         const qty = formData.get(`qty_${key.replace('item_','')}`) || 1;
         filteredData.append(key.replace('item_',''), qty);
       }
@@ -333,14 +309,14 @@ form.addEventListener('submit', e => {
   fetch(orderURL, { method:'POST', body: filteredData })
     .then(res => res.json())
     .then(resp => {
-      if(resp.success) {
+      if(resp.success){
         alert('✅ Your order has been placed!');
         form.reset();
-        document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
-        document.querySelectorAll('.menu-card').forEach(card => card.style.border='none');
+        menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
+        menuContainer.querySelectorAll('.menu-card').forEach(card=>card.style.border='none');
         updateTotal();
       } else {
-        alert('❌ Failed to submit order: ' + resp.message);
+        alert('❌ Failed to submit order: '+resp.message);
       }
     })
     .catch(err => {
