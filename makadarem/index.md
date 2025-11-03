@@ -35,6 +35,10 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
 
+    <!-- Order summary & total moved here -->
+    <div class="order-summary" id="orderSummary"></div>
+    <div class="total-price" id="totalPrice">Total: ₱0</div>
+
     <div class="order-form-section">
       <label>Name</label>
       <input type="text" name="name" maxlength="50" required>
@@ -46,8 +50,6 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
       <textarea name="notes" rows="3"></textarea>
     </div>
 
-    <div class="order-summary" id="orderSummary"></div>
-    <div class="total-price" id="totalPrice">Total: ₱0</div>
     <div class="order-number" id="orderNumber"></div>
     <button type="submit" class="order-button">Place Order</button>
   </form>
