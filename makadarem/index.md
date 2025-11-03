@@ -9,7 +9,20 @@ body { margin:0; padding:0; background:#f5f5f5 url('/assets/images/menu/bg.png')
 h1 { text-align:center; font-size:2rem; margin-bottom:20px; font-weight:bold; color:#4b2e05; }
 .category-container { width:100%; margin-bottom:25px; }
 .category-container h2 { text-align:center; font-size:1.4rem; margin-bottom:10px; color:#4b2e05; border-bottom:2px solid #ff7e5f; display:inline-block; padding-bottom:4px; }
-.menu-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; width:100%; }
+.menu-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; width:100%; }
+
+@media (max-width: 1024px) {
+  .menu-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .menu-grid { grid-template-columns: 1fr; }
+}
+
 .menu-card { width:100%; background:#fff; border-radius:12px; text-align:center; display:flex; flex-direction:column; align-items:center; padding-bottom:5px; transition:transform 0.3s ease, box-shadow 0.3s ease; }
 .menu-card:hover { transform:scale(1.05); box-shadow:0 6px 25px rgba(0,0,0,0.2); }
 .menu-card img { width:100%; height:130px; object-fit:cover; border-radius:8px; margin-bottom:5px; display:block; }
@@ -34,7 +47,7 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
     <div class="order-form-section">
       <label>Name</label>
       <input type="text" name="name" required>
-      <label>Contact (09#########)</label>
+      <label>Contact</label>
       <input type="text" name="contact" placeholder="09#########" required>
       <label>Unit No.</label>
       <input type="text" name="unit_no" required>
