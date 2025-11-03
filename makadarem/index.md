@@ -10,19 +10,9 @@ h1 { text-align:center; font-size:2rem; margin-bottom:20px; font-weight:bold; co
 .category-container { width:100%; margin-bottom:25px; }
 .category-container h2 { text-align:center; font-size:1.4rem; margin-bottom:10px; color:#4b2e05; border-bottom:2px solid #ff7e5f; display:inline-block; padding-bottom:4px; }
 .menu-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; width:100%; }
-
-@media (max-width: 1024px) {
-  .menu-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (max-width: 768px) {
-  .menu-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-  .menu-grid { grid-template-columns: 1fr; }
-}
-
+@media (max-width: 1024px) { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .menu-grid { grid-template-columns: 1fr; } }
 .menu-card { width:100%; background:#fff; border-radius:12px; text-align:center; display:flex; flex-direction:column; align-items:center; padding-bottom:5px; transition:transform 0.3s ease, box-shadow 0.3s ease; }
 .menu-card:hover { transform:scale(1.05); box-shadow:0 6px 25px rgba(0,0,0,0.2); }
 .menu-card img { width:100%; height:130px; object-fit:cover; border-radius:8px; margin-bottom:5px; display:block; }
@@ -36,6 +26,7 @@ h1 { text-align:center; font-size:2rem; margin-bottom:20px; font-weight:bold; co
 .order-button { margin-top:20px; padding:10px 25px; border-radius:20px; font-size:1rem; background:linear-gradient(135deg,#ff7e5f,#ff5722); color:#fff; border:none; cursor:pointer; transition:0.3s ease; }
 .order-button:hover { background:#ff5722; transform:scale(1.05); }
 .total-price { font-weight:bold; font-size:1.2rem; margin-top:10px; color:#ff5722; text-align:center; }
+.order-number { font-weight:bold; font-size:1rem; margin-top:5px; color:#4b2e05; text-align:center; }
 footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
 </style>
 
@@ -56,6 +47,7 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
     </div>
 
     <div class="total-price" id="totalPrice">Total: ₱0</div>
+    <div class="order-number" id="orderNumber"></div>
     <button type="submit" class="order-button">Place Order</button>
   </form>
 
@@ -65,12 +57,13 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbzDBN_1rxI4a_oYcBJ0YK7VBc2ON1Z3lIUpwFlDibx6_ddEaVlvN-_lo7zCo_N_3fOG/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbzDBN_1rxI4a_oYcBJ0YK7VBc2ON1Z3lIUpwFlDibx6_ddEaVlvN-_lo7zCo_N_3fOG/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycby1kjAyM3oFi6CEXWBg9Z-0AVVorKraPEZ62hvrvxp8nUEWxfp20n0X55bi-tzLOygj/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycby1kjAyM3oFi6CEXWBg9Z-0AVVorKraPEZ62hvrvxp8nUEWxfp20n0X55bi-tzLOygj/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
 const totalPriceEl = document.getElementById('totalPrice');
+const orderNumberEl = document.getElementById('orderNumber');
 let menuDataGlobal = {};
 
 function updateTotal() {
@@ -86,7 +79,6 @@ function updateTotal() {
   return total;
 }
 
-// Load menu
 fetch(menuURL)
 .then(res=>res.json())
 .then(menuData=>{
@@ -120,7 +112,6 @@ fetch(menuURL)
   menuContainer.appendChild(frag);
   menuContainer.querySelectorAll('img[data-src]').forEach(img=>img.src=img.dataset.src);
 
-  // Checkbox toggle for quantity
   menuContainer.querySelectorAll('.menu-card input[type="checkbox"]').forEach(cb=>{
     cb.addEventListener('change', e=>{
       const qty=e.target.parentElement.querySelector('.item-qty');
@@ -136,8 +127,6 @@ fetch(menuURL)
 form.addEventListener('submit', e=>{
   e.preventDefault();
   const formData=new FormData(form);
-
-  // Validation
   const name = formData.get('name');
   const contact = formData.get('contact');
   const unitNo = formData.get('unit_no');
@@ -160,12 +149,21 @@ form.addEventListener('submit', e=>{
   const anyChecked=Array.from(form.querySelectorAll('input[type="checkbox"]')).some(cb=>cb.checked);
   if(!anyChecked){ alert("Please select at least one menu item."); return; }
 
+  // Generate order number
+  const now = new Date();
+  const pad = n => n.toString().padStart(2,'0');
+  const datetime = `${now.getFullYear().toString().slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+  const seq = Math.floor(Math.random()*999999+1).toString().padStart(6,'0');
+  const orderNumber = datetime + seq;
+  orderNumberEl.textContent = `Your Order Number: ${orderNumber}`;
+
   const filteredData=new FormData();
   filteredData.append('name', name);
   filteredData.append('contact', contact);
   filteredData.append('unit_no', unitNo);
   filteredData.append('notes', formData.get('notes'));
   filteredData.append('total', updateTotal());
+  filteredData.append('order_number', orderNumber);
 
   formData.forEach((val,key)=>{
     if(key.startsWith('item_')){
@@ -181,11 +179,12 @@ form.addEventListener('submit', e=>{
   .then(res=>res.json())
   .then(resp=>{
     if(resp.success){
-      alert('✅ Your order has been placed!');
+      alert(`✅ Your order has been placed!\nOrder Number: ${orderNumber}`);
       form.reset();
       menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
       menuContainer.querySelectorAll('.menu-card').forEach(card=>card.style.border='none');
       updateTotal();
+      orderNumberEl.textContent = '';
     } else alert('❌ Failed: '+resp.message);
   })
   .catch(err=>{ alert('❌ Failed to submit order.'); console.error(err); });
