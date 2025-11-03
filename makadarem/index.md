@@ -25,7 +25,7 @@ h1 { text-align:center; font-size:2rem; margin-bottom:20px; font-weight:bold; co
 .order-form-section input, .order-form-section textarea { width:90%; padding:6px; margin-top:3px; border-radius:5px; border:1px solid #ccc; font-size:0.9rem; }
 .order-button { margin-top:20px; padding:10px 25px; border-radius:20px; font-size:1rem; background:linear-gradient(135deg,#ff7e5f,#ff5722); color:#fff; border:none; cursor:pointer; transition:0.3s ease; }
 .order-button:hover { background:#ff5722; transform:scale(1.05); }
-.total-price { font-weight:bold; font-size:1.2rem; margin-top:10px; color:#ff5722; text-align:center; }
+.total-price, .order-summary { font-weight:bold; font-size:1.2rem; margin-top:10px; color:#ff5722; text-align:center; white-space: pre-line; }
 .order-number { font-weight:bold; font-size:1rem; margin-top:5px; color:#4b2e05; text-align:center; }
 footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
 </style>
@@ -37,15 +37,16 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
 
     <div class="order-form-section">
       <label>Name</label>
-      <input type="text" name="name" required>
+      <input type="text" name="name" maxlength="50" required>
       <label>Contact</label>
       <input type="text" name="contact" placeholder="09000000000" required>
       <label>Unit No.</label>
-      <input type="text" name="unit_no" placeholder="Max 5 alphanumeric" required>
+      <input type="text" name="unit_no" maxlength="5" placeholder="Max 5 alphanumeric" required>
       <label>Notes</label>
       <textarea name="notes" rows="3"></textarea>
     </div>
 
+    <div class="order-summary" id="orderSummary"></div>
     <div class="total-price" id="totalPrice">Total: ₱0</div>
     <div class="order-number" id="orderNumber"></div>
     <button type="submit" class="order-button">Place Order</button>
@@ -63,18 +64,26 @@ const orderURL = 'https://script.google.com/macros/s/AKfycby1kjAyM3oFi6CEXWBg9Z-
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
 const totalPriceEl = document.getElementById('totalPrice');
+const orderSummaryEl = document.getElementById('orderSummary');
 const orderNumberEl = document.getElementById('orderNumber');
 let menuDataGlobal = {};
 
 function updateTotal() {
   let total = 0;
+  let summaryText = '';
   Object.values(menuDataGlobal).forEach(category=>{
     category.forEach(item=>{
       const cb=form.querySelector(`input[name="item_${item.name}"]`);
       const qty=form.querySelector(`input[name="qty_${item.name}"]`);
-      if(cb && cb.checked) total += Number(item.price)*(Number(qty.value)||1);
+      if(cb && cb.checked){
+        const qtyVal = Number(qty.value)||1;
+        const subtotal = item.price * qtyVal;
+        total += subtotal;
+        summaryText += `${item.name} x ${qtyVal} = ₱${subtotal}\n`;
+      }
     });
   });
+  orderSummaryEl.textContent = summaryText;
   totalPriceEl.textContent = `Total: ₱${total}`;
   return total;
 }
@@ -136,6 +145,8 @@ form.addEventListener('submit', e=>{
     return;
   }
 
+  if(name.length>50){ alert("Name cannot exceed 50 characters."); return; }
+
   if(!/^\d{11}$/.test(contact)){
     alert("Contact number must be exactly 11 digits. Format: 09000000000");
     return;
@@ -149,7 +160,6 @@ form.addEventListener('submit', e=>{
   const anyChecked=Array.from(form.querySelectorAll('input[type="checkbox"]')).some(cb=>cb.checked);
   if(!anyChecked){ alert("Please select at least one menu item."); return; }
 
-  // Generate order number
   const now = new Date();
   const pad = n => n.toString().padStart(2,'0');
   const datetime = `${now.getFullYear().toString().slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
@@ -162,29 +172,37 @@ form.addEventListener('submit', e=>{
   filteredData.append('contact', contact);
   filteredData.append('unit_no', unitNo);
   filteredData.append('notes', formData.get('notes'));
-  filteredData.append('total', updateTotal());
   filteredData.append('order_number', orderNumber);
 
+  let orderSummaryText = '';
+  let total = 0;
   formData.forEach((val,key)=>{
     if(key.startsWith('item_')){
       const cb=form.querySelector(`[name="${key}"]`);
       if(cb.checked){
-        const qty=formData.get(`qty_${key.replace('item_','')}`)||1;
-        filteredData.append(key.replace('item_',''), qty);
+        const qty = Number(formData.get(`qty_${key.replace('item_','')}`) || 1);
+        const itemName = key.replace('item_','');
+        const itemPrice = menuDataGlobal && Object.values(menuDataGlobal).flat().find(i=>i.name===itemName)?.price || 0;
+        const subtotal = qty * itemPrice;
+        total += subtotal;
+        orderSummaryText += `${itemName} x ${qty} = ₱${subtotal}\n`;
+        filteredData.append(itemName, qty);
       }
     }
   });
+  filteredData.append('total', total);
 
   fetch(orderURL,{ method:'POST', body:filteredData })
   .then(res=>res.json())
   .then(resp=>{
     if(resp.success){
-      alert(`✅ Your order has been placed!\nOrder Number: ${orderNumber}`);
+      alert(`✅ Your order has been placed!\n\nOrder Number: ${orderNumber}\n\nOrder Summary:\n${orderSummaryText}\nTotal: ₱${total}`);
       form.reset();
       menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
       menuContainer.querySelectorAll('.menu-card').forEach(card=>card.style.border='none');
       updateTotal();
       orderNumberEl.textContent = '';
+      orderSummaryEl.textContent = '';
     } else alert('❌ Failed: '+resp.message);
   })
   .catch(err=>{ alert('❌ Failed to submit order.'); console.error(err); });
