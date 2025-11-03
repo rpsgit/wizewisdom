@@ -50,7 +50,7 @@ footer { margin-top:30px; text-align:center; font-size:0.9rem; color:#555; }
       <label>Contact</label>
       <input type="text" name="contact" placeholder="09000000000" required>
       <label>Unit No.</label>
-      <input type="text" name="unit_no" required>
+      <input type="text" name="unit_no" placeholder="Max 5 alphanumeric" required>
       <label>Notes</label>
       <textarea name="notes" rows="3"></textarea>
     </div>
@@ -148,7 +148,12 @@ form.addEventListener('submit', e=>{
   }
 
   if(!/^\d{11}$/.test(contact)){
-    alert("Contact number must be exactly 11 digits. Format: 09#########");
+    alert("Contact number must be exactly 11 digits. Format: 09000000000");
+    return;
+  }
+
+  if(!/^[a-zA-Z0-9]{1,5}$/.test(unitNo)){
+    alert("Unit No. must be 1 to 5 alphanumeric characters (letters and numbers only).");
     return;
   }
 
