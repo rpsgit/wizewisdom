@@ -249,8 +249,7 @@ footer {
 
 <script>
 const menuURL  = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec
-';
+const orderURL = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
