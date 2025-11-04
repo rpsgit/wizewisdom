@@ -248,15 +248,14 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbx19HhbqTWJZCzjuKJG81tSUuxX736Sn-S_IAXWzX_FPDdP8K_u-kRvKRFKoCwjvfJp/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbx19HhbqTWJZCzjuKJG81tSUuxX736Sn-S_IAXWzX_FPDdP8K_u-kRvKRFKoCwjvfJp/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbwUJv7GyJ9JMshdYcJl9wHmeAa8YsGPzfMEJDCLm78w4rpItc4ahBj8cdvyLe6x1V_P/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbwUJv7GyJ9JMshdYcJl9wHmeAa8YsGPzfMEJDCLm78w4rpItc4ahBj8cdvyLe6x1V_P/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
 const totalPriceEl = document.getElementById('totalPrice');
 const orderSummaryEl = document.getElementById('orderSummary');
 const orderNumberEl = document.getElementById('orderNumber');
-const gcashSection = document.getElementById('gcashSection');
 const modal = document.getElementById('orderPreviewModal');
 const confirmBtn = document.getElementById('confirmOrderBtn');
 const cancelBtn = document.getElementById('cancelOrderBtn');
@@ -317,6 +316,7 @@ function lazyLoadImages() {
   images.forEach(img => observer.observe(img));
 }
 
+// Load menu
 fetch(menuURL)
   .then(res => res.json())
   .then(menuData => {
@@ -340,6 +340,7 @@ fetch(menuURL)
   })
   .catch(err => { menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; console.error(err); });
 
+// Show quantity inputs
 menuContainer.addEventListener('change', e=>{
   if(e.target.type==='checkbox'){
     const qty = e.target.parentElement.querySelector('.item-qty');
@@ -365,41 +366,38 @@ form.addEventListener('submit', e=>{
   if(name.length>50) { alert("Name cannot exceed 50 characters."); return; }
   if(!/^\d{11}$/.test(contact)) { alert("Contact number must be 11 digits."); return; }
 
-  const now = new Date();
-  const pad=n=>n.toString().padStart(2,'0');
-  const orderNumber=`${now.getFullYear().toString().slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}${Math.floor(Math.random()*999999+1).toString().padStart(6,'0')}`;
-
-  let total=0, itemsList='', count=1;
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb=>{
+  let total=0, itemsList='';
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach((cb, idx)=>{
     const itemName=cb.name.replace('item_','');
     const qty=Number(fd.get(`qty_${itemName}`)||1);
     const price=priceMap[itemName]||0;
     total+=price*qty;
-    itemsList+=`${count}. ${itemName} x ${qty}\n`; count++;
+    itemsList+=`${itemName} × ${qty}${idx<document.querySelectorAll('input[type="checkbox"]:checked').length-1?', ':'')}`;
   });
 
-  pendingOrder={ fd, name, contact, unitNo, notes, orderNumber, total, itemsList };
+  pendingOrder={ fd, name, contact, unitNo, notes, total, itemsList };
   modal.style.display='flex';
 });
 
 cancelBtn.onclick = ()=>modal.style.display='none';
+
 confirmBtn.onclick = ()=>{
   modal.style.display='none';
-  const { fd, name, contact, unitNo, notes, orderNumber, total, itemsList } = pendingOrder;
+  const { fd, name, contact, unitNo, notes, total, itemsList } = pendingOrder;
+
   const filteredData = new FormData();
-  filteredData.append('order_number', orderNumber);
   filteredData.append('name', name);
   filteredData.append('contact', contact);
-  filteredData.append('unit', unitNo);
-  filteredData.append('notes', notes);
-  filteredData.append('item', itemsList.trim());
+  filteredData.append('unit_no', unitNo);
+  filteredData.append('item', itemsList);
   filteredData.append('total', total);
+  filteredData.append('notes', notes);
 
   fetch(orderURL,{method:'POST', body:filteredData})
     .then(res=>res.json())
     .then(resp=>{
       if(resp.success){
-        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n\nNotes:\n${notes}\n\nCash or GCash Payment Accepted.`);
+        alert(`✅ Order placed!\n\nOrder No: ${resp.orderNumber}\n\nItems:\n${itemsList}\n\nTotal: ₱${total}`);
         form.reset();
         menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
         updateTotal();
