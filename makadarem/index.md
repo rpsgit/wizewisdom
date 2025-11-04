@@ -384,7 +384,7 @@ confirmBtn.onclick = () => {
     .then(res => res.json())
     .then(resp => {
       if (resp.success) {
-        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n${summaryText}\n\nPlease pay via GCash.`);
+        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n${summaryText}\n\nGCASH Payment: 09178664404 RE*A P.`);
         gcashSection.style.display = 'block';
         form.reset();
         menuContainer.querySelectorAll('.item-qty').forEach(i => i.style.display = 'none');
