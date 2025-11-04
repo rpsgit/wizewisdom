@@ -213,7 +213,7 @@ footer {
   <div id="gcashSection">
     <h2>GCash Payment</h2>
     <p>Scan the QR code below or send payment to:</p>
-    <p><strong>GCash Number:</strong> 09XXXXXXXXX<br><strong>Account Name:</strong> Makadarem</p>
+    <p><strong>GCash Number:</strong> 09178664404<br><strong>Account Name:</strong> RE*A P</p>
     <img src="/assets/images/gcash_qr.png" alt="GCash QR" style="width:160px; height:160px; border-radius:10px; border:2px solid #ccc;">
     <p style="font-size:0.9rem; color:#555; margin-top:10px;">Include your <strong>Order Number</strong> in the payment note.</p>
   </div>
@@ -232,8 +232,8 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbwrmG4tIPfxogyaTP9n5YTqw4_JvEeCFcqVmos9inPyh8dyWbfrrb3wPuPD1CjVsAiO/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbwrmG4tIPfxogyaTP9n5YTqw4_JvEeCFcqVmos9inPyh8dyWbfrrb3wPuPD1CjVsAiO/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
@@ -335,6 +335,7 @@ menuContainer.addEventListener('input', e => {
   if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
+// Preview modal
 form.addEventListener('submit', e => {
   e.preventDefault();
   const fd = new FormData(form);
@@ -347,44 +348,41 @@ form.addEventListener('submit', e => {
 
   const now = new Date();
   const pad = n => n.toString().padStart(2, '0');
-  const orderNumber = `${now.getFullYear().toString().slice(2)}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}${Math.floor(Math.random() * 999999 + 1).toString().padStart(6, '0')}`;
-  orderNumberEl.textContent = `Your Order Number: ${orderNumber}`;
+  const orderNumber = `${now.getFullYear().toString().slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}${Math.floor(Math.random()*999999+1).toString().padStart(6,'0')}`;
 
-  let total = 0, summaryText = '';
+  let total = 0, itemsList = '';
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const itemName = cb.name.replace('item_', '');
     const qty = Number(fd.get(`qty_${itemName}`) || 1);
     const price = priceMap[itemName] || 0;
     total += price * qty;
-    summaryText += `${itemName} x ${qty} = ₱${price * qty}\n`;
+    itemsList += `${itemName} x ${qty}\n`;
   });
-  summaryText += `\nTotal: ₱${total}`;
-  previewDetails.textContent = `Name: ${name}\nContact: ${contact}\nUnit: ${unitNo}\n\n${summaryText}`;
+
+  previewDetails.textContent = `Name: ${name}\nContact: ${contact}\nUnit: ${unitNo}\n\nItems:\n${itemsList}\nTotal: ₱${total}`;
   modal.style.display = 'flex';
-  pendingOrder = { fd, name, contact, unitNo, orderNumber, total, summaryText };
+  pendingOrder = { fd, name, contact, unitNo, orderNumber, total, itemsList };
 });
 
 cancelBtn.onclick = () => modal.style.display = 'none';
 confirmBtn.onclick = () => {
   modal.style.display = 'none';
-  const { fd, name, contact, unitNo, orderNumber, total, summaryText } = pendingOrder;
+  const { fd, name, contact, unitNo, orderNumber, total, itemsList } = pendingOrder;
+
   const filteredData = new FormData();
+  filteredData.append('order_number', orderNumber);
   filteredData.append('name', name);
   filteredData.append('contact', contact);
-  filteredData.append('unit_no', unitNo);
-  filteredData.append('order_number', orderNumber);
+  filteredData.append('unit', unitNo);
+  filteredData.append('item', itemsList.trim());
   filteredData.append('notes', fd.get('notes'));
   filteredData.append('total', total);
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const itemName = cb.name.replace('item_', '');
-    filteredData.append(itemName, fd.get(`qty_${itemName}`) || 1);
-  });
 
   fetch(orderURL, { method: 'POST', body: filteredData })
     .then(res => res.json())
     .then(resp => {
       if (resp.success) {
-        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n${summaryText}\n\nGCASH Payment: 09178664404 RE*A P.`);
+        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n\nItems:\n${itemsList}\nTotal: ₱${total}\n\nPlease pay via GCash.`);
         gcashSection.style.display = 'block';
         form.reset();
         menuContainer.querySelectorAll('.item-qty').forEach(i => i.style.display = 'none');
