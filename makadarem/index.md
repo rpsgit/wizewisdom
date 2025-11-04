@@ -245,9 +245,10 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbzOL5euyawnFOGsmhGi6Wc9RhXu9FZs2BCw-dUN2p2F5H4iK3PenjHbnVpECu7JWUTR/execfunc=getMenu';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbzOL5euyawnFOGsmhGi6Wc9RhXu9FZs2BCw-dUN2p2F5H4iK3PenjHbnVpECu7JWUTR/exec?func=getMenu';
 const orderURL = 'https://script.google.com/macros/s/AKfycbzOL5euyawnFOGsmhGi6Wc9RhXu9FZs2BCw-dUN2p2F5H4iK3PenjHbnVpECu7JWUTR/exec';
 
+  
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
 const totalPriceEl = document.getElementById('totalPrice');
