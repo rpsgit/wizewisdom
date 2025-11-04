@@ -216,10 +216,10 @@ footer {
       <label>Name</label>
       <input type="text" name="name" maxlength="50" required>
       <label>Contact</label>
-      <input type="text" name="contact" placeholder="09000000000" required>
+      <input type="text" name="contact" placeholder="09XXXXXXXX" required>
       <label>Unit No.</label>
-      <input type="text" name="unit_no" maxlength="5" placeholder="Exactly 5 alphanumeric" required id="unitNo">
-      <span id="unitError">Unit No. must be exactly 5 alphanumeric characters.</span>
+      <input type="text" name="unit_no" maxlength="5" placeholder="1234A" required id="unitNo">
+      <span id="unitError">Unit No. must be 5 alphanumeric characters.</span>
       <label>Notes</label>
       <textarea name="notes" rows="3"></textarea>
     </div>
@@ -236,7 +236,7 @@ footer {
     <p style="font-size:0.9rem; color:#555; margin-top:10px;">Include your <strong>Order Number</strong> in the payment note.</p>
   </div>
 
-  <footer>© 2025 Makadarem | Comfort home-cooking delivered to your doorstep.</footer>
+  <footer>© 2025 Makadarem | Good food. Fast. Home delivered.</footer>
 </div>
 
 <div id="orderPreviewModal">
