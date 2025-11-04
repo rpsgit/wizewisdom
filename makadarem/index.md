@@ -195,9 +195,6 @@ footer {
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
-  .menu-item {
-    flex-direction: row;
-  }
   .menu-item img { width: 60px; height: 50px; margin-right: 8px; }
   .menu-item .details h3 { font-size: 0.95rem; }
   .menu-item .details p { font-size: 0.85rem; }
@@ -216,12 +213,12 @@ footer {
       <label>Name</label>
       <input type="text" name="name" maxlength="50" required>
       <label>Contact</label>
-      <input type="text" name="contact" placeholder="09XXXXXXXX" required>
+      <input type="text" name="contact" placeholder="09XXXXXXXXX" required>
       <label>Unit No.</label>
       <input type="text" name="unit_no" maxlength="5" placeholder="1234A" required id="unitNo">
       <span id="unitError">Unit No. must be 5 alphanumeric characters.</span>
       <label>Notes</label>
-      <textarea name="notes" rows="3"></textarea>
+      <textarea name="notes" rows="3" placeholder="Additional notes (optional)"></textarea>
     </div>
 
     <div class="order-number" id="orderNumber"></div>
@@ -236,7 +233,7 @@ footer {
     <p style="font-size:0.9rem; color:#555; margin-top:10px;">Include your <strong>Order Number</strong> in the payment note.</p>
   </div>
 
-  <footer>© 2025 Makadarem | Good food. Fast. Home delivered.</footer>
+  <footer>© 2025 Makadarem | Comfort food delivered to your doorstep.</footer>
 </div>
 
 <div id="orderPreviewModal">
@@ -248,161 +245,128 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbwUJv7GyJ9JMshdYcJl9wHmeAa8YsGPzfMEJDCLm78w4rpItc4ahBj8cdvyLe6x1V_P/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbwUJv7GyJ9JMshdYcJl9wHmeAa8YsGPzfMEJDCLm78w4rpItc4ahBj8cdvyLe6x1V_P/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbyp3lxRvwwIRfSg-t_eqolYkjB83405nx70wE0hQb_sHjz9TbH1y126USZderYhMLsX/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbyp3lxRvwwIRfSg-t_eqolYkjB83405nx70wE0hQb_sHjz9TbH1y126USZderYhMLsX/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
 const totalPriceEl = document.getElementById('totalPrice');
-const orderSummaryEl = document.getElementById('orderSummary');
-const orderNumberEl = document.getElementById('orderNumber');
+const unitInput = document.getElementById('unitNo');
+const unitError = document.getElementById('unitError');
 const modal = document.getElementById('orderPreviewModal');
 const confirmBtn = document.getElementById('confirmOrderBtn');
 const cancelBtn = document.getElementById('cancelOrderBtn');
-const unitInput = document.getElementById('unitNo');
-const unitError = document.getElementById('unitError');
 
-let menuDataGlobal = {};
 let priceMap = {};
 let pendingOrder = null;
 
-// Live Unit No. validation
-unitInput.addEventListener('input', () => {
-  const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value);
-  if (!valid) { unitInput.style.border='2px solid red'; unitError.style.display='inline'; }
-  else { unitInput.style.border='1px solid #ccc'; unitError.style.display='none'; }
-});
+// Load Menu
+fetch(menuURL)
+  .then(res => res.json())
+  .then(menuData => {
+    menuContainer.innerHTML = '';
+    Object.entries(menuData).forEach(([cat, items]) => {
+      const catDiv = document.createElement('div');
+      catDiv.className = 'category-container';
+      catDiv.innerHTML = `<h2>${cat}</h2>`;
+      const list = document.createElement('div');
+      list.className = 'menu-list';
+      items.forEach(item => {
+        priceMap[item.name] = item.price;
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80x60'">
+          <div class="details">
+            <h3>${item.name}</h3>
+            <p>₱${item.price}</p>
+          </div>
+          <div class="actions">
+            <input type="checkbox" name="item_${item.name}">
+            <input type="number" name="qty_${item.name}" class="item-qty" value="1" min="1">
+          </div>`;
+        list.appendChild(div);
+      });
+      catDiv.appendChild(list);
+      menuContainer.appendChild(catDiv);
+    });
+  })
+  .catch(() => { menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>'; });
 
 function updateTotal() {
   let total = 0;
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const itemName = cb.name.replace('item_','');
-    const qty = Number(form.querySelector(`input[name="qty_${itemName}"]`).value || 1);
-    total += (priceMap[itemName] || 0) * qty;
+    const name = cb.name.replace('item_', '');
+    const qty = Number(form.querySelector(`[name="qty_${name}"]`).value || 1);
+    total += (priceMap[name] || 0) * qty;
   });
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-function createMenuCard(item) {
-  priceMap[item.name] = item.price;
-  const card = document.createElement('div');
-  card.className = 'menu-item';
-  card.innerHTML = `
-    <img data-src="${item.img?.trim() || 'https://via.placeholder.com/80x60?text=No+Image'}" alt="${item.name}" loading="lazy">
-    <div class="details">
-      <h3>${item.name}</h3>
-      <p>₱${item.price}</p>
-    </div>
-    <div class="actions">
-      <input type="checkbox" name="item_${item.name}">
-      <input type="number" name="qty_${item.name}" class="item-qty" value="1" min="1">
-    </div>
-  `;
-  return card;
-}
-
-function lazyLoadImages() {
-  const images = document.querySelectorAll('img[data-src]');
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        obs.unobserve(img);
-      }
-    });
-  }, { rootMargin: '100px' });
-  images.forEach(img => observer.observe(img));
-}
-
-// Load menu
-fetch(menuURL)
-  .then(res => res.json())
-  .then(menuData => {
-    menuDataGlobal = menuData;
-    menuContainer.innerHTML = '';
-    const frag = document.createDocumentFragment();
-    Object.keys(menuData).forEach(cat => {
-      const catBox = document.createElement('div');
-      catBox.className='category-container';
-      const catTitle = document.createElement('h2');
-      catTitle.textContent=cat;
-      catBox.appendChild(catTitle);
-      const list = document.createElement('div');
-      list.className='menu-list';
-      menuData[cat].forEach(item => list.appendChild(createMenuCard(item)));
-      catBox.appendChild(list);
-      frag.appendChild(catBox);
-    });
-    menuContainer.appendChild(frag);
-    lazyLoadImages();
-  })
-  .catch(err => { menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; console.error(err); });
-
-// Show quantity inputs
-menuContainer.addEventListener('change', e=>{
-  if(e.target.type==='checkbox'){
+// Checkbox and quantity logic
+menuContainer.addEventListener('change', e => {
+  if (e.target.type === 'checkbox') {
     const qty = e.target.parentElement.querySelector('.item-qty');
-    qty.style.display = e.target.checked?'inline-block':'none';
-    qty.required = e.target.checked;
-    if(!e.target.checked) qty.value=1;
+    qty.style.display = e.target.checked ? 'inline-block' : 'none';
     updateTotal();
   }
 });
-menuContainer.addEventListener('input', e=>{
-  if(e.target.classList.contains('item-qty')) updateTotal();
+menuContainer.addEventListener('input', e => {
+  if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
-// Modal preview
-form.addEventListener('submit', e=>{
+// Validate unit no live
+unitInput.addEventListener('input', () => {
+  const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value);
+  unitError.style.display = valid ? 'none' : 'inline';
+  unitInput.style.border = valid ? '1px solid #ccc' : '2px solid red';
+});
+
+// Submit
+form.addEventListener('submit', e => {
   e.preventDefault();
-  if(!/^[a-zA-Z0-9]{5}$/.test(unitInput.value)){ unitInput.focus(); alert("Unit No. must be exactly 5 alphanumeric characters."); return; }
-  if(form.querySelectorAll('input[type="checkbox"]:checked').length===0){ alert("Select at least one item."); return; }
+  if (!/^[a-zA-Z0-9]{5}$/.test(unitInput.value)) return alert('Unit No. must be 5 alphanumeric characters.');
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert('Select at least one item.');
 
   const fd = new FormData(form);
-  const name=fd.get('name'), contact=fd.get('contact'), unitNo=fd.get('unit_no'), notes=fd.get('notes');
-  if(!name||!contact) { alert("Name and Contact are required."); return; }
-  if(name.length>50) { alert("Name cannot exceed 50 characters."); return; }
-  if(!/^\d{11}$/.test(contact)) { alert("Contact number must be 11 digits."); return; }
-
-  let total=0, itemsList='';
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach((cb, idx)=>{
-    const itemName=cb.name.replace('item_','');
-    const qty=Number(fd.get(`qty_${itemName}`)||1);
-    const price=priceMap[itemName]||0;
-    total+=price*qty;
-    itemsList+=`${itemName} × ${qty}${idx<document.querySelectorAll('input[type="checkbox"]:checked').length-1?', ':'')}`;
+  let total = 0;
+  let itemsList = [];
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    const itemName = cb.name.replace('item_', '');
+    const qty = Number(fd.get(`qty_${itemName}`));
+    const price = priceMap[itemName] || 0;
+    total += price * qty;
+    itemsList.push(`${itemName} × ${qty}`);
   });
 
-  pendingOrder={ fd, name, contact, unitNo, notes, total, itemsList };
-  modal.style.display='flex';
+  pendingOrder = {
+    name: fd.get('name'),
+    contact: fd.get('contact'),
+    unit_no: fd.get('unit_no'),
+    notes: fd.get('notes'),
+    items: itemsList.join(', '),
+    total
+  };
+  modal.style.display = 'flex';
 });
 
-cancelBtn.onclick = ()=>modal.style.display='none';
+cancelBtn.onclick = () => modal.style.display = 'none';
 
-confirmBtn.onclick = ()=>{
-  modal.style.display='none';
-  const { fd, name, contact, unitNo, notes, total, itemsList } = pendingOrder;
+confirmBtn.onclick = () => {
+  modal.style.display = 'none';
+  const fd = new FormData();
+  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
 
-  const filteredData = new FormData();
-  filteredData.append('name', name);
-  filteredData.append('contact', contact);
-  filteredData.append('unit_no', unitNo);
-  filteredData.append('item', itemsList);
-  filteredData.append('total', total);
-  filteredData.append('notes', notes);
-
-  fetch(orderURL,{method:'POST', body:filteredData})
-    .then(res=>res.json())
-    .then(resp=>{
-      if(resp.success){
-        alert(`✅ Order placed!\n\nOrder No: ${resp.orderNumber}\n\nItems:\n${itemsList}\n\nTotal: ₱${total}`);
+  fetch(orderURL, { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        alert(`✅ Order placed!\n\nOrder Number: ${res.orderNumber}\n\nItems: ${pendingOrder.items}\n\nNotes: ${pendingOrder.notes}\nTotal: ₱${pendingOrder.total}`);
         form.reset();
-        menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
+        document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
         updateTotal();
-      } else alert('❌ Failed: '+resp.message);
+      } else alert('❌ Failed: ' + res.message);
     })
-    .catch(err=>{alert('❌ Failed to submit order.'); console.error(err);});
+    .catch(() => alert('Error saving order.'));
 };
 </script>
