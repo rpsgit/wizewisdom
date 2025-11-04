@@ -160,7 +160,6 @@ footer {
   color: #555;
 }
 #gcashSection {
-  display: none;
   text-align: center;
   margin-top: 25px;
 }
@@ -192,6 +191,7 @@ footer {
 }
 .modal-confirm { background: #ff7e5f; color: #fff; }
 .modal-cancel { background: #ccc; color: #333; }
+#unitError { font-size: 0.85rem; color: red; display: none; }
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
@@ -218,7 +218,8 @@ footer {
       <label>Contact</label>
       <input type="text" name="contact" placeholder="09000000000" required>
       <label>Unit No.</label>
-      <input type="text" name="unit_no" maxlength="5" placeholder="Max 5 alphanumeric" required>
+      <input type="text" name="unit_no" maxlength="5" placeholder="Exactly 5 alphanumeric" required id="unitNo">
+      <span id="unitError">Unit No. must be exactly 5 alphanumeric characters.</span>
       <label>Notes</label>
       <textarea name="notes" rows="3"></textarea>
     </div>
@@ -241,15 +242,14 @@ footer {
 <div id="orderPreviewModal">
   <div class="modal-box">
     <h2>Confirm Your Order</h2>
-    <div id="previewDetails" style="white-space:pre-line; margin:10px 0; text-align:left; font-size:0.9rem;"></div>
     <button id="confirmOrderBtn" class="modal-confirm">Confirm</button>
     <button id="cancelOrderBtn" class="modal-cancel">Cancel</button>
   </div>
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbxyU4-5wRnLbUCiPjDy_XclB18snw5-pXhn5EARgibj_diRQO3_D1b3l-Y17DGChk-w/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbx19HhbqTWJZCzjuKJG81tSUuxX736Sn-S_IAXWzX_FPDdP8K_u-kRvKRFKoCwjvfJp/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbx19HhbqTWJZCzjuKJG81tSUuxX736Sn-S_IAXWzX_FPDdP8K_u-kRvKRFKoCwjvfJp/exec';
 
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
@@ -258,26 +258,29 @@ const orderSummaryEl = document.getElementById('orderSummary');
 const orderNumberEl = document.getElementById('orderNumber');
 const gcashSection = document.getElementById('gcashSection');
 const modal = document.getElementById('orderPreviewModal');
-const previewDetails = document.getElementById('previewDetails');
 const confirmBtn = document.getElementById('confirmOrderBtn');
 const cancelBtn = document.getElementById('cancelOrderBtn');
+const unitInput = document.getElementById('unitNo');
+const unitError = document.getElementById('unitError');
 
 let menuDataGlobal = {};
 let priceMap = {};
 let pendingOrder = null;
 
+// Live Unit No. validation
+unitInput.addEventListener('input', () => {
+  const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value);
+  if (!valid) { unitInput.style.border='2px solid red'; unitError.style.display='inline'; }
+  else { unitInput.style.border='1px solid #ccc'; unitError.style.display='none'; }
+});
+
 function updateTotal() {
-  let total = 0, summary = '';
-  let count = 1;
+  let total = 0;
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const itemName = cb.name.replace('item_','');
     const qty = Number(form.querySelector(`input[name="qty_${itemName}"]`).value || 1);
-    const price = priceMap[itemName] || 0;
-    total += price * qty;
-    summary += `${count}. ${itemName} x ${qty} = ₱${price*qty}\n`;
-    count++;
+    total += (priceMap[itemName] || 0) * qty;
   });
-  orderSummaryEl.textContent = summary;
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
@@ -315,12 +318,12 @@ function lazyLoadImages() {
 }
 
 fetch(menuURL)
-  .then(res=>res.json())
-  .then(menuData=>{
+  .then(res => res.json())
+  .then(menuData => {
     menuDataGlobal = menuData;
     menuContainer.innerHTML = '';
     const frag = document.createDocumentFragment();
-    Object.keys(menuData).forEach(cat=>{
+    Object.keys(menuData).forEach(cat => {
       const catBox = document.createElement('div');
       catBox.className='category-container';
       const catTitle = document.createElement('h2');
@@ -328,36 +331,39 @@ fetch(menuURL)
       catBox.appendChild(catTitle);
       const list = document.createElement('div');
       list.className='menu-list';
-      menuData[cat].forEach(item=>list.appendChild(createMenuCard(item)));
+      menuData[cat].forEach(item => list.appendChild(createMenuCard(item)));
       catBox.appendChild(list);
       frag.appendChild(catBox);
     });
     menuContainer.appendChild(frag);
     lazyLoadImages();
   })
-  .catch(err=>{menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; console.error(err);});
+  .catch(err => { menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; console.error(err); });
 
 menuContainer.addEventListener('change', e=>{
   if(e.target.type==='checkbox'){
     const qty = e.target.parentElement.querySelector('.item-qty');
     qty.style.display = e.target.checked?'inline-block':'none';
     qty.required = e.target.checked;
-    if(!e.target.checked) qty.value = 1;
+    if(!e.target.checked) qty.value=1;
     updateTotal();
   }
 });
-menuContainer.addEventListener('input', e=>{ if(e.target.classList.contains('item-qty')) updateTotal(); });
+menuContainer.addEventListener('input', e=>{
+  if(e.target.classList.contains('item-qty')) updateTotal();
+});
 
 // Modal preview
 form.addEventListener('submit', e=>{
   e.preventDefault();
+  if(!/^[a-zA-Z0-9]{5}$/.test(unitInput.value)){ unitInput.focus(); alert("Unit No. must be exactly 5 alphanumeric characters."); return; }
+  if(form.querySelectorAll('input[type="checkbox"]:checked').length===0){ alert("Select at least one item."); return; }
+
   const fd = new FormData(form);
-  const name = fd.get('name'), contact=fd.get('contact'), unitNo=fd.get('unit_no'), notes=fd.get('notes');
-  if(!name || !contact || !unitNo) return alert("Name, Contact, and Unit No. are required.");
-  if(name.length>50) return alert("Name cannot exceed 50 characters.");
-  if(!/^\d{11}$/.test(contact)) return alert("Contact number must be 11 digits.");
-  if(!/^[a-zA-Z0-9]{1,5}$/.test(unitNo)) return alert("Unit No. must be 1-5 alphanumeric.");
-  if(form.querySelectorAll('input[type="checkbox"]:checked').length===0) return alert("Select at least one item.");
+  const name=fd.get('name'), contact=fd.get('contact'), unitNo=fd.get('unit_no'), notes=fd.get('notes');
+  if(!name||!contact) { alert("Name and Contact are required."); return; }
+  if(name.length>50) { alert("Name cannot exceed 50 characters."); return; }
+  if(!/^\d{11}$/.test(contact)) { alert("Contact number must be 11 digits."); return; }
 
   const now = new Date();
   const pad=n=>n.toString().padStart(2,'0');
@@ -369,17 +375,15 @@ form.addEventListener('submit', e=>{
     const qty=Number(fd.get(`qty_${itemName}`)||1);
     const price=priceMap[itemName]||0;
     total+=price*qty;
-    itemsList+=`${count}. ${itemName} x ${qty}\n`;
-    count++;
+    itemsList+=`${count}. ${itemName} x ${qty}\n`; count++;
   });
 
-  previewDetails.textContent=`Name: ${name}\nContact: ${contact}\nUnit: ${unitNo}\nNotes: ${notes}\n\nItems:\n${itemsList}\nTotal: ₱${total}`;
-  modal.style.display='flex';
   pendingOrder={ fd, name, contact, unitNo, notes, orderNumber, total, itemsList };
+  modal.style.display='flex';
 });
 
-cancelBtn.onclick=()=>modal.style.display='none';
-confirmBtn.onclick=()=>{
+cancelBtn.onclick = ()=>modal.style.display='none';
+confirmBtn.onclick = ()=>{
   modal.style.display='none';
   const { fd, name, contact, unitNo, notes, orderNumber, total, itemsList } = pendingOrder;
   const filteredData = new FormData();
@@ -395,14 +399,10 @@ confirmBtn.onclick=()=>{
     .then(res=>res.json())
     .then(resp=>{
       if(resp.success){
-        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n\nItems:\n${itemsList}\nTotal: ₱${total}\n\nNotes:\n${notes}\n\nCash or GCash Payment Accepted.`);
-        gcashSection.style.display='block';
+        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n\nNotes:\n${notes}\n\nCash or GCash Payment Accepted.`);
         form.reset();
         menuContainer.querySelectorAll('.item-qty').forEach(i=>i.style.display='none');
-        menuContainer.querySelectorAll('.menu-item').forEach(card=>card.style.border='none');
         updateTotal();
-        orderNumberEl.textContent='';
-        orderSummaryEl.textContent='';
       } else alert('❌ Failed: '+resp.message);
     })
     .catch(err=>{alert('❌ Failed to submit order.'); console.error(err);});
