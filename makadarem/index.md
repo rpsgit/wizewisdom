@@ -214,7 +214,7 @@ footer {
     <h2>GCash Payment</h2>
     <p>Scan the QR code below or send payment to:</p>
     <p><strong>GCash Number:</strong> 09178664404<br><strong>Account Name:</strong> RE*A P</p>
-    <img src="/assets/images/gcash_qr.png" alt="GCash QR" style="width:160px; height:160px; border-radius:10px; border:2px solid #ccc;">
+    <img src="/assets/images/gcash_qr.jpg" alt="GCash QR" style="width:160px; height:160px; border-radius:10px; border:2px solid #ccc;">
     <p style="font-size:0.9rem; color:#555; margin-top:10px;">Include your <strong>Order Number</strong> in the payment note.</p>
   </div>
 
@@ -382,7 +382,7 @@ confirmBtn.onclick = () => {
     .then(res => res.json())
     .then(resp => {
       if (resp.success) {
-        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n\nItems:\n${itemsList}\nTotal: ₱${total}\n\nPlease pay via GCash.`);
+        alert(`✅ Order placed!\n\nOrder No: ${orderNumber}\n\nItems:\n${itemsList}\nTotal: ₱${total}\n\nCash or GCASH Payment Accepted.`);
         gcashSection.style.display = 'block';
         form.reset();
         menuContainer.querySelectorAll('.item-qty').forEach(i => i.style.display = 'none');
