@@ -218,7 +218,7 @@ footer {
       <input type="text" name="unit_no" maxlength="5" placeholder="1234A" required id="unitNo">
       <span id="unitError">Unit No. must be 5 alphanumeric characters.</span>
       <label>Notes</label>
-      <textarea name="notes" rows="3" placeholder="Additional notes (optional)"></textarea>
+      <textarea name="notes" rows="3" placeholder="Add instructions here"></textarea>
     </div>
 
     <div class="order-number" id="orderNumber"></div>
@@ -316,6 +316,31 @@ menuContainer.addEventListener('input', e => {
   if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
+// Validate Unit No live
+unitInput.addEventListener('input', () => {
+  const value = unitInput.value;
+  const isLengthValid = value.length === 5;
+  const hasLetter = /[a-zA-Z]/.test(value);
+  const valid = isLengthValid && hasLetter;
+
+  if (!valid && isLengthValid && !hasLetter) {
+    unitError.textContent = "Unit No. must have at least 1 letter.";
+  } else {
+    unitError.textContent = "Unit No. must be 5 alphanumeric characters.";
+  }
+
+  unitError.style.display = valid ? 'none' : 'inline';
+  unitInput.style.border = valid ? '1px solid #ccc' : '2px solid red';
+});
+
+// Validate Contact live
+const contactInput = form.querySelector('input[name="contact"]');
+contactInput.addEventListener('input', () => {
+  const contactValid = /^\d{11}$/.test(contactInput.value);
+  contactInput.style.border = contactValid ? '1px solid #ccc' : '2px solid red';
+});
+
+  
 // Validate unit no live
 unitInput.addEventListener('input', () => {
   const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value);
@@ -326,9 +351,21 @@ unitInput.addEventListener('input', () => {
 // Submit
 form.addEventListener('submit', e => {
   e.preventDefault();
-  if (!/^[a-zA-Z0-9]{5}$/.test(unitInput.value)) return alert('Unit No. must be 5 alphanumeric characters.');
-  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert('Select at least one item.');
 
+  const unitValue = unitInput.value;
+  const contactValue = contactInput.value;
+
+  // Unit validation
+  if (unitValue.length !== 5) return alert('Unit No. must be exactly 5 characters.');
+  if (!/[a-zA-Z]/.test(unitValue)) return alert('Unit No. must have at least 1 letter.');
+
+  // Contact validation
+  if (!/^\d{11}$/.test(contactValue)) return alert('Contact must be exactly 11 digits.');
+
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
+    return alert('Select at least one item.');
+
+  // Proceed to prepare pendingOrder...
   const fd = new FormData(form);
   let total = 0;
   let itemsList = [];
@@ -342,14 +379,16 @@ form.addEventListener('submit', e => {
 
   pendingOrder = {
     name: fd.get('name'),
-    contact: fd.get('contact'),
-    unit_no: fd.get('unit_no'),
+    contact: contactValue,
+    unit_no: unitValue,
     notes: fd.get('notes'),
     items: itemsList.join(', '),
     total
   };
+
   modal.style.display = 'flex';
 });
+
 
 cancelBtn.onclick = () => modal.style.display = 'none';
 
