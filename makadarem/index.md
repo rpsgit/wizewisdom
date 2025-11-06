@@ -202,7 +202,7 @@ footer {
 </style>
 
 <div class="page-container">
-  <h1>Makadarem Menu</h1>
+  <h1>Makadarem for VS2</h1>
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
 
