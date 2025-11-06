@@ -24,171 +24,35 @@ body {
   flex-direction: column;
   align-items: center;
 }
-h1 {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 20px;
-  font-weight: bold;
-  color: #4b2e05;
-}
-.category-container {
-  width: 100%;
-  margin-bottom: 25px;
-}
+h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: #4b2e05; }
+.category-container { width: 100%; margin-bottom: 25px; }
 .category-container h2 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-  color: #4b2e05;
-  border-bottom: 2px solid #ff7e5f;
-  padding-bottom: 4px;
+  font-size: 1.4rem; margin-bottom: 10px; color: #4b2e05;
+  border-bottom: 2px solid #ff7e5f; padding-bottom: 4px;
 }
-.menu-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-.menu-item {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 10px;
-  padding: 6px 10px;
-  transition: 0.3s ease;
-}
-.menu-item:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-.menu-item img {
-  width: 80px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-right: 12px;
-  flex-shrink: 0;
-}
-.menu-item .details {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  word-break: break-word;
-}
-.menu-item .details h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: #333;
-}
-.menu-item .details p {
-  margin: 2px 0;
-  font-size: 0.9rem;
-  color: #555;
-}
-.menu-item .actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.menu-item input[type="checkbox"] {
-  transform: scale(1.1);
-  cursor: pointer;
-  margin-bottom: 4px;
-}
-.menu-item input[type="number"] {
-  width: 45px;
-  padding: 3px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  display: none;
-}
-.order-form-section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 15px;
-}
-.order-form-section label {
-  width: 90%;
-  margin-top: 8px;
-  font-size: 0.9rem;
-}
-.order-form-section input,
-.order-form-section textarea {
-  width: 90%;
-  padding: 6px;
-  margin-top: 3px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-}
-.order-button {
-  margin-top: 20px;
-  padding: 10px 25px;
-  border-radius: 20px;
-  font-size: 1rem;
-  background: linear-gradient(135deg, #ff7e5f, #ff5722);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-.order-button:hover {
-  background: #ff5722;
-  transform: scale(1.05);
-}
-.total-price,
-.order-summary {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-top: 10px;
-  color: #ff5722;
-  text-align: left;
-  white-space: pre-line;
-}
-.order-number {
-  font-weight: bold;
-  font-size: 1rem;
-  margin-top: 5px;
-  color: #4b2e05;
-  text-align: center;
-}
-footer {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #555;
-}
-#gcashSection {
-  text-align: center;
-  margin-top: 25px;
-}
-#orderPreviewModal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-.modal-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-}
+.menu-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.menu-item { display: flex; align-items: center; background: #fff; border-radius: 10px; padding: 6px 10px; transition: 0.3s ease; }
+.menu-item:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+.menu-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: 12px; flex-shrink: 0; }
+.menu-item .details { flex-grow: 1; display: flex; flex-direction: column; word-break: break-word; }
+.menu-item .details h3 { margin: 0; font-size: 1rem; color: #333; }
+.menu-item .details p { margin: 2px 0; font-size: 0.9rem; color: #555; }
+.menu-item .actions { display: flex; flex-direction: column; align-items: center; }
+.menu-item input[type="checkbox"] { transform: scale(1.1); cursor: pointer; margin-bottom: 4px; }
+.menu-item input[type="number"] { width: 45px; padding: 3px; border-radius: 5px; border: 1px solid #ccc; display: none; }
+.order-form-section { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
+.order-form-section label { width: 90%; margin-top: 8px; font-size: 0.9rem; }
+.order-form-section input, .order-form-section textarea { width: 90%; padding: 6px; margin-top: 3px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem; }
+.order-button { margin-top: 20px; padding: 10px 25px; border-radius: 20px; font-size: 1rem; background: linear-gradient(135deg, #ff7e5f, #ff5722); color: #fff; border: none; cursor: pointer; transition: 0.3s ease; }
+.order-button:hover { background: #ff5722; transform: scale(1.05); }
+.total-price, .order-summary { font-weight: bold; font-size: 1.1rem; margin-top: 10px; color: #ff5722; text-align: left; white-space: pre-line; }
+.order-number { font-weight: bold; font-size: 1rem; margin-top: 5px; color: #4b2e05; text-align: center; }
+footer { margin-top: 30px; text-align: center; font-size: 0.9rem; color: #555; }
+#gcashSection { text-align: center; margin-top: 25px; display:none; }
+#orderPreviewModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 999; }
+.modal-box { background: #fff; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
 .modal-box h2 { color: #4b2e05; margin-bottom: 10px; }
-.modal-box button {
-  border: none;
-  padding: 8px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 5px;
-}
+.modal-box button { border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; margin: 5px; }
 .modal-confirm { background: #ff7e5f; color: #fff; }
 .modal-cancel { background: #ccc; color: #333; }
 #unitError { font-size: 0.85rem; color: red; display: none; }
@@ -245,18 +109,19 @@ footer {
 </div>
 
 <script>
-const menuURL  = 'https://script.google.com/macros/s/AKfycbxu8HEPuo1UoSf5Zdm8yOkQRfUVgWeEa6P9z5QLkOdXDeDWX2zr243kjvdyRtfdcidf/exec?func=getMenu';
-const orderURL = 'https://script.google.com/macros/s/AKfycbxu8HEPuo1UoSf5Zdm8yOkQRfUVgWeEa6P9z5QLkOdXDeDWX2zr243kjvdyRtfdcidf/exec';
+const menuURL  = 'https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec?func=getMenu';
+const orderURL = 'https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec';
 
-  
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
 const totalPriceEl = document.getElementById('totalPrice');
 const unitInput = document.getElementById('unitNo');
 const unitError = document.getElementById('unitError');
+const contactInput = form.querySelector('input[name="contact"]');
 const modal = document.getElementById('orderPreviewModal');
 const confirmBtn = document.getElementById('confirmOrderBtn');
 const cancelBtn = document.getElementById('cancelOrderBtn');
+const gcashSection = document.getElementById('gcashSection');
 
 let priceMap = {};
 let pendingOrder = null;
@@ -304,7 +169,7 @@ function updateTotal() {
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-// Checkbox and quantity logic
+// Checkbox & quantity logic
 menuContainer.addEventListener('change', e => {
   if (e.target.type === 'checkbox') {
     const qty = e.target.parentElement.querySelector('.item-qty');
@@ -316,56 +181,28 @@ menuContainer.addEventListener('input', e => {
   if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
-// Validate Unit No live
+// Unit validation
 unitInput.addEventListener('input', () => {
-  const value = unitInput.value;
-  const isLengthValid = value.length === 5;
-  const hasLetter = /[a-zA-Z]/.test(value);
-  const valid = isLengthValid && hasLetter;
-
-  if (!valid && isLengthValid && !hasLetter) {
-    unitError.textContent = "Unit No. must have at least 1 letter.";
-  } else {
-    unitError.textContent = "Unit No. must be 5 alphanumeric characters.";
-  }
-
+  const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value) && /[a-zA-Z]/.test(unitInput.value);
   unitError.style.display = valid ? 'none' : 'inline';
   unitInput.style.border = valid ? '1px solid #ccc' : '2px solid red';
 });
 
-// Validate Contact live
-const contactInput = form.querySelector('input[name="contact"]');
+// Contact validation
 contactInput.addEventListener('input', () => {
-  const contactValid = /^\d{11}$/.test(contactInput.value);
-  contactInput.style.border = contactValid ? '1px solid #ccc' : '2px solid red';
-});
-
-  
-// Validate unit no live
-unitInput.addEventListener('input', () => {
-  const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value);
-  unitError.style.display = valid ? 'none' : 'inline';
-  unitInput.style.border = valid ? '1px solid #ccc' : '2px solid red';
+  contactInput.style.border = /^\d{11}$/.test(contactInput.value) ? '1px solid #ccc' : '2px solid red';
 });
 
 // Submit
 form.addEventListener('submit', e => {
   e.preventDefault();
-
   const unitValue = unitInput.value;
   const contactValue = contactInput.value;
 
-  // Unit validation
-  if (unitValue.length !== 5) return alert('Unit No. must be exactly 5 characters.');
-  if (!/[a-zA-Z]/.test(unitValue)) return alert('Unit No. must have at least 1 letter.');
-
-  // Contact validation
+  if (unitValue.length !== 5 || !/[a-zA-Z]/.test(unitValue)) return alert('Unit No. must be exactly 5 characters and contain at least 1 letter.');
   if (!/^\d{11}$/.test(contactValue)) return alert('Contact must be exactly 11 digits.');
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert('Select at least one item.');
 
-  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
-    return alert('Select at least one item.');
-
-  // Proceed to prepare pendingOrder...
   const fd = new FormData(form);
   let total = 0;
   let itemsList = [];
@@ -389,7 +226,6 @@ form.addEventListener('submit', e => {
   modal.style.display = 'flex';
 });
 
-
 cancelBtn.onclick = () => modal.style.display = 'none';
 
 confirmBtn.onclick = () => {
@@ -402,10 +238,17 @@ confirmBtn.onclick = () => {
     .then(res => {
       if (res.success) {
         alert(`✅ Order placed!\n\nOrder Number: ${res.orderNumber}\n\nItems: ${pendingOrder.items}\n\nNotes: ${pendingOrder.notes}\nTotal: ₱${pendingOrder.total}`);
+        
         form.reset();
         document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
         updateTotal();
-      } else alert('❌ Failed: ' + res.message);
+
+        // Show GCash and scroll to it
+        gcashSection.style.display = 'block';
+        gcashSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        alert('❌ Failed: ' + res.message);
+      }
     })
     .catch(() => alert('Error saving order.'));
 };
