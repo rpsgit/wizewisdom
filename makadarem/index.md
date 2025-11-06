@@ -67,6 +67,7 @@ footer { margin-top: 30px; text-align: center; font-size: 0.9rem; color: #555; }
 
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
+  <p>Door-o-door delivery</p>
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
 
@@ -253,3 +254,5 @@ confirmBtn.onclick = () => {
     .catch(() => alert('Error saving order.'));
 };
 </script>
+
+  <p>Contact: 09178664404</p>
