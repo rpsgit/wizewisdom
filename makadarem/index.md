@@ -145,8 +145,8 @@ footer {
 <input type="text" name="contact" placeholder="09XXXXXXXXX" maxlength="11" required>
 
 <label>Unit No.</label>
-<input type="text" name="unit_no" id="unitNo" maxlength="5" placeholder="1234A or 1234B" required>
-<span id="unitError">Unit No. must be 4 digits + A or B (ex: 1234A).</span>
+<input type="text" name="unit_no" id="unitNo" maxlength="5" placeholder="XXXXA" required>
+<span id="unitError">Unit No. must be 4 digits + A or B (1234A).</span>
 
 <label>Notes</label>
 <textarea name="notes" rows="3" placeholder="Add instructions here"></textarea>
@@ -154,6 +154,8 @@ footer {
 
 <div class="order-number" id="orderNumber"></div>
 <button type="submit" class="order-button">Place Order</button>
+
+<p>For inquiries please contact 09178664404</p>
 
 </form>
 
@@ -170,8 +172,8 @@ footer {
 
 
 <script>
-const menuURL = 'YOUR-MENU-APPSCRIPT-URL-HERE';
-const orderURL = 'YOUR-ORDER-APPSCRIPT-URL-HERE';
+const menuURL = 'https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec?func=getMenu'; 
+const orderURL = 'https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec';
 
 const form = document.getElementById('menuForm');
 const unitInput = document.getElementById('unitNo');
@@ -205,5 +207,3 @@ form.addEventListener('submit', e => {
   // Continue sending order (unchanged logic)...
 });
 </script>
-
-<p>Contact: 09178664404</p>
