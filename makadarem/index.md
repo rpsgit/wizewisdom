@@ -162,7 +162,9 @@ footer {
 #gcashSection {
   text-align: center;
   margin-top: 25px;
+  display: none; /* ✅ Hidden until successful order */
 }
+
 #orderPreviewModal {
   display: none;
   position: fixed;
