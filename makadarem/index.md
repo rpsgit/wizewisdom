@@ -1,5 +1,3 @@
-Working index.html
-------------------------------------
 ---
 layout: default
 title: Menu
@@ -250,12 +248,14 @@ footer {
 const menuURL  = 'https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec?func=getMenu';
 const orderURL = 'https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec';
 
-  
 const menuContainer = document.getElementById('menuContainer');
 const form = document.getElementById('menuForm');
-const totalPriceEl = document.getElementById('totalPrice');
 const unitInput = document.getElementById('unitNo');
 const unitError = document.getElementById('unitError');
+const contactInput = form.querySelector('input[name="contact"]');
+const totalPriceEl = document.getElementById('totalPrice');
+const gcashSection = document.getElementById('gcashSection');
+
 const modal = document.getElementById('orderPreviewModal');
 const confirmBtn = document.getElementById('confirmOrderBtn');
 const cancelBtn = document.getElementById('cancelOrderBtn');
@@ -286,7 +286,7 @@ fetch(menuURL)
           </div>
           <div class="actions">
             <input type="checkbox" name="item_${item.name}">
-            <input type="number" name="qty_${item.name}" class="item-qty" value="1" min="1">
+            <input type="number" name="qty_${item.name}" class="item-qty" value="1" min="1" style="display:none;">
           </div>`;
         list.appendChild(div);
       });
@@ -294,8 +294,9 @@ fetch(menuURL)
       menuContainer.appendChild(catDiv);
     });
   })
-  .catch(() => { menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>'; });
+  .catch(() => menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>');
 
+// Update Total
 function updateTotal() {
   let total = 0;
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
@@ -306,7 +307,7 @@ function updateTotal() {
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-// Checkbox and quantity logic
+// Checkbox / Quantity Logic
 menuContainer.addEventListener('change', e => {
   if (e.target.type === 'checkbox') {
     const qty = e.target.parentElement.querySelector('.item-qty');
@@ -318,34 +319,15 @@ menuContainer.addEventListener('input', e => {
   if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
-// Validate Unit No live
-unitInput.addEventListener('input', () => {
-  const value = unitInput.value;
-  const isLengthValid = value.length === 5;
-  const hasLetter = /[a-zA-Z]/.test(value);
-  const valid = isLengthValid && hasLetter;
-
-  if (!valid && isLengthValid && !hasLetter) {
-    unitError.textContent = "Unit No. must have at least 1 letter.";
-  } else {
-    unitError.textContent = "Unit No. must be 5 alphanumeric characters.";
-  }
-
-  unitError.style.display = valid ? 'none' : 'inline';
-  unitInput.style.border = valid ? '1px solid #ccc' : '2px solid red';
-});
-
-// Validate Contact live
-const contactInput = form.querySelector('input[name="contact"]');
+// ✅ Contact must stay numeric & max 11 digits
 contactInput.addEventListener('input', () => {
-  const contactValid = /^\d{11}$/.test(contactInput.value);
-  contactInput.style.border = contactValid ? '1px solid #ccc' : '2px solid red';
+  contactInput.value = contactInput.value.replace(/\D/g,'').slice(0,11);
 });
 
-  
-// Validate unit no live
+// ✅ Unit must be exactly `####A` or `####B`
 unitInput.addEventListener('input', () => {
-  const valid = /^[a-zA-Z0-9]{5}$/.test(unitInput.value);
+  unitInput.value = unitInput.value.toUpperCase();
+  const valid = /^[0-9]{4}[AB]$/.test(unitInput.value);
   unitError.style.display = valid ? 'none' : 'inline';
   unitInput.style.border = valid ? '1px solid #ccc' : '2px solid red';
 });
@@ -354,35 +336,30 @@ unitInput.addEventListener('input', () => {
 form.addEventListener('submit', e => {
   e.preventDefault();
 
-  const unitValue = unitInput.value;
-  const contactValue = contactInput.value;
+  if (!/^[0-9]{4}[AB]$/.test(unitInput.value))
+    return alert("Unit must be 4 digits followed by A or B (e.g., 1234A).");
 
-  // Unit validation
-  if (unitValue.length !== 5) return alert('Unit No. must be exactly 5 characters.');
-  if (!/[a-zA-Z]/.test(unitValue)) return alert('Unit No. must have at least 1 letter.');
-
-  // Contact validation
-  if (!/^\d{11}$/.test(contactValue)) return alert('Contact must be exactly 11 digits.');
+  if (!/^\d{11}$/.test(contactInput.value))
+    return alert("Contact must be exactly 11 digits.");
 
   if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
-    return alert('Select at least one item.');
+    return alert("Select at least one item.");
 
-  // Proceed to prepare pendingOrder...
   const fd = new FormData(form);
   let total = 0;
   let itemsList = [];
+
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const itemName = cb.name.replace('item_', '');
-    const qty = Number(fd.get(`qty_${itemName}`));
-    const price = priceMap[itemName] || 0;
-    total += price * qty;
-    itemsList.push(`${itemName} × ${qty}`);
+    const name = cb.name.replace('item_', '');
+    const qty = Number(fd.get(`qty_${name}`));
+    total += (priceMap[name] || 0) * qty;
+    itemsList.push(`${name} × ${qty}`);
   });
 
   pendingOrder = {
     name: fd.get('name'),
-    contact: contactValue,
-    unit_no: unitValue,
+    contact: contactInput.value,
+    unit_no: unitInput.value,
     notes: fd.get('notes'),
     items: itemsList.join(', '),
     total
@@ -391,11 +368,11 @@ form.addEventListener('submit', e => {
   modal.style.display = 'flex';
 });
 
-
 cancelBtn.onclick = () => modal.style.display = 'none';
 
 confirmBtn.onclick = () => {
   modal.style.display = 'none';
+
   const fd = new FormData();
   Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
 
@@ -403,12 +380,17 @@ confirmBtn.onclick = () => {
     .then(r => r.json())
     .then(res => {
       if (res.success) {
-        alert(`✅ Order placed!\n\nOrder Number: ${res.orderNumber}\n\nItems: ${pendingOrder.items}\n\nNotes: ${pendingOrder.notes}\nTotal: ₱${pendingOrder.total}`);
+        alert(`✅ Order placed!\nOrder Number: ${res.orderNumber}`);
+        
+        gcashSection.style.display = 'block'; // ✅ Show GCash AFTER order
+        
         form.reset();
         document.querySelectorAll('.item-qty').forEach(i => i.style.display='none');
         updateTotal();
-      } else alert('❌ Failed: ' + res.message);
+      } else {
+        alert('❌ Failed to save order.');
+      }
     })
-    .catch(() => alert('Error saving order.'));
+    .catch(() => alert('Network error. Try again.'));
 };
 </script>
