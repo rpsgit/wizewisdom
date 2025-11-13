@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-  <title>VS2 Service Directory Search</title>
+  <title>VS2 Residential Service Directory Search</title>
   <style>
     body {
       font-family: "Poppins", Arial, sans-serif;
@@ -145,7 +145,7 @@
   </style>
 </head>
 <body>
-  <h1>VS2 Service Directory</h1>
+  <h1>VS2 Residential Service Directory</h1>
 
   <div class="search-container">
     <input type="text" id="searchInput" placeholder="Search services..." onkeypress="if(event.key === 'Enter') searchServices()" />
@@ -168,7 +168,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec"; // replace with your actual web app URL
+    const SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE"; // replace with your actual web app URL
 
     async function searchServices() {
       const query = document.getElementById("searchInput").value.trim();
