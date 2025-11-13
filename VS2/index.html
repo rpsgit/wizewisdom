@@ -74,6 +74,23 @@
       margin-bottom: 4px;
       break-inside: avoid;
     }
+    .summary a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 4px;
+      padding: 2px 6px;
+      transition: all 0.2s ease;
+    }
+    .summary a:hover {
+      color: #005fa3;
+      text-decoration: underline;
+    }
+    .summary a.active {
+      background: #0077cc;
+      color: white !important;
+      text-decoration: none;
+    }
     table {
       width: 100%;
       max-width: 900px;
@@ -134,6 +151,7 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec";
     let searchTimeout;
+    let activeCategory = null;
 
     document.addEventListener("DOMContentLoaded", () => {
       const searchInput = document.getElementById("searchInput");
@@ -144,13 +162,17 @@
       // Live search (debounced)
       searchInput.addEventListener("input", () => {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(searchServices, 400);
+        searchTimeout = setTimeout(() => {
+          clearActiveCategory();
+          searchServices();
+        }, 400);
       });
 
       // Press Enter to search
       searchInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
+          clearActiveCategory();
           searchServices();
         }
       });
@@ -171,7 +193,14 @@
         const services = [...new Set(data.map(item => item["Type of Service"]).filter(Boolean))];
         summaryDiv.innerHTML = `
           <h2>Available Services</h2>
-          <ul>${services.map(s => `<li>${s}</li>`).join("")}</ul>
+          <ul>
+            ${services
+              .map(
+                s =>
+                  `<li><a href="#" onclick="categorySearch(this, '${s.replace(/'/g, "\\'")}')">${s}</a></li>`
+              )
+              .join("")}
+          </ul>
         `;
       } catch (err) {
         console.error(err);
@@ -179,8 +208,23 @@
       }
     }
 
-    async function searchServices() {
-      const query = document.getElementById("searchInput").value.trim();
+    function clearActiveCategory() {
+      if (activeCategory) activeCategory.classList.remove("active");
+      activeCategory = null;
+    }
+
+    async function categorySearch(link, category) {
+      clearActiveCategory();
+      link.classList.add("active");
+      activeCategory = link;
+
+      const searchInput = document.getElementById("searchInput");
+      searchInput.value = category;
+      searchServices(category);
+    }
+
+    async function searchServices(forcedQuery) {
+      const query = forcedQuery || document.getElementById("searchInput").value.trim();
       const resultsDiv = document.getElementById("results");
 
       if (!query) {
