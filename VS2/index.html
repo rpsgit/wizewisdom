@@ -110,6 +110,8 @@
   }
   tr:hover { background: #f2f8ff; }
 
+  .selected-row { background-color: #d0e6ff !important; }
+
   .no-results {
     color: #888;
     margin-top: 1rem;
@@ -119,6 +121,7 @@
 
   /* CARD VIEW for mobile */
   @media (max-width: 600px) {
+    table { display: none; }
     .card-list { display: flex; flex-direction: column; gap: 15px; }
     .card {
       background: white;
@@ -126,6 +129,10 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       padding: 15px;
       cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .card:hover, .card.active-card {
+      background: #d0e6ff;
     }
     .card h3 { margin: 0 0 8px; color: #0077cc; font-size: 1.1rem; }
     .card p { margin: 4px 0; font-size: 0.9rem; line-height: 1.3; }
@@ -234,14 +241,14 @@ function renderResults(data) {
     return;
   }
 
-  // TABLE VIEW
+  // --- TABLE VIEW (desktop) ---
   const tableHTML = `
     <div class="table-container">
       <table>
         <thead>
           <tr>
             <th>Type of Service</th>
-            <th>Description</th>
+            <th>Product/Service</th>
             <th>Contact Number</th>
           </tr>
         </thead>
@@ -249,7 +256,7 @@ function renderResults(data) {
           ${data.map((item,index) => `
             <tr onclick="showFullCard(${index})">
               <td>${item["Type of Service"] || ""}</td>
-              <td>${item["Description"] || ""}</td>
+              <td>${item["Product/Service"] || ""}</td>
               <td>${item["Contact Number"] || ""}</td>
             </tr>
           `).join("")}
@@ -258,13 +265,13 @@ function renderResults(data) {
     </div>
   `;
 
-  // CARD VIEW
+  // --- CARD VIEW (mobile only) ---
   const cardsHTML = `
     <div class="card-list">
       ${data.map((item,index) => `
-        <div class="card" onclick="showFullCard(${index})">
+        <div class="card" onclick="showFullCard(${index}); highlightCard(this);">
           <h3>${item["Type of Service"] || "No Type"}</h3>
-          <p><strong>Description:</strong> ${item["Description"] || "—"}</p>
+          <p><strong>Product/Service:</strong> ${item["Product/Service"] || "—"}</p>
           <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
         </div>
       `).join("")}
@@ -279,10 +286,15 @@ function showFullCard(index) {
   const item = window.currentResults[index];
   const selectedDiv = document.getElementById("selectedCard");
 
+  // Highlight selected table row
+  const rows = document.querySelectorAll("table tbody tr");
+  rows.forEach(r => r.classList.remove("selected-row"));
+  if (rows[index]) rows[index].classList.add("selected-row");
+
   selectedDiv.innerHTML = `
     <div class="card" style="margin-bottom:20px;">
       <h3>${item["Type of Service"] || "No Type"}</h3>
-      <p><strong>Description:</strong> ${item["Description"] || "—"}</p>
+      <p><strong>Product/Service:</strong> ${item["Product/Service"] || "—"}</p>
       <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
       <p><strong>Contact Name:</strong> ${item["Contact Name"] || "—"}</p>
       <p><strong>Availability:</strong> ${item["Availability"] || "—"}</p>
@@ -291,6 +303,11 @@ function showFullCard(index) {
   `;
 
   selectedDiv.scrollIntoView({behavior:"smooth"});
+}
+
+function highlightCard(card) {
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active-card"));
+  card.classList.add("active-card");
 }
 </script>
 </body>
