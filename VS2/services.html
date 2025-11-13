@@ -117,15 +117,15 @@
       background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
-      overflow-x: auto; /* ✅ allow horizontal scrolling */
+      overflow-x: auto; /* horizontal scrolling */
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       table-layout: auto;
-      font-size: 1rem; /* ✅ same font size as detail section */
-      white-space: nowrap; /* ✅ prevent wrapping */
+      font-size: 1rem; /* same as details section */
+      white-space: nowrap; /* prevent wrapping */
     }
 
     th, td {
@@ -159,21 +159,6 @@
       display: none;
       width: 100%;
     }
-
-    /* mobile adjustments */
-    @media (max-width: 600px) {
-      .summary ul {
-        columns: 1;
-      }
-
-      table {
-        font-size: 1rem; /* keep same font on mobile */
-      }
-
-      th, td {
-        padding: 8px 10px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -186,8 +171,8 @@
     </div>
 
     <div class="summary" id="serviceSummary">
-      <h2>Available Services</h2>
-      <p>Loading services...</p>
+      <h2>Select a category</h2>
+      <p>Loading producs and services...</p>
     </div>
 
     <div id="results"></div>
@@ -222,20 +207,20 @@
         const data = await response.json();
 
         if (!data.length) {
-          summaryDiv.innerHTML = `<h2>Available Services</h2><p>No services found in the directory.</p>`;
+          summaryDiv.innerHTML = `<h2>Available Product/Services</h2><p>No services found in the directory.</p>`;
           return;
         }
 
         const services = [...new Set(data.map(item => item["Type of Service"]).filter(Boolean))];
         summaryDiv.innerHTML = `
-          <h2>Available Services</h2>
+          <h2>Available Product/Services</h2>
           <ul>
             ${services.map(s => `<li><a href="#" onclick="searchCategory('${s}'); return false;">${s}</a></li>`).join("")}
           </ul>
         `;
       } catch (err) {
         console.error(err);
-        summaryDiv.innerHTML = `<h2>Available Services</h2><p>Error loading service list.</p>`;
+        summaryDiv.innerHTML = `<h2>Available Product/Services</h2><p>Error loading service list.</p>`;
       }
     }
 
@@ -274,7 +259,6 @@
               <thead>
                 <tr>
                   <th>Product/Service</th>
-                  <th>Contact Name</th>
                   <th>Contact Number</th>
                 </tr>
               </thead>
@@ -282,7 +266,6 @@
                 ${data.map((item, i) => `
                   <tr data-index="${i}">
                     <td>${item["Product/Service"] || ""}</td>
-                    <td>${item["Contact Name"] || ""}</td>
                     <td>${item["Contact Number"] || ""}</td>
                   </tr>
                 `).join("")}
@@ -311,7 +294,7 @@
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);
                 max-width:900px;
                 width:100%;
-                font-size:1rem; /* match table font */
+                font-size:1rem;
               ">
                 <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
                 <p><strong>Product/Service:</strong> ${item["Product/Service"] || "N/A"}</p>
