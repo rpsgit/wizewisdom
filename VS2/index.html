@@ -1,284 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VS2 Service & Merchandise Directory Search</title>
-<style>
-  body {
-    font-family: "Poppins", sans-serif;
-    background: #f4f6fb;
-    color: #222;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.5rem;
-    margin: 0;
-  }
-
-  h1 {
-    color: #0077cc;
-    margin-bottom: 1.2rem;
-    text-align: center;
-    font-size: 1.8rem;
-  }
-
-  .search-box {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    max-width: 600px;
-  }
-
-  input {
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    width: 100%;
-    max-width: 300px;
-    outline: none;
-    transition: box-shadow 0.2s ease;
-  }
-
-  input:focus { box-shadow: 0 0 0 3px rgba(0,119,204,0.2); }
-
-  button {
-    padding: 10px 15px;
-    background: #0077cc;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-
-  button:hover { background: #005fa3; }
-
-  .summary {
-    width: 100%;
-    max-width: 800px;
-    background: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    text-align: left;
-  }
-
-  .summary h2 { color: #0077cc; font-size: 1.2rem; margin-bottom: 8px; }
-
-  .summary ul {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    columns: 2;
-    column-gap: 2rem;
-  }
-
-  .summary li { margin-bottom: 6px; break-inside: avoid; }
-
-  .summary a { color: #0077cc; text-decoration: none; transition: color 0.2s ease; }
-  .summary a:hover { text-decoration: underline; color: #005fa3; }
-
-  .table-container {
-    width: 100%;
-    max-width: 900px;
-    overflow-x: auto;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 450px;
-    cursor: pointer;
-  }
-
-  th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; white-space: nowrap; }
-  th {
-    background: #0077cc;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  tr:hover { background: #f2f8ff; }
-
-  .no-results {
-    color: #888;
-    margin-top: 1rem;
-    font-style: italic;
-    text-align: center;
-  }
-
-  .details-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    padding: 15px 20px;
-    width: 100%;
-    max-width: 800px;
-  }
-
-  .details-card h3 {
-    margin: 0 0 10px;
-    color: #0077cc;
-    font-size: 1.2rem;
-  }
-
-  .details-card p { margin: 6px 0; line-height: 1.4; }
-
-  @media (max-width: 700px) {
-    h1 { font-size: 1.4rem; }
-    input { width: 100%; }
-    .summary ul { columns: 1; }
-    th, td { padding: 8px; }
-  }
-</style>
-</head>
-<body>
-<h1>🔍 VS2 Service & Merchandise Directory Search</h1>
-
-<div class="search-box">
-  <input type="text" id="searchInput" placeholder="Search for a product or service..." />
-  <button onclick="searchServices()">Search</button>
-</div>
-
-<div class="summary" id="serviceSummary">
-  <h2>Products or Services Categories</h2>
-  <p>Loading services...</p>
-</div>
-
-<div id="results"></div>
-<div id="selectedDetails"></div>
-
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec";
-let searchTimeout;
-let allData = [];
-
-document.addEventListener("DOMContentLoaded", () => {
-  fetchServiceSummary();
-
-  const searchInput = document.getElementById("searchInput");
-  searchInput.addEventListener("input", () => {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(searchServices, 400);
-  });
-  searchInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") { e.preventDefault(); searchServices(); }
-  });
-});
-
-async function fetchServiceSummary() {
-  const summaryDiv = document.getElementById("serviceSummary");
-  try {
-    const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=`);
-    const data = await response.json();
-    allData = data;
-
-    if (!data.length) {
-      summaryDiv.innerHTML = `<h2>Available Products or Services</h2><p>No services found.</p>`;
-      return;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>VS2 Service Directory Search</title>
+  <style>
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
-    const services = [...new Set(data.map(item => item["Type of Service"]).filter(Boolean))];
+    h1 {
+      margin-top: 1.2rem;
+      text-align: center;
+      color: #0077cc;
+    }
 
-    summaryDiv.innerHTML = `
-      <h2>Available Services</h2>
-      <ul>
-        ${services.map(s => `<li><a href="#" onclick="filterByCategory('${s}')">${s}</a></li>`).join("")}
-      </ul>
-    `;
-  } catch (err) {
-    console.error(err);
-    summaryDiv.innerHTML = `<h2>Available Services</h2><p>Error loading service list.</p>`;
-  }
-}
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 90%;
+      max-width: 500px;
+    }
 
-async function searchServices(queryOverride = null) {
-  const query = queryOverride || document.getElementById("searchInput").value.trim();
-  const resultsDiv = document.getElementById("results");
-  document.getElementById("selectedDetails").innerHTML = "";
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      font-size: 16px;
+    }
 
-  if (!query) { resultsDiv.innerHTML = ""; return; }
+    button {
+      background-color: #0077cc;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      max-width: 200px;
+    }
 
-  resultsDiv.innerHTML = "<p>Searching...</p>";
+    button:hover {
+      background-color: #005fa3;
+    }
 
-  try {
-    const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=${encodeURIComponent(query)}`);
-    const data = await response.json();
-    renderResults(data);
-  } catch (err) {
-    console.error(err);
-    resultsDiv.innerHTML = `<p class="no-results">Error fetching data.</p>`;
-  }
-}
+    .service-summary {
+      width: 90%;
+      max-width: 700px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
 
-function filterByCategory(category) {
-  document.getElementById("searchInput").value = category;
-  const filtered = allData.filter(item => item["Type of Service"] === category);
-  renderResults(filtered);
-}
+    .service-summary h2 {
+      color: #0077cc;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
 
-function renderResults(data) {
-  const resultsDiv = document.getElementById("results");
+    .service-summary ul {
+      list-style-type: disc;
+      margin: 0;
+      padding-left: 1.5rem;
+      color: #333;
+    }
 
-  if (!data.length) {
-    resultsDiv.innerHTML = `<p class="no-results">No matching services found.</p>`;
-    return;
-  }
+    .results-container {
+      width: 95%;
+      max-width: 1000px;
+      margin-top: 1.2rem;
+    }
 
-  const tableHTML = `
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Type of Service</th>
-            <th>Product/Service</th>
-            <th>Contact Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${data.map((item, index) => `
-            <tr onclick="showFullDetails(${index})">
-              <td>${item["Type of Service"] || ""}</td>
-              <td>${item["Product/Service"] || ""}</td>
-              <td>${item["Contact Number"] || ""}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
+    /* Make table scrollable horizontally on mobile */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 0.5rem;
+    }
 
-  resultsDiv.innerHTML = tableHTML;
-  window.currentResults = data;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
 
-function showFullDetails(index) {
-  const item = window.currentResults[index];
-  const detailsDiv = document.getElementById("selectedDetails");
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 15px;
+    }
 
-  detailsDiv.innerHTML = `
-    <div class="details-card">
-      <h3>${item["Type of Service"] || "No Type"}</h3>
-      <p><strong>Product/Service:</strong> ${item["Product/Service"] || "—"}</p>
-      <p><strong>Contact Name:</strong> ${item["Contact Name"] || "—"}</p>
-      <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
-      <p><strong>Availability:</strong> ${item["Availability"] || "—"}</p>
-      <p><strong>Other Details:</strong> ${item["Other Details"] || "—"}</p>
-    </div>
-  `;
+    th {
+      background-color: #0077cc;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
 
-  detailsDiv.scrollIntoView({ behavior: "smooth" });
-}
-</script>
+    tr:hover {
+      background-color: #f1f9ff;
+      cursor: pointer;
+    }
+
+    #detailsSection {
+      margin-top: 1.5rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        font-size: 13px;
+        padding: 8px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>VS2 Service Directory</h1>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search services..." onkeypress="if(event.key === 'Enter') searchServices()" />
+    <button onclick="searchServices()">Search</button>
+  </div>
+
+  <div class="service-summary">
+    <h2>Available Service Categories</h2>
+    <ul>
+      <li><strong>Food & Beverage Services:</strong> Meals, catering, food delivery</li>
+      <li><strong>Household Services:</strong> Laundry, cleaning, home maintenance</li>
+      <li><strong>Utility / Maintenance Services:</strong> Water refilling, plumbing, repairs</li>
+      <li><strong>Financial & Digital Services:</strong> GCash In/Out, mobile load, printing, scanning</li>
+      <li><strong>Retail & Non-Food Sales:</strong> General store items, dry goods, clothing, accessories</li>
+    </ul>
+  </div>
+
+  <div class="results-container">
+    <div id="results"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec"; // replace with your actual web app URL
+
+    async function searchServices() {
+      const query = document.getElementById("searchInput").value.trim();
+      const resultsDiv = document.getElementById("results");
+      
+      const existingDetails = document.getElementById("detailsSection");
+      if (existingDetails) existingDetails.remove();
+
+      if (!query) {
+        resultsDiv.innerHTML = "";
+        return;
+      }
+
+      resultsDiv.innerHTML = "<p>Searching...</p>";
+
+      try {
+        const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+          resultsDiv.innerHTML = `<p>No matching services found.</p>`;
+          return;
+        }
+
+        // Table display
+        const tableHTML = `
+          <div class="table-wrapper">
+            <table id="resultsTable">
+              <thead>
+                <tr>
+                  <th>Type of Service</th>
+                  <th>Description</th>
+                  <th>Contact Number</th>
+                  <th>Contact Name</th>
+                  <th>Schedule of Operation</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.map((item, i) => `
+                  <tr data-index="${i}">
+                    <td>${item["Type of Service"] || ""}</td>
+                    <td>${item["Description"] || ""}</td>
+                    <td>${item["Contact Number"] || ""}</td>
+                    <td>${item["Contact Name"] || ""}</td>
+                    <td>${item["Schedule of Operation"] || ""}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        resultsDiv.innerHTML = tableHTML;
+
+        // Add click listeners for showing details
+        const rows = document.querySelectorAll("#resultsTable tbody tr");
+        rows.forEach(row => {
+          row.addEventListener("click", () => {
+            const index = row.getAttribute("data-index");
+            const item = data[index];
+            
+            const existing = document.getElementById("detailsSection");
+            if (existing) existing.remove();
+
+            const detailDiv = document.createElement("div");
+            detailDiv.id = "detailsSection";
+            detailDiv.innerHTML = `
+              <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
+              <p><strong>Description:</strong> ${item["Description"] || "N/A"}</p>
+              <p><strong>Contact Name:</strong> ${item["Contact Name"] || "N/A"}</p>
+              <p><strong>Contact Number:</strong> ${item["Contact Number"] || "N/A"}</p>
+              <p><strong>Schedule of Operation:</strong> ${item["Schedule of Operation"] || "N/A"}</p>
+            `;
+            resultsDiv.appendChild(detailDiv);
+          });
+        });
+
+      } catch (error) {
+        console.error(error);
+        resultsDiv.innerHTML = `<p>Error loading results. Please try again later.</p>`;
+      }
+    }
+  </script>
 </body>
 </html>
