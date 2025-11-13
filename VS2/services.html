@@ -117,21 +117,21 @@
       background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
-      overflow: hidden;
+      overflow-x: auto; /* ✅ allow horizontal scrolling */
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       table-layout: auto;
-      font-size: 0.85rem; /* ✅ Smaller font */
+      font-size: 1rem; /* ✅ same font size as detail section */
+      white-space: nowrap; /* ✅ prevent wrapping */
     }
 
     th, td {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-bottom: 1px solid #eee;
       text-align: left;
-      word-wrap: break-word;
       vertical-align: top;
     }
 
@@ -160,41 +160,18 @@
       width: 100%;
     }
 
-    /* Fully responsive table */
+    /* mobile adjustments */
     @media (max-width: 600px) {
       .summary ul {
         columns: 1;
       }
 
-      table, thead, tbody, th, td, tr {
-        display: block;
+      table {
+        font-size: 1rem; /* keep same font on mobile */
       }
 
-      thead {
-        display: none; /* hide headers */
-      }
-
-      tr {
-        margin-bottom: 12px;
-        border-bottom: 1px solid #eee;
-        padding: 5px 0;
-      }
-
-      td {
-        text-align: right;
-        padding-left: 50%;
-        position: relative;
-        font-size: 0.85rem;
-      }
-
-      td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        width: 45%;
-        text-align: left;
-        font-weight: bold;
-        color: #0077cc;
+      th, td {
+        padding: 8px 10px;
       }
     }
   </style>
@@ -304,9 +281,9 @@
               <tbody>
                 ${data.map((item, i) => `
                   <tr data-index="${i}">
-                    <td data-label="Product/Service">${item["Product/Service"] || ""}</td>
-                    <td data-label="Contact Name">${item["Contact Name"] || ""}</td>
-                    <td data-label="Contact Number">${item["Contact Number"] || ""}</td>
+                    <td>${item["Product/Service"] || ""}</td>
+                    <td>${item["Contact Name"] || ""}</td>
+                    <td>${item["Contact Number"] || ""}</td>
                   </tr>
                 `).join("")}
               </tbody>
@@ -334,6 +311,7 @@
                 box-shadow:0 2px 8px rgba(0,0,0,0.1);
                 max-width:900px;
                 width:100%;
+                font-size:1rem; /* match table font */
               ">
                 <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
                 <p><strong>Product/Service:</strong> ${item["Product/Service"] || "N/A"}</p>
