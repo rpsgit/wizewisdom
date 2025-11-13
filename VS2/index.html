@@ -1,131 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Service Directory Search</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #f4f6fb;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-    h1 {
-      color: #0077cc;
-      margin-bottom: 1.5rem;
-    }
-    .search-box {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    input {
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 250px;
-    }
-    button {
-      padding: 10px 15px;
-      background: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #005fa3;
-    }
-    table {
-      width: 100%;
-      max-width: 800px;
-      border-collapse: collapse;
-      margin-top: 10px;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-    th {
-      background: #0077cc;
-      color: white;
-    }
-    tr:hover {
-      background: #f2f8ff;
-    }
-    .no-results {
-      color: #888;
-      margin-top: 1rem;
-      font-style: italic;
-    }
-  </style>
-</head>
-<body>
-  <h1>🔍 Service Directory Search</h1>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search for a service..." />
-    <button onclick="searchServices()">Search</button>
-  </div>
-  <div id="results"></div>
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec";
+  let searchTimeout;
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec";
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchInput");
 
-    async function searchServices() {
-      const query = document.getElementById("searchInput").value.trim();
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "<p>Searching...</p>";
+    // Trigger search when typing (with debounce)
+    searchInput.addEventListener("input", () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(searchServices, 400); // delay to avoid too many calls
+    });
 
-      try {
-        const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=${encodeURIComponent(query)}`);
-        const data = await response.json();
-
-        if (data.length === 0) {
-          resultsDiv.innerHTML = `<p class="no-results">No matching services found.</p>`;
-          return;
-        }
-
-        // Build table
-        const tableHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Type of Service</th>
-                <th>Description</th>
-                <th>Contact Number</th>
-                <th>Contact Name</th>
-                <th>Schedule of Operation</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${data.map(item => `
-                <tr>
-                  <td>${item["Type of Service"] || ""}</td>
-                  <td>${item["Description"] || ""}</td>
-                  <td>${item["Contact Number"] || ""}</td>
-                  <td>${item["Contact Name"] || ""}</td>
-                  <td>${item["Schedule of Operation"] || ""}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        `;
-        resultsDiv.innerHTML = tableHTML;
-      } catch (err) {
-        console.error(err);
-        resultsDiv.innerHTML = `<p class="no-results">Error fetching data. Please try again later.</p>`;
+    // Trigger search on Enter
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        searchServices();
       }
+    });
+  });
+
+  async function searchServices() {
+    const query = document.getElementById("searchInput").value.trim();
+    const resultsDiv = document.getElementById("results");
+
+    if (!query) {
+      resultsDiv.innerHTML = "";
+      return;
     }
-  </script>
-</body>
-</html>
+
+    resultsDiv.innerHTML = "<p>Searching...</p>";
+
+    try {
+      const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=${encodeURIComponent(query)}`);
+      const data = await response.json();
+
+      if (data.length === 0) {
+        resultsDiv.innerHTML = `<p class="no-results">No matching services found.</p>`;
+        return;
+      }
+
+      // Build results table
+      const tableHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Type of Service</th>
+              <th>Description</th>
+              <th>Contact Number</th>
+              <th>Contact Name</th>
+              <th>Schedule of Operation</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.map(item => `
+              <tr>
+                <td>${item["Type of Service"] || ""}</td>
+                <td>${item["Description"] || ""}</td>
+                <td>${item["Contact Number"] || ""}</td>
+                <td>${item["Contact Name"] || ""}</td>
+                <td>${item["Schedule of Operation"] || ""}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+      resultsDiv.innerHTML = tableHTML;
+    } catch (err) {
+      console.error(err);
+      resultsDiv.innerHTML = `<p class="no-results">Error fetching data. Please try again later.</p>`;
+    }
+  }
+</script>
