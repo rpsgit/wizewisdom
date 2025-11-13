@@ -110,8 +110,6 @@
   }
   tr:hover { background: #f2f8ff; }
 
-  .selected-row { background-color: #d0e6ff !important; }
-
   .no-results {
     color: #888;
     margin-top: 1rem;
@@ -119,31 +117,27 @@
     text-align: center;
   }
 
-  /* CARD VIEW for mobile */
-  @media (max-width: 600px) {
-    table { display: none; }
-    .card-list { display: flex; flex-direction: column; gap: 15px; }
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      padding: 15px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .card:hover, .card.active-card {
-      background: #d0e6ff;
-    }
-    .card h3 { margin: 0 0 8px; color: #0077cc; font-size: 1.1rem; }
-    .card p { margin: 4px 0; font-size: 0.9rem; line-height: 1.3; }
-    .card p strong { color: #333; }
+  .details-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 15px 20px;
+    width: 100%;
+    max-width: 800px;
   }
+
+  .details-card h3 {
+    margin: 0 0 10px;
+    color: #0077cc;
+    font-size: 1.2rem;
+  }
+
+  .details-card p { margin: 6px 0; line-height: 1.4; }
 
   @media (max-width: 700px) {
     h1 { font-size: 1.4rem; }
     input { width: 100%; }
     .summary ul { columns: 1; }
-    .table-container { border: 1px solid #ddd; border-radius: 8px; }
     th, td { padding: 8px; }
   }
 </style>
@@ -162,7 +156,7 @@
 </div>
 
 <div id="results"></div>
-<div id="selectedCard"></div>
+<div id="selectedDetails"></div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec";
@@ -211,7 +205,7 @@ async function fetchServiceSummary() {
 async function searchServices(queryOverride = null) {
   const query = queryOverride || document.getElementById("searchInput").value.trim();
   const resultsDiv = document.getElementById("results");
-  document.getElementById("selectedCard").innerHTML = "";
+  document.getElementById("selectedDetails").innerHTML = "";
 
   if (!query) { resultsDiv.innerHTML = ""; return; }
 
@@ -241,22 +235,21 @@ function renderResults(data) {
     return;
   }
 
-  // --- TABLE VIEW (desktop) ---
   const tableHTML = `
     <div class="table-container">
       <table>
         <thead>
           <tr>
             <th>Type of Service</th>
-            <th>Product/Service</th>
+            <th>Description</th>
             <th>Contact Number</th>
           </tr>
         </thead>
         <tbody>
-          ${data.map((item,index) => `
-            <tr onclick="showFullCard(${index})">
+          ${data.map((item, index) => `
+            <tr onclick="showFullDetails(${index})">
               <td>${item["Type of Service"] || ""}</td>
-              <td>${item["Product/Service"] || ""}</td>
+              <td>${item["Description"] || ""}</td>
               <td>${item["Contact Number"] || ""}</td>
             </tr>
           `).join("")}
@@ -265,49 +258,26 @@ function renderResults(data) {
     </div>
   `;
 
-  // --- CARD VIEW (mobile only) ---
-  const cardsHTML = `
-    <div class="card-list">
-      ${data.map((item,index) => `
-        <div class="card" onclick="showFullCard(${index}); highlightCard(this);">
-          <h3>${item["Type of Service"] || "No Type"}</h3>
-          <p><strong>Product/Service:</strong> ${item["Product/Service"] || "—"}</p>
-          <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
-        </div>
-      `).join("")}
-    </div>
-  `;
-
-  resultsDiv.innerHTML = tableHTML + cardsHTML;
+  resultsDiv.innerHTML = tableHTML;
   window.currentResults = data;
 }
 
-function showFullCard(index) {
+function showFullDetails(index) {
   const item = window.currentResults[index];
-  const selectedDiv = document.getElementById("selectedCard");
+  const detailsDiv = document.getElementById("selectedDetails");
 
-  // Highlight selected table row
-  const rows = document.querySelectorAll("table tbody tr");
-  rows.forEach(r => r.classList.remove("selected-row"));
-  if (rows[index]) rows[index].classList.add("selected-row");
-
-  selectedDiv.innerHTML = `
-    <div class="card" style="margin-bottom:20px;">
+  detailsDiv.innerHTML = `
+    <div class="details-card">
       <h3>${item["Type of Service"] || "No Type"}</h3>
-      <p><strong>Product/Service:</strong> ${item["Product/Service"] || "—"}</p>
-      <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
+      <p><strong>Description:</strong> ${item["Description"] || "—"}</p>
       <p><strong>Contact Name:</strong> ${item["Contact Name"] || "—"}</p>
+      <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
       <p><strong>Availability:</strong> ${item["Availability"] || "—"}</p>
       <p><strong>Other Details:</strong> ${item["Other Details"] || "—"}</p>
     </div>
   `;
 
-  selectedDiv.scrollIntoView({behavior:"smooth"});
-}
-
-function highlightCard(card) {
-  document.querySelectorAll(".card").forEach(c => c.classList.remove("active-card"));
-  card.classList.add("active-card");
+  detailsDiv.scrollIntoView({ behavior: "smooth" });
 }
 </script>
 </body>
