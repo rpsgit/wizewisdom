@@ -15,12 +15,11 @@
       justify-content: center;
     }
 
-    /* ✅ Container box */
     .container {
       width: 100%;
       max-width: 950px;
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       display: flex;
@@ -37,7 +36,7 @@
     .search-box {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       flex-wrap: wrap;
       justify-content: center;
       width: 100%;
@@ -114,18 +113,17 @@
 
     .table-container {
       width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
       border-radius: 8px;
       background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
+      overflow: hidden;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px;
+      table-layout: auto;
     }
 
     th, td {
@@ -133,6 +131,7 @@
       border-bottom: 1px solid #eee;
       text-align: left;
       word-wrap: break-word;
+      vertical-align: top;
     }
 
     th {
@@ -160,22 +159,44 @@
       width: 100%;
     }
 
+    /* ✅ Fully responsive table on mobile */
     @media (max-width: 600px) {
       .summary ul {
         columns: 1;
       }
 
-      table {
-        font-size: 0.9rem;
-        min-width: 700px;
+      table, thead, tbody, th, td, tr {
+        display: block;
       }
 
-      th, td {
-        padding: 8px;
+      thead {
+        display: none; /* hide headers on mobile */
       }
 
-      #detailsSection {
-        font-size: 0.95rem;
+      tr {
+        margin-bottom: 15px;
+        border-bottom: 2px solid #eee;
+        padding: 10px 0;
+      }
+
+      td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        text-align: left;
+        font-weight: bold;
+        color: #0077cc;
+      }
+
+      td:last-child {
+        padding-bottom: 0;
       }
     }
   </style>
@@ -285,9 +306,9 @@
               <tbody>
                 ${data.map((item, i) => `
                   <tr data-index="${i}">
-                    <td>${item["Type of Service"] || ""}</td>
-                    <td>${item["Product/Service"] || ""}</td>
-                    <td>${item["Contact Number"] || ""}</td>
+                    <td data-label="Type of Service">${item["Type of Service"] || ""}</td>
+                    <td data-label="Product/Service">${item["Product/Service"] || ""}</td>
+                    <td data-label="Contact Number">${item["Contact Number"] || ""}</td>
                   </tr>
                 `).join("")}
               </tbody>
