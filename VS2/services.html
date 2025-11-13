@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ✅ Allow zooming and fix mobile scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
   <title>VS2 Service Directory Search</title>
   <style>
     body {
@@ -98,15 +99,21 @@
       text-decoration: underline;
     }
 
-    table {
+    /* ✅ Scrollable container for table */
+    .table-container {
       width: 100%;
       max-width: 900px;
-      border-collapse: collapse;
-      margin-top: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
       background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
     }
 
     th, td {
@@ -149,11 +156,16 @@
         columns: 1;
       }
 
+      /* ✅ Keep table fully scrollable and visible */
+      .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 10px;
+      }
+
       table {
         font-size: 0.9rem;
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        min-width: 700px;
       }
 
       th, td {
@@ -180,7 +192,6 @@
   </div>
 
   <div id="results"></div>
-
   <div id="detailsSection"></div>
 
   <script>
@@ -258,24 +269,26 @@
         }
 
         const tableHTML = `
-          <table id="resultsTable">
-            <thead>
-              <tr>
-                <th>Type of Service</th>
-                <th>Product/Service</th>
-                <th>Contact Number</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${data.map((item, i) => `
-                <tr data-index="${i}">
-                  <td>${item["Type of Service"] || ""}</td>
-                  <td>${item["Product/Service"] || ""}</td>
-                  <td>${item["Contact Number"] || ""}</td>
+          <div class="table-container">
+            <table id="resultsTable">
+              <thead>
+                <tr>
+                  <th>Type of Service</th>
+                  <th>Product/Service</th>
+                  <th>Contact Number</th>
                 </tr>
-              `).join("")}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                ${data.map((item, i) => `
+                  <tr data-index="${i}">
+                    <td>${item["Type of Service"] || ""}</td>
+                    <td>${item["Product/Service"] || ""}</td>
+                    <td>${item["Contact Number"] || ""}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
         `;
         resultsDiv.innerHTML = tableHTML;
 
