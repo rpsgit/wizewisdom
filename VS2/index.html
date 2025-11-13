@@ -151,7 +151,7 @@
 </div>
 
 <div class="summary" id="serviceSummary">
-  <h2>Available Products or Services</h2>
+  <h2>Products or Services Categories</h2>
   <p>Loading services...</p>
 </div>
 
@@ -241,7 +241,7 @@ function renderResults(data) {
         <thead>
           <tr>
             <th>Type of Service</th>
-            <th>Description</th>
+            <th>Product/Service</th>
             <th>Contact Number</th>
           </tr>
         </thead>
@@ -249,7 +249,7 @@ function renderResults(data) {
           ${data.map((item, index) => `
             <tr onclick="showFullDetails(${index})">
               <td>${item["Type of Service"] || ""}</td>
-              <td>${item["Description"] || ""}</td>
+              <td>${item["Product/Service"] || ""}</td>
               <td>${item["Contact Number"] || ""}</td>
             </tr>
           `).join("")}
@@ -269,7 +269,7 @@ function showFullDetails(index) {
   detailsDiv.innerHTML = `
     <div class="details-card">
       <h3>${item["Type of Service"] || "No Type"}</h3>
-      <p><strong>Description:</strong> ${item["Description"] || "—"}</p>
+      <p><strong>Product/Service:</strong> ${item["Product/Service"] || "—"}</p>
       <p><strong>Contact Name:</strong> ${item["Contact Name"] || "—"}</p>
       <p><strong>Contact Number:</strong> ${item["Contact Number"] || "—"}</p>
       <p><strong>Availability:</strong> ${item["Availability"] || "—"}</p>
