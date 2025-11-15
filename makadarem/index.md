@@ -4,7 +4,7 @@ title: Makadarem Menu
 ---
 
 <style>
-/* Your existing CSS */
+/* Your CSS (same as before) */
 body {
   margin: 0;
   padding: 0;
@@ -107,5 +107,150 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 </div>
 
 <script>
-// Your existing JS (fetch menu, lazy loading, total calculation, order submission)
+const menuURL = "https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec?func=getMenu";
+const orderURL = "https://script.google.com/macros/s/AKfycbwc4ANd6POGZXrjeAOuZ7aIscMRZTUzb66MDr7cbEFJ6KaHYG7uIW92dQr2UtZd98dq/exec";
+
+const menuContainer = document.getElementById("menuContainer");
+const form = document.getElementById("menuForm");
+const totalPriceEl = document.getElementById("totalPrice");
+const unitInput = document.getElementById("unitNo");
+const unitError = document.getElementById("unitError");
+const gcashSection = document.getElementById("gcashSection");
+
+let priceMap = {};
+let pendingOrder = null;
+
+function makeKey(name) {
+  return name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_-]/g, "").toLowerCase();
+}
+
+fetch(menuURL)
+  .then(res => res.json())
+  .then(data => {
+    menuContainer.innerHTML = "";
+    Object.entries(data).forEach(([category, items]) => {
+      const catDiv = document.createElement("div");
+      catDiv.className = "category-container";
+      catDiv.innerHTML = `<h2>${category}</h2>`;
+
+      const list = document.createElement("div");
+      list.className = "menu-list";
+
+      items.forEach(item => {
+        const name = item.name;
+        const price = Number(item.price);
+        const imgSrc = item.image || "";
+
+        const key = makeKey(name);
+        priceMap[key] = price;
+
+        const div = document.createElement("div");
+        div.className = "menu-item";
+        div.innerHTML = `
+          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy">
+          <div class="details">
+            <h3>${name}</h3>
+            <p>₱${price.toFixed(0)}</p>
+          </div>
+          <div class="actions">
+            <input type="checkbox" id="cb_${key}" name="item_${key}">
+            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
+          </div>`;
+        list.appendChild(div);
+      });
+
+      catDiv.appendChild(list);
+      menuContainer.appendChild(catDiv);
+    });
+
+    // Lazy load
+    const lazyImages = document.querySelectorAll("img[data-src]");
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.onload = () => img.removeAttribute("data-src");
+          obs.unobserve(img);
+        }
+      });
+    }, { rootMargin: "150px" });
+    lazyImages.forEach(img => observer.observe(img));
+  })
+  .catch(err => {
+    console.error(err);
+    menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
+  });
+
+function updateTotal() {
+  let total = 0;
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    const key = cb.name.replace('item_', '');
+    const qty = Number(form.querySelector(`[name="qty_${key}"]`).value || 1);
+    total += (priceMap[key] || 0) * qty;
+  });
+  totalPriceEl.textContent = `Total: ₱${total}`;
+}
+
+menuContainer.addEventListener('change', e => {
+  if (e.target.type === 'checkbox') {
+    const qty = e.target.parentElement.querySelector('.item-qty');
+    qty.style.display = e.target.checked ? 'inline-block' : 'none';
+    updateTotal();
+  }
+});
+menuContainer.addEventListener('input', e => { if (e.target.classList.contains('item-qty')) updateTotal(); });
+
+unitInput.addEventListener('input', () => {
+  unitInput.value = unitInput.value.toUpperCase();
+  const valid = /^[0-9]{4}[AB]$/.test(unitInput.value);
+  unitError.style.display = valid ? 'none' : 'block';
+});
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert("Select at least one item.");
+
+  const fd = new FormData(form);
+  let total = 0;
+  const itemsList = [];
+
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    const key = cb.name.replace('item_', '');
+    const qty = Number(fd.get(`qty_${key}`)) || 1;
+    const displayName = document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
+    itemsList.push(`${displayName} × ${qty}`);
+    total += (priceMap[key] || 0) * qty;
+  });
+
+  pendingOrder = {
+    name: fd.get('name'),
+    contact: fd.get('contact'),
+    unit_no: fd.get('unit_no'),
+    notes: fd.get('notes'),
+    items: itemsList.join(', '),
+    total
+  };
+
+  document.getElementById('orderPreviewModal').style.display = 'flex';
+});
+
+document.getElementById('cancelOrderBtn').onclick = () => document.getElementById('orderPreviewModal').style.display = 'none';
+
+document.getElementById('confirmOrderBtn').onclick = () => {
+  const fd = new FormData();
+  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
+  fetch(orderURL, { method: "POST", body: fd })
+    .then(r => r.json())
+    .then(res => {
+      alert("✅ Order placed!");
+      gcashSection.style.display = 'block';
+      form.reset();
+      document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
+      updateTotal();
+    })
+    .catch(err => { console.error(err); alert("Network error. Try again."); });
+  document.getElementById('orderPreviewModal').style.display = 'none';
+};
 </script>
