@@ -281,7 +281,15 @@ fetch(menuURL)
         const div = document.createElement('div');
         div.className = 'menu-item';
         div.innerHTML = `
-          <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80x60'">
+          <img 
+  src="https://cdn.jsdelivr.net/gh/rpsgit/wizewisdom/assets/images/menu/placeholder.jpg"
+  data-src="${item.img.replace('raw.githubusercontent.com','cdn.jsdelivr.net/gh').replace('/main/','/')}"
+  alt="${item.name}"
+  loading="lazy"
+  class="lazy-img"
+  onerror="this.src='https://via.placeholder.com/80x60'"
+>
+
           <div class="details">
             <h3>${item.name}</h3>
             <p>₱${item.price}</p>
