@@ -254,25 +254,28 @@
         }
 
         const tableHTML = `
-          <div class="table-container">
-            <table id="resultsTable">
-              <thead>
-                <tr>
-                  <th>Product/Service</th>
-                  <th>Contact Number</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${data.map((item, i) => `
-                  <tr data-index="${i}">
-                    <td>${item["Product/Service"] || ""}</td>
-                    <td>${item["Contact Number"] || ""}</td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
-        `;
+  <div class="table-container">
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Product/Service</th>
+          <th>FB Handle</th>
+          <th>Contact Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map((item, i) => `
+          <tr data-index="${i}">
+            <td>${item["Product/Service"] || ""}</td>
+            <td>${item["FB Handle"] || ""}</td>
+            <td>${item["Contact Number"] || ""}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </div>
+`;
+
         resultsDiv.innerHTML = tableHTML;
 
         const rows = document.querySelectorAll("#resultsTable tbody tr");
@@ -286,24 +289,26 @@
 
             detailsSection.style.display = "block";
             detailsSection.innerHTML = `
-              <div style="
-                background:white;
-                padding:1rem;
-                margin-top:1rem;
-                border-radius:8px;
-                box-shadow:0 2px 8px rgba(0,0,0,0.1);
-                max-width:900px;
-                width:100%;
-                font-size:1rem;
-              ">
-                <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
-                <p><strong>Product/Service:</strong> ${item["Product/Service"] || "N/A"}</p>
-                <p><strong>Contact Name:</strong> ${item["Contact Name"] || "N/A"}</p>
-                <p><strong>Contact Number:</strong> ${item["Contact Number"] || "N/A"}</p>
-                <p><strong>Availability:</strong> ${item["Availability"] || "N/A"}</p>
-                <p><strong>Other Details:</strong> ${item["Other Details"] || "N/A"}</p>
-              </div>
-            `;
+  <div style="
+    background:white;
+    padding:1rem;
+    margin-top:1rem;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    max-width:900px;
+    width:100%;
+    font-size:1rem;
+  ">
+    <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
+    <p><strong>Product/Service:</strong> ${item["Product/Service"] || "N/A"}</p>
+    <p><strong>FB Handle:</strong> ${item["FB Handle"] || "N/A"}</p>
+    <p><strong>Contact Name:</strong> ${item["Contact Name"] || "N/A"}</p>
+    <p><strong>Contact Number:</strong> ${item["Contact Number"] || "N/A"}</p>
+    <p><strong>Availability:</strong> ${item["Availability"] || "N/A"}</p>
+    <p><strong>Info:</strong> ${item["Info"] || "N/A"}</p>
+  </div>
+`;
+
 
             detailsSection.scrollIntoView({ behavior: "smooth" });
           });
