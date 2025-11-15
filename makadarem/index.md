@@ -3,68 +3,6 @@ layout: default
 title: Makadarem Menu
 ---
 
-<style>
-/* Your CSS (same as before) */
-body {
-  margin: 0;
-  padding: 0;
-  background: #f5f5f5 url('/assets/images/menu/bg.png') no-repeat center center fixed;
-  background-size: cover;
-  font-family: "Poppins", Arial, sans-serif;
-  color: #222;
-}
-.page-container {
-  width: 95%;
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: #4b2e05; }
-.category-container { width: 100%; margin-bottom: 25px; }
-.category-container h2 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-  color: #4b2e05;
-  border-bottom: 2px solid #ff7e5f;
-  padding-bottom: 4px;
-}
-.menu-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-.menu-item {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 10px;
-  padding: 6px 10px;
-  transition: 0.3s ease;
-}
-.menu-item:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-.menu-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: 12px; flex-shrink: 0; }
-.details { flex-grow: 1; display: flex; flex-direction: column; }
-.details h3 { margin: 0; font-size: 1rem; color: #333; }
-.details p { margin: 2px 0; font-size: 0.9rem; color: #555; }
-.actions { display: flex; flex-direction: column; align-items: center; }
-.actions input[type="checkbox"] { transform: scale(1.1); cursor: pointer; margin-bottom: 4px; }
-.actions input[type="number"] { width: 45px; padding: 3px; border-radius: 5px; border: 1px solid #ccc; display: none; }
-.order-form-section { width: 100%; margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
-.order-form-section label { width: 90%; margin-top: 8px; font-size: 0.9rem; }
-.order-form-section input, .order-form-section textarea { width: 90%; padding: 6px; margin-top: 3px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem; }
-.order-button { margin-top: 20px; padding: 10px 25px; border-radius: 20px; font-size: 1rem; background: linear-gradient(135deg, #ff7e5f, #ff5722); color: #fff; border: none; cursor: pointer; transition: 0.3s ease; }
-.order-button:hover { background: #ff5722; transform: scale(1.05); }
-.total-price, .order-summary { font-weight: bold; font-size: 1.1rem; margin-top: 10px; color: #ff5722; text-align: left; white-space: pre-line; }
-#unitError { font-size: 0.85rem; color: red; display: none; }
-#gcashSection { display: none; margin-top: 25px; text-align: center; }
-/* Modal */
-#orderPreviewModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 999; }
-.modal-box { background: #fff; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
-@media (max-width: 600px) { .menu-item img { width: 60px; height: 50px; } }
-</style>
-
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
 
@@ -94,7 +32,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   <div id="gcashSection">
     <h2>GCash Payment</h2>
     <p><strong>GCash:</strong> 09178664404<br><strong>Name:</strong> RE*A P</p>
-    <img src="/assets/images/gcash_qr.jpg" style="width:160px; height:160px; border-radius:10px; border:2px solid #ccc;">
+    <img src="{{ '/assets/images/gcash_qr.jpg' | relative_url }}" style="width:160px; height:160px; border-radius:10px; border:2px solid #ccc;">
   </div>
 </div>
 
@@ -120,14 +58,17 @@ const gcashSection = document.getElementById("gcashSection");
 let priceMap = {};
 let pendingOrder = null;
 
+/* Helper: sanitize keys */
 function makeKey(name) {
   return name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_-]/g, "").toLowerCase();
 }
 
+/* Fetch and render menu */
 fetch(menuURL)
   .then(res => res.json())
   .then(data => {
     menuContainer.innerHTML = "";
+
     Object.entries(data).forEach(([category, items]) => {
       const catDiv = document.createElement("div");
       catDiv.className = "category-container";
@@ -137,17 +78,29 @@ fetch(menuURL)
       list.className = "menu-list";
 
       items.forEach(item => {
-        const name = item.name;
-        const price = Number(item.price);
-        const imgSrc = item.image || "";
+        const name = item.name || item.title || "";
+        const price = Number(item.price || item.cost || 0);
+        const imgSrc = item.image || item.img || "";
 
         const key = makeKey(name);
         priceMap[key] = price;
 
+        // Transform GitHub raw URLs to jsDelivr CDN
+        let finalImg = imgSrc;
+        if (imgSrc.includes("raw.githubusercontent.com")) {
+          finalImg = imgSrc.replace("raw.githubusercontent.com", "cdn.jsdelivr.net/gh").replace("/main/", "/");
+        } else if (!imgSrc.startsWith("http")) {
+          // Local images: Jekyll relative path
+          finalImg = "{{ '/assets/images/menu/' | relative_url }}" + imgSrc;
+        }
+
         const div = document.createElement("div");
         div.className = "menu-item";
         div.innerHTML = `
-          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy">
+          <img data-src="${finalImg}" 
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" 
+               alt="${name}" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/80x60'">
           <div class="details">
             <h3>${name}</h3>
             <p>₱${price.toFixed(0)}</p>
@@ -155,7 +108,8 @@ fetch(menuURL)
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
             <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
-          </div>`;
+          </div>
+        `;
         list.appendChild(div);
       });
 
@@ -163,52 +117,73 @@ fetch(menuURL)
       menuContainer.appendChild(catDiv);
     });
 
-    // Lazy load
-    const lazyImages = document.querySelectorAll("img[data-src]");
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.src;
-          img.onload = () => img.removeAttribute("data-src");
-          obs.unobserve(img);
-        }
-      });
-    }, { rootMargin: "150px" });
-    lazyImages.forEach(img => observer.observe(img));
+    initLazyLoading();
   })
   .catch(err => {
     console.error(err);
     menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
   });
 
+/* Lazy loading images */
+function initLazyLoading() {
+  const lazyImages = document.querySelectorAll("img[data-src]");
+  if (!("IntersectionObserver" in window)) {
+    lazyImages.forEach(img => { img.src = img.dataset.src; img.removeAttribute("data-src"); });
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.onload = () => img.removeAttribute("data-src");
+        img.onerror = () => { img.src = "https://via.placeholder.com/80x60"; img.removeAttribute("data-src"); };
+        obs.unobserve(img);
+      }
+    });
+  }, { rootMargin: "200px" });
+
+  lazyImages.forEach(img => observer.observe(img));
+}
+
+/* Update total price */
 function updateTotal() {
   let total = 0;
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const key = cb.name.replace('item_', '');
-    const qty = Number(form.querySelector(`[name="qty_${key}"]`).value || 1);
+    const qtyEl = form.querySelector(`[name="qty_${key}"]`);
+    const qty = Number(qtyEl ? qtyEl.value : 1);
     total += (priceMap[key] || 0) * qty;
   });
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
+/* Checkbox & qty logic */
 menuContainer.addEventListener('change', e => {
-  if (e.target.type === 'checkbox') {
-    const qty = e.target.parentElement.querySelector('.item-qty');
-    qty.style.display = e.target.checked ? 'inline-block' : 'none';
+  if (e.target.matches('input[type="checkbox"]')) {
+    const parent = e.target.closest('.actions');
+    const key = e.target.name.replace('item_', '');
+    const qty = parent ? parent.querySelector('.item-qty') : null;
+    if (qty) qty.style.display = e.target.checked ? 'inline-block' : 'none';
     updateTotal();
   }
 });
-menuContainer.addEventListener('input', e => { if (e.target.classList.contains('item-qty')) updateTotal(); });
 
-unitInput.addEventListener('input', () => {
-  unitInput.value = unitInput.value.toUpperCase();
-  const valid = /^[0-9]{4}[AB]$/.test(unitInput.value);
-  unitError.style.display = valid ? 'none' : 'block';
+menuContainer.addEventListener('input', e => {
+  if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
+/* Unit validation */
+unitInput.addEventListener('input', () => {
+  unitInput.value = unitInput.value.toUpperCase();
+  unitError.style.display = /^[0-9]{4}[AB]$/.test(unitInput.value) ? 'none' : 'block';
+});
+
+/* Submit order */
 form.addEventListener('submit', e => {
   e.preventDefault();
+
   if (!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
   if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert("Select at least one item.");
 
@@ -236,21 +211,29 @@ form.addEventListener('submit', e => {
   document.getElementById('orderPreviewModal').style.display = 'flex';
 });
 
-document.getElementById('cancelOrderBtn').onclick = () => document.getElementById('orderPreviewModal').style.display = 'none';
+/* Modal buttons */
+document.getElementById('cancelOrderBtn').onclick = () => {
+  document.getElementById('orderPreviewModal').style.display = 'none';
+};
 
 document.getElementById('confirmOrderBtn').onclick = () => {
   const fd = new FormData();
   Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
+
   fetch(orderURL, { method: "POST", body: fd })
     .then(r => r.json())
     .then(res => {
-      alert("✅ Order placed!");
       gcashSection.style.display = 'block';
       form.reset();
       document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
       updateTotal();
+      document.getElementById('orderPreviewModal').style.display = 'none';
+      alert("✅ Order placed!");
     })
-    .catch(err => { console.error(err); alert("Network error. Try again."); });
-  document.getElementById('orderPreviewModal').style.display = 'none';
+    .catch(err => {
+      console.error(err);
+      alert("❌ Failed to place order. Try again.");
+      document.getElementById('orderPreviewModal').style.display = 'none';
+    });
 };
 </script>
