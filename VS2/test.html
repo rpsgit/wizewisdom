@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>VS2 Service Directory Search</title>
+  <style>
+    body {
+  font-family: "Poppins", sans-serif;
+  background: #f4f6fb;
+  color: #222;
+  margin: 0;
+  padding: 1rem;
+  display: block; /* FIX */
+}
+
+.container {
+  width: 100%;
+  max-width: 950px;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin: 0 auto; /* centers properly */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+    h1 {
+      color: #0077cc;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 250px;
+      outline: none;
+      transition: box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.2);
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #005fa3;
+    }
+
+    .summary {
+      width: 100%;
+      max-width: 900px;
+      background: #ffffff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .summary h2 {
+      color: #0077cc;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .summary ul {
+      list-style-type: disc;
+      margin: 0;
+      padding-left: 1.5rem;
+      columns: 2;
+      column-gap: 2rem;
+    }
+
+    .summary li {
+      margin-bottom: 6px;
+      break-inside: avoid;
+    }
+
+    .summary a {
+      color: #0077cc;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .summary a:hover {
+      color: #005fa3;
+      text-decoration: underline;
+    }
+
+    .table-container {
+      width: 100%;
+      border-radius: 8px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow-x: auto; /* horizontal scrolling */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      font-size: 1rem; /* same as details section */
+      white-space: nowrap; /* prevent wrapping */
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #0077cc;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f2f8ff;
+      cursor: pointer;
+    }
+
+    tr.selected {
+      background: #cce7ff !important;
+    }
+
+    .no-results {
+      color: #888;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    #detailsSection {
+      display: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 VS2 Service Directory Search</h1>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search for a service..." />
+      <button onclick="searchServices()">Search</button>
+    </div>
+
+    <div class="summary" id="serviceSummary">
+      <h2>Select a category</h2>
+      <p>Loading producs and services...</p>
+    </div>
+
+    <div id="results"></div>
+    <div id="detailsSection"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxv84VIjZAy56aw0eFcLkXSWXDegGHeUcWIayU_4hmlBCeG1b5rfn8oByX0dA6e3_-A/exec";
+    let searchTimeout;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("searchInput");
+      fetchServiceSummary();
+
+      searchInput.addEventListener("input", () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(searchServices, 400);
+      });
+
+      searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          searchServices();
+        }
+      });
+    });
+
+    async function fetchServiceSummary() {
+      const summaryDiv = document.getElementById("serviceSummary");
+      try {
+        const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=`);
+        const data = await response.json();
+
+        if (!data.length) {
+          summaryDiv.innerHTML = `<h2>Available Product/Services</h2><p>No services found in the directory.</p>`;
+          return;
+        }
+
+        const services = [...new Set(data.map(item => item["Type of Service"]).filter(Boolean))];
+        summaryDiv.innerHTML = `
+          <h2>Available Product/Services</h2>
+          <ul>
+            ${services.map(s => `<li><a href="#" onclick="searchCategory('${s}'); return false;">${s}</a></li>`).join("")}
+          </ul>
+        `;
+      } catch (err) {
+        console.error(err);
+        summaryDiv.innerHTML = `<h2>Available Product/Services</h2><p>Error loading service list.</p>`;
+      }
+    }
+
+    async function searchCategory(category) {
+      document.getElementById("searchInput").value = category;
+      await searchServices();
+    }
+
+    async function searchServices() {
+      const query = document.getElementById("searchInput").value.trim();
+      const resultsDiv = document.getElementById("results");
+      const detailsSection = document.getElementById("detailsSection");
+
+      detailsSection.style.display = "none";
+      detailsSection.innerHTML = "";
+
+      if (!query) {
+        resultsDiv.innerHTML = "";
+        return;
+      }
+
+      resultsDiv.innerHTML = "<p>Searching...</p>";
+
+      try {
+        const response = await fetch(`${SCRIPT_URL}?func=searchServices&query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        if (!data.length) {
+          resultsDiv.innerHTML = `<p class="no-results">No matching services found.</p>`;
+          return;
+        }
+
+        const tableHTML = `
+  <div class="table-container">
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Product/Service</th>
+          <th>FB Handle</th>
+          <th>Contact Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map((item, i) => `
+          <tr data-index="${i}">
+            <td>${item["Product/Service"] || ""}</td>
+            <td>${item["FB Handle"] || ""}</td>
+            <td>${item["Contact Number"] || ""}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </div>
+`;
+
+        resultsDiv.innerHTML = tableHTML;
+
+        const rows = document.querySelectorAll("#resultsTable tbody tr");
+        rows.forEach(row => {
+          row.addEventListener("click", () => {
+            rows.forEach(r => r.classList.remove("selected"));
+            row.classList.add("selected");
+
+            const index = row.getAttribute("data-index");
+            const item = data[index];
+
+            detailsSection.style.display = "block";
+            detailsSection.innerHTML = `
+  <div style="
+    background:white;
+    padding:1rem;
+    margin-top:1rem;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    max-width:900px;
+    width:100%;
+    font-size:1rem;
+  ">
+    <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
+    <p><strong>Product/Service:</strong> ${item["Product/Service"] || "N/A"}</p>
+    <p><strong>FB Handle:</strong> ${item["FB Handle"] || "N/A"}</p>
+    <p><strong>Contact Name:</strong> ${item["Contact Name"] || "N/A"}</p>
+    <p><strong>Contact Number:</strong> ${item["Contact Number"] || "N/A"}</p>
+    <p><strong>Availability:</strong> ${item["Availability"] || "N/A"}</p>
+    <p><strong>Info:</strong> ${item["Info"] || "N/A"}</p>
+  </div>
+`;
+
+
+            detailsSection.scrollIntoView({ behavior: "smooth" });
+          });
+        });
+
+      } catch (err) {
+        console.error(err);
+        resultsDiv.innerHTML = `<p class="no-results">Error fetching data. Please try again later.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
