@@ -2,31 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+
+  <!-- FIXED VIEWPORT: allows zoom + proper scaling -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=0.5, maximum-scale=5">
+
   <title>VS2 Service Directory Search</title>
+
   <style>
+    /* ENABLE MOBILE PANNING */
+    html, body {
+      touch-action: pan-x pan-y;
+      overflow-x: auto;
+    }
+
     body {
-  font-family: "Poppins", sans-serif;
-  background: #f4f6fb;
-  color: #222;
-  margin: 0;
-  padding: 1rem;
-  display: block; /* FIX */
-}
+      font-family: "Poppins", sans-serif;
+      background: #f4f6fb;
+      color: #222;
+      margin: 0;
+      padding: 1rem;
+      display: block; /* FIX */
+    }
 
-.container {
-  width: 100%;
-  max-width: 950px;
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  margin: 0 auto; /* centers properly */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
+    .container {
+      width: 100%;
+      max-width: 950px;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     h1 {
       color: #0077cc;
@@ -118,15 +128,16 @@
       background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
-      overflow-x: auto; /* horizontal scrolling */
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       table-layout: auto;
-      font-size: 1rem; /* same as details section */
-      white-space: nowrap; /* prevent wrapping */
+
+      /* FIX: allow wrapping so text does NOT get cut */
+      white-space: normal;
     }
 
     th, td {
@@ -162,6 +173,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>🔍 VS2 Service Directory Search</h1>
@@ -310,7 +322,6 @@
   </div>
 `;
 
-
             detailsSection.scrollIntoView({ behavior: "smooth" });
           });
         });
@@ -321,5 +332,6 @@
       }
     }
   </script>
+
 </body>
 </html>
