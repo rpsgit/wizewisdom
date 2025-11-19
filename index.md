@@ -129,7 +129,7 @@ title: "Wizewisdom World"
   </a>
 
   <a href="/makadarem/index.html" class="icon-card">
-    <img src="/assets/images/menu-ico.png" alt="Group Icon">
+    <img src="/assets/images/menu-ico.png" alt="Menu Icon">
     <span>MAKADAREM</span>
   </a>
   
@@ -138,6 +138,7 @@ title: "Wizewisdom World"
     <span>Minevault 🔒</span>
   </a>
 </div>
+
 
 
 
