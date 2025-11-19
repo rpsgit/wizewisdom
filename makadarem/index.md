@@ -1,4 +1,4 @@
----
+s---
 layout: default
 title: Makadarem Menu
 ---
@@ -70,7 +70,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 
   <!-- Schedule highlighted in red -->
   <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 19, Wed</h2>
-  <h3 style="color: red;"11:00 AM to 4:00 PM</h3>
+  <h3 style="color: red;">11:00 AM to 4:00 PM</h3>
   <h3 style="color: red;">8:00 PM to 12:00 MN</h3>
 
   <form id="menuForm">
