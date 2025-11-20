@@ -69,8 +69,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   <h1>Makadarem for VS2</h1>
 
   <!-- Schedule highlighted in red -->
-  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 20, Thu</h2>
-  <h3 style="color: red;">8:00 AM to 12:00 MN</h3>
+  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 21, Fri</h2>
+  <h3 style="color: red;">9:00 AM～12:00 MN and 3:00～12:00MN </h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
