@@ -111,8 +111,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 </div>
 
 <script>
-const menuURL = "https://script.google.com/macros/s/AKfycbyiSwecbBaGUhS4rIHphGlUNjhdrzF8087x17n9jAlYTJ-R5QgXt43B2fpdUMSkVTQ/exec?func=getMenu";
-const orderURL = "https://script.google.com/macros/s/AKfycbyiSwecbBaGUhS4rIHphGlUNjhdrzF8087x17n9jAlYTJ-R5QgXt43B2fpdUMSkVTQ/exec";
+const menuURL = "https://script.google.com/macros/s/AKfycbwh8Fv7814QFHsmQgnI6FxDcDPTlilQyT1IokUcI0vs3FQ1tbgtKSWaqjlEQrv0vRei/exec?func=getMenu";
+const orderURL = "https://script.google.com/macros/s/AKfycbwh8Fv7814QFHsmQgnI6FxDcDPTlilQyT1IokUcI0vs3FQ1tbgtKSWaqjlEQrv0vRei/exec";
 
 const menuContainer = document.getElementById("menuContainer");
 const form = document.getElementById("menuForm");
