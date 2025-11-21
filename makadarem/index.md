@@ -68,7 +68,6 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
   <p>Door-to-door delivery within VS2 only</p>
-  <!-- Schedule highlighted in red -->
   <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 22, Sat</h2>
   <h3 style="color: red;">10:00 AM～12:00 MN </h3>
 
@@ -111,8 +110,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 </div>
 
 <script>
-const menuURL = "https://script.google.com/macros/s/AKfycbzclz85X1MIPwcJqBmSaSu3In7uFh-NeLxrbqANoNTR-N09bLsz8tmVtunIqeDn0lVc/exec?func=getMenu";
-const orderURL = "https://script.google.com/macros/s/AKfycbzclz85X1MIPwcJqBmSaSu3In7uFh-NeLxrbqANoNTR-N09bLsz8tmVtunIqeDn0lVc/exec";
+const menuURL = "https://script.google.com/macros/s/AKfycbyKMUZnCLIQEOdKNMpRv-BbmNXLjvLUEY4zzzoPnfDb0gCKJdxRTtzQu0lHJ4ObBh_u/exec?func=getMenu";
+const orderURL = "https://script.google.com/macros/s/AKfycbyKMUZnCLIQEOdKNMpRv-BbmNXLjvLUEY4zzzoPnfDb0gCKJdxRTtzQu0lHJ4ObBh_u/exec";
 
 const menuContainer = document.getElementById("menuContainer");
 const form = document.getElementById("menuForm");
@@ -124,40 +123,34 @@ const gcashSection = document.getElementById("gcashSection");
 let priceMap = {};
 let pendingOrder = null;
 
-/* Helper */
 function makeKey(name) { return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase(); }
 
-/* Fetch & render menu */
+// Fetch & render menu
 fetch(menuURL)
   .then(res => res.json())
   .then(data => {
     menuContainer.innerHTML = "";
-    Object.entries(data).forEach(([category, items]) => {
+    const categories = {};
+    data.forEach(item => {
+      if(!categories[item.Category]) categories[item.Category] = [];
+      categories[item.Category].push(item);
+    });
+    Object.entries(categories).forEach(([cat, items]) => {
       const catDiv = document.createElement("div");
       catDiv.className = "category-container";
-      catDiv.innerHTML = `<h2>${category}</h2>`;
+      catDiv.innerHTML = `<h2>${cat}</h2>`;
       const list = document.createElement("div");
       list.className = "menu-list";
-
       items.forEach(item => {
-        const name = item.name || item.title || "";
-        const price = Number(item.price || item.cost || 0);
-        const imgSrc = item.image || item.img || "";
-
+        const name = item.Item;
+        const price = Number(item.Price || 0);
+        const imgSrc = item.Image || "https://via.placeholder.com/80x60";
         const key = makeKey(name);
         priceMap[key] = price;
-
-        let finalImg = imgSrc;
-        if (imgSrc.includes("raw.githubusercontent.com")) {
-          finalImg = imgSrc.replace("raw.githubusercontent.com", "cdn.jsdelivr.net/gh").replace("/main/", "/");
-        } else if (!imgSrc.startsWith("http")) {
-          finalImg = "{{ '/assets/images/menu/' | relative_url }}" + imgSrc;
-        }
-
         const div = document.createElement("div");
         div.className = "menu-item";
         div.innerHTML = `
-          <img data-src="${finalImg}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy" onerror="this.src='https://via.placeholder.com/80x60'">
+          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy">
           <div class="details"><h3>${name}</h3><p>₱${price.toFixed(0)}</p></div>
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
@@ -166,11 +159,9 @@ fetch(menuURL)
         `;
         list.appendChild(div);
       });
-
       catDiv.appendChild(list);
       menuContainer.appendChild(catDiv);
     });
-
     initLazyLoading();
   })
   .catch(err => { console.error(err); menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; });
@@ -192,7 +183,7 @@ function initLazyLoading() {
   lazyImages.forEach(img => observer.observe(img));
 }
 
-/* Total & form logic */
+// Total & form logic
 function updateTotal() {
   let total=0;
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb=>{
@@ -204,20 +195,23 @@ function updateTotal() {
   totalPriceEl.textContent=`Total: ₱${total}`;
 }
 
-menuContainer.addEventListener('change',e=>{
+menuContainer.addEventListener('change', e=>{
   if(e.target.matches('input[type="checkbox"]')){
     const parent=e.target.closest('.actions');
     const key=e.target.name.replace('item_','');
-    const qty=parent?parent.querySelector('.item-qty'):null;
+    const qty=parent.querySelector('.item-qty');
     if(qty) qty.style.display=e.target.checked?'inline-block':'none';
     updateTotal();
   }
 });
-menuContainer.addEventListener('input',e=>{if(e.target.classList.contains('item-qty'))updateTotal();});
+menuContainer.addEventListener('input', e=>{if(e.target.classList.contains('item-qty'))updateTotal();});
 
-unitInput.addEventListener('input',()=>{unitInput.value=unitInput.value.toUpperCase(); unitError.style.display=/^[0-9]{4}[AB]$/.test(unitInput.value)?'none':'block';});
+unitInput.addEventListener('input', ()=>{
+  unitInput.value=unitInput.value.toUpperCase();
+  unitError.style.display=/^[0-9]{4}[AB]$/.test(unitInput.value)?'none':'block';
+});
 
-form.addEventListener('submit',e=>{
+form.addEventListener('submit', e=>{
   e.preventDefault();
   if(!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
   if(form.querySelectorAll('input[type="checkbox"]:checked').length===0) return alert("Select at least one item.");
@@ -239,6 +233,8 @@ document.getElementById('cancelOrderBtn').onclick=()=>{document.getElementById('
 document.getElementById('confirmOrderBtn').onclick=()=>{
   const fd=new FormData();
   Object.entries(pendingOrder).forEach(([k,v])=>fd.append(k,v));
+  fd.append("total", pendingOrder.total);
+  fd.append("item", pendingOrder.items);
   fetch(orderURL,{method:"POST",body:fd})
     .then(r=>r.json())
     .then(res=>{
