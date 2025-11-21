@@ -67,10 +67,10 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
-
+  <p>Door-to-door delivery withing VS2 only</p>p
   <!-- Schedule highlighted in red -->
-  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 21, Fri</h2>
-  <h3 style="color: red;">8:00 AM～11:00 AM and 1:00 PM～12:00 MN </h3>
+  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 22, Sat</h2>
+  <h3 style="color: red;">10:00 AM～12:00 MN </h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
@@ -111,7 +111,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 </div>
 
 <script>
-const menuURL = "https://script.google.com/macros/s/AKfycbzaBE38sbGzJN9UhdZokYAOZey11UJ57Yqyz61o5DGwU6FSeScnu9Ad7NpeZkpcpS-c/exec";
+const menuURL = "const menuURL = "https://script.google.com/macros/s/AKfycbzaBE38sbGzJN9UhdZokYAOZey11UJ57Yqyz61o5DGwU6FSeScnu9Ad7NpeZkpcpS-c/exec?func=getMenu";
 const orderURL = "https://script.google.com/macros/s/AKfycbzaBE38sbGzJN9UhdZokYAOZey11UJ57Yqyz61o5DGwU6FSeScnu9Ad7NpeZkpcpS-c/exec";
 
 const menuContainer = document.getElementById("menuContainer");
