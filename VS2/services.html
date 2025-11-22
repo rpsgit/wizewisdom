@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- FIXED VIEWPORT: allows zoom + proper scaling -->
+  <!-- FIXED VIEWPORT -->
   <meta name="viewport"
         content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=0.5, maximum-scale=5">
 
@@ -18,11 +18,15 @@
 
     body {
       font-family: "Poppins", sans-serif;
-      background: #f4f6fb;
+
+      /* 🔽 ADDED PLACEHOLDER BACKGROUND */
+      background: #f4f6fb url('VS2/directory-bg.png') no-repeat center center fixed;
+      background-size: cover;
+
       color: #222;
       margin: 0;
       padding: 1rem;
-      display: block; /* FIX */
+      display: block;
     }
 
     .container {
@@ -135,9 +139,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: auto;
-
-      /* FIX: allow wrapping so text does NOT get cut */
-      white-space: normal;
+      white-space: normal; /* allow wrapping */
     }
 
     th, td {
