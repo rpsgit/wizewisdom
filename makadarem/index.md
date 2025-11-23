@@ -107,6 +107,18 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   text-align: left; white-space: pre-line;
 }
 
+#lastOrder {
+  margin-top: 15px;
+  padding: 10px;
+  width: 90%;
+  background: #fff8e1;
+  border-radius: 10px;
+  border: 1px solid #ffcc80;
+  font-size: 0.9rem;
+  color: #333;
+  display: none;
+}
+
 #unitError { font-size: 0.85rem; color: red; display: none; }
 #gcashSection { display: none; margin-top: 25px; text-align: center; }
 
@@ -134,8 +146,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.85);
-  justify-content: center;
-  align-items: center;
+  justify-content: center; align-items: center;
   z-index: 2000;
 }
 #imageModal img {
@@ -148,7 +159,6 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   .menu-item img { width: 60px; height: 50px; }
 }
 </style>
-
 
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
@@ -176,8 +186,10 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
       <textarea name="notes" rows="3" placeholder="Add instructions"></textarea>
     </div>
 
-    <button type="submit" class="order-button">Place Order</button>
+    <button type="submit" class="order-button" id="orderButton">Place Order</button>
   </form>
+
+  <div id="lastOrder"></div>
 
   <div id="gcashSection">
     <h2>GCash Payment</h2>
@@ -198,7 +210,6 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   </div>
 </div>
 
-
 <script>
 const menuURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
 const orderURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
@@ -209,6 +220,8 @@ const totalPriceEl = document.getElementById("totalPrice");
 const unitInput = document.getElementById("unitNo");
 const unitError = document.getElementById("unitError");
 const gcashSection = document.getElementById("gcashSection");
+const orderButton = document.getElementById("orderButton");
+const lastOrderDiv = document.getElementById("lastOrder");
 
 let priceMap = {};
 let pendingOrder = null;
@@ -223,12 +236,10 @@ fetch(menuURL)
   .then(data => {
     menuContainer.innerHTML = "";
     const categories = {};
-
     data.forEach(item => {
       if(!categories[item.Category]) categories[item.Category] = [];
       categories[item.Category].push(item);
     });
-
     Object.entries(categories).forEach(([cat, items]) => {
       const catDiv = document.createElement("div");
       catDiv.className = "category-container";
@@ -238,18 +249,14 @@ fetch(menuURL)
       list.className = "menu-list";
 
       items.forEach(item => {
-
-        // 🔸 NAME + DESCRIPTION SPLIT
         let raw = item.Item || "";
         let name = raw;
         let desc = "";
-
         if (raw.includes(" - ")) {
           const parts = raw.split(" - ");
           name = parts.shift();
           desc = parts.join(" - ");
         }
-
         const price = Number(item.Price || 0);
         const imgSrc = item.Image || "https://via.placeholder.com/80x60";
         const key = makeKey(name);
@@ -259,26 +266,20 @@ fetch(menuURL)
         div.className = "menu-item";
 
         div.innerHTML = `
-          <img data-src="${imgSrc}"
-               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                alt="${name}" class="zoomable" loading="lazy">
-
           <div class="details">
             <h3>${name}</h3>
             ${desc ? `<p class="item-desc">${desc}</p>` : ""}
             <p>₱${price.toFixed(0)}</p>
           </div>
-
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
-            <input type="number" id="qty_${key}" name="qty_${key}"
-            class="item-qty" value="1" min="1" style="display:none;">
+            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
           </div>
         `;
-
         list.appendChild(div);
       });
-
       catDiv.appendChild(list);
       menuContainer.appendChild(catDiv);
     });
@@ -286,78 +287,50 @@ fetch(menuURL)
     initLazyLoading();
     initImageZoom();
   })
-  .catch(err => {
-    console.error(err);
-    menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
-  });
+  .catch(err => { console.error(err); menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>'; });
 
-
-// IMAGE LAZY LOADING
+// LAZY LOAD IMAGES
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img[data-src]");
-
   if (!("IntersectionObserver" in window)) {
-    lazyImages.forEach(img => {
-      img.src = img.dataset.src;
-      img.removeAttribute("data-src");
-    });
+    lazyImages.forEach(img => { img.src = img.dataset.src; img.removeAttribute("data-src"); });
     return;
   }
-
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const img = entry.target;
         img.src = img.dataset.src;
-
         img.onload = () => img.removeAttribute("data-src");
-        img.onerror = () => {
-          img.src = "https://via.placeholder.com/80x60";
-          img.removeAttribute("data-src");
-        };
-
+        img.onerror = () => { img.src = "https://via.placeholder.com/80x60"; img.removeAttribute("data-src"); };
         obs.unobserve(img);
       }
     });
   }, { rootMargin: "200px" });
-
   lazyImages.forEach(img => observer.observe(img));
 }
 
-
-// 🔍 IMAGE ZOOM MODAL
+// IMAGE ZOOM
 function initImageZoom() {
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImg");
-
   document.querySelectorAll(".zoomable").forEach(img => {
-    img.onclick = () => {
-      modal.style.display = "flex";
-      modalImg.src = img.dataset.src || img.src;
-    };
+    img.onclick = () => { modal.style.display = "flex"; modalImg.src = img.dataset.src || img.src; };
   });
-
-  modal.onclick = () => {
-    modal.style.display = "none";
-    modalImg.src = "";
-  };
+  modal.onclick = () => { modal.style.display = "none"; modalImg.src = ""; };
 }
-
 
 // TOTAL PRICE
 function updateTotal() {
   let total = 0;
-
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const key = cb.name.replace('item_','');
     const qtyEl = form.querySelector(`[name="qty_${key}"]`);
     const qty = Number(qtyEl ? qtyEl.value : 1);
     total += (priceMap[key] || 0) * qty;
   });
-
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
-
 
 // CHECKBOX LOGIC
 menuContainer.addEventListener('change', e => {
@@ -365,49 +338,32 @@ menuContainer.addEventListener('change', e => {
     const parent = e.target.closest('.actions');
     const key = e.target.name.replace('item_','');
     const qty = parent.querySelector('.item-qty');
-
     if (qty) qty.style.display = e.target.checked ? 'inline-block' : 'none';
-
     updateTotal();
   }
 });
+menuContainer.addEventListener('input', e => { if (e.target.classList.contains('item-qty')) updateTotal(); });
 
-menuContainer.addEventListener('input', e => {
-  if (e.target.classList.contains('item-qty')) updateTotal();
-});
-
-
-// VALIDATE UNIT NO.
+// UNIT VALIDATION
 unitInput.addEventListener('input', () => {
   unitInput.value = unitInput.value.toUpperCase();
-  unitError.style.display =
-    /^[0-9]{4}[AB]$/.test(unitInput.value) ? 'none' : 'block';
+  unitError.style.display = /^[0-9]{4}[AB]$/.test(unitInput.value) ? 'none' : 'block';
 });
 
-
-// SUBMIT ORDER
+// SUBMIT FORM
 form.addEventListener('submit', e => {
   e.preventDefault();
-
-  if (!/^[0-9]{4}[AB]$/.test(unitInput.value))
-    return alert("Invalid unit number.");
-
-  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
-    return alert("Select at least one item.");
+  if (!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert("Select at least one item.");
 
   const fd = new FormData(form);
-
   let total = 0;
   const itemsList = [];
 
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const key = cb.name.replace('item_','');
     const qty = Number(fd.get(`qty_${key}`)) || 1;
-
-    const displayName = document.querySelector(`#cb_${key}`)
-      .closest('.menu-item')
-      .querySelector('.details h3').textContent;
-
+    const displayName = document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
     itemsList.push(`${displayName} × ${qty}`);
     total += (priceMap[key] || 0) * qty;
   });
@@ -424,16 +380,13 @@ form.addEventListener('submit', e => {
   document.getElementById('orderPreviewModal').style.display = 'flex';
 });
 
+// CANCEL ORDER
+document.getElementById('cancelOrderBtn').onclick = () => { document.getElementById('orderPreviewModal').style.display = 'none'; };
 
-document.getElementById('cancelOrderBtn').onclick = () => {
-  document.getElementById('orderPreviewModal').style.display = 'none';
-};
-
+// CONFIRM ORDER
 document.getElementById('confirmOrderBtn').onclick = () => {
   const fd = new FormData();
-
   Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
-
   fd.append("total", pendingOrder.total);
   fd.append("item", pendingOrder.items);
 
@@ -445,12 +398,19 @@ document.getElementById('confirmOrderBtn').onclick = () => {
       document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
       updateTotal();
       document.getElementById('orderPreviewModal').style.display = 'none';
+
+      // Show last order summary
+      lastOrderDiv.style.display = 'block';
+      lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
+
+      // Change button to "Order Again"
+      orderButton.textContent = "Order Again";
+
+      // Scroll to top
+      document.querySelector('.page-container').scrollIntoView({ behavior: 'smooth' });
+
       alert("✅ Order placed!");
     })
-    .catch(err => {
-      console.error(err);
-      alert("❌ Failed to place order.");
-      document.getElementById('orderPreviewModal').style.display = 'none';
-    });
+    .catch(err => { console.error(err); alert("❌ Failed to place order."); document.getElementById('orderPreviewModal').style.display = 'none'; });
 };
 </script>
