@@ -13,6 +13,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .page-container {
   width: 95%;
   max-width: 900px;
@@ -25,6 +26,7 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
 h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: #4b2e05; }
 .category-container { width: 100%; margin-bottom: 25px; }
 .category-container h2 {
@@ -34,7 +36,9 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   border-bottom: 2px solid #ff7e5f;
   padding-bottom: 4px;
 }
+
 .menu-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+
 .menu-item {
   display: flex;
   align-items: center;
@@ -44,32 +48,113 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   transition: 0.3s ease;
 }
 .menu-item:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-.menu-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: 12px; flex-shrink: 0; }
+
+.menu-item img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
 .details { flex-grow: 1; display: flex; flex-direction: column; }
 .details h3 { margin: 0; font-size: 1rem; color: #333; }
+
+.item-desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 2px 0 4px 0;
+  white-space: normal;
+  line-height: 1.25rem;
+}
+
 .details p { margin: 2px 0; font-size: 0.9rem; color: #555; }
+
 .actions { display: flex; flex-direction: column; align-items: center; }
-.actions input[type="checkbox"] { transform: scale(1.1); cursor: pointer; margin-bottom: 4px; }
-.actions input[type="number"] { width: 45px; padding: 3px; border-radius: 5px; border: 1px solid #ccc; display: none; }
+.actions input[type="checkbox"] {
+  transform: scale(1.1); cursor: pointer; margin-bottom: 4px;
+}
+.actions input[type="number"] {
+  width: 45px; padding: 3px; border-radius: 5px;
+  border: 1px solid #ccc; display: none;
+}
+
 .order-form-section { width: 100%; margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
 .order-form-section label { width: 90%; margin-top: 8px; font-size: 0.9rem; }
-.order-form-section input, .order-form-section textarea { width: 90%; padding: 6px; margin-top: 3px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem; }
-.order-button { margin-top: 20px; padding: 10px 25px; border-radius: 20px; font-size: 1rem; background: linear-gradient(135deg, #ff7e5f, #ff5722); color: #fff; border: none; cursor: pointer; transition: 0.3s ease; }
+.order-form-section input, .order-form-section textarea {
+  width: 90%; padding: 6px; margin-top: 3px;
+  border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem;
+}
+
+.order-button {
+  margin-top: 20px;
+  padding: 10px 25px;
+  border-radius: 20px;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #ff7e5f, #ff5722);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
 .order-button:hover { background: #ff5722; transform: scale(1.05); }
-.total-price { font-weight: bold; font-size: 1.1rem; margin-top: 10px; color: #ff5722; text-align: left; white-space: pre-line; }
+
+.total-price {
+  font-weight: bold; font-size: 1.1rem;
+  margin-top: 10px; color: #ff5722;
+  text-align: left; white-space: pre-line;
+}
+
 #unitError { font-size: 0.85rem; color: red; display: none; }
 #gcashSection { display: none; margin-top: 25px; text-align: center; }
-/* Modal */
-#orderPreviewModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 999; }
-.modal-box { background: #fff; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
-@media (max-width: 600px) { .menu-item img { width: 60px; height: 50px; } }
+
+/* Order Confirmation Modal */
+#orderPreviewModal {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center; align-items: center;
+  z-index: 999;
+}
+.modal-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Image Zoom Modal */
+#imageModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+#imageModal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+}
+
+@media (max-width: 600px) {
+  .menu-item img { width: 60px; height: 50px; }
+}
 </style>
+
 
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
   <p>Door-to-door delivery within VS2 only</p>
   <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 24, Mon</h2>
-  <h3 style="color: red;">9:00 AM to 12:00 and 5:00 PM to 12:00 MN. Thank you. </h3>
+  <h3 style="color: red;">9:00 AM to 12:00 and 5:00 PM to 12:00 MN. Thank you.</h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
@@ -101,6 +186,10 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   </div>
 </div>
 
+<!-- Image Zoom Modal -->
+<div id="imageModal"><img id="modalImg"></div>
+
+<!-- Order Preview Modal -->
 <div id="orderPreviewModal">
   <div class="modal-box">
     <h2>Confirm Order?</h2>
@@ -108,6 +197,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
     <button id="cancelOrderBtn">Cancel</button>
   </div>
 </div>
+
 
 <script>
 const menuURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
@@ -123,127 +213,244 @@ const gcashSection = document.getElementById("gcashSection");
 let priceMap = {};
 let pendingOrder = null;
 
-function makeKey(name) { return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase(); }
+function makeKey(name) {
+  return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase();
+}
 
-// Fetch & render menu
+// FETCH MENU & RENDER
 fetch(menuURL)
   .then(res => res.json())
   .then(data => {
     menuContainer.innerHTML = "";
     const categories = {};
+
     data.forEach(item => {
       if(!categories[item.Category]) categories[item.Category] = [];
       categories[item.Category].push(item);
     });
+
     Object.entries(categories).forEach(([cat, items]) => {
       const catDiv = document.createElement("div");
       catDiv.className = "category-container";
       catDiv.innerHTML = `<h2>${cat}</h2>`;
+
       const list = document.createElement("div");
       list.className = "menu-list";
+
       items.forEach(item => {
-        const name = item.Item;
+
+        // 🔸 NAME + DESCRIPTION SPLIT
+        let raw = item.Item || "";
+        let name = raw;
+        let desc = "";
+
+        if (raw.includes(" - ")) {
+          const parts = raw.split(" - ");
+          name = parts.shift();
+          desc = parts.join(" - ");
+        }
+
         const price = Number(item.Price || 0);
         const imgSrc = item.Image || "https://via.placeholder.com/80x60";
         const key = makeKey(name);
         priceMap[key] = price;
+
         const div = document.createElement("div");
         div.className = "menu-item";
+
         div.innerHTML = `
-          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy">
-          <div class="details"><h3>${name}</h3><p>₱${price.toFixed(0)}</p></div>
+          <img data-src="${imgSrc}"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+               alt="${name}" class="zoomable" loading="lazy">
+
+          <div class="details">
+            <h3>${name}</h3>
+            ${desc ? `<p class="item-desc">${desc}</p>` : ""}
+            <p>₱${price.toFixed(0)}</p>
+          </div>
+
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
-            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
+            <input type="number" id="qty_${key}" name="qty_${key}"
+            class="item-qty" value="1" min="1" style="display:none;">
           </div>
         `;
+
         list.appendChild(div);
       });
+
       catDiv.appendChild(list);
       menuContainer.appendChild(catDiv);
     });
-    initLazyLoading();
-  })
-  .catch(err => { console.error(err); menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; });
 
+    initLazyLoading();
+    initImageZoom();
+  })
+  .catch(err => {
+    console.error(err);
+    menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
+  });
+
+
+// IMAGE LAZY LOADING
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img[data-src]");
-  if (!("IntersectionObserver" in window)) { lazyImages.forEach(img => { img.src = img.dataset.src; img.removeAttribute("data-src"); }); return; }
+
+  if (!("IntersectionObserver" in window)) {
+    lazyImages.forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute("data-src");
+    });
+    return;
+  }
+
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const img = entry.target;
         img.src = img.dataset.src;
+
         img.onload = () => img.removeAttribute("data-src");
-        img.onerror = () => { img.src="https://via.placeholder.com/80x60"; img.removeAttribute("data-src"); };
+        img.onerror = () => {
+          img.src = "https://via.placeholder.com/80x60";
+          img.removeAttribute("data-src");
+        };
+
         obs.unobserve(img);
       }
     });
-  }, { rootMargin:"200px" });
+  }, { rootMargin: "200px" });
+
   lazyImages.forEach(img => observer.observe(img));
 }
 
-// Total & form logic
-function updateTotal() {
-  let total=0;
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb=>{
-    const key=cb.name.replace('item_','');
-    const qtyEl=form.querySelector(`[name="qty_${key}"]`);
-    const qty=Number(qtyEl?qtyEl.value:1);
-    total+=(priceMap[key]||0)*qty;
+
+// 🔍 IMAGE ZOOM MODAL
+function initImageZoom() {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImg");
+
+  document.querySelectorAll(".zoomable").forEach(img => {
+    img.onclick = () => {
+      modal.style.display = "flex";
+      modalImg.src = img.dataset.src || img.src;
+    };
   });
-  totalPriceEl.textContent=`Total: ₱${total}`;
+
+  modal.onclick = () => {
+    modal.style.display = "none";
+    modalImg.src = "";
+  };
 }
 
-menuContainer.addEventListener('change', e=>{
-  if(e.target.matches('input[type="checkbox"]')){
-    const parent=e.target.closest('.actions');
-    const key=e.target.name.replace('item_','');
-    const qty=parent.querySelector('.item-qty');
-    if(qty) qty.style.display=e.target.checked?'inline-block':'none';
+
+// TOTAL PRICE
+function updateTotal() {
+  let total = 0;
+
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    const key = cb.name.replace('item_','');
+    const qtyEl = form.querySelector(`[name="qty_${key}"]`);
+    const qty = Number(qtyEl ? qtyEl.value : 1);
+    total += (priceMap[key] || 0) * qty;
+  });
+
+  totalPriceEl.textContent = `Total: ₱${total}`;
+}
+
+
+// CHECKBOX LOGIC
+menuContainer.addEventListener('change', e => {
+  if (e.target.matches('input[type="checkbox"]')) {
+    const parent = e.target.closest('.actions');
+    const key = e.target.name.replace('item_','');
+    const qty = parent.querySelector('.item-qty');
+
+    if (qty) qty.style.display = e.target.checked ? 'inline-block' : 'none';
+
     updateTotal();
   }
 });
-menuContainer.addEventListener('input', e=>{if(e.target.classList.contains('item-qty'))updateTotal();});
 
-unitInput.addEventListener('input', ()=>{
-  unitInput.value=unitInput.value.toUpperCase();
-  unitError.style.display=/^[0-9]{4}[AB]$/.test(unitInput.value)?'none':'block';
+menuContainer.addEventListener('input', e => {
+  if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
-form.addEventListener('submit', e=>{
+
+// VALIDATE UNIT NO.
+unitInput.addEventListener('input', () => {
+  unitInput.value = unitInput.value.toUpperCase();
+  unitError.style.display =
+    /^[0-9]{4}[AB]$/.test(unitInput.value) ? 'none' : 'block';
+});
+
+
+// SUBMIT ORDER
+form.addEventListener('submit', e => {
   e.preventDefault();
-  if(!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
-  if(form.querySelectorAll('input[type="checkbox"]:checked').length===0) return alert("Select at least one item.");
-  const fd=new FormData(form);
-  let total=0;
-  const itemsList=[];
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb=>{
-    const key=cb.name.replace('item_','');
-    const qty=Number(fd.get(`qty_${key}`))||1;
-    const displayName=document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
+
+  if (!/^[0-9]{4}[AB]$/.test(unitInput.value))
+    return alert("Invalid unit number.");
+
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
+    return alert("Select at least one item.");
+
+  const fd = new FormData(form);
+
+  let total = 0;
+  const itemsList = [];
+
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    const key = cb.name.replace('item_','');
+    const qty = Number(fd.get(`qty_${key}`)) || 1;
+
+    const displayName = document.querySelector(`#cb_${key}`)
+      .closest('.menu-item')
+      .querySelector('.details h3').textContent;
+
     itemsList.push(`${displayName} × ${qty}`);
-    total+=(priceMap[key]||0)*qty;
+    total += (priceMap[key] || 0) * qty;
   });
-  pendingOrder={name:fd.get('name'),contact:fd.get('contact'),unit_no:fd.get('unit_no'),notes:fd.get('notes'),items:itemsList.join(', '),total};
-  document.getElementById('orderPreviewModal').style.display='flex';
+
+  pendingOrder = {
+    name: fd.get('name'),
+    contact: fd.get('contact'),
+    unit_no: fd.get('unit_no'),
+    notes: fd.get('notes'),
+    items: itemsList.join(', '),
+    total
+  };
+
+  document.getElementById('orderPreviewModal').style.display = 'flex';
 });
 
-document.getElementById('cancelOrderBtn').onclick=()=>{document.getElementById('orderPreviewModal').style.display='none';};
-document.getElementById('confirmOrderBtn').onclick=()=>{
-  const fd=new FormData();
-  Object.entries(pendingOrder).forEach(([k,v])=>fd.append(k,v));
+
+document.getElementById('cancelOrderBtn').onclick = () => {
+  document.getElementById('orderPreviewModal').style.display = 'none';
+};
+
+document.getElementById('confirmOrderBtn').onclick = () => {
+  const fd = new FormData();
+
+  Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
+
   fd.append("total", pendingOrder.total);
   fd.append("item", pendingOrder.items);
-  fetch(orderURL,{method:"POST",body:fd})
-    .then(r=>r.json())
-    .then(res=>{
-      gcashSection.style.display='block';
+
+  fetch(orderURL, { method:"POST", body:fd })
+    .then(r => r.json())
+    .then(res => {
+      gcashSection.style.display = 'block';
       form.reset();
-      document.querySelectorAll('.item-qty').forEach(el=>el.style.display='none');
+      document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
       updateTotal();
-      document.getElementById('orderPreviewModal').style.display='none';
+      document.getElementById('orderPreviewModal').style.display = 'none';
       alert("✅ Order placed!");
-    }).catch(err=>{console.error(err);alert("❌ Failed to place order.");document.getElementById('orderPreviewModal').style.display='none';});
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Failed to place order.");
+      document.getElementById('orderPreviewModal').style.display = 'none';
+    });
 };
 </script>
