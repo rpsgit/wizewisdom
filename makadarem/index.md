@@ -3,260 +3,247 @@ layout: default
 title: Makadarem Menu
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Makadarem Menu</title>
-
 <style>
-  body {
-    font-family: "Poppins", sans-serif;
-    background: #f4f6fb url('placeholder-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #222;
-    margin: 0;
-    padding: 1rem;
-  }
-
-  /* 🔴 Delivery Schedule Banner */
-  #scheduleBox {
-    background: #ff4d4d;
-    color: white;
-    font-weight: 600;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 1rem;
-    line-height: 1.4rem;
-  }
-
-  h2.category-title {
-    margin-top: 25px;
-    margin-bottom: 10px;
-    font-size: 1.3rem;
-    color: #333;
-  }
-
-  .menu-item {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 12px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-
-  .menu-item img {
-    width: 80px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 15px;
-    cursor: pointer;
-  }
-
-  .details {
-    flex: 1;
-  }
-
-  .details h3 {
-    margin: 0;
-    font-size: 1.05rem;
-  }
-
-  .item-desc {
-    font-size: 0.85rem;
-    color: #666;
-    margin: 2px 0 4px;
-    white-space: normal;
-    line-height: 1.25rem;
-  }
-
-  .menu-item p {
-    margin: 3px 0;
-    font-size: 0.9rem;
-  }
-
-  .actions {
-    text-align: center;
-  }
-
-  .item-qty {
-    width: 45px;
-    margin-top: 3px;
-  }
-
-  /* Image Modal */
-  #imageModal {
-    display: none;
-    position: fixed;
-    z-index: 99999;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #imageModal img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 10px;
-  }
+/* === Page Styles === */
+body {
+  background: #f5f5f5 url('{{ "/assets/images/menu/bg.png" | relative_url }}') no-repeat center center fixed;
+  background-size: cover;
+  font-family: "Poppins", Arial, sans-serif;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+.page-container {
+  width: 95%;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 15px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: #4b2e05; }
+.category-container { width: 100%; margin-bottom: 25px; }
+.category-container h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #4b2e05;
+  border-bottom: 2px solid #ff7e5f;
+  padding-bottom: 4px;
+}
+.menu-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 10px;
+  transition: 0.3s ease;
+}
+.menu-item:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+.menu-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: 12px; flex-shrink: 0; }
+.details { flex-grow: 1; display: flex; flex-direction: column; }
+.details h3 { margin: 0; font-size: 1rem; color: #333; }
+.details p { margin: 2px 0; font-size: 0.9rem; color: #555; }
+.actions { display: flex; flex-direction: column; align-items: center; }
+.actions input[type="checkbox"] { transform: scale(1.1); cursor: pointer; margin-bottom: 4px; }
+.actions input[type="number"] { width: 45px; padding: 3px; border-radius: 5px; border: 1px solid #ccc; display: none; }
+.order-form-section { width: 100%; margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
+.order-form-section label { width: 90%; margin-top: 8px; font-size: 0.9rem; }
+.order-form-section input, .order-form-section textarea { width: 90%; padding: 6px; margin-top: 3px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem; }
+.order-button { margin-top: 20px; padding: 10px 25px; border-radius: 20px; font-size: 1rem; background: linear-gradient(135deg, #ff7e5f, #ff5722); color: #fff; border: none; cursor: pointer; transition: 0.3s ease; }
+.order-button:hover { background: #ff5722; transform: scale(1.05); }
+.total-price { font-weight: bold; font-size: 1.1rem; margin-top: 10px; color: #ff5722; text-align: left; white-space: pre-line; }
+#unitError { font-size: 0.85rem; color: red; display: none; }
+#gcashSection { display: none; margin-top: 25px; text-align: center; }
+/* Modal */
+#orderPreviewModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 999; }
+.modal-box { background: #fff; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
+@media (max-width: 600px) { .menu-item img { width: 60px; height: 50px; } }
 </style>
 
-</head>
-<body>
+<div class="page-container">
+  <h1>Makadarem for VS2</h1>
+  <p>Door-to-door delivery within VS2 only</p>
+  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 24, Mon</h2>
+  <h3 style="color: red;">9:00 AM to 12:00 and 5:00 PM to 12:00 MN. Thank you. </h3>
 
-<!-- 🔴 Delivery Schedule Box (auto-filled by Google Sheet) -->
-<div id="scheduleBox">Loading delivery schedule...</div>
+  <form id="menuForm">
+    <div id="menuContainer">Loading menu...</div>
 
-<h1>Makadarem Menu</h1>
+    <div class="total-price" id="totalPrice">Total: ₱0</div>
 
-<div id="menu"></div>
+    <div class="order-form-section">
+      <label>Name</label>
+      <input type="text" name="name" maxlength="50" required>
 
-<!-- Image Zoom Modal -->
-<div id="imageModal" onclick="this.style.display='none'">
-  <img id="modalImg" src="">
+      <label>Contact</label>
+      <input type="text" name="contact" placeholder="09XXXXXXXXX" required>
+
+      <label>Unit No.</label>
+      <input type="text" name="unit_no" maxlength="5" placeholder="1234A" required id="unitNo">
+      <span id="unitError">Unit No. must be 4 digits + A/B.</span>
+
+      <label>Notes</label>
+      <textarea name="notes" rows="3" placeholder="Add instructions"></textarea>
+    </div>
+
+    <button type="submit" class="order-button">Place Order</button>
+  </form>
+
+  <div id="gcashSection">
+    <h2>GCash Payment</h2>
+    <p><strong>GCash:</strong> 09178664404<br><strong>Name:</strong> RE*A P</p>
+    <img src="{{ '/assets/images/gcash_qr.jpg' | relative_url }}" style="width:160px; height:160px; border-radius:10px; border:2px solid #ccc;">
+  </div>
+</div>
+
+<div id="orderPreviewModal">
+  <div class="modal-box">
+    <h2>Confirm Order?</h2>
+    <button id="confirmOrderBtn">Confirm</button>
+    <button id="cancelOrderBtn">Cancel</button>
+  </div>
 </div>
 
 <script>
-/* ==========================
-   FETCH MENU + SCHEDULE
-   ========================== */
-
 const menuURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
 const orderURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
 
+const menuContainer = document.getElementById("menuContainer");
+const form = document.getElementById("menuForm");
+const totalPriceEl = document.getElementById("totalPrice");
+const unitInput = document.getElementById("unitNo");
+const unitError = document.getElementById("unitError");
+const gcashSection = document.getElementById("gcashSection");
 
-// Convert item name to key
-function makeKey(name) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, "_");
-}
+let priceMap = {};
+let pendingOrder = null;
 
-// Load Google Sheets
-async function fetchSheet(url) {
-  const res = await fetch(url);
-  return await res.json();
-}
+function makeKey(name) { return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase(); }
 
-async function loadData() {
-  const menuData = await fetchSheet(sheetURL);
-  const orderData = await fetchSheet(orderSheetURL);
-
-  /* ========== LOAD SCHEDULE FROM E1 + F1 ========== */
-  const scheduleBox = document.getElementById("scheduleBox");
-
-  const schedLine1 = orderData[0]["E"] || "";
-  const schedLine2 = orderData[0]["F"] || "";
-
-  scheduleBox.innerHTML = `
-    📅 <b>Delivery Schedule</b><br>
-    ${schedLine1}<br>
-    ${schedLine2}
-  `;
-
-  /* ========== LOAD MENU ========== */
-  const menuDiv = document.getElementById("menu");
-  menuDiv.innerHTML = "";
-
-  const categories = {};
-
-  menuData.forEach(item => {
-    const cat = item.Category || "Others";
-    if (!categories[cat]) categories[cat] = [];
-    categories[cat].push(item);
-  });
-
-  for (const category in categories) {
-    const h2 = document.createElement("h2");
-    h2.className = "category-title";
-    h2.textContent = category;
-    menuDiv.appendChild(h2);
-
-    categories[category].forEach(item => {
-      let raw = item.Item || "";
-      let name = raw;
-      let desc = "";
-
-      if (raw.includes(" - ")) {
-        const parts = raw.split(" - ");
-        name = parts.shift();
-        desc = parts.join(" - ");
-      }
-
-      const price = Number(item.Price || 0);
-      const imgSrc = item.Image || "https://via.placeholder.com/80x60";
-      const key = makeKey(name);
-
-      const div = document.createElement("div");
-      div.className = "menu-item";
-
-      div.innerHTML = `
-        <img data-full="${imgSrc}" 
-             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" 
-             data-src="${imgSrc}" 
-             alt="${name}" 
-             class="lazy-img">
-
-        <div class="details">
-          <h3>${name}</h3>
-          ${desc ? `<p class="item-desc">${desc}</p>` : ""}
-          <p>₱${price.toFixed(0)}</p>
-        </div>
-
-        <div class="actions">
-          <input type="checkbox" id="cb_${key}">
-          <input type="number" id="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
-        </div>
-      `;
-
-      // Click image → enlarge
-      div.querySelector("img").onclick = function () {
-        document.getElementById("modalImg").src = this.getAttribute("data-full");
-        document.getElementById("imageModal").style.display = "flex";
-      };
-
-      // Show quantity when checkbox is clicked
-      div.querySelector(`#cb_${key}`).addEventListener("change", (e) => {
-        const qty = div.querySelector(`#qty_${key}`);
-        qty.style.display = e.target.checked ? "inline-block" : "none";
-      });
-
-      menuDiv.appendChild(div);
+// Fetch & render menu
+fetch(menuURL)
+  .then(res => res.json())
+  .then(data => {
+    menuContainer.innerHTML = "";
+    const categories = {};
+    data.forEach(item => {
+      if(!categories[item.Category]) categories[item.Category] = [];
+      categories[item.Category].push(item);
     });
-  }
+    Object.entries(categories).forEach(([cat, items]) => {
+      const catDiv = document.createElement("div");
+      catDiv.className = "category-container";
+      catDiv.innerHTML = `<h2>${cat}</h2>`;
+      const list = document.createElement("div");
+      list.className = "menu-list";
+      items.forEach(item => {
+        const name = item.Item;
+        const price = Number(item.Price || 0);
+        const imgSrc = item.Image || "https://via.placeholder.com/80x60";
+        const key = makeKey(name);
+        priceMap[key] = price;
+        const div = document.createElement("div");
+        div.className = "menu-item";
+        div.innerHTML = `
+          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy">
+          <div class="details"><h3>${name}</h3><p>₱${price.toFixed(0)}</p></div>
+          <div class="actions">
+            <input type="checkbox" id="cb_${key}" name="item_${key}">
+            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
+          </div>
+        `;
+        list.appendChild(div);
+      });
+      catDiv.appendChild(list);
+      menuContainer.appendChild(catDiv);
+    });
+    initLazyLoading();
+  })
+  .catch(err => { console.error(err); menuContainer.innerHTML='<p style="color:red;">❌ Failed to load menu.</p>'; });
 
-  lazyLoadImages();
-}
-
-
-/* ==========================
-   LAZY LOAD IMAGES
-   ========================== */
-function lazyLoadImages() {
-  const lazyImages = document.querySelectorAll(".lazy-img");
-
-  const observer = new IntersectionObserver(entries => {
+function initLazyLoading() {
+  const lazyImages = document.querySelectorAll("img[data-src]");
+  if (!("IntersectionObserver" in window)) { lazyImages.forEach(img => { img.src = img.dataset.src; img.removeAttribute("data-src"); }); return; }
+  const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const img = entry.target;
         img.src = img.dataset.src;
-        observer.unobserve(img);
+        img.onload = () => img.removeAttribute("data-src");
+        img.onerror = () => { img.src="https://via.placeholder.com/80x60"; img.removeAttribute("data-src"); };
+        obs.unobserve(img);
       }
     });
-  });
-
+  }, { rootMargin:"200px" });
   lazyImages.forEach(img => observer.observe(img));
 }
 
-loadData();
-</script>
+// Total & form logic
+function updateTotal() {
+  let total=0;
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb=>{
+    const key=cb.name.replace('item_','');
+    const qtyEl=form.querySelector(`[name="qty_${key}"]`);
+    const qty=Number(qtyEl?qtyEl.value:1);
+    total+=(priceMap[key]||0)*qty;
+  });
+  totalPriceEl.textContent=`Total: ₱${total}`;
+}
 
-</body>
-</html>
+menuContainer.addEventListener('change', e=>{
+  if(e.target.matches('input[type="checkbox"]')){
+    const parent=e.target.closest('.actions');
+    const key=e.target.name.replace('item_','');
+    const qty=parent.querySelector('.item-qty');
+    if(qty) qty.style.display=e.target.checked?'inline-block':'none';
+    updateTotal();
+  }
+});
+menuContainer.addEventListener('input', e=>{if(e.target.classList.contains('item-qty'))updateTotal();});
+
+unitInput.addEventListener('input', ()=>{
+  unitInput.value=unitInput.value.toUpperCase();
+  unitError.style.display=/^[0-9]{4}[AB]$/.test(unitInput.value)?'none':'block';
+});
+
+form.addEventListener('submit', e=>{
+  e.preventDefault();
+  if(!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
+  if(form.querySelectorAll('input[type="checkbox"]:checked').length===0) return alert("Select at least one item.");
+  const fd=new FormData(form);
+  let total=0;
+  const itemsList=[];
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb=>{
+    const key=cb.name.replace('item_','');
+    const qty=Number(fd.get(`qty_${key}`))||1;
+    const displayName=document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
+    itemsList.push(`${displayName} × ${qty}`);
+    total+=(priceMap[key]||0)*qty;
+  });
+  pendingOrder={name:fd.get('name'),contact:fd.get('contact'),unit_no:fd.get('unit_no'),notes:fd.get('notes'),items:itemsList.join(', '),total};
+  document.getElementById('orderPreviewModal').style.display='flex';
+});
+
+document.getElementById('cancelOrderBtn').onclick=()=>{document.getElementById('orderPreviewModal').style.display='none';};
+document.getElementById('confirmOrderBtn').onclick=()=>{
+  const fd=new FormData();
+  Object.entries(pendingOrder).forEach(([k,v])=>fd.append(k,v));
+  fd.append("total", pendingOrder.total);
+  fd.append("item", pendingOrder.items);
+  fetch(orderURL,{method:"POST",body:fd})
+    .then(r=>r.json())
+    .then(res=>{
+      gcashSection.style.display='block';
+      form.reset();
+      document.querySelectorAll('.item-qty').forEach(el=>el.style.display='none');
+      updateTotal();
+      document.getElementById('orderPreviewModal').style.display='none';
+      alert("✅ Order placed!");
+    }).catch(err=>{console.error(err);alert("❌ Failed to place order.");document.getElementById('orderPreviewModal').style.display='none';});
+};
+</script>
