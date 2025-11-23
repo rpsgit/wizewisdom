@@ -399,15 +399,12 @@ document.getElementById('confirmOrderBtn').onclick = () => {
       updateTotal();
       document.getElementById('orderPreviewModal').style.display = 'none';
 
-      // Show last order summary
+      // Show last order summary at the bottom
       lastOrderDiv.style.display = 'block';
       lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
 
       // Change button to "Order Again"
       orderButton.textContent = "Order Again";
-
-      // Scroll to top
-      document.querySelector('.page-container').scrollIntoView({ behavior: 'smooth' });
 
       alert("✅ Order placed!");
     })
