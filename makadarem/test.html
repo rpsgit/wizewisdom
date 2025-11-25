@@ -82,6 +82,18 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   border: 1px solid #ccc; display: none;
 }
 
+/* dressing options under an item */
+.dressing-options {
+  margin-top: 6px;
+  display: none;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+.dressing-options label { margin-right: 8px; cursor: pointer; }
+
+/* small label for qty */
+.qty-label { font-size: 0.85rem; margin-top: 6px; color: #444; }
+
 .order-form-section { width: 100%; margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
 .order-form-section label { width: 90%; margin-top: 8px; font-size: 0.9rem; }
 .order-form-section input, .order-form-section textarea {
@@ -212,9 +224,21 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 </div>
 
 <script>
+/* ---------------------------
+   Configuration
+   --------------------------- */
+const SALAD_ITEMS = ["Chicken Salad", "Egg Salad"]; // exact item names in your sheet
+const DRESSINGS = ["Garlic", "Peanut", "Caesar"];
+
+/* ---------------------------
+   Endpoints
+   --------------------------- */
 const menuURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
 const orderURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
 
+/* ---------------------------
+   Elements
+   --------------------------- */
 const menuContainer = document.getElementById("menuContainer");
 const form = document.getElementById("menuForm");
 const totalPriceEl = document.getElementById("totalPrice");
@@ -232,7 +256,9 @@ function makeKey(name) {
   return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase();
 }
 
-// FETCH MENU & RENDER
+/* ---------------------------
+   Fetch menu & render
+   --------------------------- */
 fetch(menuURL)
   .then(res => res.json())
   .then(data => {
@@ -242,6 +268,7 @@ fetch(menuURL)
       if(!categories[item.Category]) categories[item.Category] = [];
       categories[item.Category].push(item);
     });
+
     Object.entries(categories).forEach(([cat, items]) => {
       const catDiv = document.createElement("div");
       catDiv.className = "category-container";
@@ -254,11 +281,13 @@ fetch(menuURL)
         let raw = item.Item || "";
         let name = raw;
         let desc = "";
+
         if (raw.includes(" - ")) {
           const parts = raw.split(" - ");
           name = parts.shift();
           desc = parts.join(" - ");
         }
+
         const price = Number(item.Price || 0);
         const imgSrc = item.Image || "https://via.placeholder.com/80x60";
         const key = makeKey(name);
@@ -267,31 +296,47 @@ fetch(menuURL)
         const div = document.createElement("div");
         div.className = "menu-item";
 
+        // If item is a salad item, we will render dressing checkboxes (hidden by default)
+        const isSalad = SALAD_ITEMS.includes(name);
+
         div.innerHTML = `
-          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-               alt="${name}" class="zoomable" loading="lazy">
+          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" class="zoomable" loading="lazy">
           <div class="details">
             <h3>${name}</h3>
             ${desc ? `<p class="item-desc">${desc}</p>` : ""}
             <p>₱${price.toFixed(0)}</p>
+
+            ${isSalad ? `
+              <div class="dressing-options" id="dress_${key}">
+                ${DRESSINGS.map(d => `<label><input type="checkbox" name="dressing_${key}" value="${d}"> ${d}</label>`).join("")}
+              </div>
+            ` : ""}
           </div>
+
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
-            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
+            <div class="qty-label" id="qtyLabel_${key}" style="display:none;">Qty:
+              <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="width:60px; margin-left:8px;">
+            </div>
           </div>
         `;
+
         list.appendChild(div);
       });
+
       catDiv.appendChild(list);
       menuContainer.appendChild(catDiv);
     });
 
     initLazyLoading();
     initImageZoom();
+    initItemInteractions();
   })
   .catch(err => { console.error(err); menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>'; });
 
-// LAZY LOAD IMAGES
+/* ---------------------------
+   Lazy loading images
+   --------------------------- */
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img[data-src]");
   if (!("IntersectionObserver" in window)) {
@@ -312,7 +357,9 @@ function initLazyLoading() {
   lazyImages.forEach(img => observer.observe(img));
 }
 
-// IMAGE ZOOM
+/* ---------------------------
+   Image zoom
+   --------------------------- */
 function initImageZoom() {
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImg");
@@ -322,51 +369,86 @@ function initImageZoom() {
   modal.onclick = () => { modal.style.display = "none"; modalImg.src = ""; };
 }
 
-// TOTAL PRICE
+/* ---------------------------
+   Item interactivity (checkbox -> show qty & dressing)
+   --------------------------- */
+function initItemInteractions() {
+  menuContainer.addEventListener('change', e => {
+    if (e.target && e.target.matches('input[type="checkbox"]') && e.target.id.startsWith('cb_')) {
+      const key = e.target.id.replace('cb_','');
+      const qtyLabel = document.getElementById(`qtyLabel_${key}`);
+      const dressDiv = document.getElementById(`dress_${key}`);
+
+      if (e.target.checked) {
+        if (qtyLabel) qtyLabel.style.display = 'inline-block';
+        // show dressings if this item supports it
+        if (dressDiv) dressDiv.style.display = 'block';
+      } else {
+        if (qtyLabel) qtyLabel.style.display = 'none';
+        if (dressDiv) {
+          // hide and uncheck dressing options
+          dressDiv.style.display = 'none';
+          dressDiv.querySelectorAll('input[type="checkbox"]').forEach(ch=> ch.checked = false);
+        }
+      }
+      updateTotal();
+    }
+
+    // quantity changed also updates total
+    if (e.target && e.target.matches('.item-qty')) updateTotal();
+  });
+
+  // ensure qty changes from direct input update total
+  menuContainer.addEventListener('input', e => {
+    if (e.target && e.target.matches('.item-qty')) updateTotal();
+  });
+}
+
+/* ---------------------------
+   Calculate total
+   --------------------------- */
 function updateTotal() {
   let total = 0;
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const key = cb.name.replace('item_','');
-    const qtyEl = form.querySelector(`[name="qty_${key}"]`);
+  form.querySelectorAll('input[id^="cb_"]:checked').forEach(cb => {
+    const key = cb.id.replace('cb_','');
+    const qtyEl = document.getElementById(`qty_${key}`);
     const qty = Number(qtyEl ? qtyEl.value : 1);
     total += (priceMap[key] || 0) * qty;
   });
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-// CHECKBOX LOGIC
-menuContainer.addEventListener('change', e => {
-  if (e.target.matches('input[type="checkbox"]')) {
-    const parent = e.target.closest('.actions');
-    const key = e.target.name.replace('item_','');
-    const qty = parent.querySelector('.item-qty');
-    if (qty) qty.style.display = e.target.checked ? 'inline-block' : 'none';
-    updateTotal();
-  }
-});
-menuContainer.addEventListener('input', e => { if (e.target.classList.contains('item-qty')) updateTotal(); });
-
-// UNIT VALIDATION
+/* ---------------------------
+   Unit validation
+   --------------------------- */
 unitInput.addEventListener('input', () => {
   unitInput.value = unitInput.value.toUpperCase();
   unitError.style.display = /^[0-9]{4}[AB]$/.test(unitInput.value) ? 'none' : 'block';
 });
 
-// SUBMIT FORM
+/* ---------------------------
+   Submit form -> open confirm modal
+   --------------------------- */
 form.addEventListener('submit', e => {
   e.preventDefault();
   if (!/^[0-9]{4}[AB]$/.test(unitInput.value)) return alert("Invalid unit number.");
-  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) return alert("Select at least one item.");
+  if (form.querySelectorAll('input[id^="cb_"]:checked').length === 0) return alert("Select at least one item.");
 
   const fd = new FormData(form);
   let total = 0;
   const itemsList = [];
 
-  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const key = cb.name.replace('item_','');
+  form.querySelectorAll('input[id^="cb_"]:checked').forEach(cb => {
+    const key = cb.id.replace('cb_','');
     const qty = Number(fd.get(`qty_${key}`)) || 1;
     const displayName = document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
-    itemsList.push(`${displayName} × ${qty}`);
+
+    // get dressing selections for this item (if any)
+    const dressingNodes = document.querySelectorAll(`input[name="dressing_${key}"]:checked`);
+    const dressings = Array.from(dressingNodes).map(n => n.value);
+
+    const dressingText = dressings.length ? ` (Dressing: ${dressings.join(', ')})` : '';
+    itemsList.push(`${displayName} × ${qty}${dressingText}`);
     total += (priceMap[key] || 0) * qty;
   });
 
@@ -375,7 +457,7 @@ form.addEventListener('submit', e => {
     contact: fd.get('contact'),
     unit_no: fd.get('unit_no'),
     notes: fd.get('notes'),
-    items: itemsList.join(', '),
+    items: itemsList.join(' | '),
     total
   };
 
@@ -386,19 +468,26 @@ form.addEventListener('submit', e => {
   document.getElementById('orderPreviewModal').style.display = 'flex';
 });
 
-// CANCEL ORDER
-document.getElementById('cancelOrderBtn').onclick = () => { document.getElementById('orderPreviewModal').style.display = 'none'; };
+/* ---------------------------
+   Cancel confirm modal
+   --------------------------- */
+document.getElementById('cancelOrderBtn').onclick = () => {
+  document.getElementById('orderPreviewModal').style.display = 'none';
+};
 
-// CONFIRM ORDER
+/* ---------------------------
+   Confirm order -> send to backend
+   --------------------------- */
 document.getElementById('confirmOrderBtn').onclick = () => {
 
-  // disable confirm immediately so double-clicks won't send two requests
+  // disable confirm immediately to prevent double submits
   confirmBtn.disabled = true;
   confirmBtn.textContent = "Processing...";
 
-  // preserve current scroll position so resetting the form doesn't jump the page
+  // preserve scroll position so resetting the form doesn't jump the page
   const scrollPos = window.scrollY;
 
+  // prepare formdata; include the human readable items summary
   const fd = new FormData();
   Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
   fd.append("total", pendingOrder.total);
@@ -412,20 +501,21 @@ document.getElementById('confirmOrderBtn').onclick = () => {
       // reset form but restore scroll position to avoid jumping
       form.reset();
       document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
+      // also hide dressing options and uncheck them
+      document.querySelectorAll('.dressing-options').forEach(d => { d.style.display = 'none'; d.querySelectorAll('input[type="checkbox"]').forEach(ch=> ch.checked = false); });
       updateTotal();
       document.getElementById('orderPreviewModal').style.display = 'none';
       window.scrollTo(0, scrollPos); // restore location (prevents page jump)
 
       // Show last order summary at the bottom
       lastOrderDiv.style.display = 'block';
-      lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
+      lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items.replace(/\|/g,'<br>')}<br><strong>Total:</strong> ₱${pendingOrder.total}`;
 
       // Change button to "Order Again"
       orderButton.textContent = "Order Again";
 
-      // Leave confirm button disabled after success (prevents accidental re-confirm)
+      // Leave confirm button disabled after success (will be re-enabled when the modal is opened again)
       confirmBtn.textContent = "Confirm";
-      // confirmBtn.disabled = true; // intentionally keep disabled — it will be re-enabled when modal opens next time
 
       alert("✅ Order placed!");
     })
@@ -439,5 +529,4 @@ document.getElementById('confirmOrderBtn').onclick = () => {
       confirmBtn.textContent = "Confirm";
     });
 };
-
 </script>
