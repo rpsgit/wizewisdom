@@ -5,6 +5,7 @@ title: Makadarem Menu
 
 <style>
 /* === Page Styles === */
+html, body { scroll-behavior: auto !important; } /* prevents unexpected smooth scrolling/jumps */
 body {
   background: #f5f5f5 url('{{ "/assets/images/menu/bg.png" | relative_url }}') no-repeat center center fixed;
   background-size: cover;
@@ -222,6 +223,7 @@ const unitError = document.getElementById("unitError");
 const gcashSection = document.getElementById("gcashSection");
 const orderButton = document.getElementById("orderButton");
 const lastOrderDiv = document.getElementById("lastOrder");
+const confirmBtn = document.getElementById("confirmOrderBtn"); // cached confirm button
 
 let priceMap = {};
 let pendingOrder = null;
@@ -377,6 +379,10 @@ form.addEventListener('submit', e => {
     total
   };
 
+  // Re-enable confirm button when opening modal for a new confirmation
+  confirmBtn.disabled = false;
+  confirmBtn.textContent = "Confirm";
+
   document.getElementById('orderPreviewModal').style.display = 'flex';
 });
 
@@ -385,6 +391,14 @@ document.getElementById('cancelOrderBtn').onclick = () => { document.getElementB
 
 // CONFIRM ORDER
 document.getElementById('confirmOrderBtn').onclick = () => {
+
+  // disable confirm immediately so double-clicks won't send two requests
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Processing...";
+
+  // preserve current scroll position so resetting the form doesn't jump the page
+  const scrollPos = window.scrollY;
+
   const fd = new FormData();
   Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
   fd.append("total", pendingOrder.total);
@@ -394,10 +408,13 @@ document.getElementById('confirmOrderBtn').onclick = () => {
     .then(r => r.json())
     .then(res => {
       gcashSection.style.display = 'block';
+
+      // reset form but restore scroll position to avoid jumping
       form.reset();
       document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
       updateTotal();
       document.getElementById('orderPreviewModal').style.display = 'none';
+      window.scrollTo(0, scrollPos); // restore location (prevents page jump)
 
       // Show last order summary at the bottom
       lastOrderDiv.style.display = 'block';
@@ -406,8 +423,21 @@ document.getElementById('confirmOrderBtn').onclick = () => {
       // Change button to "Order Again"
       orderButton.textContent = "Order Again";
 
+      // Leave confirm button disabled after success (prevents accidental re-confirm)
+      confirmBtn.textContent = "Confirm";
+      // confirmBtn.disabled = true; // intentionally keep disabled — it will be re-enabled when modal opens next time
+
       alert("✅ Order placed!");
     })
-    .catch(err => { console.error(err); alert("❌ Failed to place order."); document.getElementById('orderPreviewModal').style.display = 'none'; });
+    .catch(err => {
+      console.error(err);
+      alert("❌ Failed to place order.");
+      document.getElementById('orderPreviewModal').style.display = 'none';
+
+      // Allow retry if error
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "Confirm";
+    });
 };
+
 </script>
