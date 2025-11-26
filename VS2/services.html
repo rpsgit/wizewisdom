@@ -274,7 +274,7 @@
       <thead>
         <tr>
           <th>Product/Service</th>
-          <th>Name or FB Handle</th>
+          <th>NName/Handle</th>
           <th>Contact Number</th>
         </tr>
       </thead>
@@ -282,7 +282,7 @@
         ${data.map((item, i) => `
           <tr data-index="${i}">
             <td>${item["Product/Service"] || ""}</td>
-            <td>${item["FB Handle"] || ""}</td>
+            <td>${item["Name/Handle"] || ""}</td>
             <td>${item["Contact Number"] || ""}</td>
           </tr>
         `).join("")}
@@ -316,7 +316,7 @@
   ">
     <h3 style="color:#0077cc;">${item["Type of Service"] || "Service Details"}</h3>
     <p><strong>Product/Service:</strong> ${item["Product/Service"] || "N/A"}</p>
-    <p><strong>FB Handle:</strong> ${item["FB Handle"] || "N/A"}</p>
+    <p><strong>Name/Handle:</strong> ${item["Name/Handle"] || "N/A"}</p>
     <p><strong>Contact Name:</strong> ${item["Contact Name"] || "N/A"}</p>
     <p><strong>Contact Number:</strong> ${item["Contact Number"] || "N/A"}</p>
     <p><strong>Availability:</strong> ${item["Availability"] || "N/A"}</p>
