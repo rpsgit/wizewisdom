@@ -164,8 +164,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
   <p>Door-to-door delivery within VS2 only</p>
-  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 28, Fri</h2>
-  <h3 style="color: red;">8 AM to to 10 PM. Thank you.</h3>
+  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 29, Sat</h2>
+  <h3 style="color: red;">6 PM to 11 PM. Thank you.</h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
