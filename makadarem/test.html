@@ -5,7 +5,7 @@ title: Makadarem Menu
 
 <style>
 /* === Page Styles === */
-html, body { scroll-behavior: auto !important; } /* prevents unexpected smooth scrolling/jumps */
+html, body { scroll-behavior: auto !important; }
 body {
   background: #f5f5f5 url('{{ "/assets/images/menu/bg.png" | relative_url }}') no-repeat center center fixed;
   background-size: cover;
@@ -180,8 +180,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
       <input type="text" name="contact" placeholder="09XXXXXXXXX" required>
 
       <label>Unit No.</label>
-      <input type="text" name="unit_no" maxlength="5" placeholder="1234A" required id="unitNo">
-      <span id="unitError">Unit No. must be 4 digits + A/B.</span>
+      <input type="text" name="unit_no" maxlength="5" placeholder="1234A / PH12 / 12PH" required id="unitNo">
+      <span id="unitError">Sample: 1234A・B1234・PH12A・B12PH.</span>
 
       <label>Notes</label>
       <textarea name="notes" rows="3" placeholder="Add instructions"></textarea>
@@ -232,7 +232,7 @@ function makeKey(name) {
   return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase();
 }
 
-/* --- FETCH MENU --- */
+// FETCH MENU
 fetch(menuURL)
   .then(res => res.json())
   .then(data => {
@@ -268,6 +268,7 @@ fetch(menuURL)
 
         const div = document.createElement("div");
         div.className = "menu-item";
+
         div.innerHTML = `
           <img data-src="${imgSrc}"
                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
@@ -281,7 +282,7 @@ fetch(menuURL)
 
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
-            <input type="number" id="qty_${key}" class="item-qty" name="qty_${key}" value="1" min="1" style="display:none;">
+            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1">
           </div>
         `;
         list.appendChild(div);
@@ -293,13 +294,9 @@ fetch(menuURL)
 
     initLazyLoading();
     initImageZoom();
-  })
-  .catch(err => {
-    console.error(err);
-    menuContainer.innerHTML = "<p style='color:red;'>❌ Failed to load menu.</p>";
   });
 
-/* --- LAZY LOAD --- */
+// LAZY LOAD
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img[data-src]");
   if (!("IntersectionObserver" in window)) {
@@ -312,175 +309,174 @@ function initLazyLoading() {
         const img = entry.target;
         img.src = img.dataset.src;
         img.onload = () => img.removeAttribute("data-src");
-        img.onerror = () => img.src = "https://via.placeholder.com/80x60";
         obs.unobserve(img);
       }
     });
   }, { rootMargin: "200px" });
-
   lazyImages.forEach(img => observer.observe(img));
 }
 
-/* --- IMAGE ZOOM --- */
+// ZOOM
 function initImageZoom() {
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImg");
-
   document.querySelectorAll(".zoomable").forEach(img => {
     img.onclick = () => {
       modal.style.display = "flex";
       modalImg.src = img.dataset.src || img.src;
     };
   });
-
-  modal.onclick = () => {
-    modal.style.display = "none";
-    modalImg.src = "";
-  };
+  modal.onclick = () => { modal.style.display = "none"; };
 }
 
-/* --- TOTAL PRICE --- */
+// TOTAL
 function updateTotal() {
   let total = 0;
-
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const key = cb.name.replace("item_","");
-    const qtyEl = form.querySelector(`[name="qty_${key}"]`);
-    const qty = Number(qtyEl ? qtyEl.value : 1);
-    total += (priceMap[key] || 0) * qty;
+    const key = cb.name.replace('item_','');
+    const qtyEl = document.querySelector(`#qty_${key}`);
+    const qty = Number(qtyEl.value) || 1;
+    total += priceMap[key] * qty;
   });
-
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-/* --- CHECKBOX / QTY --- */
-menuContainer.addEventListener("change", e => {
-  if (e.target.matches("input[type='checkbox']")) {
-    const parent = e.target.closest(".actions");
-    const key = e.target.name.replace("item_","");
-    const qty = parent.querySelector(".item-qty");
-    qty.style.display = e.target.checked ? "inline-block" : "none";
+// ITEM CHECK
+menuContainer.addEventListener('change', e => {
+  if (e.target.matches('input[type="checkbox"]')) {
+    const key = e.target.name.replace('item_','');
+    const qty = document.querySelector(`#qty_${key}`);
+    qty.style.display = e.target.checked ? 'inline-block' : 'none';
     updateTotal();
   }
 });
-menuContainer.addEventListener("input", e => {
-  if (e.target.classList.contains("item-qty")) updateTotal();
+
+menuContainer.addEventListener('input', e => {
+  if (e.target.classList.contains('item-qty')) updateTotal();
 });
 
-/* --------------------------------------
-   UNIT VALIDATION (UPDATED)
---------------------------------------- */
-unitInput.addEventListener("input", () => {
+// UNIT VALIDATION (updated with all allowed combos)
+/*
+Allowed patterns:
+1) 4 numbers + A/B       -> 1234A
+2) A/B + 4 numbers       -> A1234
+3) 2 numbers + A/B + 2 numbers -> 12A34
+4) 2 numbers + A/B + PH  -> 12APH
+5) PH + 2 numbers + A/B  -> PH12A
+6) A/B + 2 numbers + PH  -> A12PH
+7) A/B + PH + 2 numbers  -> APH12
+*/
+unitInput.addEventListener('input', () => {
   unitInput.value = unitInput.value.toUpperCase();
-  const val = unitInput.value;
-  const valid = /^[0-9]{4}[AB]$/.test(val) || val === "PH";
+  const v = unitInput.value;
+
+  const patterns = [
+    /^[0-9]{4}[AB]$/,      // 1234A
+    /^[AB][0-9]{4}$/,      // A1234
+    /^[0-9]{2}[AB][0-9]{2}$/, // 12A34
+    /^[0-9]{2}[AB]PH$/,    // 12APH
+    /^PH[0-9]{2}[AB]$/,    // PH12A
+    /^[AB][0-9]{2}PH$/,    // A12PH
+    /^[AB]PH[0-9]{2}$/     // APH12
+  ];
+
+  const valid = patterns.some(rx => rx.test(v));
+
+  unitError.textContent = "Unit No. must be one of: 4 digits + A/B (1234A), A/B + 4 digits (A1234), 2 digits + A/B + 2 digits (12A34), 2 digits + A/B + PH (12APH), PH + 2 digits + A/B (PH12A), A/B + 2 digits + PH (A12PH), or A/B + PH + 2 digits (APH12).";
+
   unitError.style.display = valid ? "none" : "block";
 });
 
-/* --------------------------------------
-   SUBMIT FORM → OPEN CONFIRM MODAL
---------------------------------------- */
-form.addEventListener("submit", e => {
+// SUBMIT
+form.addEventListener('submit', e => {
   e.preventDefault();
 
-  if (!(/^[0-9]{4}[AB]$/.test(unitInput.value) || unitInput.value === "PH")) {
-    return alert("Invalid unit number. Must be 4 digits + A/B or 'PH'.");
+  const unitVal = unitInput.value.toUpperCase();
+
+  const patterns = [
+    /^[0-9]{4}[AB]$/,      // 1234A
+    /^[AB][0-9]{4}$/,      // A1234
+    /^[0-9]{2}[AB][0-9]{2}$/, // 12A34
+    /^[0-9]{2}[AB]PH$/,    // 12APH
+    /^PH[0-9]{2}[AB]$/,    // PH12A
+    /^[AB][0-9]{2}PH$/,    // A12PH
+    /^[AB]PH[0-9]{2}$/     // APH12
+  ];
+
+  const validUnit = patterns.some(rx => rx.test(unitVal));
+
+  if (!validUnit) {
+    return alert("Invalid Unit No. Must match one of the allowed formats. See inline hint.");
   }
-  if (form.querySelectorAll("input[type='checkbox']:checked").length === 0) {
+
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
     return alert("Select at least one item.");
-  }
 
   const fd = new FormData(form);
   let total = 0;
   const itemsList = [];
 
-  form.querySelectorAll("input[type='checkbox']:checked").forEach(cb => {
-    const key = cb.name.replace("item_","");
+  form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    const key = cb.name.replace('item_','');
     const qty = Number(fd.get(`qty_${key}`)) || 1;
-    const displayName = document.querySelector(`#cb_${key}`).closest(".menu-item").querySelector(".details h3").textContent;
-
+    const displayName = document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
     itemsList.push(`${displayName} × ${qty}`);
-    total += (priceMap[key] || 0) * qty;
+    total += priceMap[key] * qty;
   });
 
   pendingOrder = {
-    name: fd.get("name"),
-    contact: fd.get("contact"),
-    unit_no: fd.get("unit_no"),
-    notes: fd.get("notes"),
-    items: itemsList.join(", "),
+    name: fd.get('name'),
+    contact: fd.get('contact'),
+    unit_no: fd.get('unit_no'),
+    notes: fd.get('notes'),
+    items: itemsList.join(', '),
     total
   };
 
-  /* --- Inject Order Summary into Modal --- */
-  document.querySelector(".modal-box").innerHTML = `
-    <h2>Confirm Order?</h2>
+  confirmBtn.disabled = false;
+  confirmBtn.textContent = "Confirm";
 
-    <div id="orderSummary" style="text-align:left; margin-top:10px; font-size:0.9rem;">
-      <strong>Name:</strong> ${pendingOrder.name}<br>
-      <strong>Contact:</strong> ${pendingOrder.contact}<br>
-      <strong>Unit No.:</strong> ${pendingOrder.unit_no}<br>
-      <strong>Items:</strong> ${pendingOrder.items}<br>
-      <strong>Total:</strong> ₱${pendingOrder.total.toLocaleString()}
-    </div>
-
-    <p style="color:red; font-weight:bold; margin-top:15px;">
-      Please double-check your UNIT No.
-    </p>
-
-    <button id="confirmOrderBtn">Confirm</button>
-    <button id="cancelOrderBtn">Cancel</button>
-  `;
-
-  /* Reattach buttons */
-  document.getElementById("cancelOrderBtn").onclick = () =>
-    document.getElementById("orderPreviewModal").style.display = "none";
-
-  document.getElementById("confirmOrderBtn").onclick = confirmOrder;
-
-  document.getElementById("orderPreviewModal").style.display = "flex";
+  document.getElementById('orderPreviewModal').style.display = 'flex';
 });
 
-/* --------------------------------------
-   CONFIRM ORDER (POST)
---------------------------------------- */
-function confirmOrder() {
-  const confirmBtn = document.getElementById("confirmOrderBtn");
+// CANCEL
+document.getElementById('cancelOrderBtn').onclick = () =>
+  document.getElementById('orderPreviewModal').style.display = 'none';
+
+// CONFIRM ORDER
+document.getElementById('confirmOrderBtn').onclick = () => {
+
   confirmBtn.disabled = true;
   confirmBtn.textContent = "Processing...";
 
   const scrollPos = window.scrollY;
 
   const fd = new FormData();
-  Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
-  fd.append("total", pendingOrder.total);
-  fd.append("item", pendingOrder.items);
+  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
 
-  fetch(orderURL, { method:"POST", body:fd })
+  fetch(orderURL, { method: "POST", body: fd })
     .then(r => r.json())
-    .then(res => {
-      gcashSection.style.display = "block";
-      form.reset();
-      document.querySelectorAll(".item-qty").forEach(el => el.style.display = "none");
-      updateTotal();
-      document.getElementById("orderPreviewModal").style.display = "none";
+    .then(() => {
+      gcashSection.style.display = 'block';
 
+      form.reset();
+      document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
+      updateTotal();
+      document.getElementById('orderPreviewModal').style.display = 'none';
       window.scrollTo(0, scrollPos);
 
-      lastOrderDiv.style.display = "block";
-      lastOrderDiv.innerHTML = `
-        <strong>Last Order:</strong><br>
-        ${pendingOrder.items}<br>
-        Total: ₱${pendingOrder.total}
-      `;
+      lastOrderDiv.style.display = 'block';
+      lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
 
       orderButton.textContent = "Order Again";
+
       alert("✅ Order placed!");
     })
-    .catch(() => {
+    .catch(err => {
+      console.error(err);
       alert("❌ Failed to place order.");
       confirmBtn.disabled = false;
       confirmBtn.textContent = "Confirm";
     });
-}
+};
 </script>
