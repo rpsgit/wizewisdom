@@ -382,7 +382,7 @@ unitInput.addEventListener('input', () => {
 
   const valid = patterns.some(rx => rx.test(v));
 
-  unitError.textContent = "Unit No. must be one of: 4 digits + A/B (1234A), A/B + 4 digits (A1234), 2 digits + A/B + 2 digits (12A34), 2 digits + A/B + PH (12APH), PH + 2 digits + A/B (PH12A), A/B + 2 digits + PH (A12PH), or A/B + PH + 2 digits (APH12).";
+  unitError.textContent = "Sample valid Unit No: 1234A・B1234・PH12A・B12PH.";
 
   unitError.style.display = valid ? "none" : "block";
 });
