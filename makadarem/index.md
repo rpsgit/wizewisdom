@@ -402,16 +402,18 @@ unitInput.addEventListener("input", () => {
 });
 
 // ---------------------------
-// SUBMIT FORM
+// SUBMIT FORM (with Order Summary in Modal)
 // ---------------------------
 form.addEventListener("submit", e => {
   e.preventDefault();
 
+  // Unit validation
   if (!unitRegex.test(unitInput.value)) {
     alert("Invalid Unit No.\nAccepted formats: 1234A, A1234, 12A34, 12APH, PH12A, A12PH, APH12.");
     return;
   }
 
+  // Must select at least one item
   if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) {
     alert("Select at least one item.");
     return;
@@ -431,7 +433,6 @@ form.addEventListener("submit", e => {
       .querySelector(".details h3").textContent;
 
     itemsList.push(`${displayName} × ${qty}`);
-
     total += (priceMap[key] || 0) * qty;
   });
 
@@ -440,15 +441,75 @@ form.addEventListener("submit", e => {
     contact: fd.get("contact"),
     unit_no: fd.get("unit_no"),
     notes: fd.get("notes"),
-    items: itemsList.join(", "),
+    items: itemsList.join("<br>"),
     total
   };
 
+  // Build the order summary text
+  document.getElementById("orderSummary").innerHTML = `
+    <strong>Items:</strong><br>${pendingOrder.items}<br><br>
+    <strong>Total:</strong> ₱${pendingOrder.total}<br><br>
+    <strong>Name:</strong> ${pendingOrder.name}<br>
+    <strong>Contact:</strong> ${pendingOrder.contact}<br>
+    <strong>Unit No.:</strong> ${pendingOrder.unit_no}<br>
+    ${pendingOrder.notes ? `<strong>Notes:</strong> ${pendingOrder.notes}<br>` : ""}
+  `;
+
+  // Open modal
   confirmBtn.disabled = false;
   confirmBtn.textContent = "Confirm";
-
   document.getElementById("orderPreviewModal").style.display = "flex";
 });
+
+// ---------------------------
+// CANCEL PREVIEW
+// ---------------------------
+document.getElementById("cancelOrderBtn").onclick = () => {
+  document.getElementById("orderPreviewModal").style.display = "none";
+};
+
+// ---------------------------
+// CONFIRM ORDER
+// ---------------------------
+document.getElementById("confirmOrderBtn").onclick = () => {
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Processing...";
+
+  const scrollPos = window.scrollY;
+
+  const fd = new FormData();
+  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
+  fd.append("item", pendingOrder.items.replace(/<br>/g, ", "));
+  fd.append("total", pendingOrder.total);
+
+  fetch(orderURL, { method: "POST", body: fd })
+    .then(r => r.json())
+    .then(res => {
+      gcashSection.style.display = "block";
+
+      form.reset();
+      document.querySelectorAll(".item-qty").forEach(el => el.style.display = "none");
+      updateTotal();
+
+      document.getElementById("orderPreviewModal").style.display = "none";
+      window.scrollTo(0, scrollPos);
+
+      lastOrderDiv.style.display = "block";
+      lastOrderDiv.innerHTML =
+        `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
+
+      orderButton.textContent = "Order Again";
+
+      alert("✅ Order placed!");
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Failed to place order.");
+      document.getElementById("orderPreviewModal").style.display = "none";
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "Confirm";
+    });
+};
 
 // ---------------------------
 // CANCEL PREVIEW
