@@ -5,7 +5,7 @@ title: Makadarem Menu
 
 <style>
 /* === Page Styles === */
-html, body { scroll-behavior: auto !important; } /* prevents unexpected smooth scrolling/jumps */
+html, body { scroll-behavior: auto !important; }
 body {
   background: #f5f5f5 url('{{ "/assets/images/menu/bg.png" | relative_url }}') no-repeat center center fixed;
   background-size: cover;
@@ -112,12 +112,15 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   margin-top: 15px;
   padding: 10px;
   width: 90%;
+  max-width: 600px;
   background: #fff8e1;
   border-radius: 10px;
   border: 1px solid #ffcc80;
   font-size: 0.9rem;
   color: #333;
   display: none;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #unitError { font-size: 0.85rem; color: red; display: none; }
@@ -138,6 +141,19 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   width: 90%;
   max-width: 400px;
   text-align: center;
+}
+#orderSummary {
+  text-align: left;
+  margin-top: 15px;
+}
+#unitReminder {
+  margin-top: 12px;
+  padding: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  color: #856404;
+  font-weight: bold;
 }
 
 /* Image Zoom Modal */
@@ -206,6 +222,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 <div id="orderPreviewModal">
   <div class="modal-box">
     <h2>Confirm Order?</h2>
+    <div id="orderSummary"></div>
+    <div id="unitReminder">4. Correct po ba ang Unit Number natin? 🤔</div>
     <button id="confirmOrderBtn">Confirm</button>
     <button id="cancelOrderBtn">Cancel</button>
   </div>
@@ -228,15 +246,14 @@ const confirmBtn = document.getElementById("confirmOrderBtn");
 let priceMap = {};
 let pendingOrder = null;
 
-// Updated Unit No. validator
+// Unit regex
 const unitRegex = /^(?:\d{4}[AB]|[AB]\d{4}|\d{2}[AB]\d{2}|\d{2}[AB]PH|PH\d{2}[AB]|[AB]\d{2}PH|[AB]PH\d{2})$/;
-
 unitError.textContent =
   "Invalid Unit No. Accepted formats: 1234A, A1234, 12A34, 12APH, PH12A, A12PH, APH12.";
 
-// ---------------------------
+// --------------------
 // FETCH MENU
-// ---------------------------
+// --------------------
 function makeKey(name) {
   return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase();
 }
@@ -246,7 +263,6 @@ fetch(menuURL)
   .then(data => {
     menuContainer.innerHTML = "";
     const categories = {};
-
     data.forEach(item => {
       if (!categories[item.Category]) categories[item.Category] = [];
       categories[item.Category].push(item);
@@ -264,13 +280,11 @@ fetch(menuURL)
         let raw = item.Item || "";
         let name = raw;
         let desc = "";
-
         if (raw.includes(" - ")) {
           const parts = raw.split(" - ");
           name = parts.shift();
           desc = parts.join(" - ");
         }
-
         const price = Number(item.Price || 0);
         const imgSrc = item.Image || "https://via.placeholder.com/80x60";
         const key = makeKey(name);
@@ -290,14 +304,11 @@ fetch(menuURL)
 
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
-            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty"
-                   value="1" min="1" style="display:none;">
+            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
           </div>
         `;
-
         list.appendChild(div);
       });
-
       catDiv.appendChild(list);
       menuContainer.appendChild(catDiv);
     });
@@ -305,81 +316,59 @@ fetch(menuURL)
     initLazyLoading();
     initImageZoom();
   })
-  .catch(err => {
-    console.error(err);
-    menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>';
-  });
+  .catch(err => { console.error(err); menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>'; });
 
-// ---------------------------
-// IMAGE LAZY LOADING
-// ---------------------------
+// --------------------
+// Lazy load images
+// --------------------
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img[data-src]");
-
   if (!("IntersectionObserver" in window)) {
-    lazyImages.forEach(img => {
-      img.src = img.dataset.src;
-      img.removeAttribute("data-src");
-    });
+    lazyImages.forEach(img => { img.src = img.dataset.src; img.removeAttribute("data-src"); });
     return;
   }
-
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const img = entry.target;
         img.src = img.dataset.src;
         img.onload = () => img.removeAttribute("data-src");
-        img.onerror = () => {
-          img.src = "https://via.placeholder.com/80x60";
-          img.removeAttribute("data-src");
-        };
+        img.onerror = () => { img.src = "https://via.placeholder.com/80x60"; img.removeAttribute("data-src"); };
         obs.unobserve(img);
       }
     });
   }, { rootMargin: "200px" });
-
   lazyImages.forEach(img => observer.observe(img));
 }
 
-// ---------------------------
-// IMAGE ZOOM
-// ---------------------------
+// --------------------
+// Image zoom
+// --------------------
 function initImageZoom() {
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImg");
-
   document.querySelectorAll(".zoomable").forEach(img => {
-    img.onclick = () => {
-      modal.style.display = "flex";
-      modalImg.src = img.dataset.src || img.src;
-    };
+    img.onclick = () => { modal.style.display = "flex"; modalImg.src = img.dataset.src || img.src; };
   });
-
-  modal.onclick = () => {
-    modal.style.display = "none";
-    modalImg.src = "";
-  };
+  modal.onclick = () => { modal.style.display = "none"; modalImg.src = ""; };
 }
 
-// ---------------------------
-// TOTAL PRICE
-// ---------------------------
+// --------------------
+// Total price
+// --------------------
 function updateTotal() {
   let total = 0;
-
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const key = cb.name.replace("item_", "");
     const qty = Number(form.querySelector(`#qty_${key}`).value || 1);
     total += (priceMap[key] || 0) * qty;
   });
-
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-// ---------------------------
-// CHECKBOX + QTY LOGIC
-// ---------------------------
+// --------------------
+// Checkbox & qty
+// --------------------
 menuContainer.addEventListener("change", e => {
   if (e.target.matches('input[type="checkbox"]')) {
     const key = e.target.name.replace("item_", "");
@@ -388,32 +377,27 @@ menuContainer.addEventListener("change", e => {
     updateTotal();
   }
 });
+menuContainer.addEventListener("input", e => { if(e.target.classList.contains("item-qty")) updateTotal(); });
 
-menuContainer.addEventListener("input", e => {
-  if (e.target.classList.contains("item-qty")) updateTotal();
-});
-
-// ---------------------------
-// UNIT VALIDATION (UPDATED)
-// ---------------------------
+// --------------------
+// Unit input
+// --------------------
 unitInput.addEventListener("input", () => {
   unitInput.value = unitInput.value.toUpperCase();
   unitError.style.display = unitRegex.test(unitInput.value) ? "none" : "block";
 });
 
-// ---------------------------
-// SUBMIT FORM (with Order Summary in Modal)
-// ---------------------------
+// --------------------
+// Submit form & modal
+// --------------------
 form.addEventListener("submit", e => {
   e.preventDefault();
 
-  // Unit validation
   if (!unitRegex.test(unitInput.value)) {
     alert("Invalid Unit No.\nAccepted formats: 1234A, A1234, 12A34, 12APH, PH12A, A12PH, APH12.");
     return;
   }
 
-  // Must select at least one item
   if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) {
     alert("Select at least one item.");
     return;
@@ -426,12 +410,7 @@ form.addEventListener("submit", e => {
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
     const key = cb.name.replace("item_", "");
     const qty = Number(fd.get(`qty_${key}`)) || 1;
-
-    const displayName = document
-      .querySelector(`#cb_${key}`)
-      .closest(".menu-item")
-      .querySelector(".details h3").textContent;
-
+    const displayName = document.querySelector(`#cb_${key}`).closest(".menu-item").querySelector(".details h3").textContent;
     itemsList.push(`${displayName} × ${qty}`);
     total += (priceMap[key] || 0) * qty;
   });
@@ -445,7 +424,6 @@ form.addEventListener("submit", e => {
     total
   };
 
-  // Build the order summary text
   document.getElementById("orderSummary").innerHTML = `
     <strong>Items:</strong><br>${pendingOrder.items}<br><br>
     <strong>Total:</strong> ₱${pendingOrder.total}<br><br>
@@ -454,102 +432,43 @@ form.addEventListener("submit", e => {
     <strong>Unit No.:</strong> ${pendingOrder.unit_no}<br>
     ${pendingOrder.notes ? `<strong>Notes:</strong> ${pendingOrder.notes}<br>` : ""}
   `;
-
-  // Open modal
+  
   confirmBtn.disabled = false;
   confirmBtn.textContent = "Confirm";
   document.getElementById("orderPreviewModal").style.display = "flex";
 });
 
-// ---------------------------
-// CANCEL PREVIEW
-// ---------------------------
+// --------------------
+// Cancel modal
+// --------------------
 document.getElementById("cancelOrderBtn").onclick = () => {
   document.getElementById("orderPreviewModal").style.display = "none";
 };
 
-// ---------------------------
-// CONFIRM ORDER
-// ---------------------------
+// --------------------
+// Confirm order
+// --------------------
 document.getElementById("confirmOrderBtn").onclick = () => {
   confirmBtn.disabled = true;
   confirmBtn.textContent = "Processing...";
-
   const scrollPos = window.scrollY;
-
   const fd = new FormData();
-  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
-  fd.append("item", pendingOrder.items.replace(/<br>/g, ", "));
+  Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
+  fd.append("item", pendingOrder.items.replace(/<br>/g,", "));
   fd.append("total", pendingOrder.total);
 
   fetch(orderURL, { method: "POST", body: fd })
     .then(r => r.json())
     .then(res => {
       gcashSection.style.display = "block";
-
       form.reset();
       document.querySelectorAll(".item-qty").forEach(el => el.style.display = "none");
       updateTotal();
-
       document.getElementById("orderPreviewModal").style.display = "none";
       window.scrollTo(0, scrollPos);
-
       lastOrderDiv.style.display = "block";
-      lastOrderDiv.innerHTML =
-        `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
-
+      lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
       orderButton.textContent = "Order Again";
-
-      alert("✅ Order placed!");
-    })
-    .catch(err => {
-      console.error(err);
-      alert("❌ Failed to place order.");
-      document.getElementById("orderPreviewModal").style.display = "none";
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = "Confirm";
-    });
-};
-
-// ---------------------------
-// CANCEL PREVIEW
-// ---------------------------
-document.getElementById("cancelOrderBtn").onclick = () => {
-  document.getElementById("orderPreviewModal").style.display = "none";
-};
-
-// ---------------------------
-// CONFIRM ORDER
-// ---------------------------
-document.getElementById("confirmOrderBtn").onclick = () => {
-  confirmBtn.disabled = true;
-  confirmBtn.textContent = "Processing...";
-
-  const scrollPos = window.scrollY;
-
-  const fd = new FormData();
-  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
-  fd.append("item", pendingOrder.items);
-  fd.append("total", pendingOrder.total);
-
-  fetch(orderURL, { method: "POST", body: fd })
-    .then(r => r.json())
-    .then(res => {
-      gcashSection.style.display = "block";
-
-      form.reset();
-      document.querySelectorAll(".item-qty").forEach(el => el.style.display = "none");
-      updateTotal();
-
-      document.getElementById("orderPreviewModal").style.display = "none";
-      window.scrollTo(0, scrollPos);
-
-      lastOrderDiv.style.display = "block";
-      lastOrderDiv.innerHTML =
-        `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
-
-      orderButton.textContent = "Order Again";
-
       alert("✅ Order placed!");
     })
     .catch(err => {
