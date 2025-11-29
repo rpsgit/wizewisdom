@@ -223,7 +223,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   <div class="modal-box">
     <h2>Confirm Order?</h2>
     <div id="orderSummary"></div>
-    <div id="unitReminder">4. Correct po ba ang Unit Number natin? 🤔</div>
+    <div id="unitReminder">Correct po ba ang Unit Number natin? 🤔</div>
     <button id="confirmOrderBtn">Confirm</button>
     <button id="cancelOrderBtn">Cancel</button>
   </div>
@@ -249,7 +249,7 @@ let pendingOrder = null;
 // Unit regex
 const unitRegex = /^(?:\d{4}[AB]|[AB]\d{4}|\d{2}[AB]\d{2}|\d{2}[AB]PH|PH\d{2}[AB]|[AB]\d{2}PH|[AB]PH\d{2})$/;
 unitError.textContent =
-  "Invalid Unit No. Accepted formats: 1234A, A1234, 12A34, 12APH, PH12A, A12PH, APH12.";
+  "Accepted formats: ####A, A####, ##A##, ##APH, PH99A, A##PH, APH##.";
 
 // --------------------
 // FETCH MENU
@@ -450,7 +450,7 @@ document.getElementById("cancelOrderBtn").onclick = () => {
 // --------------------
 document.getElementById("confirmOrderBtn").onclick = () => {
   confirmBtn.disabled = true;
-  confirmBtn.textContent = "Processing...";
+  confirmBtn.textContent = "Wait lang po... ✌️"; // <-- updated text with peace sign
   const scrollPos = window.scrollY;
   const fd = new FormData();
   Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
@@ -469,7 +469,7 @@ document.getElementById("confirmOrderBtn").onclick = () => {
       lastOrderDiv.style.display = "block";
       lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
       orderButton.textContent = "Order Again";
-      alert("✅ Order placed!");
+      alert("✅ Order placed! Pa-wait po ng confirmation kapitb 😊");
     })
     .catch(err => {
       console.error(err);
