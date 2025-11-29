@@ -450,7 +450,7 @@ document.getElementById("cancelOrderBtn").onclick = () => {
 // --------------------
 document.getElementById("confirmOrderBtn").onclick = () => {
   confirmBtn.disabled = true;
-  confirmBtn.textContent = "Wait lang po... ✌️"; // <-- updated text with peace sign
+  confirmBtn.textContent = "Sending you order... ✌️"; // <-- updated text with peace sign
   const scrollPos = window.scrollY;
   const fd = new FormData();
   Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
@@ -469,7 +469,7 @@ document.getElementById("confirmOrderBtn").onclick = () => {
       lastOrderDiv.style.display = "block";
       lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
       orderButton.textContent = "Order Again";
-      alert("✅ Order placed! Pa-wait po ng confirmation kapitb 😊");
+      alert("✅ Order placed! Pa-wait po ng confirmation, neighbor. 😊");
     })
     .catch(err => {
       console.error(err);
