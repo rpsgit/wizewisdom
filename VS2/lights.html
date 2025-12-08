@@ -12,21 +12,10 @@
     .floor-name { font-weight: bold; margin-bottom: 5px; }
     .unit-grid { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 
-    .unit-btn {
-      width: 50px;
-      height: 30px;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s;
-    }
+    .unit-btn { width: 50px; height: 30px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
     .unit-btn.large { width: 70px; height: 40px; font-size: 14px; }
-
     .on { background-color: yellow; color: black; }
     .off { background-color: gray; }
-
     .spacer { width: 10px; }
 
     /* Modal Styles */
@@ -70,78 +59,88 @@
 <div id="toast"></div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxYejhM-EjWiHCPdOjmhcutqiQ5AV7UK23D2-1EPxQmDGnXmyXqet6j2pAxzcHWyoQK/exec"; // replace with your deployed web app URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxYejhM-EjWiHCPdOjmhcutqiQ5AV7UK23D2-1EPxQmDGnXmyXqet6j2pAxzcHWyoQK/exec"; // replace with your Web App URL
 const UNIT_COUNT = 61;
 const FLOORS = [...Array(32).keys()].map(i => (14 + i).toString()).concat(["PH"]);
+
 let lightData;
 let currentBtn = null;
 let currentTower = document.getElementById("tower-select").value;
 
+// Toast and overlays
 function showToast(msg) {
   const toast = document.getElementById("toast");
   toast.textContent = msg;
   toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2000);
+  setTimeout(()=>toast.classList.remove("show"),2000);
 }
-function showLoading(msg) { const overlay = document.getElementById("loading-overlay"); overlay.textContent = msg; overlay.style.display = 'block'; }
-function hideLoading() { document.getElementById("loading-overlay").style.display = 'none'; }
-function showUpdating() { document.getElementById("updating-overlay").style.display = "flex"; }
-function hideUpdating() { document.getElementById("updating-overlay").style.display = "none"; }
+function showLoading(msg){ const overlay=document.getElementById("loading-overlay"); overlay.textContent=msg; overlay.style.display='block'; }
+function hideLoading(){ document.getElementById("loading-overlay").style.display='none'; }
+function showUpdating(){ document.getElementById("updating-overlay").style.display="flex"; }
+function hideUpdating(){ document.getElementById("updating-overlay").style.display="none"; }
 
-async function fetchLightData(tower) {
-  showLoading(`Switching to ${tower}...`);
-  const resp = await fetch(`${WEB_APP_URL}?tower=${encodeURIComponent(tower)}`);
-  const data = await resp.json();
-  hideLoading();
-  showToast(`Loaded ${tower}`);
-  return data;
-}
-
-async function updateLightStatus(tower, floor, unit, value) {
-  showUpdating();
-  await fetch(WEB_APP_URL, {
-    method: "POST",
-    body: JSON.stringify({ tower, floor, unit, value }),
-    headers: { "Content-Type": "application/json" }
-  });
-  hideUpdating();
-  showToast("Updated");
+// Fetch tower data
+async function fetchLightData(tower){
+  try{
+    showLoading(`Switching to ${tower}...`);
+    const resp = await fetch(`${WEB_APP_URL}?tower=${encodeURIComponent(tower)}`);
+    if(!resp.ok) throw new Error(`HTTP error ${resp.status}`);
+    const data = await resp.json();
+    hideLoading();
+    showToast(`Loaded ${tower}`);
+    return data;
+  } catch(err){
+    hideLoading();
+    showToast("Error loading data");
+    console.error(err);
+    return {};
+  }
 }
 
-function renderLights() {
-  const container = document.getElementById("building");
-  container.innerHTML = "";
+// Update single unit
+async function updateLightStatus(tower,floor,unit,value){
+  try{
+    showUpdating();
+    const resp=await fetch(WEB_APP_URL,{
+      method:"POST",
+      body:JSON.stringify({tower,floor,unit,value}),
+      headers:{"Content-Type":"application/json"}
+    });
+    if(!resp.ok) throw new Error(`HTTP error ${resp.status}`);
+    hideUpdating();
+    showToast("Updated");
+  } catch(err){
+    hideUpdating();
+    showToast("Update failed");
+    console.error(err);
+  }
+}
 
-  for (const floor of Object.keys(lightData)) {
-    const floorDiv = document.createElement("div");
-    floorDiv.className = "floor";
-
-    const floorName = document.createElement("div");
-    floorName.className = "floor-name";
-    floorName.textContent = "Floor " + floor;
+// Render units
+function renderLights(){
+  const container=document.getElementById("building");
+  container.innerHTML="";
+  for(const floor of Object.keys(lightData)){
+    const floorDiv=document.createElement("div"); floorDiv.className="floor";
+    const floorName=document.createElement("div"); floorName.className="floor-name"; floorName.textContent="Floor "+floor;
     floorDiv.appendChild(floorName);
+    const grid=document.createElement("div"); grid.className="unit-grid";
 
-    const grid = document.createElement("div");
-    grid.className = "unit-grid";
-
-    // PE & SE
     ["PE","SE"].forEach(type=>{
-      const btn = document.createElement("button");
-      btn.textContent = type;
-      btn.className = "unit-btn large " + (lightData[floor][type]==1?"on":"off");
-      btn.onclick = ()=>openModal(btn, floor, type);
+      const btn=document.createElement("button");
+      btn.textContent=type;
+      btn.className="unit-btn large "+(lightData[floor][type]==1?"on":"off");
+      btn.onclick=()=>openModal(btn,floor,type);
       grid.appendChild(btn);
     });
 
-    // Spacer
-    const spacer = document.createElement("div"); spacer.className="spacer"; grid.appendChild(spacer);
+    const spacer=document.createElement("div"); spacer.className="spacer"; grid.appendChild(spacer);
 
-    // Regular units
-    for (let u=1; u<=UNIT_COUNT; u++) {
-      const btn = document.createElement("button");
-      btn.textContent = u;
-      btn.className = "unit-btn " + (lightData[floor][u]==1?"on":"off");
-      btn.onclick = ()=>openModal(btn, floor, u);
+    for(let u=1; u<=UNIT_COUNT; u++){
+      const btn=document.createElement("button");
+      btn.textContent=u;
+      btn.className="unit-btn "+(lightData[floor][u]==1?"on":"off");
+      btn.onclick=()=>openModal(btn,floor,u);
       grid.appendChild(btn);
     }
 
@@ -150,38 +149,39 @@ function renderLights() {
   }
 }
 
-function openModal(btn, floor, unit) {
-  currentBtn = {btn,floor,unit};
+// Modal
+function openModal(btn,floor,unit){
+  currentBtn={btn,floor,unit};
   let formattedID;
   if(unit==="PE"||unit==="SE") formattedID=`${floor}${unit}${currentTower.slice(-1)}`;
   else formattedID=`${floor}${unit.toString().padStart(2,'0')}${currentTower.slice(-1)}`;
-  document.getElementById("modal-text").textContent = `Is ${formattedID} light OK or OUT?`;
+  document.getElementById("modal-text").textContent=`Is ${formattedID} light OK or OUT?`;
   document.getElementById("modal").classList.add("show");
 }
-
-function closeModal() { document.getElementById("modal").classList.remove("show"); hideUpdating(); currentBtn=null; }
-
-async function saveStatus(newStatus) {
+function closeModal(){ document.getElementById("modal").classList.remove("show"); hideUpdating(); currentBtn=null; }
+async function saveStatus(newStatus){
   if(!currentBtn) return;
-  const {btn,floor,unit} = currentBtn;
+  const {btn,floor,unit}=currentBtn;
   if(lightData[floor][unit]===newStatus){ closeModal(); showToast("No changes made"); return; }
-  await updateLightStatus(currentTower, floor, unit, newStatus);
+  await updateLightStatus(currentTower,floor,unit,newStatus);
   lightData[floor][unit]=newStatus;
   btn.className="unit-btn"+(btn.classList.contains("large")?" large":"")+" "+(newStatus==1?"on":"off");
   closeModal();
 }
 
+// Event listeners
 document.getElementById("on-btn").onclick=()=>saveStatus(1);
 document.getElementById("out-btn").onclick=()=>saveStatus(0);
+document.getElementById("tower-select").addEventListener("change",loadTower);
 
-async function loadTower() {
+async function loadTower(){
   currentTower=document.getElementById("tower-select").value;
   document.getElementById("page-title").textContent=`VS2 Residential Lights Status - ${currentTower}`;
   lightData=await fetchLightData(currentTower);
   renderLights();
 }
 
-document.getElementById("tower-select").addEventListener("change", loadTower);
+// Load first tower
 window.onload=loadTower;
 </script>
 </body>
