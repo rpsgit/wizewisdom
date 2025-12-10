@@ -1,7 +1,34 @@
----
-layout: default
-title: VS2 Residential Lights Status
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VS2 Residential Lights Status</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; position: relative; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    #tower-select { margin-bottom: 20px; font-size: 16px; padding: 5px; }
+    .floor { margin-bottom: 30px; }
+    .floor-name { font-weight: bold; margin-bottom: 5px; }
+    .unit-grid { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+    .unit-btn { width: 50px; height: 30px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
+    .unit-btn.large { width: 70px; height: 40px; font-size: 14px; }
+    .on { background-color: yellow; color: black; }
+    .off { background-color: gray; }
+    .spacer { width: 10px; }
+    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s; }
+    .modal.show { display: block; opacity: 1; }
+    .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border-radius: 10px; width: 320px; text-align: center; transform: scale(0.8); transition: transform 0.3s; position: relative; }
+    .modal.show .modal-content { transform: scale(1); }
+    .modal button { margin: 10px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    .modal .on-btn { background-color: yellow; color: black; }
+    .modal .out-btn { background-color: gray; color: white; }
+    .updating-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; font-size: 16px; border-radius: 10px; display: none; }
+    #loading-overlay { display:none; position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.7); z-index:500; text-align:center; font-size:20px; font-weight:bold; padding-top:200px; }
+    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 10px 20px; border-radius: 5px; opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 1000; }
+    #toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
 
 <h1 id="page-title">VS2 Residential Lights Status</h1>
 
@@ -25,123 +52,96 @@ title: VS2 Residential Lights Status
 <div id="loading-overlay"></div>
 <div id="toast"></div>
 
-<style>
-/* Styles similar to previous front-end script */
-body { font-family: Arial, sans-serif; padding: 20px; position: relative; }
-h1 { text-align: center; margin-bottom: 20px; }
-#tower-select { margin-bottom: 20px; font-size: 16px; padding: 5px; }
-
-.floor { margin-bottom: 30px; }
-.floor-name { font-weight: bold; margin-bottom: 5px; }
-.unit-grid { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
-
-.unit-btn { width: 50px; height: 30px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
-.unit-btn.large { width: 70px; height: 40px; font-size: 14px; }
-.on { background-color: yellow; color: black; }
-.off { background-color: gray; }
-.spacer { width: 10px; }
-
-.modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s; }
-.modal.show { display: block; opacity: 1; }
-.modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border-radius: 10px; width: 320px; text-align: center; transform: scale(0.8); transition: transform 0.3s; position: relative; }
-.modal.show .modal-content { transform: scale(1); }
-.modal button { margin: 10px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.modal .on-btn { background-color: yellow; color: black; }
-.modal .out-btn { background-color: gray; color: white; }
-
-.updating-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; font-size: 16px; border-radius: 10px; display: none; }
-
-#loading-overlay { display:none; position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.7); z-index:500; text-align:center; font-size:20px; font-weight:bold; padding-top:200px; }
-
-#toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 10px 20px; border-radius: 5px; opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 1000; }
-#toast.show { opacity: 1; }
-</style>
-
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby-vRooqEXxEOWgzwFO9sZ3yAKEs1x59uZ7NDnrzK4EaGReMBirHena1MtnK1baEJVY/exec"; // replace with your Web App URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby-vRooqEXxEOWgzwFO9sZ3yAKEs1x59uZ7NDnrzK4EaGReMBirHena1MtnK1baEJVY/exec"; // <-- replace
 const UNIT_COUNT = 61;
-const FLOORS = [...Array(32).keys()].map(i => (14 + i).toString()).concat(["PH"]);
+const FLOORS = [...Array(32).keys()].map(i => (14+i).toString()).concat(["PH"]);
 
-let lightData;
+let lightData = {};
 let currentBtn = null;
 let currentTower = document.getElementById("tower-select").value;
+let autoRefreshInterval = null;
 
-function showToast(msg) { const toast=document.getElementById("toast"); toast.textContent=msg; toast.classList.add("show"); setTimeout(()=>toast.classList.remove("show"),2000); }
-function showLoading(msg){ const overlay=document.getElementById("loading-overlay"); overlay.textContent=msg; overlay.style.display='block'; }
-function hideLoading(){ document.getElementById("loading-overlay").style.display='none'; }
-function showUpdating(){ document.getElementById("updating-overlay").style.display="flex"; }
-function hideUpdating(){ document.getElementById("updating-overlay").style.display="none"; }
+// --- UI helpers ---
+function showToast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000);}
+function showLoading(msg){ const l=document.getElementById("loading-overlay"); l.textContent=msg; l.style.display='block';}
+function hideLoading(){ document.getElementById("loading-overlay").style.display='none';}
+function showUpdating(){ document.getElementById("updating-overlay").style.display='flex';}
+function hideUpdating(){ document.getElementById("updating-overlay").style.display='none';}
 
+// --- Fetch light data from Apps Script ---
 async function fetchLightData(tower){
   try{
-    showLoading(`Switching to ${tower}...`);
+    showLoading(`Loading ${tower}...`);
     const resp = await fetch(`${WEB_APP_URL}?tower=${encodeURIComponent(tower)}`);
-    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
     hideLoading();
+    if(!data.success) throw new Error(data.error || "Failed to load data");
     showToast(`Loaded ${tower}`);
-    return data;
+    return data.data;
   } catch(err){
-    hideLoading();
-    showToast("Error loading data");
-    console.error(err);
+    hideLoading(); showToast("Error loading data"); console.error(err);
     return {};
   }
 }
 
+// --- Update light status ---
 async function updateLightStatus(tower,floor,unit,value){
   try{
     showUpdating();
-    const resp=await fetch(WEB_APP_URL,{
+    const resp = await fetch(WEB_APP_URL,{
       method:"POST",
-      body:JSON.stringify({tower,floor,unit,value}),
-      headers:{"Content-Type":"application/json"}
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({tower,floor,unit,value})
     });
-    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
     hideUpdating();
+    if(!data.success) throw new Error(data.error||"Update failed");
     showToast("Updated");
   } catch(err){
-    hideUpdating();
-    showToast("Update failed");
-    console.error(err);
+    hideUpdating(); showToast("Update failed"); console.error(err);
   }
 }
 
+// --- Render UI ---
 function renderLights(){
   const container=document.getElementById("building"); container.innerHTML="";
   for(const floor of Object.keys(lightData)){
     const floorDiv=document.createElement("div"); floorDiv.className="floor";
     const floorName=document.createElement("div"); floorName.className="floor-name"; floorName.textContent="Floor "+floor;
     floorDiv.appendChild(floorName);
+
     const grid=document.createElement("div"); grid.className="unit-grid";
 
     ["PE","SE"].forEach(type=>{
-      const btn=document.createElement("button"); btn.textContent=type;
+      const btn=document.createElement("button");
       btn.className="unit-btn large "+(lightData[floor][type]==1?"on":"off");
-      btn.onclick=()=>openModal(btn,floor,type); grid.appendChild(btn);
+      btn.textContent=type;
+      btn.onclick=()=>openModal(btn,floor,type);
+      grid.appendChild(btn);
     });
 
     const spacer=document.createElement("div"); spacer.className="spacer"; grid.appendChild(spacer);
 
     for(let u=1; u<=UNIT_COUNT; u++){
-      const btn=document.createElement("button"); btn.textContent=u;
+      const btn=document.createElement("button");
       btn.className="unit-btn "+(lightData[floor][u]==1?"on":"off");
-      btn.onclick=()=>openModal(btn,floor,u); grid.appendChild(btn);
+      btn.textContent=u;
+      btn.onclick=()=>openModal(btn,floor,u);
+      grid.appendChild(btn);
     }
 
     floorDiv.appendChild(grid); container.appendChild(floorDiv);
   }
 }
 
-function openModal(btn,floor,unit){
-  currentBtn={btn,floor,unit};
-  let formattedID;
-  if(unit==="PE"||unit==="SE") formattedID=`${floor}${unit}${currentTower.slice(-1)}`;
-  else formattedID=`${floor}${unit.toString().padStart(2,'0')}${currentTower.slice(-1)}`;
+// --- Modal logic ---
+function openModal(btn,floor,unit){ currentBtn={btn,floor,unit};
+  let formattedID = (unit==="PE"||unit==="SE") ? `${floor}${unit}${currentTower.slice(-1)}` : `${floor}${unit.toString().padStart(2,'0')}${currentTower.slice(-1)}`;
   document.getElementById("modal-text").textContent=`Is ${formattedID} light OK or OUT?`;
   document.getElementById("modal").classList.add("show");
 }
-function closeModal(){ document.getElementById("modal").classList.remove("show"); hideUpdating(); currentBtn=null; }
+function closeModal(){ document.getElementById("modal").classList.remove("show"); hideUpdating(); currentBtn=null;}
 async function saveStatus(newStatus){
   if(!currentBtn) return;
   const {btn,floor,unit}=currentBtn;
@@ -152,16 +152,29 @@ async function saveStatus(newStatus){
   closeModal();
 }
 
+// --- Tower change ---
 document.getElementById("on-btn").onclick=()=>saveStatus(1);
 document.getElementById("out-btn").onclick=()=>saveStatus(0);
 document.getElementById("tower-select").addEventListener("change",loadTower);
 
+// --- Load tower data ---
 async function loadTower(){
   currentTower=document.getElementById("tower-select").value;
   document.getElementById("page-title").textContent=`VS2 Residential Lights Status - ${currentTower}`;
-  lightData=await fetchLightData(currentTower);
+  lightData = await fetchLightData(currentTower);
   renderLights();
+
+  // Auto-refresh every 30 sec
+  if(autoRefreshInterval) clearInterval(autoRefreshInterval);
+  autoRefreshInterval = setInterval(async()=>{
+    const newData = await fetchLightData(currentTower);
+    lightData = newData;
+    renderLights();
+  },30000);
 }
 
 window.onload=loadTower;
 </script>
+
+</body>
+</html>
