@@ -112,12 +112,15 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   margin-top: 15px;
   padding: 10px;
   width: 90%;
+  max-width: 600px;
   background: #fff8e1;
   border-radius: 10px;
   border: 1px solid #ffcc80;
   font-size: 0.9rem;
   color: #333;
   display: none;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #unitError { font-size: 0.85rem; color: red; display: none; }
@@ -138,6 +141,19 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   width: 90%;
   max-width: 400px;
   text-align: center;
+}
+#orderSummary {
+  text-align: left;
+  margin-top: 15px;
+}
+#unitReminder {
+  margin-top: 12px;
+  padding: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  color: #856404;
+  font-weight: bold;
 }
 
 /* Image Zoom Modal */
@@ -164,8 +180,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
   <p>Door-to-door delivery within VS2 only</p>
-  <h2 style="color: red; font-weight: bold;">Delivery Schedule for November 29, Sat</h2>
-  <h3 style="color: red;">6 PM to 11 PM. Thank you.</h3>
+  <h2 style="color: red; font-weight: bold;">Delivery Schedule for December 21, Sun</h2>
+  <h3 style="color: red;">TBA. Salamat po.</h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
@@ -180,8 +196,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
       <input type="text" name="contact" placeholder="09XXXXXXXXX" required>
 
       <label>Unit No.</label>
-      <input type="text" name="unit_no" maxlength="5" placeholder="1234A・B1234・PH12A・B12PH" required id="unitNo">
-      <span id="unitError">Sample: 1234A・B1234・PH12A・B12PH.</span>
+      <input type="text" name="unit_no" maxlength="5" placeholder="1234A" required id="unitNo">
+      <span id="unitError">Unit No. must be 4 digits + A/B.</span>
 
       <label>Notes</label>
       <textarea name="notes" rows="3" placeholder="Add instructions"></textarea>
@@ -206,6 +222,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 <div id="orderPreviewModal">
   <div class="modal-box">
     <h2>Confirm Order?</h2>
+    <div id="orderSummary"></div>
+    <div id="unitReminder">Correct po ba ang Unit Number natin? 🤔</div>
     <button id="confirmOrderBtn">Confirm</button>
     <button id="cancelOrderBtn">Cancel</button>
   </div>
@@ -228,18 +246,25 @@ const confirmBtn = document.getElementById("confirmOrderBtn");
 let priceMap = {};
 let pendingOrder = null;
 
+// Unit regex
+const unitRegex = /^(?:\d{4}[AB]|[AB]\d{4}|\d{2}[AB]\d{2}|\d{2}[AB]PH|PH\d{2}[AB]|[AB]\d{2}PH|[AB]PH\d{2})$/;
+unitError.textContent =
+  "Accepted formats: ####A, A####, ##A##, ##APH, PH99A, A##PH, APH##.";
+
+// --------------------
+// FETCH MENU
+// --------------------
 function makeKey(name) {
   return name.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_-]/g,"").toLowerCase();
 }
 
-// FETCH MENU
 fetch(menuURL)
   .then(res => res.json())
   .then(data => {
     menuContainer.innerHTML = "";
     const categories = {};
     data.forEach(item => {
-      if(!categories[item.Category]) categories[item.Category] = [];
+      if (!categories[item.Category]) categories[item.Category] = [];
       categories[item.Category].push(item);
     });
 
@@ -260,7 +285,6 @@ fetch(menuURL)
           name = parts.shift();
           desc = parts.join(" - ");
         }
-
         const price = Number(item.Price || 0);
         const imgSrc = item.Image || "https://via.placeholder.com/80x60";
         const key = makeKey(name);
@@ -268,10 +292,8 @@ fetch(menuURL)
 
         const div = document.createElement("div");
         div.className = "menu-item";
-
         div.innerHTML = `
-          <img data-src="${imgSrc}"
-               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+          <img data-src="${imgSrc}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" 
                alt="${name}" class="zoomable" loading="lazy">
 
           <div class="details">
@@ -282,21 +304,23 @@ fetch(menuURL)
 
           <div class="actions">
             <input type="checkbox" id="cb_${key}" name="item_${key}">
-            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1">
+            <input type="number" id="qty_${key}" name="qty_${key}" class="item-qty" value="1" min="1" style="display:none;">
           </div>
         `;
         list.appendChild(div);
       });
-
       catDiv.appendChild(list);
       menuContainer.appendChild(catDiv);
     });
 
     initLazyLoading();
     initImageZoom();
-  });
+  })
+  .catch(err => { console.error(err); menuContainer.innerHTML = '<p style="color:red;">❌ Failed to load menu.</p>'; });
 
-// LAZY LOAD
+// --------------------
+// Lazy load images
+// --------------------
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img[data-src]");
   if (!("IntersectionObserver" in window)) {
@@ -309,6 +333,7 @@ function initLazyLoading() {
         const img = entry.target;
         img.src = img.dataset.src;
         img.onload = () => img.removeAttribute("data-src");
+        img.onerror = () => { img.src = "https://via.placeholder.com/80x60"; img.removeAttribute("data-src"); };
         obs.unobserve(img);
       }
     });
@@ -316,165 +341,140 @@ function initLazyLoading() {
   lazyImages.forEach(img => observer.observe(img));
 }
 
-// ZOOM
+// --------------------
+// Image zoom
+// --------------------
 function initImageZoom() {
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImg");
   document.querySelectorAll(".zoomable").forEach(img => {
-    img.onclick = () => {
-      modal.style.display = "flex";
-      modalImg.src = img.dataset.src || img.src;
-    };
+    img.onclick = () => { modal.style.display = "flex"; modalImg.src = img.dataset.src || img.src; };
   });
-  modal.onclick = () => { modal.style.display = "none"; };
+  modal.onclick = () => { modal.style.display = "none"; modalImg.src = ""; };
 }
 
-// TOTAL
+// --------------------
+// Total price
+// --------------------
 function updateTotal() {
   let total = 0;
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const key = cb.name.replace('item_','');
-    const qtyEl = document.querySelector(`#qty_${key}`);
-    const qty = Number(qtyEl.value) || 1;
-    total += priceMap[key] * qty;
+    const key = cb.name.replace("item_", "");
+    const qty = Number(form.querySelector(`#qty_${key}`).value || 1);
+    total += (priceMap[key] || 0) * qty;
   });
   totalPriceEl.textContent = `Total: ₱${total}`;
 }
 
-// ITEM CHECK
-menuContainer.addEventListener('change', e => {
+// --------------------
+// Checkbox & qty
+// --------------------
+menuContainer.addEventListener("change", e => {
   if (e.target.matches('input[type="checkbox"]')) {
-    const key = e.target.name.replace('item_','');
+    const key = e.target.name.replace("item_", "");
     const qty = document.querySelector(`#qty_${key}`);
-    qty.style.display = e.target.checked ? 'inline-block' : 'none';
+    qty.style.display = e.target.checked ? "inline-block" : "none";
     updateTotal();
   }
 });
+menuContainer.addEventListener("input", e => { if(e.target.classList.contains("item-qty")) updateTotal(); });
 
-menuContainer.addEventListener('input', e => {
-  if (e.target.classList.contains('item-qty')) updateTotal();
-});
-
-// UNIT VALIDATION (updated with all allowed combos)
-/*
-Allowed patterns:
-1) 4 numbers + A/B       -> 1234A
-2) A/B + 4 numbers       -> A1234
-3) 2 numbers + A/B + 2 numbers -> 12A34
-4) 2 numbers + A/B + PH  -> 12APH
-5) PH + 2 numbers + A/B  -> PH12A
-6) A/B + 2 numbers + PH  -> A12PH
-7) A/B + PH + 2 numbers  -> APH12
-*/
-unitInput.addEventListener('input', () => {
+// --------------------
+// Unit input
+// --------------------
+unitInput.addEventListener("input", () => {
   unitInput.value = unitInput.value.toUpperCase();
-  const v = unitInput.value;
-
-  const patterns = [
-    /^[0-9]{4}[AB]$/,      // 1234A
-    /^[AB][0-9]{4}$/,      // A1234
-    /^[0-9]{2}[AB][0-9]{2}$/, // 12A34
-    /^[0-9]{2}[AB]PH$/,    // 12APH
-    /^PH[0-9]{2}[AB]$/,    // PH12A
-    /^[AB][0-9]{2}PH$/,    // A12PH
-    /^[AB]PH[0-9]{2}$/     // APH12
-  ];
-
-  const valid = patterns.some(rx => rx.test(v));
-
-  unitError.textContent = "Sample valid Unit No: 1234A・B1234・PH12A・B12PH.";
-
-  unitError.style.display = valid ? "none" : "block";
+  unitError.style.display = unitRegex.test(unitInput.value) ? "none" : "block";
 });
 
-// SUBMIT
-form.addEventListener('submit', e => {
+// --------------------
+// Submit form & modal
+// --------------------
+form.addEventListener("submit", e => {
   e.preventDefault();
 
-  const unitVal = unitInput.value.toUpperCase();
-
-  const patterns = [
-    /^[0-9]{4}[AB]$/,      // 1234A
-    /^[AB][0-9]{4}$/,      // A1234
-    /^[0-9]{2}[AB][0-9]{2}$/, // 12A34
-    /^[0-9]{2}[AB]PH$/,    // 12APH
-    /^PH[0-9]{2}[AB]$/,    // PH12A
-    /^[AB][0-9]{2}PH$/,    // A12PH
-    /^[AB]PH[0-9]{2}$/     // APH12
-  ];
-
-  const validUnit = patterns.some(rx => rx.test(unitVal));
-
-  if (!validUnit) {
-    return alert("Invalid Unit No. Must match one of the allowed formats. See inline hint.");
+  if (!unitRegex.test(unitInput.value)) {
+    alert("Invalid Unit No.\nAccepted formats: 1234A, A1234, 12A34, 12APH, PH12A, A12PH, APH12.");
+    return;
   }
 
-  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0)
-    return alert("Select at least one item.");
+  if (form.querySelectorAll('input[type="checkbox"]:checked').length === 0) {
+    alert("Select at least one item.");
+    return;
+  }
 
   const fd = new FormData(form);
   let total = 0;
   const itemsList = [];
 
   form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-    const key = cb.name.replace('item_','');
+    const key = cb.name.replace("item_", "");
     const qty = Number(fd.get(`qty_${key}`)) || 1;
-    const displayName = document.querySelector(`#cb_${key}`).closest('.menu-item').querySelector('.details h3').textContent;
+    const displayName = document.querySelector(`#cb_${key}`).closest(".menu-item").querySelector(".details h3").textContent;
     itemsList.push(`${displayName} × ${qty}`);
-    total += priceMap[key] * qty;
+    total += (priceMap[key] || 0) * qty;
   });
 
   pendingOrder = {
-    name: fd.get('name'),
-    contact: fd.get('contact'),
-    unit_no: fd.get('unit_no'),
-    notes: fd.get('notes'),
-    items: itemsList.join(', '),
+    name: fd.get("name"),
+    contact: fd.get("contact"),
+    unit_no: fd.get("unit_no"),
+    notes: fd.get("notes"),
+    items: itemsList.join("<br>"),
     total
   };
 
+  document.getElementById("orderSummary").innerHTML = `
+    <strong>Items:</strong><br>${pendingOrder.items}<br><br>
+    <strong>Total:</strong> ₱${pendingOrder.total}<br><br>
+    <strong>Name:</strong> ${pendingOrder.name}<br>
+    <strong>Contact:</strong> ${pendingOrder.contact}<br>
+    <strong>Unit No.:</strong> ${pendingOrder.unit_no}<br>
+    ${pendingOrder.notes ? `<strong>Notes:</strong> ${pendingOrder.notes}<br>` : ""}
+  `;
+  
   confirmBtn.disabled = false;
   confirmBtn.textContent = "Confirm";
-
-  document.getElementById('orderPreviewModal').style.display = 'flex';
+  document.getElementById("orderPreviewModal").style.display = "flex";
 });
 
-// CANCEL
-document.getElementById('cancelOrderBtn').onclick = () =>
-  document.getElementById('orderPreviewModal').style.display = 'none';
+// --------------------
+// Cancel modal
+// --------------------
+document.getElementById("cancelOrderBtn").onclick = () => {
+  document.getElementById("orderPreviewModal").style.display = "none";
+};
 
-// CONFIRM ORDER
-document.getElementById('confirmOrderBtn').onclick = () => {
-
+// --------------------
+// Confirm order
+// --------------------
+document.getElementById("confirmOrderBtn").onclick = () => {
   confirmBtn.disabled = true;
-  confirmBtn.textContent = "Processing...";
-
+  confirmBtn.textContent = "Sending you order... ✌️"; // <-- updated text with peace sign
   const scrollPos = window.scrollY;
-
   const fd = new FormData();
-  Object.entries(pendingOrder).forEach(([k, v]) => fd.append(k, v));
+  Object.entries(pendingOrder).forEach(([k,v]) => fd.append(k,v));
+  fd.append("item", pendingOrder.items.replace(/<br>/g,", "));
+  fd.append("total", pendingOrder.total);
 
   fetch(orderURL, { method: "POST", body: fd })
     .then(r => r.json())
-    .then(() => {
-      gcashSection.style.display = 'block';
-
+    .then(res => {
+      gcashSection.style.display = "block";
       form.reset();
-      document.querySelectorAll('.item-qty').forEach(el => el.style.display = 'none');
+      document.querySelectorAll(".item-qty").forEach(el => el.style.display = "none");
       updateTotal();
-      document.getElementById('orderPreviewModal').style.display = 'none';
+      document.getElementById("orderPreviewModal").style.display = "none";
       window.scrollTo(0, scrollPos);
-
-      lastOrderDiv.style.display = 'block';
+      lastOrderDiv.style.display = "block";
       lastOrderDiv.innerHTML = `<strong>Last Order:</strong><br>${pendingOrder.items}<br>Total: ₱${pendingOrder.total}`;
-
       orderButton.textContent = "Order Again";
-
-      alert("✅ Order placed!");
+      alert("✅ Order placed! Pa-wait po ng confirmation, neighbor. 😊");
     })
     .catch(err => {
       console.error(err);
       alert("❌ Failed to place order.");
+      document.getElementById("orderPreviewModal").style.display = "none";
       confirmBtn.disabled = false;
       confirmBtn.textContent = "Confirm";
     });
