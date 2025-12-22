@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Live Orders</title>
+<style>
+body{font-family:Arial;padding:20px;background:#f4f4f4}
+.card{
+  background:#fff;
+  padding:14px;
+  margin-bottom:10px;
+  border-radius:12px;
+}
+</style>
+</head>
+<body>
+<h2>📦 Live Orders</h2>
+<div id="orders">Loading…</div>
+
+<script>
+const ordersURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getOrders";
+
+function load(){
+  fetch(ordersURL).then(r=>r.json()).then(d=>{
+    document.getElementById("orders").innerHTML=
+      d.reverse().map(o=>`
+        <div class="card">
+          <strong>${o.name}</strong><br>
+          ${o.items}<br>
+          ₱${o.total}
+        </div>`).join("");
+  });
+}
+load();
+setInterval(load,5000);
+</script>
+</body>
+</html>
