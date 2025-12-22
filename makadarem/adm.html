@@ -10,22 +10,22 @@ body{font-family:Arial;background:#f4f4f4;padding:20px}
   border-radius:12px;
   margin-bottom:10px;
 }
-.toggle{
+button{
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
   background:#111;
   color:#fff;
-  padding:10px;
-  border-radius:8px;
+  font-weight:700;
   cursor:pointer;
-  display:inline-block;
-  margin-bottom:20px;
 }
 </style>
 </head>
 <body>
 
 <h2>📦 Live Orders</h2>
-<div class="toggle" onclick="toggleClosed()">Toggle Closed Today</div>
-<div id="state"></div>
+<button onclick="toggleClosed()">Toggle Closed Today</button>
+<p id="state"></p>
 <hr>
 <div id="orders">Loading…</div>
 
