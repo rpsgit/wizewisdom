@@ -4,219 +4,228 @@ title: Makadarem Menu
 ---
 
 <style>
-:root {
-  --primary: #ff5722;
-  --secondary: #ff7e5f;
-  --dark: #4b2e05;
-  --bg: #f6f6f6;
-  --card: #ffffff;
-  --radius: 16px;
+:root{
+  --primary:#ff5722;
+  --secondary:#ff7e5f;
+  --dark:#3a2a15;
+  --bg:#f4f4f4;
+  --card:#ffffff;
+  --radius:16px;
 }
 
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  font-family: "Poppins", Arial, sans-serif;
-  background: var(--bg)
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:var(--bg)
     url('{{ "/assets/images/menu/bg.png" | relative_url }}')
-    no-repeat center / cover fixed;
+    no-repeat center/cover fixed;
 }
 
 /* ===== PAGE ===== */
-.page-container {
-  max-width: 1100px;
-  margin: 20px auto 140px;
-  padding: 16px;
-  background: rgba(255,255,255,0.97);
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(0,0,0,.15);
+.page-container{
+  max-width:1200px;
+  margin:20px auto 160px;
+  padding:16px;
+  background:rgba(255,255,255,.97);
+  border-radius:24px;
+  box-shadow:0 10px 40px rgba(0,0,0,.15);
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 24px;
-  color: var(--dark);
+h1{
+  text-align:center;
+  margin-bottom:10px;
+  color:var(--dark);
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  margin-bottom:20px;
+}
+
+/* ===== CATEGORY NAV ===== */
+.category-nav{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:10px;
+  margin-bottom:16px;
+}
+.category-nav button{
+  white-space:nowrap;
+  border:none;
+  padding:8px 14px;
+  border-radius:999px;
+  background:#eee;
+  cursor:pointer;
+  font-weight:600;
+}
+.category-nav button.active{
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+}
+
+/* ===== CATEGORY SECTION ===== */
+.category-section{
+  margin-bottom:26px;
+}
+.category-title{
+  font-size:1.1rem;
+  font-weight:700;
+  color:var(--dark);
+  margin:10px 0;
 }
 
 /* ===== MENU GRID ===== */
-#menuContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 14px;
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:14px;
 }
 
-.menu-item {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.08);
-  transition: transform .15s ease, box-shadow .15s ease;
+.menu-item{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  transition:.15s;
+}
+.menu-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(0,0,0,.12);
 }
 
-.menu-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0,0,0,.12);
+.details h3{
+  margin:0;
+  font-size:1rem;
+  color:var(--dark);
+}
+.details p{
+  margin:6px 0 0;
+  font-weight:700;
+  color:var(--primary);
 }
 
-.details h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--dark);
+.actions{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
 }
-
-.details p {
-  margin: 4px 0 0;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-/* ===== ACTIONS ===== */
-.actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.actions input[type="checkbox"] {
-  transform: scale(1.3);
-  cursor: pointer;
-}
-
-.actions input[type="number"] {
-  width: 60px;
-  padding: 5px;
-  text-align: center;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  display: none;
+.actions input[type=checkbox]{transform:scale(1.3)}
+.actions input[type=number]{
+  width:60px;
+  padding:6px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  text-align:center;
+  display:none;
 }
 
 /* ===== TOTAL ===== */
-.total-price {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-align: right;
-  margin: 20px 0;
+.total-price{
+  font-size:1.2rem;
+  font-weight:800;
+  color:var(--primary);
+  text-align:right;
+  margin:20px 0;
 }
 
 /* ===== FORM ===== */
-.order-form-section {
-  display: grid;
-  gap: 10px;
+.order-form-section{
+  display:grid;
+  gap:10px;
 }
-
 .order-form-section input,
-.order-form-section textarea {
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  font-size: .95rem;
-}
-
-.order-form-section textarea {
-  resize: vertical;
-  min-height: 70px;
+.order-form-section textarea{
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ccc;
 }
 
 /* ===== BUTTON ===== */
-.order-button {
-  margin-top: 16px;
-  width: 100%;
-  padding: 14px;
-  border-radius: 999px;
-  border: none;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  background: linear-gradient(135deg,var(--secondary),var(--primary));
+.order-button{
+  margin-top:16px;
+  width:100%;
+  padding:14px;
+  border-radius:999px;
+  border:none;
+  font-size:1.05rem;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
 }
 
-/* ===== ORDER SUMMARY ===== */
-.order-summary-wrapper {
-  display: none;
-  margin: 40px auto;
-  max-width: 420px;
+/* ===== SUMMARY ===== */
+.order-summary-wrapper{
+  display:none;
+  margin:40px auto;
+  max-width:420px;
+}
+.order-summary-card{
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  border:2px dashed var(--secondary);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+.order-summary-card h2{text-align:center}
+
+.summary-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+.summary-buttons button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
 }
 
-.order-summary-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.2);
-  border: 2px dashed var(--secondary);
+/* ===== MODAL ===== */
+#orderPreviewModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
 }
-
-.order-summary-card h2 {
-  text-align: center;
-  margin-top: 0;
-  color: var(--dark);
-}
-
-.summary-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.summary-buttons button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 14px;
-  border: none;
-  font-size: .9rem;
-  cursor: pointer;
-  color: #fff;
-  background: linear-gradient(135deg,var(--secondary),var(--primary));
-}
-
-/* ===== MODALS ===== */
-#orderPreviewModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  width: 92%;
-  max-width: 420px;
+.modal-box{
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  width:92%;
+  max-width:420px;
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 600px) {
-  .page-container {
-    margin: 10px;
-    border-radius: 16px;
-  }
-
-  .total-price {
-    position: sticky;
-    bottom: 0;
-    background: #fff;
-    padding: 12px;
-    border-top: 1px solid #eee;
-    text-align: center;
-    z-index: 5;
+@media(max-width:600px){
+  .total-price{
+    position:sticky;
+    bottom:0;
+    background:#fff;
+    padding:12px;
+    border-top:1px solid #eee;
+    text-align:center;
+    z-index:10;
   }
 }
 </style>
 
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
+  <div class="subtitle">Select items • Confirm • Screenshot summary</div>
+
+  <div class="category-nav" id="categoryNav"></div>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu…</div>
@@ -234,12 +243,10 @@ h1 {
   </form>
 </div>
 
-<!-- ORDER SUMMARY -->
 <div class="order-summary-wrapper" id="orderSummaryCard">
   <div class="order-summary-card">
     <h2>Order Summary</h2>
     <div id="finalOrderSummary"></div>
-
     <div class="summary-buttons">
       <button id="copyOrderBtn">Copy</button>
       <button id="printOrderBtn">Print / Save</button>
@@ -247,7 +254,6 @@ h1 {
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
 <div id="orderPreviewModal">
   <div class="modal-box">
     <h3>Confirm Order?</h3>
@@ -258,128 +264,66 @@ h1 {
 </div>
 
 <script>
-const menuURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
-const orderURL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
+const menuURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
+const orderURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
 
-const form = document.getElementById("menuForm");
-const menuContainer = document.getElementById("menuContainer");
-const totalPriceEl = document.getElementById("totalPrice");
-const summaryCard = document.getElementById("orderSummaryCard");
-const finalSummary = document.getElementById("finalOrderSummary");
+const menuContainer=document.getElementById("menuContainer");
+const categoryNav=document.getElementById("categoryNav");
+const totalPriceEl=document.getElementById("totalPrice");
+const form=document.getElementById("menuForm");
 
-let priceMap = {};
-let pendingOrder = null;
+let priceMap={},pendingOrder=null;
 
-const makeKey = t =>
-  t.replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_]/g,"").toLowerCase();
+const key=t=>t.replace(/\s+/g,"_").replace(/[^a-z0-9_]/gi,"").toLowerCase();
 
-/* LOAD MENU */
-fetch(menuURL)
-  .then(r => r.json())
-  .then(data => {
-    menuContainer.innerHTML = "";
-    data.forEach(item => {
-      const key = makeKey(item.Item);
-      priceMap[key] = Number(item.Price || 0);
-
-      menuContainer.innerHTML += `
-        <div class="menu-item">
-          <div class="details">
-            <h3>${item.Item}</h3>
-            <p>₱${item.Price}</p>
-          </div>
-          <div class="actions">
-            <input type="checkbox" name="item_${key}">
-            <input type="number" name="qty_${key}" value="1" min="1">
-          </div>
-        </div>`;
-    });
+fetch(menuURL).then(r=>r.json()).then(data=>{
+  const groups={};
+  data.forEach(i=>{
+    const cat=i.Category||"Others";
+    groups[cat]=groups[cat]||[];
+    groups[cat].push(i);
   });
 
-/* TOTAL + QTY TOGGLE */
-menuContainer.addEventListener("change", e => {
-  if (e.target.type === "checkbox") {
-    const qty = e.target.closest(".actions")
-      .querySelector('input[type="number"]');
-    qty.style.display = e.target.checked ? "block" : "none";
-  }
+  menuContainer.innerHTML="";
+  Object.keys(groups).forEach((cat,idx)=>{
+    categoryNav.innerHTML+=
+      `<button class="${idx==0?'active':''}" onclick="document.getElementById('${key(cat)}').scrollIntoView({behavior:'smooth'})">${cat}</button>`;
 
-  let total = 0;
-  document.querySelectorAll('input[type="checkbox"]:checked')
-    .forEach(cb => {
-      const k = cb.name.replace("item_","");
-      total += (priceMap[k] || 0) * form[`qty_${k}`].value;
-    });
-
-  totalPriceEl.textContent = `Total: ₱${total}`;
+    menuContainer.innerHTML+=
+      `<div class="category-section" id="${key(cat)}">
+        <div class="category-title">${cat}</div>
+        <div class="menu-grid">
+          ${groups[cat].map(i=>{
+            const k=key(i.Item);
+            priceMap[k]=+i.Price;
+            return `
+            <div class="menu-item">
+              <div class="details">
+                <h3>${i.Item}</h3>
+                <p>₱${i.Price}</p>
+              </div>
+              <div class="actions">
+                <input type="checkbox" name="item_${k}">
+                <input type="number" name="qty_${k}" value="1" min="1">
+              </div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`;
+  });
 });
 
-/* SUBMIT */
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
-  let items = [];
-  let total = 0;
-
-  document.querySelectorAll('input[type="checkbox"]:checked')
-    .forEach(cb => {
-      const k = cb.name.replace("item_","");
-      const q = form[`qty_${k}`].value;
-      items.push(`${k.replace(/_/g," ")} × ${q}`);
-      total += (priceMap[k] || 0) * q;
-    });
-
-  pendingOrder = {
-    name: form.name.value,
-    contact: form.contact.value,
-    unit: form.unit_no.value,
-    notes: form.notes.value,
-    items,
-    total
-  };
-
-  document.getElementById("orderSummary").innerHTML =
-    items.join("<br>") + `<br><br><strong>Total:</strong> ₱${total}`;
-
-  document.getElementById("orderPreviewModal").style.display = "flex";
+menuContainer.addEventListener("change",()=>{
+  let total=0;
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
+    const k=cb.name.replace("item_","");
+    const qty=form[`qty_${k}`];
+    qty.style.display="block";
+    total+=priceMap[k]*qty.value;
+  });
+  document.querySelectorAll('input[type=checkbox]:not(:checked)').forEach(cb=>{
+    cb.closest(".actions").querySelector("input[type=number]").style.display="none";
+  });
+  totalPriceEl.textContent=`Total: ₱${total}`;
 });
-
-/* CONFIRM */
-document.getElementById("confirmOrderBtn").onclick = () => {
-  const fd = new FormData(form);
-  fd.append("items", pendingOrder.items.join(", "));
-  fd.append("total", pendingOrder.total);
-
-  fetch(orderURL, { method: "POST", body: fd })
-    .then(() => {
-      document.getElementById("orderPreviewModal").style.display = "none";
-      summaryCard.style.display = "block";
-
-      finalSummary.innerHTML = `
-        <strong>Items:</strong><br>${pendingOrder.items.join("<br>")}<br><br>
-        <strong>Total:</strong> ₱${pendingOrder.total}<br>
-        <strong>Name:</strong> ${pendingOrder.name}<br>
-        <strong>Contact:</strong> ${pendingOrder.contact}<br>
-        <strong>Unit:</strong> ${pendingOrder.unit}
-      `;
-
-      window.scrollTo({ top: summaryCard.offsetTop - 20, behavior: "smooth" });
-    });
-};
-
-document.getElementById("cancelOrderBtn").onclick = () =>
-  document.getElementById("orderPreviewModal").style.display = "none";
-
-/* COPY & PRINT */
-document.getElementById("copyOrderBtn").onclick = () => {
-  navigator.clipboard.writeText(finalSummary.innerText);
-  alert("Order copied!");
-};
-
-document.getElementById("printOrderBtn").onclick = () => {
-  const w = window.open("", "", "width=400,height=600");
-  w.document.write(finalSummary.outerHTML);
-  w.print();
-  w.close();
-};
 </script>
