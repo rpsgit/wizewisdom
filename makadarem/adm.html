@@ -1,35 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Live Orders</title>
+<title>Makadarem Admin</title>
 <style>
-body{font-family:Arial;padding:20px;background:#f4f4f4}
+body{font-family:Arial;background:#f4f4f4;padding:20px}
 .card{
   background:#fff;
   padding:14px;
-  margin-bottom:10px;
   border-radius:12px;
+  margin-bottom:10px;
+}
+.toggle{
+  background:#111;
+  color:#fff;
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  display:inline-block;
+  margin-bottom:20px;
 }
 </style>
 </head>
 <body>
+
 <h2>📦 Live Orders</h2>
+<div class="toggle" onclick="toggleClosed()">Toggle Closed Today</div>
+<div id="state"></div>
+<hr>
 <div id="orders">Loading…</div>
 
 <script>
-const ordersURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getOrders";
+const BASE="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
+const ORDERS_URL=BASE+"?func=getOrders";
+const SETTINGS_URL=BASE+"?func=getSettings";
+const SET_URL=BASE+"?func=setClosed";
 
 function load(){
-  fetch(ordersURL).then(r=>r.json()).then(d=>{
-    document.getElementById("orders").innerHTML=
-      d.reverse().map(o=>`
-        <div class="card">
-          <strong>${o.name}</strong><br>
-          ${o.items}<br>
-          ₱${o.total}
-        </div>`).join("");
+  fetch(ORDERS_URL).then(r=>r.json()).then(d=>{
+    orders.innerHTML=d.reverse().map(o=>`
+      <div class="card">
+        <b>${o.name}</b><br>
+        ${o.items}<br>
+        ₱${o.total}
+      </div>`).join("");
+  });
+
+  fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+    state.innerHTML="<b>Closed today:</b> "+s.closed_today;
   });
 }
+
+function toggleClosed(){
+  fetch(SET_URL,{method:"POST"}).then(load);
+}
+
 load();
 setInterval(load,5000);
 </script>
