@@ -9,8 +9,6 @@ title: Makadarem Menu
   --secondary:#ff7e5f;
   --dark:#3a2a15;
   --bg:#f4f4f4;
-  --card:#fff;
-  --radius:16px;
 }
 
 *{box-sizing:border-box}
@@ -20,7 +18,6 @@ body{
   background:var(--bg);
 }
 
-/* ===== CLOSED BANNER ===== */
 #closedBanner{
   display:none;
   background:#111;
@@ -30,25 +27,22 @@ body{
   font-weight:700;
 }
 
-/* ===== PAGE ===== */
-.page-container{
+.page{
   max-width:1200px;
   margin:20px auto 200px;
   padding:16px;
   background:#fff;
   border-radius:24px;
-  box-shadow:0 10px 40px rgba(0,0,0,.15);
 }
 
 h1{text-align:center;margin-bottom:6px}
 .subtitle{text-align:center;color:#666;margin-bottom:16px}
 
-/* ===== CATEGORY NAV ===== */
 .category-nav{
   display:flex;
   gap:8px;
   overflow-x:auto;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 .category-nav button{
   border:none;
@@ -59,41 +53,34 @@ h1{text-align:center;margin-bottom:6px}
   cursor:pointer;
 }
 
-/* ===== MENU ===== */
-.category-section{margin-bottom:28px}
-.category-title{
-  font-weight:800;
-  color:var(--dark);
-  margin-bottom:10px;
-}
+.category{margin-bottom:30px}
+.category h3{margin-bottom:10px}
 
-.menu-grid{
+.grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:14px;
 }
 
-.menu-item{
-  background:var(--card);
+.item{
+  background:#fff;
   border-radius:16px;
-  overflow:hidden;
   box-shadow:0 6px 18px rgba(0,0,0,.1);
+  overflow:hidden;
 }
 
-.menu-item img{
+.item img{
   width:100%;
   height:140px;
   object-fit:cover;
 }
 
-.menu-body{
+.body{
   padding:12px;
   display:flex;
   justify-content:space-between;
-  gap:10px;
 }
 
-.menu-body h3{margin:0;font-size:1rem}
 .price{color:var(--primary);font-weight:800}
 
 .actions{
@@ -107,8 +94,31 @@ h1{text-align:center;margin-bottom:6px}
   margin-top:4px;
 }
 
-/* ===== FLOATING CART ===== */
-#cartBtn{
+.total{
+  font-size:1.2rem;
+  font-weight:800;
+  margin:20px 0;
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  margin-bottom:10px;
+}
+
+button.main{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+  font-weight:800;
+}
+
+#cart{
   position:fixed;
   bottom:16px;
   right:16px;
@@ -117,52 +127,9 @@ h1{text-align:center;margin-bottom:6px}
   padding:14px 18px;
   border-radius:999px;
   font-weight:800;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
   cursor:pointer;
-  z-index:20;
 }
 
-/* ===== FORM ===== */
-.total-price{
-  font-size:1.2rem;
-  font-weight:800;
-  margin:20px 0;
-}
-
-.order-form input,
-.order-form textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #ccc;
-  margin-bottom:10px;
-}
-
-.order-button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:999px;
-  font-size:1.05rem;
-  font-weight:800;
-  color:#fff;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-}
-
-/* ===== SUMMARY ===== */
-#summaryWrapper{
-  display:none;
-  max-width:420px;
-  margin:40px auto;
-}
-#summaryCard{
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  border:2px dashed var(--secondary);
-}
-
-/* ===== MODAL ===== */
 #modal{
   display:none;
   position:fixed;
@@ -170,110 +137,82 @@ h1{text-align:center;margin-bottom:6px}
   background:rgba(0,0,0,.6);
   justify-content:center;
   align-items:center;
-  z-index:999;
 }
 .modal-box{
   background:#fff;
   padding:20px;
   border-radius:16px;
-  width:92%;
   max-width:420px;
+  width:92%;
 }
 
-/* ===== ADMIN VIEW ===== */
-#adminPanel{
+#summary{
   display:none;
-  padding:16px;
-  max-width:800px;
-  margin:20px auto;
-}
-.admin-card{
+  max-width:420px;
+  margin:40px auto;
   background:#fff;
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:10px;
+  padding:20px;
+  border-radius:20px;
+  border:2px dashed var(--secondary);
 }
 </style>
 
-<div id="closedBanner">🚫 Ordering is currently closed</div>
+<div id="closedBanner">🚫 Ordering is closed today</div>
 
-<div class="page-container" id="customerView">
+<div class="page">
   <h1>Makadarem Menu</h1>
   <div class="subtitle">Order • Confirm • Screenshot</div>
 
-  <div class="category-nav" id="categoryNav"></div>
+  <div class="category-nav" id="nav"></div>
 
-  <form id="menuForm" class="order-form">
-    <div id="menuContainer">Loading menu…</div>
+  <form id="form">
+    <div id="menu">Loading…</div>
 
-    <div class="total-price" id="totalPrice">Total: ₱0</div>
+    <div class="total" id="total">Total: ₱0</div>
 
     <input name="name" placeholder="Name" required>
     <input name="contact" placeholder="09XXXXXXXXX" required>
-    <input name="unit_no" placeholder="Unit No." required>
-    <textarea name="notes" placeholder="Notes (optional)"></textarea>
+    <input name="unit" placeholder="Unit No." required>
+    <textarea name="notes" placeholder="Notes"></textarea>
 
-    <button class="order-button">Place Order</button>
+    <button class="main">Place Order</button>
   </form>
 </div>
 
-<div id="cartBtn">🛒 <span id="cartCount">0</span> | ₱<span id="cartTotal">0</span></div>
-
-<div id="summaryWrapper">
-  <div id="summaryCard">
-    <h3 style="text-align:center">Order Summary</h3>
-    <div id="finalSummary"></div>
-    <button onclick="copyOrder()">Copy</button>
-    <button onclick="sendWhatsApp()">WhatsApp</button>
-    <button onclick="sendMessenger()">Messenger</button>
-  </div>
-</div>
+<div id="cart">🛒 <span id="count">0</span> | ₱<span id="sum">0</span></div>
 
 <div id="modal">
   <div class="modal-box">
-    <h3>Confirm Order?</h3>
+    <h3>Confirm Order</h3>
     <div id="preview"></div><br>
-    <button id="confirmBtn">Confirm</button>
+    <button onclick="confirm()">Confirm</button>
     <button onclick="closeModal()">Cancel</button>
   </div>
 </div>
 
-<div id="adminPanel">
-  <h2>📦 Live Orders</h2>
-  <div id="orders"></div>
-</div>
+<div id="summary"></div>
 
 <script>
-/* ===== CONFIG ===== */
-const OPEN_HOUR = 9;
-const CLOSE_HOUR = 21;
-const WHATSAPP_NUMBER = "639XXXXXXXXX";
-const MESSENGER_PAGE = "https://m.me/YOURPAGE";
+/* ===== URLs ===== */
+const BASE = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
+const MENU_URL = BASE + "?func=getMenu";
+const SETTINGS_URL = BASE + "?func=getSettings";
+const ORDER_URL = BASE;
 
-const menuURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
-const orderURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
-const ordersURL=orderURL+"?func=getOrders";
-
-/* ===== OPEN/CLOSE ===== */
-const h=new Date().getHours();
-if(h<OPEN_HOUR||h>=CLOSE_HOUR){
-  closedBanner.style.display="block";
-  menuForm.style.display="none";
-}
-
-/* ===== ADMIN TOGGLE ===== */
-if(location.search.includes("admin")){
-  customerView.style.display="none";
-  adminPanel.style.display="block";
-  loadOrders();
-  setInterval(loadOrders,5000);
-}
+/* ===== SETTINGS ===== */
+fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+  if(String(s.closed_today).toLowerCase()==="true"){
+    closedBanner.style.display="block";
+    form.style.display="none";
+  }
+});
 
 /* ===== MENU ===== */
-let priceMap={},pending=null;
-const key=t=>t.replace(/\s+/g,"_").toLowerCase();
+let prices={},pending=null;
 
-fetch(menuURL).then(r=>r.json()).then(data=>{
+const k=t=>t.replace(/\s+/g,"_").toLowerCase();
+
+fetch(MENU_URL).then(r=>r.json()).then(data=>{
   const cats={};
   data.forEach(i=>{
     const c=i.Category||"Others";
@@ -281,27 +220,27 @@ fetch(menuURL).then(r=>r.json()).then(data=>{
     cats[c].push(i);
   });
 
-  menuContainer.innerHTML="";
+  menu.innerHTML="";
   Object.keys(cats).forEach(cat=>{
-    categoryNav.innerHTML+=`<button onclick="document.getElementById('${key(cat)}').scrollIntoView({behavior:'smooth'})">${cat}</button>`;
-    menuContainer.innerHTML+=`
-      <div class="category-section" id="${key(cat)}">
-        <div class="category-title">${cat}</div>
-        <div class="menu-grid">
+    nav.innerHTML+=`<button onclick="document.getElementById('${k(cat)}').scrollIntoView({behavior:'smooth'})">${cat}</button>`;
+    menu.innerHTML+=`
+      <div class="category" id="${k(cat)}">
+        <h3>${cat}</h3>
+        <div class="grid">
           ${cats[cat].map(i=>{
-            const k=key(i.Item);
-            priceMap[k]=+i.Price;
+            const key=k(i.Item);
+            prices[key]=+i.Price;
             return `
-            <div class="menu-item">
+            <div class="item">
               <img src="${i.ImageURL||'https://via.placeholder.com/300x200'}">
-              <div class="menu-body">
+              <div class="body">
                 <div>
-                  <h3>${i.Item}</h3>
+                  <strong>${i.Item}</strong>
                   <div class="price">₱${i.Price}</div>
                 </div>
                 <div class="actions">
-                  <input type="checkbox" name="item_${k}">
-                  <input type="number" name="qty_${k}" value="1" min="1">
+                  <input type="checkbox" name="i_${key}">
+                  <input type="number" name="q_${key}" value="1" min="1">
                 </div>
               </div>
             </div>`;
@@ -313,68 +252,45 @@ fetch(menuURL).then(r=>r.json()).then(data=>{
 
 /* ===== CART ===== */
 document.addEventListener("change",()=>{
-  let total=0,count=0;
+  let t=0,c=0;
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
-    const k=cb.name.replace("item_","");
-    const q=document.querySelector(`[name=qty_${k}]`);
+    const k=cb.name.replace("i_","");
+    const q=form[`q_${k}`];
     q.style.display="block";
-    total+=priceMap[k]*q.value;
-    count+=+q.value;
+    t+=prices[k]*q.value;
+    c+=+q.value;
   });
-  cartTotal.textContent=total;
-  cartCount.textContent=count;
-  totalPrice.textContent=`Total: ₱${total}`;
+  total.textContent=`Total: ₱${t}`;
+  sum.textContent=t;
+  count.textContent=c;
 });
 
-cartBtn.onclick=()=>totalPrice.scrollIntoView({behavior:"smooth"});
+cart.onclick=()=>total.scrollIntoView({behavior:"smooth"});
 
 /* ===== SUBMIT ===== */
-menuForm.onsubmit=e=>{
+form.onsubmit=e=>{
   e.preventDefault();
-  let items=[],total=0;
+  let items=[],t=0;
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
-    const k=cb.name.replace("item_","");
-    const q=menuForm[`qty_${k}`].value;
+    const k=cb.name.replace("i_","");
+    const q=form[`q_${k}`].value;
     items.push(`${k.replace(/_/g," ")} x${q}`);
-    total+=priceMap[k]*q;
+    t+=prices[k]*q;
   });
-
-  pending={items,total,name:menuForm.name.value,contact:menuForm.contact.value,unit:menuForm.unit_no.value};
-  preview.innerHTML=items.join("<br>")+`<br><b>Total:</b> ₱${total}`;
+  pending={items,t};
+  preview.innerHTML=items.join("<br>")+`<br><b>Total:</b> ₱${t}`;
   modal.style.display="flex";
 };
 
-confirmBtn.onclick=()=>{
-  const fd=new FormData(menuForm);
+function confirm(){
+  const fd=new FormData(form);
   fd.append("items",pending.items.join(", "));
-  fd.append("total",pending.total);
-  fetch(orderURL,{method:"POST",body:fd}).then(()=>{
+  fd.append("total",pending.t);
+  fetch(ORDER_URL,{method:"POST",body:fd}).then(()=>{
     modal.style.display="none";
-    summaryWrapper.style.display="block";
-    finalSummary.innerHTML=
-      pending.items.join("<br>")+`<br><br>
-      <b>Total:</b> ₱${pending.total}<br>
-      <b>Name:</b> ${pending.name}<br>
-      <b>Unit:</b> ${pending.unit}`;
+    summary.style.display="block";
+    summary.innerHTML=`<b>Order Summary</b><br><br>${pending.items.join("<br>")}<br><br>Total: ₱${pending.t}`;
   });
-};
-
+}
 function closeModal(){modal.style.display="none"}
-function copyOrder(){navigator.clipboard.writeText(finalSummary.innerText)}
-function sendWhatsApp(){
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(finalSummary.innerText)}`);
-}
-function sendMessenger(){
-  window.open(MESSENGER_PAGE);
-}
-
-/* ===== ADMIN ===== */
-function loadOrders(){
-  fetch(ordersURL).then(r=>r.json()).then(d=>{
-    orders.innerHTML=d.reverse().map(o=>`
-      <div class="admin-card">
-        <b>${o.name}</b><br>${o.items}<br>₱${o.total}
-      </div>`).join("");
-  });
-}
 </script>
