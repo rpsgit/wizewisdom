@@ -7,7 +7,6 @@ title: Makadarem Menu
 :root{
   --primary:#ff5722;
   --secondary:#ff7e5f;
-  --dark:#3a2a15;
   --bg:#f4f4f4;
 }
 
@@ -18,6 +17,7 @@ body{
   background:var(--bg);
 }
 
+/* CLOSED */
 #closedBanner{
   display:none;
   background:#111;
@@ -27,6 +27,7 @@ body{
   font-weight:700;
 }
 
+/* PAGE */
 .page{
   max-width:1200px;
   margin:20px auto 200px;
@@ -35,26 +36,30 @@ body{
   border-radius:24px;
 }
 
-h1{text-align:center;margin-bottom:6px}
-.subtitle{text-align:center;color:#666;margin-bottom:16px}
-
-.category-nav{
+/* TABS */
+.tabs{
   display:flex;
   gap:8px;
   overflow-x:auto;
   margin-bottom:16px;
 }
-.category-nav button{
+.tabs button{
   border:none;
-  padding:8px 14px;
+  padding:10px 16px;
   border-radius:999px;
   background:#eee;
-  font-weight:600;
+  font-weight:700;
   cursor:pointer;
+  white-space:nowrap;
+}
+.tabs button.active{
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
 }
 
-.category{margin-bottom:30px}
-.category h3{margin-bottom:10px}
+/* MENU */
+.tab-content{display:none}
+.tab-content.active{display:block}
 
 .grid{
   display:grid;
@@ -65,8 +70,8 @@ h1{text-align:center;margin-bottom:6px}
 .item{
   background:#fff;
   border-radius:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
   overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.1);
 }
 
 .item img{
@@ -94,30 +99,7 @@ h1{text-align:center;margin-bottom:6px}
   margin-top:4px;
 }
 
-.total{
-  font-size:1.2rem;
-  font-weight:800;
-  margin:20px 0;
-}
-
-input,textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #ccc;
-  margin-bottom:10px;
-}
-
-button.main{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:#fff;
-  font-weight:800;
-}
-
+/* CART */
 #cart{
   position:fixed;
   bottom:16px;
@@ -130,6 +112,30 @@ button.main{
   cursor:pointer;
 }
 
+/* FORM */
+.total{
+  font-size:1.2rem;
+  font-weight:800;
+  margin:20px 0;
+}
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  margin-bottom:10px;
+}
+button.main{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+  font-weight:800;
+}
+
+/* MODAL */
 #modal{
   display:none;
   position:fixed;
@@ -145,28 +151,17 @@ button.main{
   max-width:420px;
   width:92%;
 }
-
-#summary{
-  display:none;
-  max-width:420px;
-  margin:40px auto;
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  border:2px dashed var(--secondary);
-}
 </style>
 
 <div id="closedBanner">🚫 Ordering is closed today</div>
 
 <div class="page">
-  <h1>Makadarem Menu</h1>
-  <div class="subtitle">Order • Confirm • Screenshot</div>
+  <h1 style="text-align:center">Makadarem Menu</h1>
 
-  <div class="category-nav" id="nav"></div>
+  <div class="tabs" id="tabs"></div>
 
   <form id="form">
-    <div id="menu">Loading…</div>
+    <div id="menu"></div>
 
     <div class="total" id="total">Total: ₱0</div>
 
@@ -186,20 +181,16 @@ button.main{
     <h3>Confirm Order</h3>
     <div id="preview"></div><br>
     <button onclick="confirm()">Confirm</button>
-    <button onclick="closeModal()">Cancel</button>
+    <button onclick="modal.style.display='none'">Cancel</button>
   </div>
 </div>
 
-<div id="summary"></div>
-
 <script>
-/* ===== URLs ===== */
-const BASE = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
-const MENU_URL = BASE + "?func=getMenu";
-const SETTINGS_URL = BASE + "?func=getSettings";
-const ORDER_URL = BASE;
+const BASE="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
+const MENU_URL=BASE+"?func=getMenu";
+const SETTINGS_URL=BASE+"?func=getSettings";
+const ORDER_URL=BASE;
 
-/* ===== SETTINGS ===== */
 fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   if(String(s.closed_today).toLowerCase()==="true"){
     closedBanner.style.display="block";
@@ -207,9 +198,7 @@ fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   }
 });
 
-/* ===== MENU ===== */
 let prices={},pending=null;
-
 const k=t=>t.replace(/\s+/g,"_").toLowerCase();
 
 fetch(MENU_URL).then(r=>r.json()).then(data=>{
@@ -220,12 +209,17 @@ fetch(MENU_URL).then(r=>r.json()).then(data=>{
     cats[c].push(i);
   });
 
-  menu.innerHTML="";
+  let first=true;
   Object.keys(cats).forEach(cat=>{
-    nav.innerHTML+=`<button onclick="document.getElementById('${k(cat)}').scrollIntoView({behavior:'smooth'})">${cat}</button>`;
+    const id=k(cat);
+
+    tabs.innerHTML+=`
+      <button class="${first?'active':''}" onclick="openTab('${id}',this)">
+        ${cat}
+      </button>`;
+
     menu.innerHTML+=`
-      <div class="category" id="${k(cat)}">
-        <h3>${cat}</h3>
+      <div class="tab-content ${first?'active':''}" id="${id}">
         <div class="grid">
           ${cats[cat].map(i=>{
             const key=k(i.Item);
@@ -247,17 +241,24 @@ fetch(MENU_URL).then(r=>r.json()).then(data=>{
           }).join("")}
         </div>
       </div>`;
+    first=false;
   });
 });
 
-/* ===== CART ===== */
+function openTab(id,btn){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  btn.classList.add("active");
+}
+
 document.addEventListener("change",()=>{
   let t=0,c=0;
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
-    const k=cb.name.replace("i_","");
-    const q=form[`q_${k}`];
+    const key=cb.name.replace("i_","");
+    const q=form[`q_${key}`];
     q.style.display="block";
-    t+=prices[k]*q.value;
+    t+=prices[key]*q.value;
     c+=+q.value;
   });
   total.textContent=`Total: ₱${t}`;
@@ -267,15 +268,14 @@ document.addEventListener("change",()=>{
 
 cart.onclick=()=>total.scrollIntoView({behavior:"smooth"});
 
-/* ===== SUBMIT ===== */
 form.onsubmit=e=>{
   e.preventDefault();
   let items=[],t=0;
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
-    const k=cb.name.replace("i_","");
-    const q=form[`q_${k}`].value;
-    items.push(`${k.replace(/_/g," ")} x${q}`);
-    t+=prices[k]*q;
+    const key=cb.name.replace("i_","");
+    const q=form[`q_${key}`].value;
+    items.push(`${key.replace(/_/g," ")} x${q}`);
+    t+=prices[key]*q;
   });
   pending={items,t};
   preview.innerHTML=items.join("<br>")+`<br><b>Total:</b> ₱${t}`;
@@ -288,9 +288,8 @@ function confirm(){
   fd.append("total",pending.t);
   fetch(ORDER_URL,{method:"POST",body:fd}).then(()=>{
     modal.style.display="none";
-    summary.style.display="block";
-    summary.innerHTML=`<b>Order Summary</b><br><br>${pending.items.join("<br>")}<br><br>Total: ₱${pending.t}`;
+    alert("Order sent!");
+    location.reload();
   });
 }
-function closeModal(){modal.style.display="none"}
 </script>
