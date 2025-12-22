@@ -9,7 +9,7 @@ title: Makadarem Menu
   --secondary:#ff7e5f;
   --dark:#3a2a15;
   --bg:#f4f4f4;
-  --card:#ffffff;
+  --card:#fff;
   --radius:16px;
 }
 
@@ -17,180 +17,153 @@ title: Makadarem Menu
 body{
   margin:0;
   font-family:Poppins,Arial,sans-serif;
-  background:var(--bg)
-    url('{{ "/assets/images/menu/bg.png" | relative_url }}')
-    no-repeat center/cover fixed;
+  background:var(--bg);
+}
+
+/* ===== CLOSED BANNER ===== */
+#closedBanner{
+  display:none;
+  background:#111;
+  color:#fff;
+  padding:14px;
+  text-align:center;
+  font-weight:700;
 }
 
 /* ===== PAGE ===== */
 .page-container{
   max-width:1200px;
-  margin:20px auto 160px;
+  margin:20px auto 200px;
   padding:16px;
-  background:rgba(255,255,255,.97);
+  background:#fff;
   border-radius:24px;
   box-shadow:0 10px 40px rgba(0,0,0,.15);
 }
 
-h1{
-  text-align:center;
-  margin-bottom:10px;
-  color:var(--dark);
-}
-
-.subtitle{
-  text-align:center;
-  color:#666;
-  margin-bottom:20px;
-}
+h1{text-align:center;margin-bottom:6px}
+.subtitle{text-align:center;color:#666;margin-bottom:16px}
 
 /* ===== CATEGORY NAV ===== */
 .category-nav{
   display:flex;
   gap:8px;
   overflow-x:auto;
-  padding-bottom:10px;
-  margin-bottom:16px;
+  margin-bottom:20px;
 }
 .category-nav button{
-  white-space:nowrap;
   border:none;
   padding:8px 14px;
   border-radius:999px;
   background:#eee;
-  cursor:pointer;
   font-weight:600;
-}
-.category-nav button.active{
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:#fff;
+  cursor:pointer;
 }
 
-/* ===== CATEGORY SECTION ===== */
-.category-section{
-  margin-bottom:26px;
-}
+/* ===== MENU ===== */
+.category-section{margin-bottom:28px}
 .category-title{
-  font-size:1.1rem;
-  font-weight:700;
+  font-weight:800;
   color:var(--dark);
-  margin:10px 0;
+  margin-bottom:10px;
 }
 
-/* ===== MENU GRID ===== */
 .menu-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:14px;
 }
 
 .menu-item{
   background:var(--card);
-  border-radius:var(--radius);
-  padding:14px;
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
-  transition:.15s;
-}
-.menu-item:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 22px rgba(0,0,0,.12);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.1);
 }
 
-.details h3{
-  margin:0;
-  font-size:1rem;
-  color:var(--dark);
+.menu-item img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
 }
-.details p{
-  margin:6px 0 0;
-  font-weight:700;
-  color:var(--primary);
+
+.menu-body{
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
 }
+
+.menu-body h3{margin:0;font-size:1rem}
+.price{color:var(--primary);font-weight:800}
 
 .actions{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:6px;
 }
-.actions input[type=checkbox]{transform:scale(1.3)}
 .actions input[type=number]{
-  width:60px;
-  padding:6px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  text-align:center;
   display:none;
+  width:60px;
+  margin-top:4px;
 }
 
-/* ===== TOTAL ===== */
-.total-price{
-  font-size:1.2rem;
+/* ===== FLOATING CART ===== */
+#cartBtn{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+  padding:14px 18px;
+  border-radius:999px;
   font-weight:800;
-  color:var(--primary);
-  text-align:right;
-  margin:20px 0;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  cursor:pointer;
+  z-index:20;
 }
 
 /* ===== FORM ===== */
-.order-form-section{
-  display:grid;
-  gap:10px;
+.total-price{
+  font-size:1.2rem;
+  font-weight:800;
+  margin:20px 0;
 }
-.order-form-section input,
-.order-form-section textarea{
+
+.order-form input,
+.order-form textarea{
+  width:100%;
   padding:12px;
   border-radius:12px;
   border:1px solid #ccc;
+  margin-bottom:10px;
 }
 
-/* ===== BUTTON ===== */
 .order-button{
-  margin-top:16px;
   width:100%;
   padding:14px;
-  border-radius:999px;
   border:none;
+  border-radius:999px;
   font-size:1.05rem;
-  font-weight:700;
+  font-weight:800;
   color:#fff;
   background:linear-gradient(135deg,var(--secondary),var(--primary));
 }
 
 /* ===== SUMMARY ===== */
-.order-summary-wrapper{
+#summaryWrapper{
   display:none;
-  margin:40px auto;
   max-width:420px;
+  margin:40px auto;
 }
-.order-summary-card{
+#summaryCard{
   background:#fff;
-  border-radius:20px;
   padding:20px;
+  border-radius:20px;
   border:2px dashed var(--secondary);
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-}
-.order-summary-card h2{text-align:center}
-
-.summary-buttons{
-  display:flex;
-  gap:10px;
-  margin-top:15px;
-}
-.summary-buttons button{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:14px;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:#fff;
 }
 
 /* ===== MODAL ===== */
-#orderPreviewModal{
+#modal{
   display:none;
   position:fixed;
   inset:0;
@@ -207,104 +180,129 @@ h1{
   max-width:420px;
 }
 
-/* ===== MOBILE ===== */
-@media(max-width:600px){
-  .total-price{
-    position:sticky;
-    bottom:0;
-    background:#fff;
-    padding:12px;
-    border-top:1px solid #eee;
-    text-align:center;
-    z-index:10;
-  }
+/* ===== ADMIN VIEW ===== */
+#adminPanel{
+  display:none;
+  padding:16px;
+  max-width:800px;
+  margin:20px auto;
+}
+.admin-card{
+  background:#fff;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:10px;
 }
 </style>
 
-<div class="page-container">
-  <h1>Makadarem for VS2</h1>
-  <div class="subtitle">Select items • Confirm • Screenshot summary</div>
+<div id="closedBanner">🚫 Ordering is currently closed</div>
+
+<div class="page-container" id="customerView">
+  <h1>Makadarem Menu</h1>
+  <div class="subtitle">Order • Confirm • Screenshot</div>
 
   <div class="category-nav" id="categoryNav"></div>
 
-  <form id="menuForm">
+  <form id="menuForm" class="order-form">
     <div id="menuContainer">Loading menu…</div>
 
     <div class="total-price" id="totalPrice">Total: ₱0</div>
 
-    <div class="order-form-section">
-      <input name="name" placeholder="Name" required>
-      <input name="contact" placeholder="09XXXXXXXXX" required>
-      <input name="unit_no" placeholder="Unit No." required>
-      <textarea name="notes" placeholder="Notes (optional)"></textarea>
-    </div>
+    <input name="name" placeholder="Name" required>
+    <input name="contact" placeholder="09XXXXXXXXX" required>
+    <input name="unit_no" placeholder="Unit No." required>
+    <textarea name="notes" placeholder="Notes (optional)"></textarea>
 
     <button class="order-button">Place Order</button>
   </form>
 </div>
 
-<div class="order-summary-wrapper" id="orderSummaryCard">
-  <div class="order-summary-card">
-    <h2>Order Summary</h2>
-    <div id="finalOrderSummary"></div>
-    <div class="summary-buttons">
-      <button id="copyOrderBtn">Copy</button>
-      <button id="printOrderBtn">Print / Save</button>
-    </div>
+<div id="cartBtn">🛒 <span id="cartCount">0</span> | ₱<span id="cartTotal">0</span></div>
+
+<div id="summaryWrapper">
+  <div id="summaryCard">
+    <h3 style="text-align:center">Order Summary</h3>
+    <div id="finalSummary"></div>
+    <button onclick="copyOrder()">Copy</button>
+    <button onclick="sendWhatsApp()">WhatsApp</button>
+    <button onclick="sendMessenger()">Messenger</button>
   </div>
 </div>
 
-<div id="orderPreviewModal">
+<div id="modal">
   <div class="modal-box">
     <h3>Confirm Order?</h3>
-    <div id="orderSummary"></div><br>
-    <button id="confirmOrderBtn">Confirm</button>
-    <button id="cancelOrderBtn">Cancel</button>
+    <div id="preview"></div><br>
+    <button id="confirmBtn">Confirm</button>
+    <button onclick="closeModal()">Cancel</button>
   </div>
+</div>
+
+<div id="adminPanel">
+  <h2>📦 Live Orders</h2>
+  <div id="orders"></div>
 </div>
 
 <script>
+/* ===== CONFIG ===== */
+const OPEN_HOUR = 9;
+const CLOSE_HOUR = 21;
+const WHATSAPP_NUMBER = "639XXXXXXXXX";
+const MESSENGER_PAGE = "https://m.me/YOURPAGE";
+
 const menuURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
 const orderURL="https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
+const ordersURL=orderURL+"?func=getOrders";
 
-const menuContainer=document.getElementById("menuContainer");
-const categoryNav=document.getElementById("categoryNav");
-const totalPriceEl=document.getElementById("totalPrice");
-const form=document.getElementById("menuForm");
+/* ===== OPEN/CLOSE ===== */
+const h=new Date().getHours();
+if(h<OPEN_HOUR||h>=CLOSE_HOUR){
+  closedBanner.style.display="block";
+  menuForm.style.display="none";
+}
 
-let priceMap={},pendingOrder=null;
+/* ===== ADMIN TOGGLE ===== */
+if(location.search.includes("admin")){
+  customerView.style.display="none";
+  adminPanel.style.display="block";
+  loadOrders();
+  setInterval(loadOrders,5000);
+}
 
-const key=t=>t.replace(/\s+/g,"_").replace(/[^a-z0-9_]/gi,"").toLowerCase();
+/* ===== MENU ===== */
+let priceMap={},pending=null;
+const key=t=>t.replace(/\s+/g,"_").toLowerCase();
 
 fetch(menuURL).then(r=>r.json()).then(data=>{
-  const groups={};
+  const cats={};
   data.forEach(i=>{
-    const cat=i.Category||"Others";
-    groups[cat]=groups[cat]||[];
-    groups[cat].push(i);
+    const c=i.Category||"Others";
+    cats[c]=cats[c]||[];
+    cats[c].push(i);
   });
 
   menuContainer.innerHTML="";
-  Object.keys(groups).forEach((cat,idx)=>{
-    categoryNav.innerHTML+=
-      `<button class="${idx==0?'active':''}" onclick="document.getElementById('${key(cat)}').scrollIntoView({behavior:'smooth'})">${cat}</button>`;
-
-    menuContainer.innerHTML+=
-      `<div class="category-section" id="${key(cat)}">
+  Object.keys(cats).forEach(cat=>{
+    categoryNav.innerHTML+=`<button onclick="document.getElementById('${key(cat)}').scrollIntoView({behavior:'smooth'})">${cat}</button>`;
+    menuContainer.innerHTML+=`
+      <div class="category-section" id="${key(cat)}">
         <div class="category-title">${cat}</div>
         <div class="menu-grid">
-          ${groups[cat].map(i=>{
+          ${cats[cat].map(i=>{
             const k=key(i.Item);
             priceMap[k]=+i.Price;
             return `
             <div class="menu-item">
-              <div class="details">
-                <h3>${i.Item}</h3>
-                <p>₱${i.Price}</p>
-              </div>
-              <div class="actions">
-                <input type="checkbox" name="item_${k}">
-                <input type="number" name="qty_${k}" value="1" min="1">
+              <img src="${i.ImageURL||'https://via.placeholder.com/300x200'}">
+              <div class="menu-body">
+                <div>
+                  <h3>${i.Item}</h3>
+                  <div class="price">₱${i.Price}</div>
+                </div>
+                <div class="actions">
+                  <input type="checkbox" name="item_${k}">
+                  <input type="number" name="qty_${k}" value="1" min="1">
+                </div>
               </div>
             </div>`;
           }).join("")}
@@ -313,17 +311,70 @@ fetch(menuURL).then(r=>r.json()).then(data=>{
   });
 });
 
-menuContainer.addEventListener("change",()=>{
-  let total=0;
+/* ===== CART ===== */
+document.addEventListener("change",()=>{
+  let total=0,count=0;
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
     const k=cb.name.replace("item_","");
-    const qty=form[`qty_${k}`];
-    qty.style.display="block";
-    total+=priceMap[k]*qty.value;
+    const q=document.querySelector(`[name=qty_${k}]`);
+    q.style.display="block";
+    total+=priceMap[k]*q.value;
+    count+=+q.value;
   });
-  document.querySelectorAll('input[type=checkbox]:not(:checked)').forEach(cb=>{
-    cb.closest(".actions").querySelector("input[type=number]").style.display="none";
-  });
-  totalPriceEl.textContent=`Total: ₱${total}`;
+  cartTotal.textContent=total;
+  cartCount.textContent=count;
+  totalPrice.textContent=`Total: ₱${total}`;
 });
+
+cartBtn.onclick=()=>totalPrice.scrollIntoView({behavior:"smooth"});
+
+/* ===== SUBMIT ===== */
+menuForm.onsubmit=e=>{
+  e.preventDefault();
+  let items=[],total=0;
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
+    const k=cb.name.replace("item_","");
+    const q=menuForm[`qty_${k}`].value;
+    items.push(`${k.replace(/_/g," ")} x${q}`);
+    total+=priceMap[k]*q;
+  });
+
+  pending={items,total,name:menuForm.name.value,contact:menuForm.contact.value,unit:menuForm.unit_no.value};
+  preview.innerHTML=items.join("<br>")+`<br><b>Total:</b> ₱${total}`;
+  modal.style.display="flex";
+};
+
+confirmBtn.onclick=()=>{
+  const fd=new FormData(menuForm);
+  fd.append("items",pending.items.join(", "));
+  fd.append("total",pending.total);
+  fetch(orderURL,{method:"POST",body:fd}).then(()=>{
+    modal.style.display="none";
+    summaryWrapper.style.display="block";
+    finalSummary.innerHTML=
+      pending.items.join("<br>")+`<br><br>
+      <b>Total:</b> ₱${pending.total}<br>
+      <b>Name:</b> ${pending.name}<br>
+      <b>Unit:</b> ${pending.unit}`;
+  });
+};
+
+function closeModal(){modal.style.display="none"}
+function copyOrder(){navigator.clipboard.writeText(finalSummary.innerText)}
+function sendWhatsApp(){
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(finalSummary.innerText)}`);
+}
+function sendMessenger(){
+  window.open(MESSENGER_PAGE);
+}
+
+/* ===== ADMIN ===== */
+function loadOrders(){
+  fetch(ordersURL).then(r=>r.json()).then(d=>{
+    orders.innerHTML=d.reverse().map(o=>`
+      <div class="admin-card">
+        <b>${o.name}</b><br>${o.items}<br>₱${o.total}
+      </div>`).join("");
+  });
+}
 </script>
