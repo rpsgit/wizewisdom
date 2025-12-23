@@ -180,8 +180,8 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
 <div class="page-container">
   <h1>Makadarem for VS2</h1>
   <p>Door-to-door delivery within VS2 only</p>
-  <h2 style="color: red; font-weight: bold;">Delivery Schedule for December 23, Tue</h2>
-  <h3 style="color: red;">11 AM to to 11 MN. Salamat po.</h3>
+  <h2 style="color: red; font-weight: bold;">Delivery Schedule for December 24, Wed</h2>
+  <h3 style="color: red;">9 AM to 11 AM --- Break---- 2 PM to 11 PM. Salamat po.</h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
