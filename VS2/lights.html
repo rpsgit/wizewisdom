@@ -25,11 +25,7 @@
 <body>
 
 <h1 id="page-title">VS2 Residential Lights Status</h1>
-<select id="tower-select">
-  <option value="Tower A">Tower A</option>
-  <option value="Tower B">Tower B</option>
-</select>
-
+<select id="tower-select"></select>
 <div id="building"></div>
 
 <div id="modal" class="modal">
@@ -43,29 +39,52 @@
 <div id="toast"></div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPSGwu1ATbhSgYuwgOfp794_Mhazoc-cg4o75fb__3wTpGNsQ_80XBQrGqTKcwUG7N/exec"; // replace with your Web App URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwSQ1vJRFREMmMnnxh13pdb5DKkeuqBj2m8ZhhB8xhj7FFGsdX-cQXsmBX_ULlOtgZL/exec"; // Replace with your Web App URL
 const UNIT_COUNT = 61;
 const FLOORS = [...Array(32).keys()].map(i => 14+i).concat("PH");
 
 let lightData = {};
 let currentBtn = null;
-let currentTower = document.getElementById("tower-select").value;
+let currentTower = "";
 
 // Toast
-function showToast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000);}
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2000);
+}
 
-// Fetch
+// Fetch tower list
+async function fetchTowers(){
+  try {
+    const res = await fetch(WEB_APP_URL);
+    const data = await res.json();
+    if(!data.success) throw new Error(data.error || "Failed to load towers");
+    const select = document.getElementById("tower-select");
+    select.innerHTML = "";
+    data.availableTowers.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      select.appendChild(opt);
+    });
+    currentTower = select.value;
+  } catch(e){ console.error(e); showToast("Error loading towers"); }
+}
+
+// Fetch lights
 async function fetchLightData(tower){
   try {
     const res = await fetch(`${WEB_APP_URL}?tower=${encodeURIComponent(tower)}`);
     const data = await res.json();
-    if(!data.success) throw new Error(data.error||"Failed to load");
+    if(!data.success) throw new Error(data.error || "Failed to load");
     showToast(`Loaded ${tower}`);
     return data.data;
   } catch(e){ showToast("Error loading data"); console.error(e); return {}; }
 }
 
-// Update
+// Update lights
 async function updateLightStatus(tower,floor,unit,value){
   try {
     const res = await fetch(WEB_APP_URL,{
@@ -74,12 +93,12 @@ async function updateLightStatus(tower,floor,unit,value){
       body: JSON.stringify({tower,floor,unit,value})
     });
     const data = await res.json();
-    if(!data.success) throw new Error(data.error||"Update failed");
+    if(!data.success) throw new Error(data.error || "Update failed");
     showToast("Updated");
   } catch(e){ showToast("Update failed"); console.error(e); }
 }
 
-// Render
+// Render UI
 function renderLights(){
   const container = document.getElementById("building");
   container.innerHTML="";
@@ -130,7 +149,6 @@ document.getElementById("on-btn").onclick=()=>saveStatus(1);
 document.getElementById("out-btn").onclick=()=>saveStatus(0);
 document.getElementById("tower-select").addEventListener("change",loadTower);
 
-// Load tower
 async function loadTower(){
   currentTower=document.getElementById("tower-select").value;
   document.getElementById("page-title").textContent=`VS2 Residential Lights Status - ${currentTower}`;
@@ -138,7 +156,12 @@ async function loadTower(){
   renderLights();
 }
 
-window.onload=loadTower;
+async function init(){
+  await fetchTowers();
+  await loadTower();
+}
+
+window.onload = init;
 </script>
 
 </body>
