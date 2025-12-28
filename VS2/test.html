@@ -1,202 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Services Master Data Maintenance</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-    .btn-add { background: #28a745; color:#fff; }
-    .btn-update { background: #ffc107; }
-    .btn-delete { background: #dc3545; color:#fff; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th { background: #eee; }
-    .action-btns button { margin-right: 5px; }
-  </style>
+<meta charset="UTF-8">
+<title>Online Food Ordering</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f4f4f4;
+}
+.container {
+  max-width:1200px;
+  margin:auto;
+  padding:15px;
+}
+h1,h3 { margin:10px 0; }
+
+/* MOBILE-FIRST MENU */
+.menu {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.menu-card {
+  background:#fff;
+  border-radius:12px;
+  padding:15px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+.price { font-weight:bold; }
+.menu-card button {
+  width:100%;
+  padding:10px;
+  background:#28a745;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+}
+
+/* CART BAR */
+.cart-bar {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#222;
+  color:#fff;
+  padding:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.cart-bar button {
+  background:#ff9800;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+}
+
+/* CART PANEL */
+.cart-panel {
+  display:none;
+  background:#fff;
+  margin-top:15px;
+  padding:15px;
+  border-radius:12px;
+}
+.cart-item {
+  border-bottom:1px solid #eee;
+  padding:10px 0;
+}
+textarea { width:100%; }
+
+/* DESKTOP */
+@media (min-width:768px){
+  .menu { display:none; }
+  .desktop { display:block; }
+  table {
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+  }
+  th,td {
+    border:1px solid #ddd;
+    padding:10px;
+  }
+  .cart-bar {
+    position:static;
+    background:none;
+    color:#000;
+    justify-content:flex-end;
+  }
+}
+
+/* MODAL */
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+}
+.modal-content {
+  background:#fff;
+  max-width:400px;
+  margin:20% auto;
+  padding:20px;
+  border-radius:12px;
+}
+.modal-content input {
+  width:100%;
+  padding:8px;
+  margin-bottom:10px;
+}
+</style>
 </head>
+
 <body>
+
 <div class="container">
-  <h1>Services Master Data Maintenance</h1>
+<h1>Food Ordering</h1>
 
-  <h3>Add / Update Service</h3>
-  <form id="serviceForm">
-    <input type="hidden" id="rowId" />
+<div class="menu" id="menuCards"></div>
 
-    <label>Category</label>
-    <input type="text" id="category" required>
+<div class="desktop" style="display:none;">
+<table>
+<thead>
+<tr><th>Item</th><th>Description</th><th>Price</th><th></th></tr>
+</thead>
+<tbody id="menuTable"></tbody>
+</table>
+</div>
 
-    <label>Type of Service</label>
-    <input type="text" id="serviceType" required>
+<div class="cart-panel" id="cartPanel">
+<h3>🛒 Cart</h3>
+<div id="cartItems"></div>
+<h3 style="text-align:right;">Total: ₱<span id="total">0</span></h3>
+<button onclick="openCheckout()">Checkout</button>
+</div>
+</div>
 
-    <label>Product/Service</label>
-    <input type="text" id="product" required>
+<div class="cart-bar">
+<div>Items: <span id="cartCount">0</span></div>
+<button onclick="toggleCart()">View Cart</button>
+</div>
 
-    <label>Name/Handle</label>
-    <input type="text" id="handle" required>
-
-    <label>Contact Name</label>
-    <input type="text" id="contactName" required>
-
-    <label>Contact Number</label>
-    <input type="text" id="contactNumber" required>
-
-    <label>Availability</label>
-    <input type="text" id="availability" required>
-
-    <label>Info</label>
-    <textarea id="info" rows="3"></textarea>
-
-    <button type="submit" class="btn-add" id="submitBtn">Add Service</button>
-  </form>
-
-  <h3>Service Records</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Category</th>
-        <th>Type</th>
-        <th>Product/Service</th>
-        <th>Name/Handle</th>
-        <th>Contact Name</th>
-        <th>Contact #</th>
-        <th>Availability</th>
-        <th>Info</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="serviceTable"></tbody>
-  </table>
+<div class="modal" id="checkoutModal">
+<div class="modal-content">
+<h3>Checkout</h3>
+<input id="custName" placeholder="Name">
+<input id="custPhone" placeholder="Phone">
+<input id="custAddress" placeholder="Address">
+<button onclick="submitOrder()">Place Order</button>
+<button onclick="closeCheckout()">Cancel</button>
+</div>
 </div>
 
 <script>
-const apiURL = "https://script.google.com/macros/s/AKfycbwh3zjK3wwa_c-FJDKbr5JQ7TVxciGuJ-Xl9r1kjP6dt2LZBUQegTHbjDCCLPsARMAO/exec"; // Replace with your Apps Script Web App URL
+/* ======================
+   APPS SCRIPT CONNECTION
+====================== */
+const apiURL = "https://script.google.com/macros/s/AKfycbwh3zjK3wwa_c-FJDKbr5JQ7TVxciGuJ-Xl9r1kjP6dt2LZBUQegTHbjDCCLPsARMAO/exec";
 
-// Load data on page load
-document.addEventListener("DOMContentLoaded", loadData);
+/* SAMPLE MENU */
+const menu = [
+  {id:1,name:"Chicken Adobo",desc:"Classic Filipino",price:120},
+  {id:2,name:"Pork Sisig",desc:"Sizzling pork",price:150},
+  {id:3,name:"Beef Kare-Kare",desc:"Peanut stew",price:180}
+];
 
-function loadData() {
-  fetch(`${apiURL}?action=read`)
-    .then(res => res.json())
-    .then(data => displayTable(data))
-    .catch(err => console.error(err));
-}
+let cart = [];
 
-function displayTable(rows) {
-  const table = document.getElementById("serviceTable");
-  table.innerHTML = "";
-
-  rows.forEach((row, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${row.Category}</td>
-      <td>${row.Type}</td>
-      <td>${row.Product}</td>
-      <td>${row.Handle}</td>
-      <td>${row.ContactName}</td>
-      <td>${row.ContactNumber}</td>
-      <td>${row.Availability}</td>
-      <td>${row.Info}</td>
-      <td class="action-btns">
-        <button class="btn-update" onclick='editRow(${JSON.stringify(row)})'>Edit</button>
-        <button class="btn-delete" onclick='deleteRow("${row.ID}")'>Delete</button>
-      </td>
-    `;
-    table.appendChild(tr);
-  });
-}
-
-// Form submit (Add or Update)
-document.getElementById("serviceForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const rowId = document.getElementById("rowId").value;
-  const data = {
-    action: rowId ? "update" : "add",
-    rowId,
-    category: category.value,
-    serviceType: serviceType.value,
-    product: product.value,
-    handle: handle.value,
-    contactName: contactName.value,
-    contactNumber: contactNumber.value,
-    availability: availability.value,
-    info: info.value
-  };
-
-  fetch(apiURL, {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(res => res.text())
-  .then(() => {
-    alert("Saved!");
-    this.reset();
-    document.getElementById("submitBtn").textContent = "Add Service";
-    loadData();
-  })
-  .catch(err => console.error(err));
+/* RENDER MENU */
+menu.forEach(item=>{
+  menuCards.innerHTML += `
+    <div class="menu-card">
+      <h3>${item.name}</h3>
+      <p>${item.desc}</p>
+      <div class="price">₱${item.price}</div>
+      <button onclick='addToCart(${JSON.stringify(item)})'>Add</button>
+    </div>`;
+  menuTable.innerHTML += `
+    <tr>
+      <td>${item.name}</td>
+      <td>${item.desc}</td>
+      <td>₱${item.price}</td>
+      <td><button onclick='addToCart(${JSON.stringify(item)})'>Add</button></td>
+    </tr>`;
 });
 
-function editRow(row) {
-  rowId.value = row.ID;
-  category.value = row.Category;
-  serviceType.value = row.Type;
-  product.value = row.Product;
-  handle.value = row.Handle;
-  contactName.value = row.ContactName;
-  contactNumber.value = row.ContactNumber;
-  availability.value = row.Availability;
-  info.value = row.Info;
-  submitBtn.textContent = "Update Service";
+/* CART */
+function addToCart(item){
+  const f = cart.find(i=>i.id===item.id);
+  f ? f.qty++ : cart.push({...item,qty:1,notes:""});
+  renderCart();
 }
 
-function deleteRow(id) {
-  if (!confirm("Delete this record?")) return;
+function renderCart(){
+  cartItems.innerHTML="";
+  let total=0,count=0;
+  cart.forEach(i=>{
+    total+=i.qty*i.price;
+    count+=i.qty;
+    cartItems.innerHTML+=`
+      <div class="cart-item">
+        <b>${i.name}</b><br>
+        <button onclick="changeQty(${i.id},-1)">-</button>
+        ${i.qty}
+        <button onclick="changeQty(${i.id},1)">+</button>
+        ₱${i.qty*i.price}
+        <textarea placeholder="Notes" oninput="i.notes=this.value"></textarea>
+      </div>`;
+  });
+  totalSpan.textContent=total;
+  cartCount.textContent=count;
+}
 
-  fetch(`${apiURL}?action=delete&id=${id}`)
-    .then(res => res.text())
-    .then(() => loadData())
-    .catch(err => console.error(err));
+function changeQty(id,delta){
+  const i = cart.find(x=>x.id===id);
+  i.qty+=delta;
+  if(i.qty<=0) cart=cart.filter(x=>x.id!==id);
+  renderCart();
+}
+
+function toggleCart(){
+  cartPanel.style.display = cartPanel.style.display==="block"?"none":"block";
+}
+
+/* CHECKOUT */
+function openCheckout(){
+  if(!cart.length) return alert("Cart empty");
+  checkoutModal.style.display="block";
+}
+function closeCheckout(){
+  checkoutModal.style.display="none";
+}
+
+/* ======================
+   SEND TO APPS SCRIPT
+====================== */
+function submitOrder(){
+  const order = {
+    customer:{
+      name:custName.value,
+      phone:custPhone.value,
+      address:custAddress.value
+    },
+    cart,
+    total: totalSpan.textContent,
+    timestamp: new Date().toISOString()
+  };
+
+  fetch(apiURL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(order)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    alert("Order sent successfully!");
+    cart=[];
+    renderCart();
+    closeCheckout();
+  })
+  .catch(err=>{
+    alert("Failed to send order");
+    console.error(err);
+  });
 }
 </script>
 
