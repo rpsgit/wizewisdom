@@ -1,0 +1,295 @@
+---
+layout: default
+title: Adimup Kitchen
+---
+
+<style>
+:root{
+  --primary:#ff5722;
+  --secondary:#ff7e5f;
+  --bg:#f4f4f4;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:var(--bg);
+}
+
+/* CLOSED */
+#closedBanner{
+  display:none;
+  background:#111;
+  color:#fff;
+  padding:14px;
+  text-align:center;
+  font-weight:700;
+}
+
+/* PAGE */
+.page{
+  max-width:1200px;
+  margin:20px auto 200px;
+  padding:16px;
+  background:#fff;
+  border-radius:24px;
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin-bottom:16px;
+}
+.tabs button{
+  border:none;
+  padding:10px 16px;
+  border-radius:999px;
+  background:#eee;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.tabs button.active{
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+}
+
+/* MENU */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+
+.item{
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.1);
+}
+
+.item img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+
+.body{
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.price{color:var(--primary);font-weight:800}
+
+.actions{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.actions input[type=number]{
+  display:none;
+  width:60px;
+  margin-top:4px;
+}
+
+/* CART */
+#cart{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+  padding:14px 18px;
+  border-radius:999px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* FORM */
+.total{
+  font-size:1.2rem;
+  font-weight:800;
+  margin:20px 0;
+}
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  margin-bottom:10px;
+}
+button.main{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+  font-weight:800;
+}
+
+/* MODAL */
+#modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  justify-content:center;
+  align-items:center;
+}
+.modal-box{
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  max-width:420px;
+  width:92%;
+}
+</style>
+
+<div id="closedBanner">🚫 Ordering is closed today</div>
+
+<div class="page">
+  <h1 style="text-align:center">Makadarem Menu</h1>
+
+  <div class="tabs" id="tabs"></div>
+
+  <form id="form">
+    <div id="menu"></div>
+
+    <div class="total" id="total">Total: ₱0</div>
+
+    <input name="name" placeholder="Name" required>
+    <input name="contact" placeholder="09XXXXXXXXX" required>
+    <input name="address" placeholder="Address" required>
+    <textarea name="notes" placeholder="Notes"></textarea>
+
+    <button class="main">Place Order</button>
+  </form>
+</div>
+
+<div id="cart">🛒 <span id="count">0</span> | ₱<span id="sum">0</span></div>
+
+<div id="modal">
+  <div class="modal-box">
+    <h3>Confirm Order</h3>
+    <div id="preview"></div><br>
+    <button onclick="confirm()">Confirm</button>
+    <button onclick="modal.style.display='none'">Cancel</button>
+  </div>
+</div>
+
+<script>
+const BASE="https://script.google.com/macros/s/AKfycbxIoTa0K5YwKlYk9vZw3SqYdhP4qRjSOilANcdLaAtlV1AI8lslDwz5yqQh8Tm55TmIhw/exec";
+const MENU_URL=BASE+"?func=getMenu";
+const SETTINGS_URL=BASE+"?func=getSettings";
+const ORDER_URL=BASE;
+
+fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+  if(String(s.closed_today).toLowerCase()==="true"){
+    closedBanner.style.display="block";
+    form.style.display="none";
+  }
+});
+
+let prices={},pending=null;
+const k=t=>t.replace(/\s+/g,"_").toLowerCase();
+
+fetch(MENU_URL).then(r=>r.json()).then(data=>{
+  const cats={};
+  data.forEach(i=>{
+    const c=i.Category||"Others";
+    cats[c]=cats[c]||[];
+    cats[c].push(i);
+  });
+
+  let first=true;
+  Object.keys(cats).forEach(cat=>{
+    const id=k(cat);
+
+    tabs.innerHTML+=`
+      <button class="${first?'active':''}" onclick="openTab('${id}',this)">
+        ${cat}
+      </button>`;
+
+    menu.innerHTML+=`
+      <div class="tab-content ${first?'active':''}" id="${id}">
+        <div class="grid">
+          ${cats[cat].map(i=>{
+            const key=k(i.Item);
+            prices[key]=+i.Price;
+            return `
+            <div class="item">
+              <img src="${i.ImageURL||'https://via.placeholder.com/300x200'}">
+              <div class="body">
+                <div>
+                  <strong>${i.Item}</strong>
+                  <div class="price">₱${i.Price}</div>
+                </div>
+                <div class="actions">
+                  <input type="checkbox" name="i_${key}">
+                  <input type="number" name="q_${key}" value="1" min="1">
+                </div>
+              </div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`;
+    first=false;
+  });
+});
+
+function openTab(id,btn){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  btn.classList.add("active");
+}
+
+document.addEventListener("change",()=>{
+  let t=0,c=0;
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
+    const key=cb.name.replace("i_","");
+    const q=form[`q_${key}`];
+    q.style.display="block";
+    t+=prices[key]*q.value;
+    c+=+q.value;
+  });
+  total.textContent=`Total: ₱${t}`;
+  sum.textContent=t;
+  count.textContent=c;
+});
+
+cart.onclick=()=>total.scrollIntoView({behavior:"smooth"});
+
+form.onsubmit=e=>{
+  e.preventDefault();
+  let items=[],t=0;
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
+    const key=cb.name.replace("i_","");
+    const q=form[`q_${key}`].value;
+    items.push(`${key.replace(/_/g," ")} x${q}`);
+    t+=prices[key]*q;
+  });
+  pending={items,t};
+  preview.innerHTML=items.join("<br>")+`<br><b>Total:</b> ₱${t}`;
+  modal.style.display="flex";
+};
+
+function confirm(){
+  const fd=new FormData(form);
+  fd.append("items",pending.items.join(", "));
+  fd.append("total",pending.t);
+  fetch(ORDER_URL,{method:"POST",body:fd}).then(()=>{
+    modal.style.display="none";
+    alert("Order sent!");
+    location.reload();
+  });
+}
+</script>
