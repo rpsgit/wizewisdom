@@ -199,10 +199,11 @@ const k = t => t.toLowerCase().replace(/\s+/g,"_");
 fetch(SETTINGS_URL)
   .then(r => r.json())
   .then(s => {
-    if (String(s.closed_today).toLowerCase() === "true") {
-      closedBanner.style.display = "block";
-      form.style.display = "none";
-    }
+if (s.closed_today === true || s.auto_closed === true) {
+  closedBanner.style.display="block";
+  form.style.display="none";
+}
+
   });
 
 fetch(MENU_URL)
