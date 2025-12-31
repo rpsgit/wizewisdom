@@ -35,6 +35,16 @@ body{
   border-radius:24px;
 }
 
+/* LOGO */
+#logo{
+  display:block;
+  margin:0 auto 16px auto;
+  max-width:200px;
+  width:100%;
+  height:auto;
+  cursor:pointer;
+}
+
 /* TABS */
 .tabs{
   display:flex;
@@ -162,6 +172,9 @@ button.main{
 <div id="closedBanner">🚫 Ordering is closed</div>
 
 <div class="page">
+<!-- Clickable Logo -->
+<img id="logo" src="assets/images/ak/Adimup Kitchen.png" alt="Adimup Kitchen Logo">
+
   <h1 style="text-align:center">Adimup Kitchen</h1>
 
   <div class="tabs" id="tabs"></div>
@@ -214,62 +227,64 @@ fetch(SETTINGS_URL)
   });
 
 /* ================= MENU ================= */
-fetch(MENU_URL)
-.then(r=>r.json())
-.then(data=>{
-  if (!Array.isArray(data)) throw data;
+function loadMenu(){
+  fetch(MENU_URL)
+  .then(r=>r.json())
+  .then(data=>{
+    if (!Array.isArray(data)) throw data;
 
-  const cats = {};
-  data.forEach(i=>{
-    const c = i.Category || "Others";
-    cats[c] = cats[c] || [];
-    cats[c].push(i);
-  });
-
-  let first = true;
-  Object.keys(cats)
-    .sort((a,b)=>cats[a][0].Sort - cats[b][0].Sort)
-    .forEach(cat=>{
-      const id = k(cat);
-
-      tabs.insertAdjacentHTML("beforeend",
-        `<button class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`
-      );
-
-      menu.insertAdjacentHTML("beforeend",`
-        <div class="tab-content ${first?'active':''}" id="${id}">
-          <div class="grid">
-            ${cats[cat].map(i=>{
-              const key = k(i.Item);
-              prices[key] = i.Price;
-              return `
-              <div class="item">
-                <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}">
-                <div class="body">
-                  <div>
-                    <strong>${i.Item}</strong>
-                    <div class="price">₱${i.Price}</div>
-                  </div>
-                  <div class="actions">
-                    ${i.SoldOut
-                      ? `<div class="soldout">SOLD OUT</div>`
-                      : `<input type="checkbox" name="i_${key}">
-                         <input type="number" name="q_${key}" value="1" min="1">`
-                    }
-                  </div>
-                </div>
-              </div>`;
-            }).join("")}
-          </div>
-        </div>
-      `);
-      first=false;
+    const cats = {};
+    data.forEach(i=>{
+      const c = i.Category || "Others";
+      cats[c] = cats[c] || [];
+      cats[c].push(i);
     });
-})
-.catch(err=>{
-  alert("Failed to load menu");
-  console.error(err);
-});
+
+    let first = true;
+    Object.keys(cats)
+      .sort((a,b)=>cats[a][0].Sort - cats[b][0].Sort)
+      .forEach(cat=>{
+        const id = k(cat);
+
+        tabs.insertAdjacentHTML("beforeend",
+          `<button class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`
+        );
+
+        menu.insertAdjacentHTML("beforeend",`
+          <div class="tab-content ${first?'active':''}" id="${id}">
+            <div class="grid">
+              ${cats[cat].map(i=>{
+                const key = k(i.Item);
+                prices[key] = i.Price;
+                return `
+                <div class="item">
+                  <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}">
+                  <div class="body">
+                    <div>
+                      <strong>${i.Item}</strong>
+                      <div class="price">₱${i.Price}</div>
+                    </div>
+                    <div class="actions">
+                      ${i.SoldOut
+                        ? `<div class="soldout">SOLD OUT</div>`
+                        : `<input type="checkbox" name="i_${key}">
+                           <input type="number" name="q_${key}" value="1" min="1">`
+                      }
+                    </div>
+                  </div>
+                </div>`;}
+              ).join("")}
+            </div>
+          </div>
+        `);
+        first=false;
+      });
+  })
+  .catch(err=>{
+    alert("Failed to load menu");
+    console.error(err);
+  });
+}
 
 /* ================= UI ================= */
 function openTab(id,btn){
@@ -326,4 +341,14 @@ function confirmOrder(){
       location.reload();
     });
 }
+
+/* ================= CLICKABLE LOGO ================= */
+const logo = document.getElementById("logo");
+logo.onclick = () => {
+  menu.scrollIntoView({behavior:"smooth"});
+  loadMenu();
+};
+
+// Initial load
+loadMenu();
 </script>
