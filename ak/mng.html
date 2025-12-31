@@ -1,0 +1,142 @@
+---
+layout: default
+title: ADIMUP ADMIN
+---
+
+<style>
+:root{--primary:#ff5722;--secondary:#ff7e5f;--bg:#f4f4f4}
+body{margin:0;font-family:Poppins,Arial,sans-serif;background:var(--bg)}
+.page{max-width:1000px;margin:20px auto;padding:16px;background:#fff;border-radius:24px}
+h1,h2{text-align:center;margin-bottom:20px}
+button{border:none;padding:10px 16px;border-radius:999px;background:linear-gradient(135deg,var(--secondary),var(--primary));color:#fff;font-weight:700;cursor:pointer;margin:5px}
+table{width:100%;border-collapse:collapse;margin-top:16px}
+th,td{border:1px solid #ccc;padding:8px;text-align:left}
+td input[type=checkbox]{transform:scale(1.2)}
+.completed{color:green;font-weight:800}
+</style>
+
+<div class="page">
+  <h1>Adimup Admin Panel</h1>
+
+  <div style="text-align:center;margin-bottom:20px">
+    <button id="toggleStore">Toggle Store Open/Close</button>
+    <span id="storeStatus" style="margin-left:10px;font-weight:800"></span>
+  </div>
+
+  <h2>Menu Items</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Sold Out</th>
+      </tr>
+    </thead>
+    <tbody id="menuTable"></tbody>
+  </table>
+
+  <h2>Recent Orders</h2>
+  <table id="ordersTable">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Address</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Notes</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+    <tbody id="ordersBody"></tbody>
+  </table>
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+const BASE = "https://script.google.com/macros/s/AKfycbzcg9KQ88cIhiW6nTyK-gIJcRCJ1A2RTRS2c60CXNHxzX53klf1XX9ydLdof1GF6E_gHA/exec";
+const MENU_URL = BASE + "?func=getMenu";
+const SETTINGS_URL = BASE + "?func=getSettings";
+const ORDER_URL = BASE;
+
+/* ================= STATE ================= */
+let storeClosed = false;
+const menuData = [];
+
+/* ================= SETTINGS ================= */
+function loadSettings(){
+  fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+    storeClosed = s.closed_today || s.auto_closed;
+    storeStatus.textContent = storeClosed ? "Store is CLOSED" : "Store is OPEN";
+  });
+}
+
+toggleStore.onclick = () => {
+  storeClosed = !storeClosed;
+  fetch(BASE,{method:"POST",body:new URLSearchParams({func:"toggleClose",value:storeClosed})})
+    .then(()=>storeStatus.textContent = storeClosed?"Store is CLOSED":"Store is OPEN");
+};
+
+/* ================= MENU ================= */
+function loadMenu(){
+  fetch(MENU_URL).then(r=>r.json()).then(data=>{
+    menuData.push(...data);
+    const cats = {};
+    data.forEach(i=>{
+      const c = i.Category||"Others";
+      cats[c] = cats[c]||[];
+      cats[c].push(i);
+    });
+    const sortedCats = Object.keys(cats).sort((a,b)=>cats[a][0].Sort-cats[b][0].Sort);
+    menuTable.innerHTML="";
+    sortedCats.forEach(cat=>{
+      cats[cat].forEach(item=>{
+        const tr=document.createElement("tr");
+        const soldCheckbox=document.createElement("input");
+        soldCheckbox.type="checkbox";
+        soldCheckbox.checked=item.SoldOut;
+        soldCheckbox.onchange=()=>toggleSold(item.Item,soldCheckbox.checked);
+        tr.innerHTML=`<td>${item.Item}</td><td>${item.Category}</td><td>₱${item.Price}</td><td></td>`;
+        tr.querySelector("td:last-child").appendChild(soldCheckbox);
+        menuTable.appendChild(tr);
+      });
+    });
+  });
+}
+
+function toggleSold(item,value){
+  fetch(BASE,{method:"POST",body:new URLSearchParams({func:"toggleSold",item:item,value:value})});
+}
+
+/* ================= ORDERS ================= */
+function loadOrders(){
+  fetch(BASE+"?func=getOrders").then(r=>r.json()).then(data=>{
+    ordersBody.innerHTML="";
+    data.forEach(o=>{
+      const tr=document.createElement("tr");
+      const completedBtn=document.createElement("button");
+      completedBtn.textContent=o.Completed?"Completed":"Mark Completed";
+      completedBtn.disabled=o.Completed;
+      completedBtn.onclick=()=>markCompleted(o.ID,completedBtn);
+      tr.innerHTML=`<td>${o.Time}</td><td>${o.Name}</td><td>${o.Contact}</td>
+                    <td>${o.Address}</td><td>${o.Items}</td><td>₱${o.Total}</td>
+                    <td>${o.Notes||""}</td><td></td>`;
+      tr.querySelector("td:last-child").appendChild(completedBtn);
+      ordersBody.appendChild(tr);
+    });
+  });
+}
+
+function markCompleted(id,btn){
+  fetch(BASE,{method:"POST",body:new URLSearchParams({func:"markCompleted",id:id})})
+    .then(()=>{btn.textContent="Completed";btn.disabled=true;});
+}
+
+/* ================= INIT ================= */
+loadSettings();
+loadMenu();
+loadOrders();
+setInterval(loadOrders,30000); // refresh orders every 30s
+</script>
