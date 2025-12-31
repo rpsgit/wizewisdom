@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Adimup Kitchen
+title: ADIMUP KITCHEN
 ---
 
 <style>
@@ -9,7 +9,6 @@ title: Adimup Kitchen
   --secondary:#ff7e5f;
   --bg:#f4f4f4;
 }
-
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -99,6 +98,13 @@ body{
   margin-top:4px;
 }
 
+/* SOLD OUT */
+.soldout{
+  color:red;
+  font-weight:800;
+  font-size:.9rem;
+}
+
 /* CART */
 #cart{
   position:fixed;
@@ -153,7 +159,7 @@ button.main{
 }
 </style>
 
-<div id="closedBanner">🚫 Ordering is closed today</div>
+<div id="closedBanner">🚫 Ordering is closed</div>
 
 <div class="page">
   <h1 style="text-align:center">Adimup Kitchen</h1>
@@ -180,66 +186,60 @@ button.main{
   <div class="modal-box">
     <h3>Confirm Order</h3>
     <div id="preview"></div><br>
-    <button onclick="confirm()">Confirm</button>
+    <button onclick="confirmOrder()">Confirm</button>
     <button onclick="modal.style.display='none'">Cancel</button>
   </div>
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbx1AHY0V--7J2cIz3UaBpRDoRm0IqiIvBc1tzPZUrPjXstQYu7OgQJW2z8lWWqIFAoZEg/exec";
+/* ================= CONFIG ================= */
+const BASE = "https://script.google.com/macros/s/AKfycbzcg9KQ88cIhiW6nTyK-gIJcRCJ1A2RTRS2c60CXNHxzX53klf1XX9ydLdof1GF6E_gHA/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 const ORDER_URL = BASE;
 
+/* ================= STATE ================= */
 const prices = {};
 let pending = null;
-
 const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
+/* ================= SETTINGS ================= */
 fetch(SETTINGS_URL)
-  .then(r => r.json())
-  .then(s => {
-if (s.closed_today === true || s.auto_closed === true) {
-  closedBanner.style.display="block";
-  form.style.display="none";
-}
-
+  .then(r=>r.json())
+  .then(s=>{
+    if (s.closed_today === true || s.auto_closed === true){
+      closedBanner.style.display="block";
+      form.style.display="none";
+    }
   });
 
+/* ================= MENU ================= */
 fetch(MENU_URL)
-  .then(r => r.json())
-  .then(data => {
-    if (!Array.isArray(data)) {
-      alert("Menu API error. Check Apps Script deployment.");
-      console.error(data);
-      return;
-    }
+.then(r=>r.json())
+.then(data=>{
+  if (!Array.isArray(data)) throw data;
 
-    const cats = {};
-    data.forEach(i => {
-      const cat = i.Category || "Others";
-      cats[cat] = cats[cat] || [];
-      cats[cat].push(i);
-    });
+  const cats = {};
+  data.forEach(i=>{
+    const c = i.Category || "Others";
+    cats[c] = cats[c] || [];
+    cats[c].push(i);
+  });
 
-    let first = true;
-
-    Object.keys(cats)
-  .sort((a,b)=>cats[a][0].Sort - cats[b][0].Sort)
-  .forEach(cat=>{
-
+  let first = true;
+  Object.keys(cats)
+    .sort((a,b)=>cats[a][0].Sort - cats[b][0].Sort)
+    .forEach(cat=>{
       const id = k(cat);
 
-      tabs.insertAdjacentHTML("beforeend", `
-        <button class="${first ? "active" : ""}" onclick="openTab('${id}',this)">
-          ${cat}
-        </button>
-      `);
+      tabs.insertAdjacentHTML("beforeend",
+        `<button class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`
+      );
 
-      menu.insertAdjacentHTML("beforeend", `
-        <div class="tab-content ${first ? "active" : ""}" id="${id}">
+      menu.insertAdjacentHTML("beforeend",`
+        <div class="tab-content ${first?'active':''}" id="${id}">
           <div class="grid">
-            ${cats[cat].map(i => {
+            ${cats[cat].map(i=>{
               const key = k(i.Item);
               prices[key] = i.Price;
               return `
@@ -251,8 +251,11 @@ fetch(MENU_URL)
                     <div class="price">₱${i.Price}</div>
                   </div>
                   <div class="actions">
-                    <input type="checkbox" name="i_${key}">
-                    <input type="number" name="q_${key}" value="1" min="1">
+                    ${i.SoldOut
+                      ? `<div class="soldout">SOLD OUT</div>`
+                      : `<input type="checkbox" name="i_${key}">
+                         <input type="number" name="q_${key}" value="1" min="1">`
+                    }
                   </div>
                 </div>
               </div>`;
@@ -260,63 +263,65 @@ fetch(MENU_URL)
           </div>
         </div>
       `);
-
-      first = false;
+      first=false;
     });
-  })
-  .catch(err => {
-    alert("Failed to load menu. Check console.");
-    console.error(err);
-  });
+})
+.catch(err=>{
+  alert("Failed to load menu");
+  console.error(err);
+});
 
-function openTab(id, btn) {
-  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+/* ================= UI ================= */
+function openTab(id,btn){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   btn.classList.add("active");
 }
 
-document.addEventListener("change", () => {
-  let total = 0, count = 0;
-
-  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb => {
+document.addEventListener("change",()=>{
+  let t=0,c=0;
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
     const key = cb.name.replace("i_","");
     const q = form[`q_${key}`];
-    q.style.display = "block";
-    total += prices[key] * q.value;
-    count += Number(q.value);
+    q.style.display="block";
+    t += prices[key] * q.value;
+    c += Number(q.value);
   });
-
-  document.getElementById("total").textContent = `Total: ₱${total}`;
-  sum.textContent = total;
-  countSpan.textContent = count;
+  total.textContent = `Total: ₱${t}`;
+  sum.textContent = t;
+  document.getElementById("count").textContent = c;
 });
 
-form.onsubmit = e => {
-  e.preventDefault();
-  const items = [];
-  let total = 0;
+cart.onclick=()=>total.scrollIntoView({behavior:"smooth"});
 
-  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb => {
-    const key = cb.name.replace("i_","");
-    const q = form[`q_${key}`].value;
+/* ================= ORDER ================= */
+form.onsubmit=e=>{
+  e.preventDefault();
+  const items=[];
+  let t=0;
+
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
+    const key=cb.name.replace("i_","");
+    const q=form[`q_${key}`].value;
     items.push(`${key.replace(/_/g," ")} x${q}`);
-    total += prices[key] * q;
+    t+=prices[key]*q;
   });
 
-  pending = { items, total };
-  preview.innerHTML = items.join("<br>") + `<br><b>Total:</b> ₱${total}`;
-  modal.style.display = "flex";
+  pending={items,total:t};
+  preview.innerHTML = items.join("<br>")+`<br><b>Total:</b> ₱${t}`;
+  modal.style.display="flex";
 };
 
-function confirm() {
+function confirmOrder(){
   const fd = new FormData(form);
-  fd.append("items", pending.items.join(", "));
-  fd.append("total", pending.total);
+  fd.append("func","order");
+  fd.append("items",pending.items.join(", "));
+  fd.append("total",pending.total);
 
-  fetch(ORDER_URL, { method:"POST", body:fd })
-    .then(() => {
-      modal.style.display = "none";
+  fetch(ORDER_URL,{method:"POST",body:fd})
+    .then(()=> {
+      modal.style.display="none";
       alert("Order sent!");
       location.reload();
     });
