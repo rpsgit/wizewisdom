@@ -186,7 +186,7 @@ button.main{
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbyiJzQzynju375ALSBnjUHsFInL3nT3jqK2TKBEaX8Tk02Q_pxGKbVzzwDRk-pkIVVFmg/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbx1AHY0V--7J2cIz3UaBpRDoRm0IqiIvBc1tzPZUrPjXstQYu7OgQJW2z8lWWqIFAoZEg/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 const ORDER_URL = BASE;
@@ -223,7 +223,10 @@ fetch(MENU_URL)
 
     let first = true;
 
-    Object.keys(cats).forEach(cat => {
+    Object.keys(cats)
+  .sort((a,b)=>cats[a][0].Sort - cats[b][0].Sort)
+  .forEach(cat=>{
+
       const id = k(cat);
 
       tabs.insertAdjacentHTML("beforeend", `
