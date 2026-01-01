@@ -232,7 +232,8 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbzivly5C8FmsGD90bbqFgscqXRpCpreeOoIiB1cah8Ys9-JScXkZDlfx8O7R1d38NrxIg/exec";
+// ENSURE THIS URL IS UPDATED IF YOU REDEPLOY
+const BASE = "https://script.google.com/macros/s/AKfycbzq-3_UX7EPlHyZAx0F0I4Khn3z08q12Y2aC99l2ADFCiS_zIOxOGBBObY4suHZyXzD8g/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 const ORDER_URL = BASE;
@@ -360,9 +361,6 @@ function confirmOrder(){
   if (!form.checkValidity()) {
     alert("Please enter your Name, Contact, and Address before confirming your order.");
     document.getElementById('modal').style.display = 'none';
-    if(!document.getElementById('userName').value) document.getElementById('userName').focus();
-    else if(!document.getElementById('userContact').value) document.getElementById('userContact').focus();
-    else if(!document.getElementById('userAddress').value) document.getElementById('userAddress').focus();
     return;
   }
 
@@ -370,18 +368,28 @@ function confirmOrder(){
   confirmBtn.disabled = true; 
   confirmBtn.textContent = "SENDING...";
   
-  const fd = new URLSearchParams(new FormData(form));
-  fd.append("func","order");
-  fd.append("items",pending.items.join(", "));
-  fd.append("total",pending.total);
+  // Use URLSearchParams for reliable data encoding
+  const fd = new URLSearchParams();
+  fd.append("func", "order");
+  fd.append("name", document.getElementById('userName').value);
+  fd.append("contact", document.getElementById('userContact').value);
+  fd.append("address", document.getElementById('userAddress').value);
+  fd.append("notes", form.notes.value);
+  fd.append("items", pending.items.join(", "));
+  fd.append("total", pending.total);
 
-  fetch(ORDER_URL,{ method:"POST", mode: "no-cors", body: fd.toString() })
+  fetch(ORDER_URL, {
+    method: "POST",
+    mode: "no-cors", // Necessary for Google Apps Script unless complex CORS headers are set
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: fd.toString()
+  })
   .then(() => { 
-    alert("Order saved successfully!"); 
+    alert("Order Request Sent! Please check your sheet."); 
     location.reload(); 
   })
   .catch(err => {
-    alert("Error sending order. Please try again.");
+    alert("Network Error. Please try again.");
     confirmBtn.disabled = false;
     confirmBtn.textContent = "CONFIRM ORDER";
   });
