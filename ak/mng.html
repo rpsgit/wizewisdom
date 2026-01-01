@@ -14,7 +14,6 @@ h1, h2, th, button, .bebas { font-family:'Bebas Neue', Arial, sans-serif; letter
 h1{ text-align:center; margin:10px 0 30px; font-size: 2.5rem; } 
 h2{ margin-top: 40px; border-bottom: 3px solid var(--primary); display: inline-block; padding-right: 20px; margin-bottom: 15px; } 
 
-/* Settings Card */
 .settings-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
@@ -41,15 +40,11 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 .status-open { color: #2e7d32; background: #e8f5e9; } 
 .status-closed { color: #c62828; background: #ffebee; } 
 
-/* Payment Tag */
 .pay-tag { background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-
-/* Menu Specifics */
 .menu-input { width: 100%; border: 1px solid #ddd; padding: 5px; border-radius: 4px; font-family: 'Lato'; }
 .btn-sm { font-size: 0.8rem; padding: 5px 12px; margin: 2px; }
 .available-check { width: 22px; height: 22px; cursor: pointer; vertical-align: middle; }
 
-/* New Order Animation */ 
 .new-order { animation: highlight 3s ease-in-out; } 
 @keyframes highlight { 0% { background-color: #fff9c4; } 100% { background-color: transparent; } } 
 </style> 
@@ -116,13 +111,12 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 </div> 
 
 <script> 
-const BASE = "https://script.google.com/macros/s/AKfycbxr2GcpiySfR5xWre3t1mgm0g7mHjTQemGN_-_tu-D2rK_XOTtM7GNPSIeF2YOkAqiJDA/exec"; 
+const BASE = "https://script.google.com/macros/s/AKfycbzp4899jeq9AUfpyrFkVLwB8q3cj8zNapH-yYvb5QGbbIwiWUh_cOm9mRNLEFbUxXMSmg/exec"; 
 
 let isStoreClosed = false;
 let lastOrderIDs = new Set(); 
 const newOrderSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3"); 
 
-/* --- SETTINGS --- */
 function loadSettings(){ 
   fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{ 
     isStoreClosed = !!(s.closed_today || s.auto_closed); 
@@ -142,8 +136,9 @@ async function savePaymentInfo(){
         gcash_number: document.getElementById('gcashNum').value, 
         maya_number: document.getElementById('mayaNum').value 
     });
+    // POST request needs to be handled via fetch with no-cors or specialized JSONP for Apps Script
     await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-    alert("Payment information updated!");
+    alert("Payment information updated! (Please refresh if numbers don't update immediately)");
 }
 
 async function toggleStoreStatus(){
@@ -152,11 +147,10 @@ async function toggleStoreStatus(){
     btn.disabled = true;
     btn.textContent = "...";
     await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-    loadSettings();
+    setTimeout(loadSettings, 1000); // Small delay to allow sheet to update
     btn.disabled = false;
 }
 
-/* --- MENU --- */
 function loadMenu(){
   fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
     const mb = document.getElementById('menuBody');
@@ -198,48 +192,62 @@ async function saveMenuRow(rowId){
     setTimeout(() => { btn.textContent = "UPDATE"; }, 2000);
 }
 
-/* --- ORDERS --- */
+// Since getOrders wasn't explicitly in your backend snippet, we use checkStatus's logic 
+// to ensure we are looking at the right Columns for the table.
 function loadOrders(){ 
+  // We call getMenu or similar to verify connectivity, but assuming your backend 
+  // has a getOrders function that returns the 'Orders' sheet values:
+  fetch(BASE + "?func=getMenu").then(() => {
+      // Logic for fetching orders normally would go here
+      // Note: Make sure your backend has: function getOrders() { ... }
+  });
+
+  // Fetch orders (I am assuming you will add function getOrders() to your backend)
   fetch(BASE + "?func=getOrders").then(r=>r.json()).then(data=>{ 
     const ob = document.getElementById('ordersBody'); 
     if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
     
     ob.innerHTML = "";
-    data.sort((a,b)=>b.ID - a.ID).forEach(o => {
+    // Sort so newest is at the top
+    data.reverse().forEach(o => {
       const tr = document.createElement("tr");
-      if(o.Completed) tr.classList.add("completed-row");
+      if(o.Completed === true || o.Completed === "true") tr.classList.add("completed-row");
       
-      // Highlight new orders
-      if(lastOrderIDs.size > 0 && !lastOrderIDs.has(o.ID) && !o.Completed){
+      if(lastOrderIDs.size > 0 && !lastOrderIDs.has(o.OrderID) && !o.Completed){
         tr.classList.add("new-order");
         newOrderSound.play().catch(()=>{});
       }
-      lastOrderIDs.add(o.ID);
+      lastOrderIDs.add(o.OrderID);
 
+      // Mapping columns based on your saveOrder function:
+      // A=Now, B=ID, C=Name, D=Contact, E=Address, F=Items, G=Total, H=Payment, I=Notes, J=Status
       tr.innerHTML = `
-        <td><small>${o.Time}</small><br><b>${o.OrderID}</b></td>
+        <td><small>${new Date(o.Timestamp).toLocaleString()}</small><br><b>${o.OrderID}</b></td>
         <td><b>${o.Name}</b></td>
         <td><small>${o.Contact}</small><br><small style="color:#666">${o.Address}</small></td>
-        <td>• ${o.Items.split(',').join('<br>• ')}</td>
+        <td>• ${o.Items ? o.Items.split(',').join('<br>• ') : ''}</td>
         <td><b>₱${o.Total}</b></td>
         <td><span class="pay-tag">${o.Payment}</span></td>
         <td style="font-style:italic; color:#666; font-size:0.85rem">${o.Notes || "-"}</td>
-        <td><button class="btn-sm" ${o.Completed ? 'disabled' : ''} onclick="markDone(${o.ID}, this)">${o.Completed ? 'DONE' : 'MARK DONE'}</button></td>
+        <td><button class="btn-sm" ${o.Completed ? 'disabled' : ''} onclick="markDone('${o.OrderID}', this)">${o.Completed ? 'DONE' : 'MARK DONE'}</button></td>
       `;
       ob.appendChild(tr);
     });
+  }).catch(e => {
+      console.log("If you see this, ensure you added getOrders() to backend script.");
   });
 }
 
-async function markDone(id, btn){
+async function markDone(orderID, btn){
     btn.textContent = "...";
-    await fetch(BASE, { method:"POST", mode: 'no-cors', body: new URLSearchParams({func:"markCompleted", id: id}) });
-    loadOrders();
+    const fd = new URLSearchParams({func:"markCompleted", id: orderID});
+    await fetch(BASE, { method:"POST", mode: 'no-cors', body: fd.toString() });
+    setTimeout(loadOrders, 1000);
 }
 
 /* ================= INIT ================= */ 
 loadSettings(); 
-loadOrders(); 
 loadMenu(); 
-setInterval(loadOrders, 30000); 
+loadOrders(); 
+setInterval(loadOrders, 30000); // Auto refresh orders every 30 seconds
 </script>
