@@ -41,9 +41,9 @@ h1,h2,h3,
 
 /* PAGE */
 .page{
-  position: relative; /* Needed for share button positioning */
+  position: relative;
   max-width:1200px;
-  margin:20px auto 200px; /* Extra bottom margin for cart visibility */
+  margin:20px auto 200px;
   padding:16px;
   background:#fff;
   border-radius:24px;
@@ -66,14 +66,8 @@ h1,h2,h3,
   transition: background 0.2s;
   z-index: 10;
 }
-.share-btn:hover {
-  background: var(--secondary);
-}
-.share-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--text-dark);
-}
+.share-btn:hover { background: var(--secondary); }
+.share-btn svg { width: 20px; height: 20px; fill: var(--text-dark); }
 
 /* LOGO */
 #logo{
@@ -109,10 +103,9 @@ h1,h2,h3,
   color:var(--text-dark);
 }
 
-/* MENU */
+/* MENU GRID */
 .tab-content{display:none}
 .tab-content.active{display:block}
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -128,7 +121,11 @@ h1,h2,h3,
   width:100%;
   height:140px;
   object-fit:cover;
+  cursor: zoom-in; /* Indicates image is clickable */
+  transition: opacity 0.2s;
 }
+.item img:hover { opacity: 0.9; }
+
 .body{
   padding:12px;
   display:flex;
@@ -153,141 +150,70 @@ h1,h2,h3,
   font-size:.85rem;
 }
 
-/* CART BUBBLE */
-#cart{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:var(--text-dark);
-  padding:15px 20px;
-  border-radius:999px;
-  font-family:'Bebas Neue', Arial, sans-serif;
-  cursor:pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  z-index: 100;
-  transition: transform 0.2s;
+/* FULL IMAGE OVERLAY (LIGHTBOX) */
+#imageViewer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
 }
-#cart:active { transform: scale(0.95); }
-
-/* FORM ELEMENTS */
-.total-display{
-  font-size:1.25rem;
-  font-family:'Bebas Neue', Arial, sans-serif;
-  margin:20px 0;
-}
-input,textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #ccc;
-  margin-bottom:10px;
-  font-family: inherit;
-}
-button.main{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:var(--text-dark);
-  font-family:'Bebas Neue', Arial,sans-serif;
-  font-size: 1.1rem;
-  cursor: pointer;
-  margin-top: 10px;
-}
-button.main:disabled{
-  background: #ccc;
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-/* MODAL */
-#modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-}
-.modal-box{
-  background:#fff;
-  padding:24px;
-  border-radius:16px;
-  max-width:420px;
-  width:92%;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-.modal-box h3 { margin-top: 0; }
-
-/* Modal List Styling */
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #eee;
-    padding: 8px 0;
-    font-size: 0.95rem;
-}
-.summary-total {
-    margin-top: 15px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: right;
-    border-top: 2px solid #111;
-    padding-top: 10px;
-}
-
-.modal-actions {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-}
-.modal-actions button {
-  flex: 1;
-  padding: 12px;
+#imageViewer img {
+  max-width: 95%;
+  max-height: 95%;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
+
+/* CART & MODALS */
+#cart{
+  position:fixed; bottom:20px; right:20px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:var(--text-dark); padding:15px 20px; border-radius:999px;
+  font-family:'Bebas Neue', Arial, sans-serif; cursor:pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100;
+}
+.total-display{ font-size:1.25rem; font-family:'Bebas Neue', Arial, sans-serif; margin:20px 0; }
+input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; }
+button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue', Arial,sans-serif; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
+#modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; }
+.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; max-height: 80vh; overflow-y: auto; }
+.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.95rem; }
+.summary-total { margin-top: 15px; font-size: 1.2rem; font-weight: bold; text-align: right; border-top: 2px solid #111; padding-top: 10px; }
+.modal-actions { margin-top: 20px; display: flex; gap: 10px; }
+.modal-actions button { flex: 1; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; }
 .btn-confirm { background: var(--primary); color: var(--text-dark); }
 .btn-cancel { background: #eee; color: #333; }
-
 </style>
 
 <div id="closedBanner">🚫 ORDERING IS CLOSED</div>
 
+<div id="imageViewer" onclick="this.style.display='none'">
+  <img id="fullImage" src="">
+</div>
+
 <div class="page">
   <button class="share-btn" id="shareBtn" title="Share Menu">
-    <svg viewBox="0 0 24 24">
-      <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-    </svg>
+    <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
   </button>
 
-  <img id="logo"
-       src="/assets/images/ak/Adimup%20Kitchen.png"
-       onerror="this.style.display='none';logoFallback.style.display='block'">
+  <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" onerror="this.style.display='none';logoFallback.style.display='block'">
   <div id="logoFallback">ADIMUP KITCHEN</div>
-
   <h1 style="text-align:center">ADIMUP KITCHEN</h1>
 
   <div class="tabs" id="tabs"></div>
 
   <form id="form">
     <div id="menu"></div>
-
     <div class="total-display" id="totalDisplay">Total: ₱0</div>
-
     <h3>DETAILS</h3>
     <input name="name" placeholder="Name" required>
     <input name="contact" placeholder="09XXXXXXXXX" required>
     <input name="address" placeholder="Address" required>
     <textarea name="notes" placeholder="Notes (Optional)"></textarea>
-
     <button type="submit" class="main" id="orderBtn">PLACE ORDER</button>
   </form>
 </div>
@@ -298,7 +224,6 @@ button.main:disabled{
   <div class="modal-box">
     <h3>YOUR ORDER SUMMARY</h3>
     <div id="preview"></div>
-    
     <div class="modal-actions">
         <button class="btn-confirm" onclick="confirmOrder()">CONFIRM ORDER</button>
         <button class="btn-cancel" onclick="document.getElementById('modal').style.display='none'">CLOSE</button>
@@ -307,55 +232,31 @@ button.main:disabled{
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-const BASE = "https://script.google.com/macros/s/AKfycbxAqdtBjr1fUTO88SSxsDG6KHRved_ixgwtZfiZFfK7JEzS9Q1plAK2iGk1I3e3v0nFxQ/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzcg9KQ88cIhiW6nTyK-gIJcRCJ1A2RTRS2c60CXNHxzX53klf1XX9ydLdof1GF6E_gHA/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 const ORDER_URL = BASE;
 
-/* ================= STATE ================= */
 const prices = {};
 let pending = null;
 const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
-/* ================= SETTINGS ================= */
-fetch(SETTINGS_URL)
-  .then(r=>r.json())
-  .then(s=>{
-    if (s.closed_today || s.auto_closed){
-      document.getElementById('closedBanner').style.display="block";
-      document.getElementById('form').style.display="none";
-      document.getElementById('cart').style.display="none";
-    }
-  }).catch(e => console.log("Settings load error:", e));
+fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+  if (s.closed_today || s.auto_closed){
+    document.getElementById('closedBanner').style.display="block";
+    document.getElementById('form').style.display="none";
+    document.getElementById('cart').style.display="none";
+  }
+});
 
-/* ================= SHARE BUTTON LOGIC ================= */
-document.getElementById('shareBtn').onclick = async () => {
-    const shareData = {
-        title: 'Adimup Kitchen',
-        text: 'Check out the menu and order food online!',
-        url: window.location.href
-    };
+// Image Viewing Logic
+function viewImage(url) {
+  const viewer = document.getElementById('imageViewer');
+  const img = document.getElementById('fullImage');
+  img.src = url;
+  viewer.style.display = 'flex';
+}
 
-    // Use Native Share API if available (Mobile/Tablets)
-    if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-        } catch (err) {
-            console.log('Share canceled');
-        }
-    } else {
-        // Fallback for Desktop: Copy URL to clipboard
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            alert('Link copied to clipboard! You can paste it in your chats.');
-        } catch (err) {
-            alert('Could not copy link. Please copy the URL from the address bar.');
-        }
-    }
-};
-
-/* ================= MENU LOADER ================= */
 function loadMenu(){
   fetch(MENU_URL).then(r=>r.json()).then(data=>{
     const tabs = document.getElementById('tabs');
@@ -370,18 +271,17 @@ function loadMenu(){
     let first=true;
     Object.keys(cats).forEach(cat=>{
       const id=k(cat);
-      tabs.insertAdjacentHTML("beforeend",
-        `<button type="button" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`
-      );
+      tabs.insertAdjacentHTML("beforeend", `<button type="button" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`);
       menu.insertAdjacentHTML("beforeend",`
         <div class="tab-content ${first?'active':''}" id="${id}">
           <div class="grid">
             ${cats[cat].map(i=>{
               const key=k(i.Item);
+              const imgUrl = i.ImageURL || 'https://via.placeholder.com/300x200';
               prices[key]=i.Price;
               return `
               <div class="item">
-                <img src="${i.ImageURL||'https://via.placeholder.com/300x200'}">
+                <img src="${imgUrl}" onclick="viewImage('${imgUrl}')">
                 <div class="body">
                   <div>
                     <strong>${i.Item}</strong>
@@ -403,7 +303,6 @@ function loadMenu(){
   });
 }
 
-/* ================= UI TABS ================= */
 function openTab(id,btn){
   document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
@@ -411,41 +310,21 @@ function openTab(id,btn){
   btn.classList.add("active");
 }
 
-/* ================= CART CALCULATIONS ================= */
 function getCartState() {
-    let total = 0;
-    let count = 0;
-    const items = [];
-    const itemStrings = [];
-    
+    let total = 0, count = 0;
+    const items = [], itemStrings = [];
     document.querySelectorAll('.item-check').forEach(cb => {
         const key = cb.name.replace("i_", "");
         const qtyInput = document.querySelector(`input[name="q_${key}"]`);
-        
         if (cb.checked) {
             qtyInput.style.display = "block";
             const qty = parseInt(qtyInput.value) || 1;
-            const price = prices[key];
-            const subtotal = price * qty;
-            
-            total += subtotal;
+            total += (prices[key] * qty);
             count += qty;
-            
-            // For Display
-            items.push({
-                name: key.replace(/_/g, " ").toUpperCase(),
-                qty: qty,
-                price: price,
-                subtotal: subtotal
-            });
-            
-            // For Google Sheet submission
+            items.push({ name: key.replace(/_/g, " ").toUpperCase(), qty: qty, price: prices[key], subtotal: prices[key] * qty });
             itemStrings.push(`${key.replace(/_/g, " ")} (x${qty})`);
-        } else {
-            qtyInput.style.display = "none";
-        }
+        } else { qtyInput.style.display = "none"; }
     });
-
     return { total, count, items, itemStrings };
 }
 
@@ -456,118 +335,38 @@ function updateCartUI() {
     document.getElementById('cartCount').textContent = state.count;
 }
 
-document.addEventListener("change", (e) => {
-    if (e.target.matches('.item-check') || e.target.matches('.item-qty')) {
-        updateCartUI();
-    }
-});
+document.addEventListener("change", (e) => { if (e.target.matches('.item-check') || e.target.matches('.item-qty')) updateCartUI(); });
 
-/* ================= MODAL LOGIC ================= */
 function showSummaryModal() {
     const state = getCartState();
-
-    if (state.count === 0) {
-        alert("Your cart is empty. Please select items first.");
-        return;
-    }
-
+    if (state.count === 0) { alert("Your cart is empty."); return; }
     let html = '';
-    state.items.forEach(item => {
-        html += `
-        <div class="summary-item">
-            <span>${item.name} <small>x${item.qty}</small></span>
-            <span>₱${item.subtotal}</span>
-        </div>`;
-    });
+    state.items.forEach(item => { html += `<div class="summary-item"><span>${item.name} <small>x${item.qty}</small></span><span>₱${item.subtotal}</span></div>`; });
     html += `<div class="summary-total">TOTAL: ₱${state.total}</div>`;
-
     document.getElementById('preview').innerHTML = html;
-    
-    pending = {
-        items: state.itemStrings,
-        total: state.total
-    };
-
+    pending = { items: state.itemStrings, total: state.total };
     document.getElementById('modal').style.display = "flex";
 }
 
-/* ================= CLICK HANDLERS ================= */
-document.getElementById('cart').onclick = () => {
-    showSummaryModal();
-};
+document.getElementById('cart').onclick = showSummaryModal;
 
 document.getElementById('form').onsubmit = (e) => {
     e.preventDefault();
     const state = getCartState();
-    
-    if (state.count === 0) {
-        alert("Please select at least one item.");
-        return;
-    }
-    
-    const name = document.querySelector('input[name="name"]').value;
-    const contact = document.querySelector('input[name="contact"]').value;
-    const address = document.querySelector('input[name="address"]').value;
-
-    if(!name || !contact || !address) {
-        alert("Please fill in your Name, Contact, and Address details.");
-        return;
-    }
-
+    if (state.count === 0) { alert("Please select items."); return; }
     showSummaryModal();
 };
 
-/* ================= SUBMIT ORDER ================= */
 function confirmOrder(){
-  const orderBtn = document.getElementById('orderBtn');
-  const form = document.getElementById('form');
-  const modal = document.getElementById('modal');
   const confirmBtn = document.querySelector('.btn-confirm');
-
-  if(!form.checkValidity()) {
-      alert("Please close this window and fill out your Name, Contact and Address.");
-      modal.style.display = "none";
-      return;
-  }
-
-  confirmBtn.disabled = true;
-  confirmBtn.textContent = "SENDING...";
-  
-  orderBtn.disabled = true;
-  orderBtn.textContent = "SAVING ORDER...";
-
-  const fd = new URLSearchParams();
-  const formData = new FormData(form);
-  for (const pair of formData.entries()) {
-      fd.append(pair[0], pair[1]);
-  }
-  
+  confirmBtn.disabled = true; confirmBtn.textContent = "SENDING...";
+  const fd = new URLSearchParams(new FormData(document.getElementById('form')));
   fd.append("func","order");
   fd.append("items",pending.items.join(", "));
   fd.append("total",pending.total);
-
-  fetch(ORDER_URL,{
-    method:"POST",
-    mode: "no-cors", 
-    cache: "no-cache",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: fd.toString()
-  })
-  .then(() => {
-    modal.style.display = "none";
-    alert("Order saved successfully!");
-    location.reload();
-  })
-  .catch(err=>{
-    console.error(err);
-    alert("Failed to save order. Please try again.");
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = "CONFIRM ORDER";
-    orderBtn.disabled = false;
-    orderBtn.textContent = "PLACE ORDER";
-  });
+  fetch(ORDER_URL,{ method:"POST", mode: "no-cors", body: fd.toString() })
+  .then(() => { alert("Order saved successfully!"); location.reload(); });
 }
 
-/* ================= INIT ================= */
 loadMenu();
 </script>
