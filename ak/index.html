@@ -121,7 +121,7 @@ h1,h2,h3,
   width:100%;
   height:140px;
   object-fit:cover;
-  cursor: zoom-in; /* Indicates image is clickable */
+  cursor: zoom-in;
   transition: opacity 0.2s;
 }
 .item img:hover { opacity: 0.9; }
@@ -210,9 +210,9 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
     <div id="menu"></div>
     <div class="total-display" id="totalDisplay">Total: ₱0</div>
     <h3>DETAILS</h3>
-    <input name="name" placeholder="Name" required>
-    <input name="contact" placeholder="09XXXXXXXXX" required>
-    <input name="address" placeholder="Address" required>
+    <input name="name" id="userName" placeholder="Name" required>
+    <input name="contact" id="userContact" placeholder="09XXXXXXXXX" required>
+    <input name="address" id="userAddress" placeholder="Address" required>
     <textarea name="notes" placeholder="Notes (Optional)"></textarea>
     <button type="submit" class="main" id="orderBtn">PLACE ORDER</button>
   </form>
@@ -232,7 +232,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbxDiWx11BkIjkYX8JCMakqiyOwcPExoSkXLPZvDyluBWfjBFU7_7sPX2LYVGusQVEwCFw/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzcg9KQ88cIhiW6nTyK-gIJcRCJ1A2RTRS2c60CXNHxzX53klf1XX9ydLdof1GF6E_gHA/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 const ORDER_URL = BASE;
@@ -249,7 +249,6 @@ fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   }
 });
 
-// Image Viewing Logic
 function viewImage(url) {
   const viewer = document.getElementById('imageViewer');
   const img = document.getElementById('fullImage');
@@ -352,20 +351,42 @@ document.getElementById('cart').onclick = showSummaryModal;
 
 document.getElementById('form').onsubmit = (e) => {
     e.preventDefault();
-    const state = getCartState();
-    if (state.count === 0) { alert("Please select items."); return; }
     showSummaryModal();
 };
 
 function confirmOrder(){
+  const form = document.getElementById('form');
+  
+  // New Fix: Validate form before allowing order confirmation
+  if (!form.checkValidity()) {
+    alert("Please enter your Name, Contact, and Address before confirming your order.");
+    document.getElementById('modal').style.display = 'none'; // Close modal to show form
+    // Focus on the first empty required field
+    if(!document.getElementById('userName').value) document.getElementById('userName').focus();
+    else if(!document.getElementById('userContact').value) document.getElementById('userContact').focus();
+    else if(!document.getElementById('userAddress').value) document.getElementById('userAddress').focus();
+    return;
+  }
+
   const confirmBtn = document.querySelector('.btn-confirm');
-  confirmBtn.disabled = true; confirmBtn.textContent = "SENDING...";
-  const fd = new URLSearchParams(new FormData(document.getElementById('form')));
+  confirmBtn.disabled = true; 
+  confirmBtn.textContent = "SENDING...";
+  
+  const fd = new URLSearchParams(new FormData(form));
   fd.append("func","order");
   fd.append("items",pending.items.join(", "));
   fd.append("total",pending.total);
+
   fetch(ORDER_URL,{ method:"POST", mode: "no-cors", body: fd.toString() })
-  .then(() => { alert("Order saved successfully!"); location.reload(); });
+  .then(() => { 
+    alert("Order saved successfully!"); 
+    location.reload(); 
+  })
+  .catch(err => {
+    alert("Error sending order. Please try again.");
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "CONFIRM ORDER";
+  });
 }
 
 loadMenu();
