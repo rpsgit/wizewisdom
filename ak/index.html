@@ -214,25 +214,35 @@ button.main{
 </div>
 
 <script>
-const BASE="https://script.google.com/macros/s/AKfycbxr2GcpiySfR5xWre3t1mgm0g7mHjTQemGN_-_tu-D2rK_XOTtM7GNPSIeF2YOkAqiJDA/exec";
-const MENU_URL=BASE+"?func=getMenu";
-const SETTINGS_URL=BASE+"?func=getSettings";
+// IMPORTANT: Update this BASE URL every time you do a "New Deployment"
+const BASE = "https://script.google.com/macros/s/AKfycbxr2GcpiySfR5xWre3t1mgm0g7mHjTQemGN_-_tu-D2rK_XOTtM7GNPSIeF2YOkAqiJDA/exec";
+const MENU_URL = BASE + "?func=getMenu";
+const SETTINGS_URL = BASE + "?func=getSettings";
 
-const prices={},k=t=>t.toLowerCase().replace(/\s+/g,"_");
-let settings={},pending=null;
+const prices = {};
+let settings = {};
+let pending = null;
+const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
+/* ================= SETTINGS ================= */
 fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
-  settings=s;
-  if(s.closed_today||s.auto_closed){
-    closedBanner.style.display="block";
-    form.style.display="none";
-    cart.style.display="none";
+  settings = s;
+  if (s.closed_today || s.auto_closed){
+    document.getElementById('closedBanner').style.display="block";
+    document.getElementById('form').style.display="none";
+    document.getElementById('cart').style.display="none";
   }
 });
 
+/* ================= MENU ================= */
 function loadMenu(){
   fetch(MENU_URL).then(r=>r.json()).then(data=>{
-    const cats={};
+    const tabs = document.getElementById('tabs');
+    const menu = document.getElementById('menu');
+    const cats = {};
+    tabs.innerHTML = "";
+    menu.innerHTML = "";
+
     data.forEach(i=>{
       const c=i.Category||"Others";
       cats[c]=cats[c]||[];
@@ -242,23 +252,30 @@ function loadMenu(){
     let first=true;
     Object.keys(cats).forEach(cat=>{
       const id=k(cat);
+
       tabs.insertAdjacentHTML("beforeend",
-        `<button type="button" class="${first?'active':''}" onclick="openTab('${id}')">${cat}</button>`
+        `<button type="button" class="${first?'active':''}" data-tab="${id}">${cat}</button>`
       );
+
       menu.insertAdjacentHTML("beforeend",`
         <div class="tab-content ${first?'active':''}" id="${id}">
           <div class="grid">
             ${cats[cat].map(i=>{
-              const key=k(i.Item); prices[key]=i.Price;
+              const key=k(i.Item);
+              prices[key]=Number(i.Price);
               return `
               <div class="item">
-                <img src="${i.ImageURL||'https://via.placeholder.com/300x200'}">
+                <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}" onclick="viewImage(this.src)">
                 <div class="body">
-                  <div><strong>${i.Item}</strong><div class="price">₱${i.Price}</div></div>
+                  <div>
+                    <strong>${i.Item}</strong>
+                    <div class="price">₱${i.Price}</div>
+                  </div>
                   <div class="actions">
-                    ${i.SoldOut?'<div class="soldout">SOLD OUT</div>':
-                    `<input type="checkbox" class="chk" data-key="${key}">
-                     <input type="number" class="qty" data-key="${key}" value="1" min="1">`}
+                    ${i.SoldOut ? '<div class="soldout">SOLD OUT</div>' : `
+                      <input type="checkbox" class="item-check" data-key="${key}">
+                      <input type="number" class="item-qty" data-key="${key}" value="1" min="1" style="display:none">
+                    `}
                   </div>
                 </div>
               </div>`;
@@ -268,31 +285,135 @@ function loadMenu(){
       `);
       first=false;
     });
+
+    bindMenuEvents();
   });
 }
 
-function openTab(id){
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+/* ================= TABS ================= */
+document.getElementById('tabs').addEventListener("click",e=>{
+  if(!e.target.dataset.tab) return;
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  [...tabs.children].find(b=>b.textContent.replace(/\s+/g,'_').toLowerCase()===id).classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(e.target.dataset.tab).classList.add('active');
+});
+
+/* ================= CART ================= */
+function bindMenuEvents(){
+  document.querySelectorAll('.item-check').forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const key=cb.dataset.key;
+      const qty=document.querySelector(`.item-qty[data-key="${key}"]`);
+      qty.style.display = cb.checked ? "block" : "none";
+      updateCartUI();
+    });
+  });
+
+  document.querySelectorAll('.item-qty').forEach(q=>{
+    q.addEventListener("input",updateCartUI);
+  });
 }
 
+function getCartState(){
+  let total=0,count=0,items=[],itemStrings=[];
+  document.querySelectorAll('.item-check:checked').forEach(cb=>{
+    const key=cb.dataset.key;
+    const qtyEl=document.querySelector(`.item-qty[data-key="${key}"]`);
+    const qty=Math.max(1,parseInt(qtyEl.value||1));
+    const subtotal=prices[key]*qty;
+    total+=subtotal;
+    count+=qty;
+    items.push({name:key.replace(/_/g," ").toUpperCase(),qty,subtotal});
+    itemStrings.push(`${key.replace(/_/g," ")} (x${qty})`);
+  });
+  return {total,count,items,itemStrings};
+}
+
+function updateCartUI(){
+  const s=getCartState();
+  document.getElementById('totalDisplay').textContent=`Total: ₱${s.total}`;
+  document.getElementById('cartSum').textContent=s.total;
+  document.getElementById('cartCount').textContent=s.count;
+}
+
+/* ================= SUMMARY ================= */
+function showSummary(){
+  const s=getCartState();
+  if(!s.count) return alert("Cart is empty!");
+
+  const pay=document.querySelector('input[name="payment"]:checked').value;
+  let html=s.items.map(i=>`
+    <div class="summary-item">
+      <span>${i.name} x${i.qty}</span>
+      <span>₱${i.subtotal}</span>
+    </div>`).join("");
+
+  html+=`<div class="summary-item" style="color:gray"><span>Payment</span><span>${pay}</span></div>`;
+  html+=`<div class="summary-total">TOTAL: ₱${s.total}</div>`;
+
+  document.getElementById('preview').innerHTML=html;
+  pending={items:s.itemStrings,total:s.total,payment:pay};
+  document.getElementById('modal').style.display="flex";
+}
+
+document.getElementById('cart').onclick=showSummary;
+document.getElementById('form').onsubmit=e=>{e.preventDefault();showSummary();};
+
+/* ================= PAYMENT ================= */
 function togglePay(){
-  const v=document.querySelector('input[name="payment"]:checked').value;
-  changeBox.style.display=v==="Cash"?"block":"none";
-  payInstructions.style.display=v==="Cash"?"none":"block";
-  if(v!=="Cash"){
-    payLabel.textContent=v;
-    payNum.textContent=v==="GCash"?settings.gcash_number:settings.maya_number;
+  const val=document.querySelector('input[name="payment"]:checked').value;
+  const inst=document.getElementById('payInstructions');
+  inst.innerHTML="";
+
+  if(val==="Cash"){
+    inst.style.display="block";
+    inst.innerHTML=`Change for:
+      <input type="number" id="changeFor" placeholder="₱ amount">`;
+  } else {
+    inst.style.display="block";
+    const num=val==="GCash"?settings.gcash_number:settings.maya_number;
+    inst.innerHTML=`
+      Send to ${val}:<br>
+      <strong>${num}</strong>
+      <button type="button" onclick="copyNum('${num}')">📋</button>`;
   }
 }
 
-function copyPay(){
-  navigator.clipboard.writeText(payNum.textContent);
-  copyMsg.textContent="Copied!";
-  setTimeout(()=>copyMsg.textContent="",1200);
+function copyNum(n){
+  navigator.clipboard.writeText(n);
+  alert("Copied!");
 }
 
+/* ================= ORDER ================= */
+async function confirmOrder(){
+  const name=userName.value.trim();
+  const contact=userContact.value.trim();
+  const address=userAddress.value.trim();
+  if(!name||!contact||!address) return alert("Complete delivery info");
+
+  const params=new URLSearchParams({
+    func:"order",
+    name,contact,address,
+    notes:document.querySelector('textarea[name="notes"]').value,
+    payment:pending.payment,
+    items:pending.items.join(", "),
+    total:pending.total
+  });
+
+  await fetch(BASE,{method:"POST",mode:"no-cors",body:params});
+  modalContent.innerHTML=`
+    <h2>ORDER PLACED</h2>
+    <button class="main" onclick="location.reload()">OK</button>`;
+}
+
+/* ================= IMAGE ================= */
+function viewImage(src){
+  fullImage.src=src;
+  imageViewer.style.display="flex";
+}
+
+/* ================= INIT ================= */
 loadMenu();
+togglePay(); // ensures Cash shows Change For on load
 </script>
