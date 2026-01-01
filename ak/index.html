@@ -41,11 +41,38 @@ h1,h2,h3,
 
 /* PAGE */
 .page{
+  position: relative; /* Needed for share button positioning */
   max-width:1200px;
   margin:20px auto 200px; /* Extra bottom margin for cart visibility */
   padding:16px;
   background:#fff;
   border-radius:24px;
+}
+
+/* SHARE BUTTON */
+.share-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f4f4f4;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.share-btn:hover {
+  background: var(--secondary);
+}
+.share-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--text-dark);
 }
 
 /* LOGO */
@@ -235,6 +262,12 @@ button.main:disabled{
 <div id="closedBanner">🚫 ORDERING IS CLOSED</div>
 
 <div class="page">
+  <button class="share-btn" id="shareBtn" title="Share Menu">
+    <svg viewBox="0 0 24 24">
+      <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+    </svg>
+  </button>
+
   <img id="logo"
        src="/assets/images/ak/Adimup%20Kitchen.png"
        onerror="this.style.display='none';logoFallback.style.display='block'">
@@ -282,7 +315,7 @@ const ORDER_URL = BASE;
 
 /* ================= STATE ================= */
 const prices = {};
-let pending = null; // Stores data for the final order submission
+let pending = null;
 const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
 /* ================= SETTINGS ================= */
@@ -295,6 +328,32 @@ fetch(SETTINGS_URL)
       document.getElementById('cart').style.display="none";
     }
   }).catch(e => console.log("Settings load error:", e));
+
+/* ================= SHARE BUTTON LOGIC ================= */
+document.getElementById('shareBtn').onclick = async () => {
+    const shareData = {
+        title: 'Adimup Kitchen',
+        text: 'Check out the menu and order food online!',
+        url: window.location.href
+    };
+
+    // Use Native Share API if available (Mobile/Tablets)
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+        } catch (err) {
+            console.log('Share canceled');
+        }
+    } else {
+        // Fallback for Desktop: Copy URL to clipboard
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard! You can paste it in your chats.');
+        } catch (err) {
+            alert('Could not copy link. Please copy the URL from the address bar.');
+        }
+    }
+};
 
 /* ================= MENU LOADER ================= */
 function loadMenu(){
@@ -353,8 +412,6 @@ function openTab(id,btn){
 }
 
 /* ================= CART CALCULATIONS ================= */
-
-// Helper to get current cart state
 function getCartState() {
     let total = 0;
     let count = 0;
@@ -363,7 +420,6 @@ function getCartState() {
     
     document.querySelectorAll('.item-check').forEach(cb => {
         const key = cb.name.replace("i_", "");
-        // Find sibling input quantity (in case logic changes, we grab by name)
         const qtyInput = document.querySelector(`input[name="q_${key}"]`);
         
         if (cb.checked) {
@@ -393,7 +449,6 @@ function getCartState() {
     return { total, count, items, itemStrings };
 }
 
-// Update Totals on Screen
 function updateCartUI() {
     const state = getCartState();
     document.getElementById('totalDisplay').textContent = `Total: ₱${state.total}`;
@@ -401,7 +456,6 @@ function updateCartUI() {
     document.getElementById('cartCount').textContent = state.count;
 }
 
-// Event Listener for any input change
 document.addEventListener("change", (e) => {
     if (e.target.matches('.item-check') || e.target.matches('.item-qty')) {
         updateCartUI();
@@ -409,7 +463,6 @@ document.addEventListener("change", (e) => {
 });
 
 /* ================= MODAL LOGIC ================= */
-
 function showSummaryModal() {
     const state = getCartState();
 
@@ -418,7 +471,6 @@ function showSummaryModal() {
         return;
     }
 
-    // Generate HTML for the modal
     let html = '';
     state.items.forEach(item => {
         html += `
@@ -431,7 +483,6 @@ function showSummaryModal() {
 
     document.getElementById('preview').innerHTML = html;
     
-    // Update global Pending variable so Confirm works
     pending = {
         items: state.itemStrings,
         total: state.total
@@ -441,13 +492,10 @@ function showSummaryModal() {
 }
 
 /* ================= CLICK HANDLERS ================= */
-
-// 1. Cart Icon Click -> Show Summary
 document.getElementById('cart').onclick = () => {
     showSummaryModal();
 };
 
-// 2. Place Order Button -> Show Summary (Validate Form first)
 document.getElementById('form').onsubmit = (e) => {
     e.preventDefault();
     const state = getCartState();
@@ -457,8 +505,6 @@ document.getElementById('form').onsubmit = (e) => {
         return;
     }
     
-    // Check if form fields are filled (Native required check handles this usually, 
-    // but good to be safe if triggered manually)
     const name = document.querySelector('input[name="name"]').value;
     const contact = document.querySelector('input[name="contact"]').value;
     const address = document.querySelector('input[name="address"]').value;
@@ -472,21 +518,18 @@ document.getElementById('form').onsubmit = (e) => {
 };
 
 /* ================= SUBMIT ORDER ================= */
-
 function confirmOrder(){
   const orderBtn = document.getElementById('orderBtn');
   const form = document.getElementById('form');
   const modal = document.getElementById('modal');
   const confirmBtn = document.querySelector('.btn-confirm');
 
-  // Check required fields again just in case invoked from Cart directly
   if(!form.checkValidity()) {
       alert("Please close this window and fill out your Name, Contact and Address.");
       modal.style.display = "none";
       return;
   }
 
-  // UI Feedback
   confirmBtn.disabled = true;
   confirmBtn.textContent = "SENDING...";
   
