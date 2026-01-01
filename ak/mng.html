@@ -2,9 +2,9 @@
 layout: default 
 title: ADIMUP ADMIN 
 --- 
-  
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> 
-  
+
 <style> 
 :root{ --primary:#ffd600; --secondary:#ffea00; --bg:#f4f4f4; --text-dark: #111; } 
 *{box-sizing:border-box} 
@@ -44,11 +44,16 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 /* Payment Tag */
 .pay-tag { background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
 
+/* Menu Specifics */
+.menu-input { width: 100%; border: 1px solid #ddd; padding: 5px; border-radius: 4px; font-family: 'Lato'; }
+.btn-sm { font-size: 0.8rem; padding: 5px 12px; margin: 2px; }
+.available-check { width: 22px; height: 22px; cursor: pointer; vertical-align: middle; }
+
 /* New Order Animation */ 
 .new-order { animation: highlight 3s ease-in-out; } 
 @keyframes highlight { 0% { background-color: #fff9c4; } 100% { background-color: transparent; } } 
 </style> 
-  
+
 <div class="page"> 
   <h1>ADIMUP ADMIN PANEL</h1> 
   
@@ -98,88 +103,24 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
     <table> 
       <thead> 
         <tr> 
-          <th>Item Name</th> 
-          <th>Category</th> 
-          <th>Price</th> 
-          <th class="center">Availability</th> 
+          <th style="width: 25%;">Item Name</th> 
+          <th style="width: 20%;">Category</th> 
+          <th style="width: 15%;">Price</th> 
+          <th class="center">Sold Out?</th> 
+          <th class="center">Action</th> 
         </tr> 
       </thead> 
       <tbody id="menuBody"></tbody> 
     </table> 
   </div> 
 </div> 
-  
-<style>
-  /* Add these to your existing CSS */
-  .menu-input { width: 100%; border: 1px solid #ddd; padding: 5px; border-radius: 4px; }
-  .btn-sm { font-size: 0.8rem; padding: 5px 12px; margin: 2px; }
-  .available-check { width: 20px; height: 20px; cursor: pointer; }
-</style>
 
-<div class="page">
-  <h1>ADIMUP ADMIN PANEL</h1>
-  
-  <div class="center">
-    <button id="toggleStore" onclick="toggleStoreStatus()">LOADING...</button><br>
-    <div id="storeStatus">CHECKING STATUS...</div>
-  </div>
-
-  <h2>Global Settings</h2>
-  <div class="settings-grid">
-      <div>
-          <label>GCash Number</label>
-          <input type="text" id="gcashNum">
-      </div>
-      <div>
-          <label>Maya Number</label>
-          <input type="text" id="mayaNum">
-      </div>
-      <div>
-          <button onclick="savePaymentInfo()" style="width: 100%;">Update Info</button>
-      </div>
-  </div>
-  
-  <h2>Recent Orders</h2>
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Time / ID</th>
-          <th>Customer</th>
-          <th>Contact / Address</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Payment</th>
-          <th>Notes</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="ordersBody"></tbody>
-    </table>
-  </div>
-  
-  <h2>Menu Management</h2>
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th style="width: 25%;">Item Name</th>
-          <th style="width: 20%;">Category</th>
-          <th style="width: 15%;">Price</th>
-          <th class="center">Sold Out?</th>
-          <th class="center">Action</th>
-        </tr>
-      </thead>
-      <tbody id="menuBody"></tbody>
-    </table>
-  </div>
-</div>
-
-<script>
-// REUSE YOUR BASE URL HERE
+<script> 
 const BASE = "https://script.google.com/macros/s/AKfycbxhU7rCJW-zfesXFWAs_FCw--muLB86tTOeeUMCA8YWBCj6pzHPdTJVl6bzYHO7PKHuiw/exec"; 
 
 let isStoreClosed = false;
+let lastOrderIDs = new Set(); 
+const newOrderSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3"); 
 
 /* --- SETTINGS --- */
 function loadSettings(){ 
@@ -207,10 +148,12 @@ async function savePaymentInfo(){
 
 async function toggleStoreStatus(){
     const fd = new URLSearchParams({ func: "toggleClose", status: !isStoreClosed });
-    document.getElementById('toggleStore').disabled = true;
+    const btn = document.getElementById('toggleStore');
+    btn.disabled = true;
+    btn.textContent = "...";
     await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
     loadSettings();
-    document.getElementById('toggleStore').disabled = false;
+    btn.disabled = false;
 }
 
 /* --- MENU --- */
@@ -259,20 +202,32 @@ async function saveMenuRow(rowId){
 function loadOrders(){ 
   fetch(BASE + "?func=getOrders").then(r=>r.json()).then(data=>{ 
     const ob = document.getElementById('ordersBody'); 
-    if(!data.length) { ob.innerHTML = "<tr><td colspan='8'>No orders.</td></tr>"; return; }
+    if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
     
-    ob.innerHTML = data.sort((a,b)=>b.ID - a.ID).map(o => `
-      <tr class="${o.Completed ? 'completed-row' : ''}">
+    ob.innerHTML = "";
+    data.sort((a,b)=>b.ID - a.ID).forEach(o => {
+      const tr = document.createElement("tr");
+      if(o.Completed) tr.classList.add("completed-row");
+      
+      // Highlight new orders
+      if(lastOrderIDs.size > 0 && !lastOrderIDs.has(o.ID) && !o.Completed){
+        tr.classList.add("new-order");
+        newOrderSound.play().catch(()=>{});
+      }
+      lastOrderIDs.add(o.ID);
+
+      tr.innerHTML = `
         <td><small>${o.Time}</small><br><b>${o.OrderID}</b></td>
         <td><b>${o.Name}</b></td>
-        <td><small>${o.Contact}</small><br><small>${o.Address}</small></td>
-        <td>${o.Items.split(',').join('<br>• ')}</td>
+        <td><small>${o.Contact}</small><br><small style="color:#666">${o.Address}</small></td>
+        <td>• ${o.Items.split(',').join('<br>• ')}</td>
         <td><b>₱${o.Total}</b></td>
         <td><span class="pay-tag">${o.Payment}</span></td>
-        <td><small>${o.Notes}</small></td>
+        <td style="font-style:italic; color:#666; font-size:0.85rem">${o.Notes || "-"}</td>
         <td><button class="btn-sm" ${o.Completed ? 'disabled' : ''} onclick="markDone(${o.ID}, this)">${o.Completed ? 'DONE' : 'MARK DONE'}</button></td>
-      </tr>
-    `).join('');
+      `;
+      ob.appendChild(tr);
+    });
   });
 }
 
@@ -282,8 +237,9 @@ async function markDone(id, btn){
     loadOrders();
 }
 
-loadSettings();
-loadOrders();
-loadMenu();
-setInterval(loadOrders, 30000);
+/* ================= INIT ================= */ 
+loadSettings(); 
+loadOrders(); 
+loadMenu(); 
+setInterval(loadOrders, 30000); 
 </script>
