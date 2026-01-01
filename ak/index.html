@@ -12,9 +12,7 @@ title: ADIMUP KITCHEN
   --secondary:#ff7e5f;
   --bg:#f4f4f4;
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:'Lato', Arial, sans-serif;
@@ -55,32 +53,12 @@ h1,h2,h3,
   margin:0 auto 8px;
   max-width:200px;
   width:100%;
-  height:auto;
 }
 #logoFallback{
   display:none;
   text-align:center;
   font-size:1.4rem;
   margin-bottom:12px;
-}
-
-/* SPINNER */
-#savingWrap{
-  display:none;
-  margin-top:12px;
-  text-align:center;
-}
-.spinner{
-  width:28px;
-  height:28px;
-  border:4px solid #ddd;
-  border-top-color:var(--primary);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin:0 auto;
-}
-@keyframes spin{
-  to{transform:rotate(360deg)}
 }
 
 /* TABS */
@@ -95,9 +73,7 @@ h1,h2,h3,
   padding:10px 16px;
   border-radius:999px;
   background:#eee;
-  font-weight:400;
   cursor:pointer;
-  white-space:nowrap;
 }
 .tabs button.active{
   background:linear-gradient(135deg,var(--secondary),var(--primary));
@@ -113,31 +89,23 @@ h1,h2,h3,
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:14px;
 }
-
 .item{
   background:#fff;
   border-radius:16px;
   overflow:hidden;
   box-shadow:0 6px 18px rgba(0,0,0,.1);
 }
-
 .item img{
   width:100%;
   height:140px;
   object-fit:cover;
 }
-
 .body{
   padding:12px;
   display:flex;
   justify-content:space-between;
 }
-
-.price{
-  color:var(--primary);
-  font-size:1.05rem;
-}
-
+.price{color:var(--primary)}
 .actions{
   display:flex;
   flex-direction:column;
@@ -148,8 +116,6 @@ h1,h2,h3,
   width:60px;
   margin-top:4px;
 }
-
-/* SOLD OUT */
 .soldout{
   color:red;
   font-weight:900;
@@ -181,7 +147,6 @@ input,textarea{
   border-radius:12px;
   border:1px solid #ccc;
   margin-bottom:10px;
-  font-family:'Lato', Arial, sans-serif;
 }
 button.main{
   width:100%;
@@ -191,7 +156,6 @@ button.main{
   background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:#fff;
   font-family:'Bebas Neue', Arial, sans-serif;
-  font-size:1rem;
 }
 button.main:disabled{
   opacity:.6;
@@ -206,6 +170,7 @@ button.main:disabled{
   background:rgba(0,0,0,.6);
   justify-content:center;
   align-items:center;
+  z-index:30;
 }
 .modal-box{
   background:#fff;
@@ -214,15 +179,35 @@ button.main:disabled{
   max-width:420px;
   width:92%;
 }
+
+/* FOREGROUND SAVING */
+#savingOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.92);
+  z-index:40;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.spinner{
+  width:32px;
+  height:32px;
+  border:4px solid #ddd;
+  border-top-color:var(--primary);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 
 <div id="closedBanner">🚫 ORDERING IS CLOSED</div>
 
 <div class="page">
-  <!-- LOGO WITH FALLBACK -->
   <img id="logo"
        src="/assets/images/ak/Adimup%20Kitchen.png"
-       alt="Adimup Kitchen Logo"
        onerror="this.style.display='none';logoFallback.style.display='block'">
   <div id="logoFallback">ADIMUP KITCHEN</div>
 
@@ -241,13 +226,6 @@ button.main:disabled{
     <textarea name="notes" placeholder="Notes"></textarea>
 
     <button class="main" id="orderBtn">PLACE ORDER</button>
-
-    <div id="savingWrap">
-      <div class="spinner"></div>
-      <div style="margin-top:6px;font-weight:700">
-        Please wait while we save your order
-      </div>
-    </div>
   </form>
 </div>
 
@@ -255,10 +233,17 @@ button.main:disabled{
 
 <div id="modal">
   <div class="modal-box">
-    <h3>CONFIRM ORDER</h3>
+    <h3>ORDER SUMMARY</h3>
     <div id="preview"></div><br>
     <button onclick="confirmOrder()">CONFIRM</button>
     <button onclick="modal.style.display='none'">CANCEL</button>
+  </div>
+</div>
+
+<div id="savingOverlay">
+  <div class="spinner"></div>
+  <div style="margin-top:10px;font-weight:700">
+    Please wait while we save your order
   </div>
 </div>
 
@@ -278,7 +263,7 @@ const k = t => t.toLowerCase().replace(/\s+/g,"_");
 fetch(SETTINGS_URL)
   .then(r=>r.json())
   .then(s=>{
-    if (s.closed_today === true || s.auto_closed === true){
+    if (s.closed_today || s.auto_closed){
       closedBanner.style.display="block";
       form.style.display="none";
     }
@@ -286,59 +271,48 @@ fetch(SETTINGS_URL)
 
 /* ================= MENU ================= */
 function loadMenu(){
-  fetch(MENU_URL)
-  .then(r=>r.json())
-  .then(data=>{
-    if (!Array.isArray(data)) throw data;
-
-    const cats = {};
+  fetch(MENU_URL).then(r=>r.json()).then(data=>{
+    const cats={};
     data.forEach(i=>{
-      const c = i.Category || "Others";
-      cats[c] = cats[c] || [];
+      const c=i.Category||"Others";
+      cats[c]=cats[c]||[];
       cats[c].push(i);
     });
 
-    let first = true;
-    Object.keys(cats)
-      .sort((a,b)=>cats[a][0].Sort - cats[b][0].Sort)
-      .forEach(cat=>{
-        const id = k(cat);
-
-        tabs.insertAdjacentHTML("beforeend",
-          `<button class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`
-        );
-
-        menu.insertAdjacentHTML("beforeend",`
-          <div class="tab-content ${first?'active':''}" id="${id}">
-            <div class="grid">
-              ${cats[cat].map(i=>{
-                const key = k(i.Item);
-                prices[key] = i.Price;
-                return `
-                <div class="item">
-                  <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}">
-                  <div class="body">
-                    <div>
-                      <strong>${i.Item}</strong>
-                      <div class="price">₱${i.Price}</div>
-                    </div>
-                    <div class="actions">
-                      ${i.SoldOut
-                        ? `<div class="soldout">SOLD OUT</div>`
-                        : `<input type="checkbox" name="i_${key}">
-                           <input type="number" name="q_${key}" value="1" min="1">`
-                      }
-                    </div>
+    let first=true;
+    Object.keys(cats).forEach(cat=>{
+      const id=k(cat);
+      tabs.insertAdjacentHTML("beforeend",
+        `<button class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`
+      );
+      menu.insertAdjacentHTML("beforeend",`
+        <div class="tab-content ${first?'active':''}" id="${id}">
+          <div class="grid">
+            ${cats[cat].map(i=>{
+              const key=k(i.Item);
+              prices[key]=i.Price;
+              return `
+              <div class="item">
+                <img src="${i.ImageURL||'https://via.placeholder.com/300x200'}">
+                <div class="body">
+                  <div>
+                    <strong>${i.Item}</strong>
+                    <div class="price">₱${i.Price}</div>
                   </div>
-                </div>`;}
-              ).join("")}
-            </div>
+                  <div class="actions">
+                    ${i.SoldOut?'<div class="soldout">SOLD OUT</div>':
+                    `<input type="checkbox" name="i_${key}">
+                     <input type="number" name="q_${key}" value="1" min="1">`}
+                  </div>
+                </div>
+              </div>`;
+            }).join("")}
           </div>
-        `);
-        first=false;
-      });
-  })
-  .catch(()=>alert("Failed to load menu"));
+        </div>
+      `);
+      first=false;
+    });
+  });
 }
 
 /* ================= UI ================= */
@@ -352,25 +326,33 @@ function openTab(id,btn){
 document.addEventListener("change",()=>{
   let t=0,c=0;
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
-    const key = cb.name.replace("i_","");
-    const q = form[`q_${key}`];
+    const key=cb.name.replace("i_","");
+    const q=form[`q_${key}`];
     q.style.display="block";
-    t += prices[key] * q.value;
-    c += Number(q.value);
+    t+=prices[key]*q.value;
+    c+=Number(q.value);
   });
-  total.textContent = `Total: ₱${t}`;
-  sum.textContent = t;
-  count.textContent = c;
+  total.textContent=`Total: ₱${t}`;
+  sum.textContent=t;
+  count.textContent=c;
 });
 
-cart.onclick=()=>total.scrollIntoView({behavior:"smooth"});
+/* CART → SUMMARY */
+cart.onclick=()=>{
+  if(!count.textContent || count.textContent==="0"){
+    alert("Please select items first");
+    return;
+  }
+  preview.innerHTML = pending ? preview.innerHTML : "Review your order below";
+  modal.style.display="flex";
+};
 
 /* ================= ORDER ================= */
 form.onsubmit=e=>{
   e.preventDefault();
+
   const items=[];
   let t=0;
-
   document.querySelectorAll('input[type=checkbox]:checked').forEach(cb=>{
     const key=cb.name.replace("i_","");
     const q=form[`q_${key}`].value;
@@ -378,16 +360,21 @@ form.onsubmit=e=>{
     t+=prices[key]*q;
   });
 
+  if(items.length===0){
+    alert("Please select at least one item");
+    return;
+  }
+
   pending={items,total:t};
-  preview.innerHTML = items.join("<br>")+`<br><b>Total:</b> ₱${t}`;
+  preview.innerHTML=items.join("<br>")+`<br><b>Total:</b> ₱${t}`;
   modal.style.display="flex";
 };
 
 function confirmOrder(){
-  orderBtn.disabled = true;
-  savingWrap.style.display = "block";
+  orderBtn.disabled=true;
+  savingOverlay.style.display="flex";
 
-  const fd = new FormData(form);
+  const fd=new FormData(form);
   fd.append("func","order");
   fd.append("items",pending.items.join(", "));
   fd.append("total",pending.total);
@@ -395,12 +382,11 @@ function confirmOrder(){
   fetch(ORDER_URL,{method:"POST",body:fd})
     .then(()=>location.reload())
     .catch(()=>{
-      savingWrap.style.display="none";
-      orderBtn.disabled = false;
-      alert("Failed to save order. Please try again.");
+      savingOverlay.style.display="none";
+      orderBtn.disabled=false;
+      setTimeout(()=>alert("Failed to save order"),300);
     });
 }
 
-// Initial load
 loadMenu();
 </script>
