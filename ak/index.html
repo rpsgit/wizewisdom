@@ -37,6 +37,9 @@ h1,h2,h3,
   padding:14px;
   text-align:center;
   font-weight:900;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
 }
 
 /* PAGE */
@@ -89,6 +92,7 @@ h1,h2,h3,
   gap:8px;
   overflow-x:auto;
   margin-bottom:16px;
+  padding-bottom: 5px;
 }
 .tabs button{
   border:none;
@@ -150,10 +154,10 @@ h1,h2,h3,
   font-size:.85rem;
 }
 
-/* PAYMENT BOX INTEGRATION */
+/* PAYMENT SECTION */
 .pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; }
-.pay-opt { display: block; margin-bottom: 8px; cursor: pointer; font-size: 1rem; }
-#payInstructions { display: none; margin-top: 10px; font-size: 0.9rem; padding: 12px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; }
+.pay-opt { display: block; margin-bottom: 8px; cursor: pointer; }
+#payInstructions { display: none; margin-top: 10px; font-size: 0.9rem; padding: 10px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; }
 
 /* FULL IMAGE OVERLAY (LIGHTBOX) */
 #imageViewer {
@@ -181,17 +185,14 @@ h1,h2,h3,
   font-family:'Bebas Neue', Arial, sans-serif; cursor:pointer;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100;
 }
-.total-display{ font-size:1.25rem; font-family:'Bebas Neue', Arial, sans-serif; margin:20px 0; }
+.total-display{ font-size:1.5rem; font-family:'Bebas Neue', Arial, sans-serif; margin:20px 0; text-align: right; }
 input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; }
-button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue', Arial,sans-serif; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
+button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue', Arial,sans-serif; font-size: 1.2rem; cursor: pointer; margin-top: 10px; }
+
 #modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; }
-.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; max-height: 80vh; overflow-y: auto; }
-.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.95rem; }
+.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; max-height: 80vh; overflow-y: auto; text-align: center;}
+.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.95rem; text-align: left; }
 .summary-total { margin-top: 15px; font-size: 1.2rem; font-weight: bold; text-align: right; border-top: 2px solid #111; padding-top: 10px; }
-.modal-actions { margin-top: 20px; display: flex; gap: 10px; }
-.modal-actions button { flex: 1; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; }
-.btn-confirm { background: var(--primary); color: var(--text-dark); }
-.btn-cancel { background: #eee; color: #333; }
 .order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; font-family: 'Bebas Neue'; }
 </style>
 
@@ -215,12 +216,12 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
   <form id="form">
     <div id="menu"></div>
     <div class="total-display" id="totalDisplay">Total: ₱0</div>
-    
-    <h3>DETAILS</h3>
-    <input name="name" id="userName" placeholder="Name" required>
-    <input name="contact" id="userContact" placeholder="09XXXXXXXXX" required>
-    <input name="address" id="userAddress" placeholder="Address" required>
-    <textarea name="notes" placeholder="Notes (Optional)"></textarea>
+
+    <h3>DELIVERY DETAILS</h3>
+    <input name="name" id="userName" placeholder="Full Name" required>
+    <input name="contact" id="userContact" placeholder="Phone Number" required>
+    <input name="address" id="userAddress" placeholder="Complete Address" required>
+    <textarea name="notes" placeholder="Landmarks / Special Notes"></textarea>
 
     <h3>PAYMENT METHOD</h3>
     <div class="pay-box">
@@ -241,27 +242,26 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 
 <div id="modal">
   <div class="modal-box" id="modalContent">
-    <h3>YOUR ORDER SUMMARY</h3>
+    <h3>ORDER SUMMARY</h3>
     <div id="preview"></div>
-    <div class="modal-actions" id="modalBtns">
-        <button class="btn-confirm" onclick="confirmOrder()">CONFIRM ORDER</button>
-        <button class="btn-cancel" onclick="document.getElementById('modal').style.display='none'">CLOSE</button>
+    <div id="modalActions" style="margin-top:20px; display:flex; gap:10px;">
+        <button class="main" onclick="confirmOrder()" id="finalBtn" style="flex:2; margin:0">CONFIRM & SEND</button>
+        <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; background:#eee; border:none; border-radius:999px; font-family:'Bebas Neue'; cursor:pointer">CANCEL</button>
     </div>
   </div>
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbx1d8F2P48XU_2gXXMnOs21zCaMPwrRuyCb5YkGSLUVpGPxwJj5fR8oT5HltlqtXkiDTg/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzivly5C8FmsGD90bbqFgscqXRpCpreeOoIiB1cah8Ys9-JScXkZDlfx8O7R1d38NrxIg/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
-const ORDER_URL = BASE;
 
 const prices = {};
 let settings = {};
 let pending = null;
 const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
-// Load Settings (Closure & Payment Numbers)
+// Initialize Settings
 fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   settings = s;
   if (s.closed_today || s.auto_closed){
@@ -324,6 +324,13 @@ function loadMenu(){
   });
 }
 
+function openTab(id,btn){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  btn.classList.add("active");
+}
+
 function togglePay(){
     const val = document.querySelector('input[name="payment"]:checked').value;
     const inst = document.getElementById('payInstructions');
@@ -332,15 +339,8 @@ function togglePay(){
     } else {
         inst.style.display = "block";
         document.getElementById('payLabel').textContent = val;
-        document.getElementById('payNum').textContent = val === "GCash" ? (settings.gcash_number || "N/A") : (settings.maya_number || "N/A");
+        document.getElementById('payNum').textContent = val === "GCash" ? settings.gcash_number : settings.maya_number;
     }
-}
-
-function openTab(id,btn){
-  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
-  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  btn.classList.add("active");
 }
 
 function getCartState() {
@@ -370,71 +370,51 @@ function updateCartUI() {
 
 document.addEventListener("change", (e) => { if (e.target.matches('.item-check') || e.target.matches('.item-qty')) updateCartUI(); });
 
-function showSummaryModal() {
+document.getElementById('form').onsubmit = (e) => {
+    e.preventDefault();
     const state = getCartState();
-    if (state.count === 0) { alert("Your cart is empty."); return; }
+    if (state.count === 0) return alert("Your cart is empty.");
+
     let html = '';
-    state.items.forEach(item => { html += `<div class="summary-item"><span>${item.name} <small>x${item.qty}</small></span><span>₱${item.subtotal}</span></div>`; });
-    
+    state.items.forEach(item => { 
+        html += `<div class="summary-item"><span>${item.name} x${item.qty}</span><span>₱${item.subtotal}</span></div>`; 
+    });
     const payMethod = document.querySelector('input[name="payment"]:checked').value;
-    html += `<div class="summary-item" style="margin-top:10px; color:#555"><span>Payment:</span><span>${payMethod}</span></div>`;
+    html += `<div class="summary-item" style="margin-top:10px; color:gray"><span>Method:</span><span>${payMethod}</span></div>`;
     html += `<div class="summary-total">TOTAL: ₱${state.total}</div>`;
     
     document.getElementById('preview').innerHTML = html;
     pending = { items: state.itemStrings, total: state.total, payment: payMethod };
     document.getElementById('modal').style.display = "flex";
-}
-
-document.getElementById('cart').onclick = showSummaryModal;
-
-document.getElementById('form').onsubmit = (e) => {
-    e.preventDefault();
-    showSummaryModal();
 };
 
-function confirmOrder(){
-  const form = document.getElementById('form');
-  
-  if (!form.checkValidity()) {
-    alert("Please enter your Name, Contact, and Address before confirming your order.");
-    document.getElementById('modal').style.display = 'none';
-    return;
-  }
+document.getElementById('cart').onclick = () => document.getElementById('form').requestSubmit();
 
-  const confirmBtn = document.querySelector('.btn-confirm');
-  confirmBtn.disabled = true; 
-  confirmBtn.textContent = "SENDING...";
-  
-  const fd = new URLSearchParams();
-  fd.append("func", "order");
-  fd.append("name", document.getElementById('userName').value);
-  fd.append("contact", document.getElementById('userContact').value);
-  fd.append("address", document.getElementById('userAddress').value);
-  fd.append("notes", form.notes.value);
-  fd.append("payment", pending.payment);
-  fd.append("items", pending.items.join(", "));
-  fd.append("total", pending.total);
+async function confirmOrder(){
+    const btn = document.getElementById('finalBtn');
+    btn.disabled = true;
+    btn.textContent = "SENDING...";
 
-  fetch(ORDER_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: fd.toString()
-  })
-  .then(() => { 
-    const tempID = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6);
+    const fd = new URLSearchParams();
+    fd.append("func", "order");
+    fd.append("name", document.getElementById('userName').value);
+    fd.append("contact", document.getElementById('userContact').value);
+    fd.append("address", document.getElementById('userAddress').value);
+    fd.append("notes", document.querySelector('textarea[name="notes"]').value);
+    fd.append("payment", pending.payment);
+    fd.append("items", pending.items.join(", "));
+    fd.append("total", pending.total);
+
+    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
+
+    const id = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6);
     document.getElementById('modalContent').innerHTML = `
-        <h2>ORDER REQUEST SENT!</h2>
-        <p>Your tracking ID (approx):</p>
-        <div class="order-id-display">${tempID}</div>
-        <p>Please check your Sheet or contact us to finalize.</p>
+        <h2 style="font-family:'Bebas Neue'">ORDER PLACED!</h2>
+        <p>Reference ID:</p>
+        <div class="order-id-display">${id}</div>
+        <p>Please take a screenshot for your records.</p>
         <button class="main" onclick="location.reload()">OK</button>
     `;
-  })
-  .catch(err => {
-    alert("Network Error. Please try again.");
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = "CONFIRM ORDER";
-  });
 }
 
 loadMenu();
