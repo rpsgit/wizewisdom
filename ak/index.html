@@ -9,17 +9,16 @@ title: ADIMUP KITCHEN
 :root{ --primary:#ffd600; --secondary:#ffea00; --bg:#f4f4f4; --text-dark: #111; }
 *{box-sizing:border-box}
 body{ margin:0; font-family:'Lato', sans-serif; background:var(--bg); color: var(--text-dark); }
-h1,h2,h3, .tabs button, .price, #logoFallback, .btn-main, .order-id-box { font-family:'Bebas Neue', sans-serif; letter-spacing:.03em; }
+h1,h2,h3, .tabs button, .price, #logoFallback, .main { font-family:'Bebas Neue', sans-serif; letter-spacing:.03em; }
 
 #closedBanner{ display:none; background:#111; color:#fff; padding:14px; text-align:center; font-weight:900; }
 .page{ position: relative; max-width:800px; margin:20px auto 100px; padding:16px; background:#fff; border-radius:24px; }
+#logo{ display:block; margin:0 auto 8px; max-width:180px; }
 
-/* TABS */
 .tabs{ display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom:5px; }
 .tabs button{ border:none; padding:10px 16px; border-radius:999px; background:#eee; cursor:pointer; white-space: nowrap; }
 .tabs button.active{ background:var(--primary); color:var(--text-dark); }
 
-/* MENU GRID */
 .tab-content{display:none}
 .tab-content.active{display:block}
 .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; }
@@ -28,59 +27,46 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .btn-main, .order-id-box { font-f
 .item-body{ padding:10px; }
 .price{ color:#d4af37; font-size: 1.2rem; }
 
-/* PAYMENT SECTION */
-.payment-selection { background: #f9f9f9; padding: 15px; border-radius: 15px; margin: 15px 0; border: 1px solid #eee; }
-.payment-option { display: block; margin-bottom: 10px; cursor: pointer; padding: 10px; border-radius: 8px; background: #fff; border: 1px solid #ddd; }
-.payment-option input { margin-right: 10px; }
-#paymentInstructions { display: none; margin-top: 10px; padding: 12px; background: #fffbe6; border-left: 4px solid #ffe58f; font-size: 0.9rem; }
+.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; }
+.pay-opt { display: block; margin-bottom: 8px; cursor: pointer; }
+#payInstructions { display: none; margin-top: 10px; font-size: 0.85rem; padding: 10px; background: #fff; border: 1px dashed #ccc; }
 
 input, textarea { width:100%; padding:12px; border-radius:10px; border:1px solid #ccc; margin-bottom:10px; font-size: 1rem; }
-.btn-main { width:100%; padding:16px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); font-size: 1.2rem; cursor: pointer; margin-top: 10px; }
+button.main { width:100%; padding:16px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); font-size: 1.2rem; cursor: pointer; }
 
-/* MODAL */
-#modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); justify-content:center; align-items:center; z-index:999; padding:20px; }
-.modal-box{ background:#fff; padding:24px; border-radius:20px; max-width:400px; width:100%; text-align:center; }
-.order-id-box { font-size: 1.8rem; color: #2e7d32; border: 2px dashed #2e7d32; padding: 10px; margin: 15px 0; display: block; }
+#modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); justify-content:center; align-items:center; z-index:999; }
+.modal-box{ background:#fff; padding:24px; border-radius:20px; max-width:400px; width:90%; text-align:center; }
+.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; }
 </style>
 
 <div id="closedBanner">🚫 WE ARE CURRENTLY CLOSED</div>
 
 <div class="page">
-    <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" style="max-width:150px; display:block; margin:0 auto;">
+    <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png">
     <h1 style="text-align:center; margin-top:0;">ADIMUP KITCHEN</h1>
-
     <div class="tabs" id="tabs"></div>
-
     <form id="form">
         <div id="menu"></div>
         <div id="totalDisplay" style="font-size:1.5rem; font-weight:bold; margin:20px 0; text-align:right;">Total: ₱0</div>
 
         <h3>DELIVERY DETAILS</h3>
         <input name="name" id="userName" placeholder="Full Name" required>
-        <input name="contact" id="userContact" placeholder="Phone Number (09...)" required>
-        <input name="address" id="userAddress" placeholder="Complete Delivery Address" required>
-        <textarea name="notes" placeholder="Special Instructions / Landmarks"></textarea>
+        <input name="contact" id="userContact" placeholder="Phone Number" required>
+        <input name="address" id="userAddress" placeholder="Complete Address" required>
+        <textarea name="notes" placeholder="Landmarks / Special Notes"></textarea>
 
         <h3>PAYMENT METHOD</h3>
-        <div class="payment-selection">
-            <label class="payment-option">
-                <input type="radio" name="payment" value="Cash" checked onclick="updatePaymentUI()"> 💵 Cash on Delivery
-            </label>
-            <label class="payment-option">
-                <input type="radio" name="payment" value="GCash" onclick="updatePaymentUI()"> 🟦 GCash
-            </label>
-            <label class="payment-option">
-                <input type="radio" name="payment" value="Maya" onclick="updatePaymentUI()"> 🟩 Maya
-            </label>
-
-            <div id="paymentInstructions">
-                Please send payment to:<br>
-                <strong id="payMethodName">GCash</strong>: <span id="payNumber" style="font-size:1.2rem; font-weight:bold;">---</span><br>
-                <small>Account Name: ADIMUP KITCHEN</small>
+        <div class="pay-box">
+            <label class="pay-opt"><input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash on Delivery</label>
+            <label class="pay-opt"><input type="radio" name="payment" value="GCash" onclick="togglePay()"> 🟦 GCash</label>
+            <label class="pay-opt"><input type="radio" name="payment" value="Maya" onclick="togglePay()"> 🟩 Maya</label>
+            <div id="payInstructions">
+                Send payment to: <strong id="payLabel">GCash</strong><br>
+                Number: <span id="payNum" style="font-weight:900; font-size:1.2rem;">---</span>
             </div>
         </div>
 
-        <button type="submit" class="btn-main" id="orderBtn">PLACE ORDER</button>
+        <button type="submit" class="main" id="orderBtn">PLACE ORDER</button>
     </form>
 </div>
 
@@ -88,149 +74,102 @@ input, textarea { width:100%; padding:12px; border-radius:10px; border:1px solid
     <div class="modal-box" id="modalContent">
         <h3>ORDER SUMMARY</h3>
         <div id="summaryItems" style="text-align:left; margin-bottom:15px;"></div>
-        <button class="btn-main" onclick="confirmOrder()" id="finalConfirmBtn">CONFIRM & SEND</button>
-        <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Cancel</button>
+        <button class="main" onclick="confirmOrder()" id="finalBtn">CONFIRM & SEND</button>
+        <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:10px; background:none; border:none; color:gray;">Cancel</button>
     </div>
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbwfF7uSXRVnFvhaZRe69tZvg66ZAh4VuU9FQSq5iMXkh4PukdknpEEQRtAMxRzSPsFDew/exec";
-let settings = {};
-let menuData = [];
-let cart = {};
+const BASE = "https://script.google.com/macros/s/AKfycbx1d8F2P48XU_2gXXMnOs21zCaMPwrRuyCb5YkGSLUVpGPxwJj5fR8oT5HltlqtXkiDTg/exec";
+let cart = {}; let settings = {};
 
-// 1. Initial Load
 async function init(){
-    const res = await fetch(BASE + "?func=getSettings");
-    settings = await res.json();
+    const sRes = await fetch(BASE + "?func=getSettings");
+    settings = await sRes.json();
     if(settings.auto_closed || settings.closed_today){
         document.getElementById('closedBanner').style.display = "block";
         document.getElementById('form').style.display = "none";
     }
-    loadMenu();
+    const mRes = await fetch(BASE + "?func=getMenu");
+    const menuData = await mRes.json();
+    renderMenu(menuData);
 }
 
-async function loadMenu(){
-    const res = await fetch(BASE + "?func=getMenu");
-    menuData = await res.json();
+function renderMenu(data){
     const tabs = document.getElementById('tabs');
     const menu = document.getElementById('menu');
-    const cats = [...new Set(menuData.map(i => i.Category))];
-
+    const cats = [...new Set(data.map(i => i.Category))];
     cats.forEach((cat, idx) => {
-        const catID = "cat-" + idx;
-        tabs.insertAdjacentHTML('beforeend', `<button type="button" class="${idx===0?'active':''}" onclick="showCat('${catID}', this)">${cat}</button>`);
-        const items = menuData.filter(i => i.Category === cat);
-        menu.insertAdjacentHTML('beforeend', `
-            <div id="${catID}" class="tab-content ${idx===0?'active':''}">
-                <div class="grid">${items.map(i => renderItem(i)).join('')}</div>
-            </div>
-        `);
+        const id = "cat-"+idx;
+        tabs.insertAdjacentHTML('beforeend', `<button type="button" class="${idx===0?'active':''}" onclick="showCat('${id}', this)">${cat}</button>`);
+        menu.insertAdjacentHTML('beforeend', `<div id="${id}" class="tab-content ${idx===0?'active':''}">
+            <div class="grid">${data.filter(i=>i.Category===cat).map(i=>`
+                <div class="item">
+                    <img src="${i.ImageURL || 'https://via.placeholder.com/150'}">
+                    <div class="item-body">
+                        <strong>${i.Item}</strong><br><span class="price">₱${i.Price}</span>
+                        ${i.SoldOut ? '<div style="color:red;font-weight:bold">SOLD OUT</div>' : 
+                        `<input type="number" placeholder="Qty" min="0" onchange="updateCart('${i.Item}', ${i.Price}, this.value)" style="margin:5px 0 0; padding:5px">`}
+                    </div>
+                </div>`).join('')}</div></div>`);
     });
-}
-
-function renderItem(i){
-    const itemID = i.Item.replace(/\s+/g, '_');
-    return `
-        <div class="item">
-            <img src="${i.ImageURL || 'https://via.placeholder.com/150'}">
-            <div class="item-body">
-                <strong>${i.Item}</strong><br>
-                <span class="price">₱${i.Price}</span>
-                <div style="margin-top:8px">
-                    ${i.SoldOut ? '<span style="color:red; font-weight:bold">SOLD OUT</span>' : 
-                    `<input type="number" placeholder="Qty" min="0" onchange="updateCart('${i.Item}', ${i.Price}, this.value)" style="margin:0; padding:5px">`}
-                </div>
-            </div>
-        </div>`;
 }
 
 function updateCart(name, price, qty){
     if(qty > 0) cart[name] = { price, qty: parseInt(qty) };
     else delete cart[name];
-    
-    let total = 0;
-    for(let k in cart) total += (cart[k].price * cart[k].qty);
+    let total = 0; for(let k in cart) total += (cart[k].price * cart[k].qty);
     document.getElementById('totalDisplay').textContent = `Total: ₱${total}`;
 }
 
-function updatePaymentUI(){
-    const method = document.querySelector('input[name="payment"]:checked').value;
-    const box = document.getElementById('paymentInstructions');
-    if(method === "Cash"){
-        box.style.display = "none";
-    } else {
-        box.style.display = "block";
-        document.getElementById('payMethodName').textContent = method;
-        document.getElementById('payNumber').textContent = method === "GCash" ? settings.gcash_number : settings.maya_number;
+function togglePay(){
+    const val = document.querySelector('input[name="payment"]:checked').value;
+    const inst = document.getElementById('payInstructions');
+    if(val === "Cash") inst.style.display = "none";
+    else {
+        inst.style.display = "block";
+        document.getElementById('payLabel').textContent = val;
+        document.getElementById('payNum').textContent = val === "GCash" ? settings.gcash_number : settings.maya_number;
     }
 }
 
 function showCat(id, btn){
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).classList.add('active'); btn.classList.add('active');
 }
 
-// 2. Order Submission
 document.getElementById('form').onsubmit = (e) => {
     e.preventDefault();
-    if(Object.keys(cart).length === 0) return alert("Please select items first!");
-    
-    let html = '';
-    let total = 0;
-    for(let k in cart) {
+    if(Object.keys(cart).length === 0) return alert("Cart is empty!");
+    let html = ''; let total = 0;
+    for(let k in cart) { 
         html += `<div style="display:flex; justify-content:space-between"><span>${k} x${cart[k].qty}</span><span>₱${cart[k].price * cart[k].qty}</span></div>`;
         total += (cart[k].price * cart[k].qty);
     }
-    document.getElementById('summaryItems').innerHTML = html + `<hr><strong>Total: ₱${total}</strong><br><small>Payment: ${document.querySelector('input[name="payment"]:checked').value}</small>`;
+    document.getElementById('summaryItems').innerHTML = html + `<hr><strong>Total: ₱${total}</strong>`;
     document.getElementById('modal').style.display = "flex";
 }
 
 async function confirmOrder(){
-    const btn = document.getElementById('finalConfirmBtn');
-    btn.disabled = true;
-    btn.textContent = "Processing...";
-
-    const form = document.getElementById('form');
+    const btn = document.getElementById('finalBtn'); btn.disabled = true; btn.textContent = "Sending...";
     const fd = new URLSearchParams();
     fd.append("func", "order");
-    fd.append("name", form.name.value);
-    fd.append("contact", form.contact.value);
-    fd.append("address", form.address.value);
-    fd.append("notes", form.notes.value);
-    fd.append("payment", form.payment.value);
+    fd.append("name", document.getElementById('userName').value);
+    fd.append("contact", document.getElementById('userContact').value);
+    fd.append("address", document.getElementById('userAddress').value);
+    fd.append("notes", document.querySelector('textarea[name="notes"]').value);
+    fd.append("payment", document.querySelector('input[name="payment"]:checked').value);
     
-    let itemsArr = [];
-    let total = 0;
-    for(let k in cart) {
-        itemsArr.push(`${k} (x${cart[k].qty})`);
-        total += (cart[k].price * cart[k].qty);
-    }
-    fd.append("items", itemsArr.join(", "));
+    let items = []; let total = 0;
+    for(let k in cart) { items.push(`${k} (x${cart[k].qty})`); total += (cart[k].price * cart[k].qty); }
+    fd.append("items", items.join(", "));
     fd.append("total", total);
 
-    try {
-        // We use no-cors to avoid Google Apps Script CORS issues
-        fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-        
-        // Since no-cors doesn't return data, we simulate a success message
-        // A unique order ID logic based on time is used here to show the user
-        const now = new Date();
-        const id = now.getFullYear() + "" + (now.getMonth()+1) + now.getDate() + "-" + now.getHours() + now.getMinutes();
-
-        document.getElementById('modalContent').innerHTML = `
-            <h2 style="color:#2e7d32">ORDER PLACED!</h2>
-            <p>Please take a screenshot of your Order ID:</p>
-            <span class="order-id-box">${id}</span>
-            <p>Thank you, ${form.name.value}!</p>
-            <button class="btn-main" onclick="location.reload()">BACK TO MENU</button>
-        `;
-    } catch(e) {
-        alert("Something went wrong. Please try again.");
-        btn.disabled = false;
-    }
+    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
+    
+    const id = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6); // Temporary ID for UI
+    document.getElementById('modalContent').innerHTML = `<h2>ORDER PLACED!</h2><p>Your Order ID:</p><div class="order-id-display">${id}</div><p>Take a screenshot.</p><button class="main" onclick="location.reload()">OK</button>`;
 }
 
 init();
