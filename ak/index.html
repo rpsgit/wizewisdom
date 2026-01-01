@@ -3,17 +3,31 @@ layout: default
 title: ADIMUP KITCHEN
 ---
 
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --primary:#ff5722;
   --secondary:#ff7e5f;
   --bg:#f4f4f4;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:Poppins,Arial,sans-serif;
+  font-family:'Lato', Arial, sans-serif;
   background:var(--bg);
+}
+
+/* HEADLINES */
+h1,h2,h3,
+.tabs button,
+.price,
+#logoFallback{
+  font-family:'Bebas Neue', Arial, sans-serif;
+  letter-spacing:.03em;
 }
 
 /* CLOSED */
@@ -23,7 +37,7 @@ body{
   color:#fff;
   padding:14px;
   text-align:center;
-  font-weight:700;
+  font-weight:900;
 }
 
 /* PAGE */
@@ -38,11 +52,35 @@ body{
 /* LOGO */
 #logo{
   display:block;
-  margin:0 auto 16px auto;
+  margin:0 auto 8px;
   max-width:200px;
   width:100%;
   height:auto;
-  cursor:pointer;
+}
+#logoFallback{
+  display:none;
+  text-align:center;
+  font-size:1.4rem;
+  margin-bottom:12px;
+}
+
+/* SPINNER */
+#savingWrap{
+  display:none;
+  margin-top:12px;
+  text-align:center;
+}
+.spinner{
+  width:28px;
+  height:28px;
+  border:4px solid #ddd;
+  border-top-color:var(--primary);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto;
+}
+@keyframes spin{
+  to{transform:rotate(360deg)}
 }
 
 /* TABS */
@@ -57,7 +95,7 @@ body{
   padding:10px 16px;
   border-radius:999px;
   background:#eee;
-  font-weight:700;
+  font-weight:400;
   cursor:pointer;
   white-space:nowrap;
 }
@@ -95,7 +133,10 @@ body{
   justify-content:space-between;
 }
 
-.price{color:var(--primary);font-weight:800}
+.price{
+  color:var(--primary);
+  font-size:1.05rem;
+}
 
 .actions{
   display:flex;
@@ -111,8 +152,8 @@ body{
 /* SOLD OUT */
 .soldout{
   color:red;
-  font-weight:800;
-  font-size:.9rem;
+  font-weight:900;
+  font-size:.85rem;
 }
 
 /* CART */
@@ -124,14 +165,14 @@ body{
   color:#fff;
   padding:14px 18px;
   border-radius:999px;
-  font-weight:800;
+  font-family:'Bebas Neue', Arial, sans-serif;
   cursor:pointer;
 }
 
 /* FORM */
 .total{
-  font-size:1.2rem;
-  font-weight:800;
+  font-size:1.25rem;
+  font-family:'Bebas Neue', Arial, sans-serif;
   margin:20px 0;
 }
 input,textarea{
@@ -140,6 +181,7 @@ input,textarea{
   border-radius:12px;
   border:1px solid #ccc;
   margin-bottom:10px;
+  font-family:'Lato', Arial, sans-serif;
 }
 button.main{
   width:100%;
@@ -148,7 +190,12 @@ button.main{
   border-radius:999px;
   background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:#fff;
-  font-weight:800;
+  font-family:'Bebas Neue', Arial, sans-serif;
+  font-size:1rem;
+}
+button.main:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
 
 /* MODAL */
@@ -169,13 +216,17 @@ button.main{
 }
 </style>
 
-<div id="closedBanner">🚫 Ordering is closed</div>
+<div id="closedBanner">🚫 ORDERING IS CLOSED</div>
 
 <div class="page">
-<!-- Clickable Logo -->
-<img id="logo" src="assets/images/ak/Adimup Kitchen.png" alt="Adimup Kitchen Logo">
+  <!-- LOGO WITH FALLBACK -->
+  <img id="logo"
+       src="/assets/images/ak/Adimup%20Kitchen.png"
+       alt="Adimup Kitchen Logo"
+       onerror="this.style.display='none';logoFallback.style.display='block'">
+  <div id="logoFallback">ADIMUP KITCHEN</div>
 
-  <h1 style="text-align:center">Adimup Kitchen</h1>
+  <h1 style="text-align:center">ADIMUP KITCHEN</h1>
 
   <div class="tabs" id="tabs"></div>
 
@@ -189,7 +240,14 @@ button.main{
     <input name="address" placeholder="Address" required>
     <textarea name="notes" placeholder="Notes"></textarea>
 
-    <button class="main">Place Order</button>
+    <button class="main" id="orderBtn">PLACE ORDER</button>
+
+    <div id="savingWrap">
+      <div class="spinner"></div>
+      <div style="margin-top:6px;font-weight:700">
+        Please wait while we save your order
+      </div>
+    </div>
   </form>
 </div>
 
@@ -197,10 +255,10 @@ button.main{
 
 <div id="modal">
   <div class="modal-box">
-    <h3>Confirm Order</h3>
+    <h3>CONFIRM ORDER</h3>
     <div id="preview"></div><br>
-    <button onclick="confirmOrder()">Confirm</button>
-    <button onclick="modal.style.display='none'">Cancel</button>
+    <button onclick="confirmOrder()">CONFIRM</button>
+    <button onclick="modal.style.display='none'">CANCEL</button>
   </div>
 </div>
 
@@ -280,10 +338,7 @@ function loadMenu(){
         first=false;
       });
   })
-  .catch(err=>{
-    alert("Failed to load menu");
-    console.error(err);
-  });
+  .catch(()=>alert("Failed to load menu"));
 }
 
 /* ================= UI ================= */
@@ -305,7 +360,7 @@ document.addEventListener("change",()=>{
   });
   total.textContent = `Total: ₱${t}`;
   sum.textContent = t;
-  document.getElementById("count").textContent = c;
+  count.textContent = c;
 });
 
 cart.onclick=()=>total.scrollIntoView({behavior:"smooth"});
@@ -329,25 +384,22 @@ form.onsubmit=e=>{
 };
 
 function confirmOrder(){
+  orderBtn.disabled = true;
+  savingWrap.style.display = "block";
+
   const fd = new FormData(form);
   fd.append("func","order");
   fd.append("items",pending.items.join(", "));
   fd.append("total",pending.total);
 
   fetch(ORDER_URL,{method:"POST",body:fd})
-    .then(()=> {
-      modal.style.display="none";
-      alert("Order sent!");
-      location.reload();
+    .then(()=>location.reload())
+    .catch(()=>{
+      savingWrap.style.display="none";
+      orderBtn.disabled = false;
+      alert("Failed to save order. Please try again.");
     });
 }
-
-/* ================= CLICKABLE LOGO ================= */
-const logo = document.getElementById("logo");
-logo.onclick = () => {
-  menu.scrollIntoView({behavior:"smooth"});
-  loadMenu();
-};
 
 // Initial load
 loadMenu();
