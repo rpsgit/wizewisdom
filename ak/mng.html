@@ -111,6 +111,7 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 </div> 
 
 <script> 
+// IMPORTANT: Ensure this URL matches your LATEST Deployment URL
 const BASE = "https://script.google.com/macros/s/AKfycbyjtVLfIVNjQITWqBPC--YRwGICdCCfz0ZDVVo4tvAKsGzrGa3QYUJXUK239Q001usw/exec"; 
 
 let isStoreClosed = false;
@@ -136,9 +137,8 @@ async function savePaymentInfo(){
         gcash_number: document.getElementById('gcashNum').value, 
         maya_number: document.getElementById('mayaNum').value 
     });
-    // POST request needs to be handled via fetch with no-cors or specialized JSONP for Apps Script
     await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-    alert("Payment information updated! (Please refresh if numbers don't update immediately)");
+    alert("Payment information updated!");
 }
 
 async function toggleStoreStatus(){
@@ -147,7 +147,7 @@ async function toggleStoreStatus(){
     btn.disabled = true;
     btn.textContent = "...";
     await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-    setTimeout(loadSettings, 1000); // Small delay to allow sheet to update
+    setTimeout(loadSettings, 1000); 
     btn.disabled = false;
 }
 
@@ -192,35 +192,24 @@ async function saveMenuRow(rowId){
     setTimeout(() => { btn.textContent = "UPDATE"; }, 2000);
 }
 
-// Since getOrders wasn't explicitly in your backend snippet, we use checkStatus's logic 
-// to ensure we are looking at the right Columns for the table.
 function loadOrders(){ 
-  // We call getMenu or similar to verify connectivity, but assuming your backend 
-  // has a getOrders function that returns the 'Orders' sheet values:
-  fetch(BASE + "?func=getMenu").then(() => {
-      // Logic for fetching orders normally would go here
-      // Note: Make sure your backend has: function getOrders() { ... }
-  });
-
-  // Fetch orders (I am assuming you will add function getOrders() to your backend)
   fetch(BASE + "?func=getOrders").then(r=>r.json()).then(data=>{ 
     const ob = document.getElementById('ordersBody'); 
     if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
     
     ob.innerHTML = "";
-    // Sort so newest is at the top
-    data.reverse().forEach(o => {
+    // Show newest orders at the top
+    [...data].reverse().forEach(o => {
       const tr = document.createElement("tr");
-      if(o.Completed === true || o.Completed === "true") tr.classList.add("completed-row");
+      const isDone = String(o.Completed) === "true";
+      if(isDone) tr.classList.add("completed-row");
       
-      if(lastOrderIDs.size > 0 && !lastOrderIDs.has(o.OrderID) && !o.Completed){
+      if(lastOrderIDs.size > 0 && !lastOrderIDs.has(o.OrderID) && !isDone){
         tr.classList.add("new-order");
         newOrderSound.play().catch(()=>{});
       }
       lastOrderIDs.add(o.OrderID);
 
-      // Mapping columns based on your saveOrder function:
-      // A=Now, B=ID, C=Name, D=Contact, E=Address, F=Items, G=Total, H=Payment, I=Notes, J=Status
       tr.innerHTML = `
         <td><small>${new Date(o.Timestamp).toLocaleString()}</small><br><b>${o.OrderID}</b></td>
         <td><b>${o.Name}</b></td>
@@ -229,12 +218,10 @@ function loadOrders(){
         <td><b>₱${o.Total}</b></td>
         <td><span class="pay-tag">${o.Payment}</span></td>
         <td style="font-style:italic; color:#666; font-size:0.85rem">${o.Notes || "-"}</td>
-        <td><button class="btn-sm" ${o.Completed ? 'disabled' : ''} onclick="markDone('${o.OrderID}', this)">${o.Completed ? 'DONE' : 'MARK DONE'}</button></td>
+        <td><button class="btn-sm" ${isDone ? 'disabled' : ''} onclick="markDone('${o.OrderID}', this)">${isDone ? 'DONE' : 'MARK DONE'}</button></td>
       `;
       ob.appendChild(tr);
     });
-  }).catch(e => {
-      console.log("If you see this, ensure you added getOrders() to backend script.");
   });
 }
 
@@ -249,5 +236,5 @@ async function markDone(orderID, btn){
 loadSettings(); 
 loadMenu(); 
 loadOrders(); 
-setInterval(loadOrders, 30000); // Auto refresh orders every 30 seconds
+setInterval(loadOrders, 30000); 
 </script>
