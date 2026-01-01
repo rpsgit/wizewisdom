@@ -10,12 +10,14 @@ title: ADIMUP KITCHEN
   --primary:#ffd600;   /* Vibrant Yellow */
   --secondary:#ffea00; /* Lighter Yellow */
   --bg:#f4f4f4;
+  --text-dark: #111;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:'Lato', Arial, sans-serif;
   background:var(--bg);
+  color: var(--text-dark);
 }
 
 /* HEADLINES */
@@ -40,7 +42,7 @@ h1,h2,h3,
 /* PAGE */
 .page{
   max-width:1200px;
-  margin:20px auto 200px;
+  margin:20px auto 200px; /* Extra bottom margin for cart visibility */
   padding:16px;
   background:#fff;
   border-radius:24px;
@@ -73,10 +75,11 @@ h1,h2,h3,
   border-radius:999px;
   background:#eee;
   cursor:pointer;
+  white-space: nowrap;
 }
 .tabs button.active{
   background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:#111; /* Dark text for yellow background readability */
+  color:var(--text-dark);
 }
 
 /* MENU */
@@ -104,8 +107,8 @@ h1,h2,h3,
   display:flex;
   justify-content:space-between;
 }
-/* Price color changed to a darker gold/yellow for visibility */
-.price{color:#d4af37; font-weight: 700;}
+.price{color:#d4af37; font-weight:700;}
+
 .actions{
   display:flex;
   flex-direction:column;
@@ -115,6 +118,7 @@ h1,h2,h3,
   display:none;
   width:60px;
   margin-top:4px;
+  text-align: center;
 }
 .soldout{
   color:red;
@@ -122,22 +126,25 @@ h1,h2,h3,
   font-size:.85rem;
 }
 
-/* CART */
+/* CART BUBBLE */
 #cart{
   position:fixed;
-  bottom:16px;
-  right:16px;
+  bottom:20px;
+  right:20px;
   background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:#111;
-  padding:14px 18px;
+  color:var(--text-dark);
+  padding:15px 20px;
   border-radius:999px;
   font-family:'Bebas Neue', Arial, sans-serif;
   cursor:pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 100;
+  transition: transform 0.2s;
 }
+#cart:active { transform: scale(0.95); }
 
-/* FORM */
-.total{
+/* FORM ELEMENTS */
+.total-display{
   font-size:1.25rem;
   font-family:'Bebas Neue', Arial, sans-serif;
   margin:20px 0;
@@ -148,6 +155,7 @@ input,textarea{
   border-radius:12px;
   border:1px solid #ccc;
   margin-bottom:10px;
+  font-family: inherit;
 }
 button.main{
   width:100%;
@@ -155,10 +163,11 @@ button.main{
   border:none;
   border-radius:999px;
   background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:#111;
+  color:var(--text-dark);
   font-family:'Bebas Neue', Arial,sans-serif;
   font-size: 1.1rem;
   cursor: pointer;
+  margin-top: 10px;
 }
 button.main:disabled{
   background: #ccc;
@@ -174,25 +183,53 @@ button.main:disabled{
   background:rgba(0,0,0,.6);
   justify-content:center;
   align-items:center;
-  z-index:30;
+  z-index:999;
 }
 .modal-box{
   background:#fff;
-  padding:20px;
+  padding:24px;
   border-radius:16px;
   max-width:420px;
   width:92%;
+  max-height: 80vh;
+  overflow-y: auto;
 }
-.modal-box button {
-  padding: 10px 20px;
-  margin: 5px;
+.modal-box h3 { margin-top: 0; }
+
+/* Modal List Styling */
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    font-size: 0.95rem;
+}
+.summary-total {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: right;
+    border-top: 2px solid #111;
+    padding-top: 10px;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+.modal-actions button {
+  flex: 1;
+  padding: 12px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
 }
-.btn-confirm { background: var(--primary); color: #111; }
-.btn-cancel { background: #eee; }
+.btn-confirm { background: var(--primary); color: var(--text-dark); }
+.btn-cancel { background: #eee; color: #333; }
+
 </style>
 
 <div id="closedBanner">🚫 ORDERING IS CLOSED</div>
@@ -210,25 +247,29 @@ button.main:disabled{
   <form id="form">
     <div id="menu"></div>
 
-    <div class="total" id="total">Total: ₱0</div>
+    <div class="total-display" id="totalDisplay">Total: ₱0</div>
 
+    <h3>DETAILS</h3>
     <input name="name" placeholder="Name" required>
     <input name="contact" placeholder="09XXXXXXXXX" required>
     <input name="address" placeholder="Address" required>
-    <textarea name="notes" placeholder="Notes"></textarea>
+    <textarea name="notes" placeholder="Notes (Optional)"></textarea>
 
     <button type="submit" class="main" id="orderBtn">PLACE ORDER</button>
   </form>
 </div>
 
-<div id="cart">🛒 <span id="count">0</span> | ₱<span id="sum">0</span></div>
+<div id="cart">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div>
 
 <div id="modal">
   <div class="modal-box">
-    <h3>ORDER SUMMARY</h3>
-    <div id="preview"></div><br>
-    <button class="btn-confirm" onclick="confirmOrder()">CONFIRM</button>
-    <button class="btn-cancel" onclick="document.getElementById('modal').style.display='none'">CANCEL</button>
+    <h3>YOUR ORDER SUMMARY</h3>
+    <div id="preview"></div>
+    
+    <div class="modal-actions">
+        <button class="btn-confirm" onclick="confirmOrder()">CONFIRM ORDER</button>
+        <button class="btn-cancel" onclick="document.getElementById('modal').style.display='none'">CLOSE</button>
+    </div>
   </div>
 </div>
 
@@ -241,7 +282,7 @@ const ORDER_URL = BASE;
 
 /* ================= STATE ================= */
 const prices = {};
-let pending = null;
+let pending = null; // Stores data for the final order submission
 const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
 /* ================= SETTINGS ================= */
@@ -251,10 +292,11 @@ fetch(SETTINGS_URL)
     if (s.closed_today || s.auto_closed){
       document.getElementById('closedBanner').style.display="block";
       document.getElementById('form').style.display="none";
+      document.getElementById('cart').style.display="none";
     }
   }).catch(e => console.log("Settings load error:", e));
 
-/* ================= MENU ================= */
+/* ================= MENU LOADER ================= */
 function loadMenu(){
   fetch(MENU_URL).then(r=>r.json()).then(data=>{
     const tabs = document.getElementById('tabs');
@@ -289,7 +331,7 @@ function loadMenu(){
                   <div class="actions">
                     ${i.SoldOut?'<div class="soldout">SOLD OUT</div>':
                     `<input type="checkbox" name="i_${key}" class="item-check">
-                     <input type="number" name="q_${key}" value="1" min="1" style="display:none">`}
+                     <input type="number" name="q_${key}" value="1" min="1" style="display:none" class="item-qty">`}
                   </div>
                 </div>
               </div>`;
@@ -302,7 +344,7 @@ function loadMenu(){
   });
 }
 
-/* ================= UI ================= */
+/* ================= UI TABS ================= */
 function openTab(id,btn){
   document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
@@ -310,68 +352,146 @@ function openTab(id,btn){
   btn.classList.add("active");
 }
 
-document.addEventListener("change",(e)=>{
-  let t=0,c=0;
-  const form = document.getElementById('form');
-  document.querySelectorAll('.item-check').forEach(cb=>{
-    const key=cb.name.replace("i_","");
-    const q=form[`q_${key}`];
-    if(cb.checked){
-        q.style.display="block";
-        t+=prices[key]*q.value;
-        c+=Number(q.value);
-    } else {
-        q.style.display="none";
+/* ================= CART CALCULATIONS ================= */
+
+// Helper to get current cart state
+function getCartState() {
+    let total = 0;
+    let count = 0;
+    const items = [];
+    const itemStrings = [];
+    
+    document.querySelectorAll('.item-check').forEach(cb => {
+        const key = cb.name.replace("i_", "");
+        // Find sibling input quantity (in case logic changes, we grab by name)
+        const qtyInput = document.querySelector(`input[name="q_${key}"]`);
+        
+        if (cb.checked) {
+            qtyInput.style.display = "block";
+            const qty = parseInt(qtyInput.value) || 1;
+            const price = prices[key];
+            const subtotal = price * qty;
+            
+            total += subtotal;
+            count += qty;
+            
+            // For Display
+            items.push({
+                name: key.replace(/_/g, " ").toUpperCase(),
+                qty: qty,
+                price: price,
+                subtotal: subtotal
+            });
+            
+            // For Google Sheet submission
+            itemStrings.push(`${key.replace(/_/g, " ")} (x${qty})`);
+        } else {
+            qtyInput.style.display = "none";
+        }
+    });
+
+    return { total, count, items, itemStrings };
+}
+
+// Update Totals on Screen
+function updateCartUI() {
+    const state = getCartState();
+    document.getElementById('totalDisplay').textContent = `Total: ₱${state.total}`;
+    document.getElementById('cartSum').textContent = state.total;
+    document.getElementById('cartCount').textContent = state.count;
+}
+
+// Event Listener for any input change
+document.addEventListener("change", (e) => {
+    if (e.target.matches('.item-check') || e.target.matches('.item-qty')) {
+        updateCartUI();
     }
-  });
-  document.getElementById('total').textContent=`Total: ₱${t}`;
-  document.getElementById('sum').textContent=t;
-  document.getElementById('count').textContent=c;
 });
 
-/* CART CLICK */
-document.getElementById('cart').onclick=()=>{
-  const count = document.getElementById('count').textContent;
-  if(!count || count==="0"){
-    alert("Please select items first");
-    return;
-  }
-  document.getElementById('total').scrollIntoView({behavior: 'smooth'});
+/* ================= MODAL LOGIC ================= */
+
+function showSummaryModal() {
+    const state = getCartState();
+
+    if (state.count === 0) {
+        alert("Your cart is empty. Please select items first.");
+        return;
+    }
+
+    // Generate HTML for the modal
+    let html = '';
+    state.items.forEach(item => {
+        html += `
+        <div class="summary-item">
+            <span>${item.name} <small>x${item.qty}</small></span>
+            <span>₱${item.subtotal}</span>
+        </div>`;
+    });
+    html += `<div class="summary-total">TOTAL: ₱${state.total}</div>`;
+
+    document.getElementById('preview').innerHTML = html;
+    
+    // Update global Pending variable so Confirm works
+    pending = {
+        items: state.itemStrings,
+        total: state.total
+    };
+
+    document.getElementById('modal').style.display = "flex";
+}
+
+/* ================= CLICK HANDLERS ================= */
+
+// 1. Cart Icon Click -> Show Summary
+document.getElementById('cart').onclick = () => {
+    showSummaryModal();
 };
 
-/* ================= ORDER ================= */
-document.getElementById('form').onsubmit=e=>{
-  e.preventDefault();
+// 2. Place Order Button -> Show Summary (Validate Form first)
+document.getElementById('form').onsubmit = (e) => {
+    e.preventDefault();
+    const state = getCartState();
+    
+    if (state.count === 0) {
+        alert("Please select at least one item.");
+        return;
+    }
+    
+    // Check if form fields are filled (Native required check handles this usually, 
+    // but good to be safe if triggered manually)
+    const name = document.querySelector('input[name="name"]').value;
+    const contact = document.querySelector('input[name="contact"]').value;
+    const address = document.querySelector('input[name="address"]').value;
 
-  const items=[];
-  let t=0;
-  const form = document.getElementById('form');
-  document.querySelectorAll('.item-check:checked').forEach(cb=>{
-    const key=cb.name.replace("i_","");
-    const q=form[`q_${key}`].value;
-    items.push(`${key.replace(/_/g," ")} (x${q})`);
-    t+=prices[key]*q;
-  });
+    if(!name || !contact || !address) {
+        alert("Please fill in your Name, Contact, and Address details.");
+        return;
+    }
 
-  if(items.length===0){
-    alert("Please select at least one item");
-    return;
-  }
-
-  pending={items,total:t};
-  document.getElementById('preview').innerHTML=items.join("<br>")+`<br><br><b>Total:</b> ₱${t}`;
-  document.getElementById('modal').style.display="flex";
+    showSummaryModal();
 };
+
+/* ================= SUBMIT ORDER ================= */
 
 function confirmOrder(){
   const orderBtn = document.getElementById('orderBtn');
   const form = document.getElementById('form');
   const modal = document.getElementById('modal');
+  const confirmBtn = document.querySelector('.btn-confirm');
 
-  // Immediate UI Feedback
+  // Check required fields again just in case invoked from Cart directly
+  if(!form.checkValidity()) {
+      alert("Please close this window and fill out your Name, Contact and Address.");
+      modal.style.display = "none";
+      return;
+  }
+
+  // UI Feedback
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "SENDING...";
+  
   orderBtn.disabled = true;
-  orderBtn.textContent = "SAVING ORDER... PLEASE WAIT";
-  modal.style.display = "none"; 
+  orderBtn.textContent = "SAVING ORDER...";
 
   const fd = new URLSearchParams();
   const formData = new FormData(form);
@@ -391,12 +511,15 @@ function confirmOrder(){
     body: fd.toString()
   })
   .then(() => {
+    modal.style.display = "none";
     alert("Order saved successfully!");
     location.reload();
   })
   .catch(err=>{
     console.error(err);
     alert("Failed to save order. Please try again.");
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "CONFIRM ORDER";
     orderBtn.disabled = false;
     orderBtn.textContent = "PLACE ORDER";
   });
