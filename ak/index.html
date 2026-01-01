@@ -230,8 +230,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 </div>
 
 <script>
-// IMPORTANT: Ensure this matches your LATEST Deployment URL from Google Sheets
-const BASE = "https://script.google.com/macros/s/AKfycbxr2GcpiySfR5xWre3t1mgm0g7mHjTQemGN_-_tu-D2rK_XOTtM7GNPSIeF2YOkAqiJDA/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbyJenQbw_f_Ar81vPau-hiP8UHafUZrivuTQruUEfrbu3-dtsRnUjdoMb3tnEyjvYk_6w/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 
@@ -240,7 +239,6 @@ let settings = {};
 let pending = null;
 const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
-// Load Settings
 fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   settings = s;
   if (s.closed_today || s.auto_closed){
@@ -250,7 +248,6 @@ fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   }
 });
 
-// Load Menu
 function loadMenu(){
   fetch(MENU_URL).then(r=>r.json()).then(data=>{
     const tabs = document.getElementById('tabs');
@@ -362,14 +359,28 @@ document.getElementById('form').onsubmit = (e) => {
 
 document.getElementById('cart').onclick = () => document.getElementById('form').requestSubmit();
 
+// GENERATE ORDER ID (Matches Backend Logic)
+function generateOrderID() {
+    const now = new Date();
+    const datePart = now.getFullYear() + 
+        String(now.getMonth() + 1).padStart(2, '0') + 
+        String(now.getDate()).padStart(2, '0');
+    const timePart = String(now.getHours()).padStart(2, '0') + 
+        String(now.getMinutes()).padStart(2, '0');
+    const randomPart = Math.floor(Math.random() * 900) + 100;
+    return `AK-${datePart}-${timePart}-${randomPart}`;
+}
+
 async function confirmOrder(){
     const btn = document.getElementById('finalBtn');
     btn.disabled = true;
     btn.textContent = "SENDING...";
 
-    // Construct form data correctly for Google Apps Script
+    const orderID = generateOrderID(); // Generate ID here
+
     const fd = new URLSearchParams();
     fd.append("func", "order");
+    fd.append("orderID", orderID); // Pass the generated ID to backend
     fd.append("name", document.getElementById('userName').value);
     fd.append("contact", document.getElementById('userContact').value);
     fd.append("address", document.getElementById('userAddress').value);
@@ -379,7 +390,6 @@ async function confirmOrder(){
     fd.append("total", pending.total);
 
     try {
-        // The fix is the Content-Type header and sending as a string
         await fetch(BASE, { 
             method: "POST", 
             mode: "no-cors", 
@@ -387,15 +397,11 @@ async function confirmOrder(){
             body: fd.toString() 
         });
 
-        // Generate a visual ID for the user
-        const id = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6);
-        
-        // Wait 1 second so it doesn't feel "too fast" (since no-cors hides the server response)
         setTimeout(() => {
             document.getElementById('modalContent').innerHTML = `
                 <h2 style="font-family:'Bebas Neue'">ORDER PLACED!</h2>
                 <p>Reference ID:</p>
-                <div class="order-id-display">${id}</div>
+                <div class="order-id-display">${orderID}</div>
                 <p>Please take a screenshot for your records.</p>
                 <button class="main" onclick="location.reload()">OK</button>
             `;
