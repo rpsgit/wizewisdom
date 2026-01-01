@@ -24,17 +24,9 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 
 .page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:16px; background:#fff; border-radius:24px; }
 
-/* TRACK BUTTON */
 .track-btn {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: #eee;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: bold;
+  position: absolute; top: 16px; left: 16px; background: #eee; border: none;
+  padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: bold;
 }
 
 #logo{ display:block; margin:0 auto 8px; max-width:200px; width:100%; }
@@ -43,26 +35,33 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 .tabs button{ border:none; padding:10px 16px; border-radius:999px; background:#eee; cursor:pointer; white-space: nowrap; }
 .tabs button.active{ background:linear-gradient(135deg,var(--secondary),var(--primary)); }
 
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
 .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
 .item{ background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.1); }
 .item img{ width:100%; height:140px; object-fit:cover; }
 .body{ padding:12px; display:flex; justify-content:space-between; }
 .price{ color:#d4af37; font-weight:700; }
-.actions input[type=number]{ display:none; width:60px; text-align: center; }
+.actions input[type=number]{ display:none; width:60px; text-align: center; border: 1px solid #ddd; border-radius: 4px;}
 
 .pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; }
 #payInstructions { display: none; margin-top: 10px; padding: 10px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; }
 
-#cart{ position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,var(--secondary),var(--primary)); padding:15px 20px; border-radius:999px; cursor:pointer; z-index: 100; font-family:'Bebas Neue'; }
+.copy-icon { cursor: pointer; margin-left: 8px; vertical-align: middle; fill: #666; width: 18px; height: 18px; }
+.copy-icon:active { fill: var(--primary); }
+
+#cart{ position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,var(--secondary),var(--primary)); padding:15px 20px; border-radius:999px; cursor:pointer; z-index: 100; font-family:'Bebas Neue'; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .total-display{ font-size:1.5rem; margin:20px 0; text-align: right; font-family:'Bebas Neue'; }
 
-input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; }
+input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; }
 button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); font-family:'Bebas Neue'; font-size: 1.2rem; cursor: pointer; }
 
 #modal, #statusModal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; }
 .modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; text-align: center; }
 .order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; }
 .status-badge { font-size: 1.2rem; padding: 8px; border-radius: 8px; background: #eee; display: block; margin-top: 10px; }
+.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 0.9rem; }
 </style>
 
 <div id="closedBanner">🚫 ORDERING IS CLOSED</div>
@@ -79,17 +78,27 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
   <form id="form">
     <div id="menu"></div>
     <div class="total-display" id="totalDisplay">Total: ₱0</div>
+    
     <h3>DELIVERY DETAILS</h3>
     <input name="name" id="userName" placeholder="Full Name" required>
     <input name="contact" id="userContact" placeholder="Phone Number" required>
     <input name="address" id="userAddress" placeholder="Complete Address" required>
-    <textarea name="notes" placeholder="Landmarks / Special Notes"></textarea>
+    <textarea name="notes" id="userNotes" placeholder="Landmarks / Special Notes"></textarea>
+    
     <h3>PAYMENT</h3>
     <div class="pay-box">
         <label><input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash</label><br>
+        <div id="cashLogic" style="margin: 10px 0;">
+            <input type="text" id="changeFor" placeholder="Change for? (e.g. 1000)">
+        </div>
         <label><input type="radio" name="payment" value="GCash" onclick="togglePay()"> 🟦 GCash</label><br>
         <label><input type="radio" name="payment" value="Maya" onclick="togglePay()"> 🟩 Maya</label>
-        <div id="payInstructions">Send to: <strong id="payLabel"></strong><br>Number: <span id="payNum" style="font-weight:900;"></span></div>
+        
+        <div id="payInstructions">
+            Send to: <strong id="payLabel"></strong><br>
+            Number: <span id="payNum" style="font-weight:900;"></span>
+            <svg class="copy-icon" onclick="copyNumber()" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </div>
     </div>
     <button type="submit" class="main">PLACE ORDER</button>
   </form>
@@ -105,15 +114,15 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
   </div>
 </div>
 
-<div id="cart">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div>
+<div id="cart" onclick="showSummary()">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div>
 
 <div id="modal">
   <div class="modal-box" id="modalContent">
     <h3>ORDER SUMMARY</h3>
-    <div id="preview"></div>
+    <div id="preview" style="text-align: left; margin-bottom: 15px;"></div>
     <div style="display:flex; gap:10px; margin-top:20px;">
         <button class="main" onclick="confirmOrder()" id="finalBtn" style="flex:2;">CONFIRM</button>
-        <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; border-radius:999px; border:none;">CANCEL</button>
+        <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; border-radius:999px; border:none; background:#eee; cursor:pointer;">BACK</button>
     </div>
   </div>
 </div>
@@ -132,6 +141,7 @@ fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   if (s.closed_today || s.auto_closed) {
     document.getElementById('closedBanner').style.display="block";
     document.getElementById('form').style.display="none";
+    document.getElementById('cart').style.display="none";
   }
 });
 
@@ -148,7 +158,7 @@ function loadMenu(){
     let first=true;
     Object.keys(cats).forEach(cat=>{
       const id=cat.toLowerCase().replace(/\s+/g,"_");
-      tabs.insertAdjacentHTML("beforeend", `<button type="button" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`);
+      tabs.insertAdjacentHTML("beforeend", `<button type="button" id="tabbtn_${id}" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`);
       menu.insertAdjacentHTML("beforeend",`
         <div class="tab-content ${first?'active':''}" id="${id}">
           <div class="grid">${cats[cat].map(i=>{
@@ -159,7 +169,7 @@ function loadMenu(){
               <div class="body">
                 <div><strong>${i.Item}</strong><div class="price">₱${i.Price}</div></div>
                 <div class="actions">
-                  ${i.SoldOut?'<span style="color:red">SOLD OUT</span>':
+                  ${i.SoldOut?'<span style="color:red; font-weight:900;">SOLD OUT</span>':
                   `<input type="checkbox" name="i_${key}" class="item-check" onchange="updateCartUI()">
                    <input type="number" name="q_${key}" value="1" min="1" class="item-qty" onchange="updateCartUI()">`}
                 </div>
@@ -189,9 +199,10 @@ function updateCartUI() {
         if (cb.checked) {
             qtyInp.style.display = "block";
             const qty = parseInt(qtyInp.value) || 1;
-            total += (prices[key] * qty);
+            const sub = prices[key] * qty;
+            total += sub;
             count += qty;
-            items.push(`${key.replace(/_/g," ")} (x${qty})`);
+            items.push({ name: key.replace(/_/g," ").toUpperCase(), qty, sub });
         } else { qtyInp.style.display = "none"; }
     });
     document.getElementById('totalDisplay').textContent = `Total: ₱${total}`;
@@ -203,21 +214,45 @@ function updateCartUI() {
 function togglePay(){
     const val = document.querySelector('input[name="payment"]:checked').value;
     const inst = document.getElementById('payInstructions');
-    if(val === "Cash") inst.style.display = "none";
-    else {
+    const cashBox = document.getElementById('cashLogic');
+    
+    if(val === "Cash") {
+        inst.style.display = "none";
+        cashBox.style.display = "block";
+    } else {
+        cashBox.style.display = "none";
         inst.style.display = "block";
         document.getElementById('payLabel').textContent = val;
         document.getElementById('payNum').textContent = val === "GCash" ? settings.gcash_number : settings.maya_number;
     }
 }
 
+function copyNumber() {
+    const num = document.getElementById('payNum').innerText;
+    navigator.clipboard.writeText(num).then(() => alert("Number copied to clipboard!"));
+}
+
+function showSummary() {
+    const state = updateCartUI();
+    if (state.total === 0) return alert("Your cart is empty!");
+    
+    let summaryHtml = '';
+    state.items.forEach(item => {
+        summaryHtml += `<div class="summary-item"><span>${item.name} (x${item.qty})</span><span>₱${item.sub}</span></div>`;
+    });
+    
+    const payMethod = document.querySelector('input[name="payment"]:checked').value;
+    summaryHtml += `<div class="summary-item" style="margin-top:10px; font-weight:bold;"><span>TOTAL</span><span>₱${state.total}</span></div>`;
+    summaryHtml += `<p style="font-size:0.8rem; color:gray; margin-top:10px;">Payment: ${payMethod}</p>`;
+    
+    document.getElementById('preview').innerHTML = summaryHtml;
+    pending = { ...state, payment: payMethod };
+    document.getElementById('modal').style.display = "flex";
+}
+
 document.getElementById('form').onsubmit = (e) => {
     e.preventDefault();
-    const state = updateCartUI();
-    if (state.total === 0) return alert("Cart is empty");
-    pending = { ...state, payment: document.querySelector('input[name="payment"]:checked').value };
-    document.getElementById('preview').innerHTML = `<p>${pending.items.join("<br>")}</p><strong>Total: ₱${pending.total}</strong>`;
-    document.getElementById('modal').style.display = "flex";
+    showSummary();
 };
 
 function generateOrderID() {
@@ -228,26 +263,51 @@ function generateOrderID() {
 }
 
 async function confirmOrder(){
+    const name = document.getElementById('userName').value;
+    const contact = document.getElementById('userContact').value;
+    const address = document.getElementById('userAddress').value;
+    
+    if(!name || !contact || !address) {
+        alert("Please fill in delivery details first.");
+        document.getElementById('modal').style.display = 'none';
+        return;
+    }
+
     const btn = document.getElementById('finalBtn');
     btn.disabled = true; btn.textContent = "SENDING...";
+    
     const orderID = generateOrderID();
+    
+    // Process Notes (Include Change Info)
+    let finalNotes = document.getElementById('userNotes').value;
+    if(pending.payment === "Cash") {
+        const change = document.getElementById('changeFor').value;
+        if(change) finalNotes = `[CHANGE FOR ₱${change}] ` + finalNotes;
+    }
+
     const fd = new URLSearchParams();
-    fd.append("func", "order"); fd.append("orderID", orderID);
-    fd.append("name", document.getElementById('userName').value);
-    fd.append("contact", document.getElementById('userContact').value);
-    fd.append("address", document.getElementById('userAddress').value);
-    fd.append("items", pending.items.join(", "));
+    fd.append("func", "order"); 
+    fd.append("orderID", orderID);
+    fd.append("name", name);
+    fd.append("contact", contact);
+    fd.append("address", address);
+    fd.append("items", pending.items.map(i => `${i.name} x${i.qty}`).join(", "));
     fd.append("total", pending.total);
     fd.append("payment", pending.payment);
+    fd.append("notes", finalNotes);
 
     fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString(), headers: {"Content-Type": "application/x-www-form-urlencoded"} });
 
     setTimeout(() => {
-        document.getElementById('modalContent').innerHTML = `<h2>SUCCESS!</h2><p>Reference ID:</p><div class="order-id-display">${orderID}</div><p>Keep this ID to track your order.</p><button class="main" onclick="location.reload()">OK</button>`;
+        document.getElementById('modalContent').innerHTML = `
+            <h2>SUCCESS!</h2>
+            <p>Reference ID:</p>
+            <div class="order-id-display">${orderID}</div>
+            <p>Order details sent! Keep this ID to track your order.</p>
+            <button class="main" onclick="location.reload()">CLOSE</button>`;
     }, 1500);
 }
 
-// STATUS TRACKING LOGIC
 function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
 function closeStatusModal() { document.getElementById('statusModal').style.display = "none"; document.getElementById('statusResult').innerHTML = ""; }
 
