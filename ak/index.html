@@ -1,3 +1,841 @@
---- layout: default 
+--- 
+
+layout: default 
+
 title: ADIMUP KITCHEN 
---- <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> <style> :root{ --primary:#ffd600; /* Vibrant Yellow */ --secondary:#ffea00; /* Lighter Yellow */ --bg:#f4f4f4; --text-dark: #111; } *{box-sizing:border-box} body{ margin:0; font-family:'Lato', Arial, sans-serif; background:var(--bg); color: var(--text-dark); } /* HEADLINES */ h1,h2,h3, .tabs button, .price, #logoFallback{ font-family:'Bebas Neue', Arial, sans-serif; letter-spacing:.03em; } /* CLOSED */ #closedBanner{ display:none; background:#111; color:#fff; padding:14px; text-align:center; font-weight:900; position: sticky; top: 0; z-index: 1001; } /* PAGE */ .page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:16px; background:#fff; border-radius:24px; } /* SHARE BUTTON */ .share-btn { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: #f4f4f4; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; z-index: 10; } .share-btn:hover { background: var(--secondary); } .share-btn svg { width: 20px; height: 20px; fill: var(--text-dark); } /* LOGO */ #logo{ display:block; margin:0 auto 8px; max-width:200px; width:100%; } #logoFallback{ display:none; text-align:center; font-size:1.4rem; margin-bottom:12px; } /* TABS */ .tabs{ display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom: 5px; } .tabs button{ border:none; padding:10px 16px; border-radius:999px; background:#eee; cursor:pointer; white-space: nowrap; } .tabs button.active{ background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); } /* MENU GRID */ .tab-content{display:none} .tab-content.active{display:block} .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; } .item{ background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.1); } .item img{ width:100%; height:140px; object-fit:cover; cursor: zoom-in; transition: opacity 0.2s; } .item img:hover { opacity: 0.9; } .body{ padding:12px; display:flex; justify-content:space-between; } .price{color:#d4af37; font-weight:700;} .actions{ display:flex; flex-direction:column; align-items:center; } .actions input[type=number]{ display:none; width:60px; margin-top:4px; text-align: center; } .soldout{ color:red; font-weight:900; font-size:.85rem; } /* PAYMENT SECTION */ .pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; } .pay-opt { display: block; margin-bottom: 8px; cursor: pointer; } #payInstructions { display: none; margin-top: 10px; font-size: 0.9rem; padding: 10px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; } /* FULL IMAGE OVERLAY (LIGHTBOX) */ #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; cursor: zoom-out; } #imageViewer img { max-width: 95%; max-height: 95%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); } /* CART & MODALS */ #cart{ position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); padding:15px 20px; border-radius:999px; font-family:'Bebas Neue', Arial, sans-serif; cursor:pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; } .total-display{ font-size:1.5rem; font-family:'Bebas Neue', Arial, sans-serif; margin:20px 0; text-align: right; } input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; } button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue', Arial,sans-serif; font-size: 1.2rem; cursor: pointer; margin-top: 10px; } #modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; } .modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; max-height: 80vh; overflow-y: auto; text-align: center;} .summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.95rem; text-align: left; } .summary-total { margin-top: 15px; font-size: 1.2rem; font-weight: bold; text-align: right; border-top: 2px solid #111; padding-top: 10px; } .order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; font-family: 'Bebas Neue'; } </style> <div id="closedBanner">🚫 ORDERING IS CLOSED</div> <div id="imageViewer" onclick="this.style.display='none'"> <img id="fullImage" src=""> </div> <div class="page"> <button class="share-btn" id="shareBtn" title="Share Menu"> <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> </button> <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" onerror="this.style.display='none';logoFallback.style.display='block'"> <div id="logoFallback">ADIMUP KITCHEN</div> <h1 style="text-align:center">ADIMUP KITCHEN</h1> <div class="tabs" id="tabs"></div> <form id="form"> <div id="menu"></div> <div class="total-display" id="totalDisplay">Total: ₱0</div> <h3>DELIVERY DETAILS</h3> <input name="name" id="userName" placeholder="Full Name" required> <input name="contact" id="userContact" placeholder="Phone Number" required> <input name="address" id="userAddress" placeholder="Complete Address" required> <textarea name="notes" placeholder="Landmarks / Special Notes"></textarea> <h3>PAYMENT METHOD</h3> <div class="pay-box"> <label class="pay-opt"><input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash on Delivery</label> <label class="pay-opt"><input type="radio" name="payment" value="GCash" onclick="togglePay()"> 🟦 GCash</label> <label class="pay-opt"><input type="radio" name="payment" value="Maya" onclick="togglePay()"> 🟩 Maya</label> <div id="payInstructions"> Send payment to: <strong id="payLabel">GCash</strong><br> Number: <span id="payNum" style="font-weight:900; font-size:1.2rem;">---</span> </div> </div> <button type="submit" class="main" id="orderBtn">PLACE ORDER</button> </form> </div> <div id="cart">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div> <div id="modal"> <div class="modal-box" id="modalContent"> <h3>ORDER SUMMARY</h3> <div id="preview"></div> <div id="modalActions" style="margin-top:20px; display:flex; gap:10px;"> <button class="main" onclick="confirmOrder()" id="finalBtn" style="flex:2; margin:0">CONFIRM & SEND</button> <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; background:#eee; border:none; border-radius:999px; font-family:'Bebas Neue'; cursor:pointer">CANCEL</button> </div> </div> </div> <script> // IMPORTANT: Update this BASE URL every time you do a "New Deployment" const BASE = "https://script.google.com/macros/s/AKfycbxr2GcpiySfR5xWre3t1mgm0g7mHjTQemGN_-_tu-D2rK_XOTtM7GNPSIeF2YOkAqiJDA/exec"; const MENU_URL = BASE + "?func=getMenu"; const SETTINGS_URL = BASE + "?func=getSettings"; const prices = {}; let settings = {}; let pending = null; const k = t => t.toLowerCase().replace(/\s+/g,"_"); fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{ settings = s; if (s.closed_today || s.auto_closed){ document.getElementById('closedBanner').style.display="block"; document.getElementById('form').style.display="none"; document.getElementById('cart').style.display="none"; } }); function loadMenu(){ fetch(MENU_URL).then(r=>r.json()).then(data=>{ const tabs = document.getElementById('tabs'), menu = document.getElementById('menu'), cats={}; data.forEach(i=>{ const c=i.Category||"Others"; cats[c]=cats[c]||[]; cats[c].push(i); }); let first=true; Object.keys(cats).forEach(cat=>{ const id=k(cat); tabs.insertAdjacentHTML("beforeend", <button type="button" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>); menu.insertAdjacentHTML("beforeend", <div class="tab-content ${first?'active':''}" id="${id}"> <div class="grid">${cats[cat].map(i=>{ const key=k(i.Item); prices[key]=i.Price; return <div class="item"> <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}" onclick="viewImage(this.src)"> <div class="body"> <div><strong>${i.Item}</strong><div class="price">₱${i.Price}</div></div> <div class="actions"> ${i.SoldOut ? '<div class="soldout">SOLD OUT</div>' : <input type="checkbox" name="i_${key}" class="item-check"> <input type="number" name="q_${key}" value="1" min="1" style="display:none" class="item-qty">} </div> </div> </div>; }).join("")}</div> </div>); first=false; }); }); } function getCartState() { let total = 0, count = 0; const items = [], itemStrings = []; document.querySelectorAll('.item-check').forEach(cb => { const key = cb.name.replace("i_", ""), qtyInput = document.querySelector(input[name="q_${key}"]); if (cb.checked) { qtyInput.style.display = "block"; const qty = parseInt(qtyInput.value) || 1; total += (prices[key] * qty); count += qty; items.push({ name: key.replace(/_/g, " ").toUpperCase(), qty, subtotal: prices[key]*qty }); itemStrings.push(${key.replace(/_/g, " ")} (x${qty})); } else qtyInput.style.display = "none"; }); return { total, count, items, itemStrings }; } function updateCartUI() { const s = getCartState(); document.getElementById('totalDisplay').textContent = Total: ₱${s.total}; document.getElementById('cartSum').textContent = s.total; document.getElementById('cartCount').textContent = s.count; } function showSummary() { const s = getCartState(); if (s.count === 0) return alert("Cart is empty!"); let html = s.items.map(i => <div class="summary-item"><span>${i.name} x${i.qty}</span><span>₱${i.subtotal}</span></div>).join(""); const pay = document.querySelector('input[name="payment"]:checked').value; html += <div class="summary-item" style="color:gray"><span>Method:</span><span>${pay}</span></div>; html += <div class="summary-total">TOTAL: ₱${s.total}</div>; document.getElementById('preview').innerHTML = html; pending = { items: s.itemStrings, total: s.total, payment: pay }; document.getElementById('modal').style.display = "flex"; } document.addEventListener("change", (e) => { if (e.target.matches('.item-check, .item-qty')) updateCartUI(); }); document.getElementById('cart').onclick = () => showSummary(); document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); }; async function confirmOrder(){ const name = document.getElementById('userName').value.trim(); const contact = document.getElementById('userContact').value.trim(); const address = document.getElementById('userAddress').value.trim(); if (!name || !contact || !address) { alert("Please complete Delivery Details first!"); document.getElementById('modal').style.display = "none"; return; } const btn = document.getElementById('finalBtn'); btn.disabled = true; btn.textContent = "SENDING..."; const params = new URLSearchParams({ func: "order", name, contact, address, notes: document.querySelector('textarea[name="notes"]').value, payment: pending.payment, items: pending.items.join(", "), total: pending.total }); // Saving to Backend try { await fetch(BASE, { method: "POST", mode: "no-cors", body: params }); const id = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6); document.getElementById('modalContent').innerHTML = <h2>ORDER PLACED!</h2><p>Ref ID: <span class="order-id-display">${id}</span></p> <button class="main" onclick="location.reload()">OK</button>; } catch (e) { alert("Error saving order. Check your connection."); btn.disabled = false; btn.textContent = "CONFIRM & SEND"; } } function togglePay(){ const val = document.querySelector('input[name="payment"]:checked').value; const inst = document.getElementById('payInstructions'); inst.style.display = val === "Cash" ? "none" : "block"; if(val !== "Cash") { document.getElementById('payLabel').textContent = val; document.getElementById('payNum').textContent = val === "GCash" ? settings.gcash_number : settings.maya_number; } } loadMenu(); </script>
+
+--- 
+
+  
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> 
+
+  
+
+<style> 
+
+:root{ 
+
+  --primary:#ffd600;   /* Vibrant Yellow */ 
+
+  --secondary:#ffea00; /* Lighter Yellow */ 
+
+  --bg:#f4f4f4; 
+
+  --text-dark: #111; 
+
+} 
+
+*{box-sizing:border-box} 
+
+body{ 
+
+  margin:0; 
+
+  font-family:'Lato', Arial, sans-serif; 
+
+  background:var(--bg); 
+
+  color: var(--text-dark); 
+
+} 
+
+  
+
+/* HEADLINES */ 
+
+h1,h2,h3, 
+
+.tabs button, 
+
+.price, 
+
+#logoFallback{ 
+
+  font-family:'Bebas Neue', Arial, sans-serif; 
+
+  letter-spacing:.03em; 
+
+} 
+
+  
+
+/* CLOSED */ 
+
+#closedBanner{ 
+
+  display:none; 
+
+  background:#111; 
+
+  color:#fff; 
+
+  padding:14px; 
+
+  text-align:center; 
+
+  font-weight:900; 
+
+  position: sticky; 
+
+  top: 0; 
+
+  z-index: 1001; 
+
+} 
+
+  
+
+/* PAGE */ 
+
+.page{ 
+
+  position: relative; 
+
+  max-width:1200px; 
+
+  margin:20px auto 200px; 
+
+  padding:16px; 
+
+  background:#fff; 
+
+  border-radius:24px; 
+
+} 
+
+  
+
+/* SHARE BUTTON */ 
+
+.share-btn { 
+
+  position: absolute; 
+
+  top: 16px; 
+
+  right: 16px; 
+
+  width: 40px; 
+
+  height: 40px; 
+
+  border-radius: 50%; 
+
+  background: #f4f4f4; 
+
+  border: none; 
+
+  display: flex; 
+
+  align-items: center; 
+
+  justify-content: center; 
+
+  cursor: pointer; 
+
+  transition: background 0.2s; 
+
+  z-index: 10; 
+
+} 
+
+.share-btn:hover { background: var(--secondary); } 
+
+.share-btn svg { width: 20px; height: 20px; fill: var(--text-dark); } 
+
+  
+
+/* LOGO */ 
+
+#logo{ 
+
+  display:block; 
+
+  margin:0 auto 8px; 
+
+  max-width:200px; 
+
+  width:100%; 
+
+} 
+
+#logoFallback{ 
+
+  display:none; 
+
+  text-align:center; 
+
+  font-size:1.4rem; 
+
+  margin-bottom:12px; 
+
+} 
+
+  
+
+/* TABS */ 
+
+.tabs{ 
+
+  display:flex; 
+
+  gap:8px; 
+
+  overflow-x:auto; 
+
+  margin-bottom:16px; 
+
+  padding-bottom: 5px; 
+
+} 
+
+.tabs button{ 
+
+  border:none; 
+
+  padding:10px 16px; 
+
+  border-radius:999px; 
+
+  background:#eee; 
+
+  cursor:pointer; 
+
+  white-space: nowrap; 
+
+} 
+
+.tabs button.active{ 
+
+  background:linear-gradient(135deg,var(--secondary),var(--primary)); 
+
+  color:var(--text-dark); 
+
+} 
+
+  
+
+/* MENU GRID */ 
+
+.tab-content{display:none} 
+
+.tab-content.active{display:block} 
+
+.grid{ 
+
+  display:grid; 
+
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); 
+
+  gap:14px; 
+
+} 
+
+.item{ 
+
+  background:#fff; 
+
+  border-radius:16px; 
+
+  overflow:hidden; 
+
+  box-shadow:0 6px 18px rgba(0,0,0,.1); 
+
+} 
+
+.item img{ 
+
+  width:100%; 
+
+  height:140px; 
+
+  object-fit:cover; 
+
+  cursor: zoom-in; 
+
+  transition: opacity 0.2s; 
+
+} 
+
+.item img:hover { opacity: 0.9; } 
+
+  
+
+.body{ 
+
+  padding:12px; 
+
+  display:flex; 
+
+  justify-content:space-between; 
+
+} 
+
+.price{color:#d4af37; font-weight:700;} 
+
+  
+
+.actions{ 
+
+  display:flex; 
+
+  flex-direction:column; 
+
+  align-items:center; 
+
+} 
+
+.actions input[type=number]{ 
+
+  display:none; 
+
+  width:60px; 
+
+  margin-top:4px; 
+
+  text-align: center; 
+
+} 
+
+.soldout{ 
+
+  color:red; 
+
+  font-weight:900; 
+
+  font-size:.85rem; 
+
+} 
+
+  
+
+/* PAYMENT SECTION */ 
+
+.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; } 
+
+.pay-opt { display: block; margin-bottom: 8px; cursor: pointer; } 
+
+#payInstructions { display: none; margin-top: 10px; font-size: 0.9rem; padding: 10px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; } 
+
+  
+
+/* FULL IMAGE OVERLAY (LIGHTBOX) */ 
+
+#imageViewer { 
+
+  display: none; 
+
+  position: fixed; 
+
+  inset: 0; 
+
+  background: rgba(0,0,0,0.9); 
+
+  z-index: 1000; 
+
+  justify-content: center; 
+
+  align-items: center; 
+
+  cursor: zoom-out; 
+
+} 
+
+#imageViewer img { 
+
+  max-width: 95%; 
+
+  max-height: 95%; 
+
+  border-radius: 8px; 
+
+  box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+
+} 
+
+  
+
+/* CART & MODALS */ 
+
+#cart{ 
+
+  position:fixed; bottom:20px; right:20px; 
+
+  background:linear-gradient(135deg,var(--secondary),var(--primary)); 
+
+  color:var(--text-dark); padding:15px 20px; border-radius:999px; 
+
+  font-family:'Bebas Neue', Arial, sans-serif; cursor:pointer; 
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; 
+
+} 
+
+.total-display{ font-size:1.5rem; font-family:'Bebas Neue', Arial, sans-serif; margin:20px 0; text-align: right; } 
+
+input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; } 
+
+button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue', Arial,sans-serif; font-size: 1.2rem; cursor: pointer; margin-top: 10px; } 
+
+  
+
+#modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; } 
+
+.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; max-height: 80vh; overflow-y: auto; text-align: center;} 
+
+.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.95rem; text-align: left; } 
+
+.summary-total { margin-top: 15px; font-size: 1.2rem; font-weight: bold; text-align: right; border-top: 2px solid #111; padding-top: 10px; } 
+
+.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; font-family: 'Bebas Neue'; } 
+
+</style> 
+
+  
+
+<div id="closedBanner">🚫 ORDERING IS CLOSED</div> 
+
+  
+
+<div id="imageViewer" onclick="this.style.display='none'"> 
+
+  <img id="fullImage" src=""> 
+
+</div> 
+
+  
+
+<div class="page"> 
+
+  <button class="share-btn" id="shareBtn" title="Share Menu"> 
+
+    <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> 
+
+  </button> 
+
+  
+
+  <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" onerror="this.style.display='none';logoFallback.style.display='block'"> 
+
+  <div id="logoFallback">ADIMUP KITCHEN</div> 
+
+  <h1 style="text-align:center">ADIMUP KITCHEN</h1> 
+
+  
+
+  <div class="tabs" id="tabs"></div> 
+
+  
+
+  <form id="form"> 
+
+    <div id="menu"></div> 
+
+    <div class="total-display" id="totalDisplay">Total: ₱0</div> 
+
+  
+
+    <h3>DELIVERY DETAILS</h3> 
+
+    <input name="name" id="userName" placeholder="Full Name" required> 
+
+    <input name="contact" id="userContact" placeholder="Phone Number" required> 
+
+    <input name="address" id="userAddress" placeholder="Complete Address" required> 
+
+    <textarea name="notes" placeholder="Landmarks / Special Notes"></textarea> 
+
+  
+
+    <h3>PAYMENT METHOD</h3> 
+
+    <div class="pay-box"> 
+
+        <label class="pay-opt"><input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash on Delivery</label> 
+
+        <label class="pay-opt"><input type="radio" name="payment" value="GCash" onclick="togglePay()"> 🟦 GCash</label> 
+
+        <label class="pay-opt"><input type="radio" name="payment" value="Maya" onclick="togglePay()"> 🟩 Maya</label> 
+
+        <div id="payInstructions"> 
+
+            Send payment to: <strong id="payLabel">GCash</strong><br> 
+
+            Number: <span id="payNum" style="font-weight:900; font-size:1.2rem;">---</span> 
+
+        </div> 
+
+    </div> 
+
+  
+
+    <button type="submit" class="main" id="orderBtn">PLACE ORDER</button> 
+
+  </form> 
+
+</div> 
+
+  
+
+<div id="cart">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div> 
+
+  
+
+<div id="modal"> 
+
+  <div class="modal-box" id="modalContent"> 
+
+    <h3>ORDER SUMMARY</h3> 
+
+    <div id="preview"></div> 
+
+    <div id="modalActions" style="margin-top:20px; display:flex; gap:10px;"> 
+
+        <button class="main" onclick="confirmOrder()" id="finalBtn" style="flex:2; margin:0">CONFIRM & SEND</button> 
+
+        <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; background:#eee; border:none; border-radius:999px; font-family:'Bebas Neue'; cursor:pointer">CANCEL</button> 
+
+    </div> 
+
+  </div> 
+
+</div> 
+
+  
+
+<script> 
+
+const BASE = "https://script.google.com/macros/s/AKfycbwy4hz-acw9q-sLh9c9gTnt4UnxGO2oMMN4tpix719m1BJ1lEtFWdHJSLghGfAZ_N8g9Q/exec"; 
+
+const MENU_URL = BASE + "?func=getMenu"; 
+
+const SETTINGS_URL = BASE + "?func=getSettings"; 
+
+  
+
+const prices = {}; 
+
+let settings = {}; 
+
+let pending = null; 
+
+const k = t => t.toLowerCase().replace(/\s+/g,"_"); 
+
+  
+
+// Initialize Settings 
+
+fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{ 
+
+  settings = s; 
+
+  if (s.closed_today || s.auto_closed){ 
+
+    document.getElementById('closedBanner').style.display="block"; 
+
+    document.getElementById('form').style.display="none"; 
+
+    document.getElementById('cart').style.display="none"; 
+
+  } 
+
+}); 
+
+  
+
+function viewImage(url) { 
+
+  const viewer = document.getElementById('imageViewer'); 
+
+  const img = document.getElementById('fullImage'); 
+
+  img.src = url; 
+
+  viewer.style.display = 'flex'; 
+
+} 
+
+  
+
+function loadMenu(){ 
+
+  fetch(MENU_URL).then(r=>r.json()).then(data=>{ 
+
+    const tabs = document.getElementById('tabs'); 
+
+    const menu = document.getElementById('menu'); 
+
+    const cats={}; 
+
+    data.forEach(i=>{ 
+
+      const c=i.Category||"Others"; 
+
+      cats[c]=cats[c]||[]; 
+
+      cats[c].push(i); 
+
+    }); 
+
+  
+
+    let first=true; 
+
+    Object.keys(cats).forEach(cat=>{ 
+
+      const id=k(cat); 
+
+      tabs.insertAdjacentHTML("beforeend", `<button type="button" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`); 
+
+      menu.insertAdjacentHTML("beforeend",` 
+
+        <div class="tab-content ${first?'active':''}" id="${id}"> 
+
+          <div class="grid"> 
+
+            ${cats[cat].map(i=>{ 
+
+              const key=k(i.Item); 
+
+              const imgUrl = i.ImageURL || 'https://via.placeholder.com/300x200'; 
+
+              prices[key]=i.Price; 
+
+              return ` 
+
+              <div class="item"> 
+
+                <img src="${imgUrl}" onclick="viewImage('${imgUrl}')"> 
+
+                <div class="body"> 
+
+                  <div> 
+
+                    <strong>${i.Item}</strong> 
+
+                    <div class="price">₱${i.Price}</div> 
+
+                  </div> 
+
+                  <div class="actions"> 
+
+                    ${i.SoldOut?'<div class="soldout">SOLD OUT</div>': 
+
+                    `<input type="checkbox" name="i_${key}" class="item-check"> 
+
+                     <input type="number" name="q_${key}" value="1" min="1" style="display:none" class="item-qty">`} 
+
+                  </div> 
+
+                </div> 
+
+              </div>`; 
+
+            }).join("")} 
+
+          </div> 
+
+        </div> 
+
+      `); 
+
+      first=false; 
+
+    }); 
+
+  }); 
+
+} 
+
+  
+
+function openTab(id,btn){ 
+
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active")); 
+
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active")); 
+
+  document.getElementById(id).classList.add("active"); 
+
+  btn.classList.add("active"); 
+
+} 
+
+  
+
+function togglePay(){ 
+
+    const val = document.querySelector('input[name="payment"]:checked').value; 
+
+    const inst = document.getElementById('payInstructions'); 
+
+    if(val === "Cash") { 
+
+        inst.style.display = "none"; 
+
+    } else { 
+
+        inst.style.display = "block"; 
+
+        document.getElementById('payLabel').textContent = val; 
+
+        document.getElementById('payNum').textContent = val === "GCash" ? settings.gcash_number : settings.maya_number; 
+
+    } 
+
+} 
+
+  
+
+function getCartState() { 
+
+    let total = 0, count = 0; 
+
+    const items = [], itemStrings = []; 
+
+    document.querySelectorAll('.item-check').forEach(cb => { 
+
+        const key = cb.name.replace("i_", ""); 
+
+        const qtyInput = document.querySelector(`input[name="q_${key}"]`); 
+
+        if (cb.checked) { 
+
+            qtyInput.style.display = "block"; 
+
+            const qty = parseInt(qtyInput.value) || 1; 
+
+            total += (prices[key] * qty); 
+
+            count += qty; 
+
+            items.push({ name: key.replace(/_/g, " ").toUpperCase(), qty: qty, price: prices[key], subtotal: prices[key] * qty }); 
+
+            itemStrings.push(`${key.replace(/_/g, " ")} (x${qty})`); 
+
+        } else { qtyInput.style.display = "none"; } 
+
+    }); 
+
+    return { total, count, items, itemStrings }; 
+
+} 
+
+  
+
+function updateCartUI() { 
+
+    const state = getCartState(); 
+
+    document.getElementById('totalDisplay').textContent = `Total: ₱${state.total}`; 
+
+    document.getElementById('cartSum').textContent = state.total; 
+
+    document.getElementById('cartCount').textContent = state.count; 
+
+} 
+
+  
+
+document.addEventListener("change", (e) => { if (e.target.matches('.item-check') || e.target.matches('.item-qty')) updateCartUI(); }); 
+
+  
+
+document.getElementById('form').onsubmit = (e) => { 
+
+    e.preventDefault(); 
+
+    const state = getCartState(); 
+
+    if (state.count === 0) return alert("Your cart is empty."); 
+
+  
+
+    let html = ''; 
+
+    state.items.forEach(item => {  
+
+        html += `<div class="summary-item"><span>${item.name} x${item.qty}</span><span>₱${item.subtotal}</span></div>`;  
+
+    }); 
+
+    const payMethod = document.querySelector('input[name="payment"]:checked').value; 
+
+    html += `<div class="summary-item" style="margin-top:10px; color:gray"><span>Method:</span><span>${payMethod}</span></div>`; 
+
+    html += `<div class="summary-total">TOTAL: ₱${state.total}</div>`; 
+
+     
+
+    document.getElementById('preview').innerHTML = html; 
+
+    pending = { items: state.itemStrings, total: state.total, payment: payMethod }; 
+
+    document.getElementById('modal').style.display = "flex"; 
+
+}; 
+
+  
+
+document.getElementById('cart').onclick = () => document.getElementById('form').requestSubmit(); 
+
+  
+
+async function confirmOrder(){ 
+
+    const btn = document.getElementById('finalBtn'); 
+
+    btn.disabled = true; 
+
+    btn.textContent = "SENDING..."; 
+
+  
+
+    const fd = new URLSearchParams(); 
+
+    fd.append("func", "order"); 
+
+    fd.append("name", document.getElementById('userName').value); 
+
+    fd.append("contact", document.getElementById('userContact').value); 
+
+    fd.append("address", document.getElementById('userAddress').value); 
+
+    fd.append("notes", document.querySelector('textarea[name="notes"]').value); 
+
+    fd.append("payment", pending.payment); 
+
+    fd.append("items", pending.items.join(", ")); 
+
+    fd.append("total", pending.total); 
+
+  
+
+    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() }); 
+
+  
+
+    const id = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6); 
+
+    document.getElementById('modalContent').innerHTML = ` 
+
+        <h2 style="font-family:'Bebas Neue'">ORDER PLACED!</h2> 
+
+        <p>Reference ID:</p> 
+
+        <div class="order-id-display">${id}</div> 
+
+        <p>Please take a screenshot for your records.</p> 
+
+        <button class="main" onclick="location.reload()">OK</button> 
+
+    `; 
+
+} 
+
+  
+
+loadMenu(); 
+
+</script> 
