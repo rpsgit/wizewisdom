@@ -155,7 +155,7 @@ button.main{
   border-radius:999px;
   background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:#fff;
-  font-family:'Bebas Neue', Arial, sans-serif;
+  font-family:'Bebas Neue', Arial,sans-serif;
 }
 button.main:disabled{
   opacity:.6;
@@ -185,12 +185,14 @@ button.main:disabled{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.95);
   z-index:40;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  text-align:center;
+  font-weight:700;
 }
 .spinner{
   width:32px;
@@ -242,7 +244,7 @@ button.main:disabled{
 
 <div id="savingOverlay">
   <div class="spinner"></div>
-  <div style="margin-top:10px;font-weight:700">
+  <div id="savingMessage" style="margin-top:10px;font-weight:700">
     Please wait while we save your order
   </div>
 </div>
@@ -373,20 +375,32 @@ form.onsubmit=e=>{
 function confirmOrder(){
   orderBtn.disabled=true;
   savingOverlay.style.display="flex";
+  savingMessage.textContent = "Saving your order… please wait";
 
   const fd=new FormData(form);
   fd.append("func","order");
   fd.append("items",pending.items.join(", "));
   fd.append("total",pending.total);
 
-  fetch(ORDER_URL,{method:"POST",body:fd})
-    .then(()=>location.reload())
-    .catch(()=>{
-      savingOverlay.style.display="none";
-      orderBtn.disabled=false;
-      setTimeout(()=>alert("Failed to save order"),300);
-    });
+  fetch(ORDER_URL,{
+    method:"POST",
+    body:fd
+  })
+  .then(r=>{
+    if(!r.ok) throw new Error("Server error");
+    return r.text();
+  })
+  .then(t=>{
+    savingMessage.textContent="Order saved successfully!";
+    setTimeout(()=>location.reload(),800);
+  })
+  .catch(err=>{
+    console.error(err);
+    savingMessage.textContent="Failed to save order. Please try again.";
+    orderBtn.disabled=false;
+  });
 }
 
+/* ================= INIT ================= */
 loadMenu();
 </script>
