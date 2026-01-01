@@ -1,237 +1,644 @@
----
-layout: default
-title: ADIMUP KITCHEN
----
+--- 
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+layout: default 
 
-<style>
-:root{ --primary:#ffd600; --secondary:#ffea00; --bg:#f4f4f4; --text-dark: #111; }
-*{box-sizing:border-box}
-body{ margin:0; font-family:'Lato', Arial, sans-serif; background:var(--bg); color: var(--text-dark); }
-h1,h2,h3, .tabs button, .price, #logoFallback{ font-family:'Bebas Neue', Arial, sans-serif; letter-spacing:.03em; }
+title: ADIMUP KITCHEN 
 
-#closedBanner{ display:none; background:#111; color:#fff; padding:14px; text-align:center; font-weight:900; position: sticky; top: 0; z-index: 1001; }
-.page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:16px; background:#fff; border-radius:24px; }
+--- 
 
-/* TABS */
-.tabs{ display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom: 5px; scrollbar-width: none; }
-.tabs::-webkit-scrollbar { display: none; }
-.tabs button{ border:none; padding:10px 16px; border-radius:999px; background:#eee; cursor:pointer; white-space: nowrap; transition: 0.2s; }
-.tabs button.active{ background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); }
+  
 
-/* MENU GRID */
-.tab-content{ display:none; }
-.tab-content.active{ display:block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
-.item{ background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.1); border: 1px solid #eee; }
-.item img{ width:100%; height:140px; object-fit:cover; cursor: zoom-in; }
-.body{ padding:12px; display:flex; justify-content:space-between; align-items: center; }
-.price{ color:#d4af37; font-weight:700; font-size: 1.1rem; }
-.actions{ display:flex; flex-direction:column; align-items:center; }
-.item-qty{ width:50px; text-align:center; border-radius:4px; border:1px solid #ccc; margin-top:5px; padding:2px; }
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> 
 
-/* COPY BUTTON */
-.copy-btn { background: #eee; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 8px; vertical-align: middle; }
-.copy-btn:active { background: var(--primary); }
+  
 
-.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; }
-#cart{ position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); padding:15px 25px; border-radius:999px; font-family:'Bebas Neue'; cursor:pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; }
-#modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; }
-.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; text-align: center;}
-.order-id-display { font-size: 1.2rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; font-family: 'Bebas Neue'; width: 100%; }
-button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue'; font-size: 1.2rem; cursor: pointer; }
-</style>
+<style> 
 
-<div id="closedBanner">🚫 ORDERING IS TEMPORARILY CLOSED</div>
+:root{ 
 
-<div class="page">
-  <h1 style="text-align:center; margin-top:0;">ADIMUP KITCHEN</h1>
-  <div class="tabs" id="tabs"></div>
+  --primary:#ffd600;   /* Vibrant Yellow */ 
 
-  <form id="form">
-    <div id="menu"></div>
-    <div id="cart" onclick="showSummary()">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div>
+  --secondary:#ffea00; /* Lighter Yellow */ 
 
-    <h3 style="border-bottom: 2px solid var(--primary); display:inline-block">DELIVERY DETAILS</h3>
-    <input name="name" id="userName" placeholder="Full Name" required>
-    <input name="contact" id="userContact" placeholder="Phone Number" required>
-    <input name="address" id="userAddress" placeholder="Complete Address" required>
-    <textarea name="notes" placeholder="Landmarks / Special Instructions"></textarea>
+  --bg:#f4f4f4; 
 
-    <h3 style="border-bottom: 2px solid var(--primary); display:inline-block">PAYMENT METHOD</h3>
-    <div class="pay-box">
-        <label style="display:block; margin-bottom:10px;"><input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash on Delivery</label>
-        <label style="display:block; margin-bottom:10px;"><input type="radio" name="payment" value="GCash" onclick="togglePay()"> 🟦 GCash</label>
-        <label style="display:block; margin-bottom:10px;"><input type="radio" name="payment" value="Maya" onclick="togglePay()"> 🟩 Maya</label>
-        <div id="payInstructions" style="display:none; background:#fff; padding:10px; border-radius:8px; border:1px dashed #ccc; margin-top:10px;">
-            Send to <span id="payLabel">GCash</span>: <br>
-            <span id="payNum" style="font-weight:900; font-size:1.2rem"></span> 
-            <button type="button" class="copy-btn" onclick="copyNum()">COPY</button>
-        </div>
-    </div>
-    <button type="submit" class="main">PREVIEW ORDER</button>
-  </form>
-</div>
+  --text-dark: #111; 
 
-<div id="modal">
-  <div class="modal-box" id="modalContent">
-    <h3>ORDER SUMMARY</h3>
-    <div id="preview" style="text-align:left; margin-bottom:20px;"></div>
-    <button class="main" onclick="confirmOrder()" id="finalBtn">CONFIRM & SEND</button>
-    <button type="button" onclick="document.getElementById('modal').style.display='none'" style="background:none; border:none; margin-top:15px; color:gray; cursor:pointer">Cancel</button>
-  </div>
-</div>
+} 
 
+*{box-sizing:border-box} 
+
+body{ 
+
+  margin:0; 
+
+  font-family:'Lato', Arial, sans-serif; 
+
+  background:var(--bg); 
+
+  color: var(--text-dark); 
+
+} 
+
+  
+
+/* HEADLINES */ 
+
+h1,h2,h3, 
+
+.tabs button, 
+
+.price, 
+
+#logoFallback{ 
+
+  font-family:'Bebas Neue', Arial, sans-serif; 
+
+  letter-spacing:.03em; 
+
+} 
+
+  
+
+/* CLOSED */ 
+
+#closedBanner{ 
+
+  display:none; 
+
+  background:#111; 
+
+  color:#fff; 
+
+  padding:14px; 
+
+  text-align:center; 
+
+  font-weight:900; 
+
+  position: sticky; 
+
+  top: 0; 
+
+  z-index: 1001; 
+
+} 
+
+  
+
+/* PAGE */ 
+
+.page{ 
+
+  position: relative; 
+
+  max-width:1200px; 
+
+  margin:20px auto 200px; 
+
+  padding:16px; 
+
+  background:#fff; 
+
+  border-radius:24px; 
+
+} 
+
+  
+
+/* SHARE BUTTON */ 
+
+.share-btn { 
+
+  position: absolute; 
+
+  top: 16px; 
+
+  right: 16px; 
+
+  width: 40px; 
+
+  height: 40px; 
+
+  border-radius: 50%; 
+
+  background: #f4f4f4; 
+
+  border: none; 
+
+  display: flex; 
+
+  align-items: center; 
+
+  justify-content: center; 
+
+  cursor: pointer; 
+
+  transition: background 0.2s; 
+
+  z-index: 10; 
+
+} 
+
+.share-btn:hover { background: var(--secondary); } 
+
+.share-btn svg { width: 20px; height: 20px; fill: var(--text-dark); } 
+
+  
+
+/* LOGO */ 
+
+#logo{ 
+
+  display:block; 
+
+  margin:0 auto 8px; 
+
+  max-width:200px; 
+
+  width:100%; 
+
+} 
+
+#logoFallback{ 
+
+  display:none; 
+
+  text-align:center; 
+
+  font-size:1.4rem; 
+
+  margin-bottom:12px; 
+
+} 
+
+  
+
+/* TABS */ 
+
+.tabs{ 
+
+  display:flex; 
+
+  gap:8px; 
+
+  overflow-x:auto; 
+
+  margin-bottom:16px; 
+
+  padding-bottom: 5px; 
+
+} 
+
+.tabs button{ 
+
+  border:none; 
+
+  padding:10px 16px; 
+
+  border-radius:999px; 
+
+  background:#eee; 
+
+  cursor:pointer; 
+
+  white-space: nowrap; 
+
+} 
+
+.tabs button.active{ 
+
+  background:linear-gradient(135deg,var(--secondary),var(--primary)); 
+
+  color:var(--text-dark); 
+
+} 
+
+  
+
+/* MENU GRID */ 
+
+.tab-content{display:none} 
+
+.tab-content.active{display:block} 
+
+.grid{ 
+
+  display:grid; 
+
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); 
+
+  gap:14px; 
+
+} 
+
+.item{ 
+
+  background:#fff; 
+
+  border-radius:16px; 
+
+  overflow:hidden; 
+
+  box-shadow:0 6px 18px rgba(0,0,0,.1); 
+
+} 
+
+.item img{ 
+
+  width:100%; 
+
+  height:140px; 
+
+  object-fit:cover; 
+
+  cursor: zoom-in; 
+
+  transition: opacity 0.2s; 
+
+} 
+
+.item img:hover { opacity: 0.9; } 
+
+  
+
+.body{ 
+
+  padding:12px; 
+
+  display:flex; 
+
+  justify-content:space-between; 
+
+} 
+
+.price{color:#d4af37; font-weight:700;} 
+
+  
+
+.actions{ 
+
+  display:flex; 
+
+  flex-direction:column; 
+
+  align-items:center; 
+
+} 
+
+.actions input[type=number]{ 
+
+  display:none; 
+
+  width:60px; 
+
+  margin-top:4px; 
+
+  text-align: center; 
+
+} 
+
+.soldout{ 
+
+  color:red; 
+
+  font-weight:900; 
+
+  font-size:.85rem; 
+
+} 
+
+  
+
+/* PAYMENT SECTION */ 
+
+.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; } 
+
+.pay-opt { display: block; margin-bottom: 8px; cursor: pointer; } 
+
+#payInstructions { display: none; margin-top: 10px; font-size: 0.9rem; padding: 10px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; } 
+
+  
+
+/* FULL IMAGE OVERLAY (LIGHTBOX) */ 
+
+#imageViewer { 
+
+  display: none; 
+
+  position: fixed; 
+
+  inset: 0; 
+
+  background: rgba(0,0,0,0.9); 
+
+  z-index: 1000; 
+
+  justify-content: center; 
+
+  align-items: center; 
+
+  cursor: zoom-out; 
+
+} 
+
+#imageViewer img { 
+
+  max-width: 95%; 
+
+  max-height: 95%; 
+
+  border-radius: 8px; 
+
+  box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+
+} 
+
+  
+
+/* CART & MODALS */ 
+
+#cart{ 
+
+  position:fixed; bottom:20px; right:20px; 
+
+  background:linear-gradient(135deg,var(--secondary),var(--primary)); 
+
+  color:var(--text-dark); padding:15px 20px; border-radius:999px; 
+
+  font-family:'Bebas Neue', Arial, sans-serif; cursor:pointer; 
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 100; 
+
+} 
+
+.total-display{ font-size:1.5rem; font-family:'Bebas Neue', Arial, sans-serif; margin:20px 0; text-align: right; } 
+
+input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; } 
+
+button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:var(--text-dark); font-family:'Bebas Neue', Arial,sans-serif; font-size: 1.2rem; cursor: pointer; margin-top: 10px; } 
+
+  
+
+#modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; } 
+
+.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; max-height: 80vh; overflow-y: auto; text-align: center;} 
+
+.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.95rem; text-align: left; } 
+
+.summary-total { margin-top: 15px; font-size: 1.2rem; font-weight: bold; text-align: right; border-top: 2px solid #111; padding-top: 10px; } 
+
+.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; font-family: 'Bebas Neue'; } 
+
+</style> 
+
+  
+
+<div id="closedBanner">🚫 ORDERING IS CLOSED</div> 
+
+  
+
+<div id="imageViewer" onclick="this.style.display='none'"> 
+
+  <img id="fullImage" src=""> 
+
+</div> 
+
+  
+
+<div class="page"> 
+
+  <button class="share-btn" id="shareBtn" title="Share Menu"> 
+
+    <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> 
+
+  </button> 
+
+  
+
+  <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" onerror="this.style.display='none';logoFallback.style.display='block'"> 
+
+  <div id="logoFallback">ADIMUP KITCHEN</div> 
+
+  <h1 style="text-align:center">ADIMUP KITCHEN</h1> 
+
+  
+
+  <div class="tabs" id="tabs"></div> 
+
+  
+
+  <form id="form"> 
+
+    <div id="menu"></div> 
+
+    <div class="total-display" id="totalDisplay">Total: ₱0</div> 
+
+  
+
+    <h3>DELIVERY DETAILS</h3> 
+
+    <input name="name" id="userName" placeholder="Full Name" required> 
+
+    <input name="contact" id="userContact" placeholder="Phone Number" required> 
+
+    <input name="address" id="userAddress" placeholder="Complete Address" required> 
+
+    <textarea name="notes" placeholder="Landmarks / Special Notes"></textarea> 
+
+  
+
+    <h3>PAYMENT METHOD</h3> 
+
+    <div class="pay-box"> 
+
+        <label class="pay-opt"><input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash on Delivery</label> 
+
+        <label class="pay-opt"><input type="radio" name="payment" value="GCash" onclick="togglePay()"> 🟦 GCash</label> 
+
+        <label class="pay-opt"><input type="radio" name="payment" value="Maya" onclick="togglePay()"> 🟩 Maya</label> 
+
+        <div id="payInstructions"> 
+
+            Send payment to: <strong id="payLabel">GCash</strong><br> 
+
+            Number: <span id="payNum" style="font-weight:900; font-size:1.2rem;">---</span> 
+
+        </div> 
+
+    </div> 
+
+  
+
+    <button type="submit" class="main" id="orderBtn">PLACE ORDER</button> 
+
+  </form> 
+
+</div> 
+
+  
+
+<div id="cart">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div> 
+
+  
+
+<div id="modal"> 
+
+  <div class="modal-box" id="modalContent"> 
+
+    <h3>ORDER SUMMARY</h3> 
+
+    <div id="preview"></div> 
+
+    <div id="modalActions" style="margin-top:20px; display:flex; gap:10px;"> 
+
+        <button class="main" onclick="confirmOrder()" id="finalBtn" style="flex:2; margin:0">CONFIRM & SEND</button> 
+
+        <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; background:#eee; border:none; border-radius:999px; font-family:'Bebas Neue'; cursor:pointer">CANCEL</button> 
+
+    </div> 
+
+  </div> 
+
+</div> 
+
+  
 <script>
+// IMPORTANT: Update this BASE URL every time you do a "New Deployment"
 const BASE = "https://script.google.com/macros/s/AKfycbxr2GcpiySfR5xWre3t1mgm0g7mHjTQemGN_-_tu-D2rK_XOTtM7GNPSIeF2YOkAqiJDA/exec";
+const MENU_URL = BASE + "?func=getMenu";
+const SETTINGS_URL = BASE + "?func=getSettings";
+
 const prices = {};
 let settings = {};
-let pendingData = null;
+let pending = null;
+const k = t => t.toLowerCase().replace(/\s+/g,"_");
 
-// Initialize
-fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
+fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   settings = s;
-  if(s.closed_today || s.auto_closed) document.getElementById('closedBanner').style.display="block";
+  if (s.closed_today || s.auto_closed){
+    document.getElementById('closedBanner').style.display="block";
+    document.getElementById('form').style.display="none";
+    document.getElementById('cart').style.display="none";
+  }
 });
 
-function loadMenu() {
-  fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
+function loadMenu(){
+  fetch(MENU_URL).then(r=>r.json()).then(data=>{
     const tabs = document.getElementById('tabs'), menu = document.getElementById('menu'), cats={};
-    data.forEach(i => { cats[i.Category] = cats[i.Category] || []; cats[i.Category].push(i); });
-    
-    Object.keys(cats).forEach((cat, idx) => {
-      const id = "cat-" + idx;
-      tabs.insertAdjacentHTML("beforeend", `<button type="button" class="${idx==0?'active':''}" onclick="openTab('${id}', this)">${cat}</button>`);
-      menu.insertAdjacentHTML("beforeend", `
-        <div class="tab-content ${idx==0?'active':''}" id="${id}">
-          <div class="grid">${cats[cat].map(i => {
-            const key = i.Item.replace(/\s+/g, '_');
-            prices[key] = i.Price;
-            return `
-              <div class="item">
-                <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}">
-                <div class="body">
-                  <div><strong>${i.Item}</strong><div class="price">₱${i.Price}</div></div>
-                  <div class="actions">
-                    ${i.SoldOut ? '<span class="soldout">SOLD OUT</span>' : `
-                      <input type="checkbox" class="item-check" data-key="${key}" onchange="updateCart()">
-                      <input type="number" class="item-qty" id="q_${key}" value="1" min="1" style="display:none" onchange="updateCart()">
-                    `}
-                  </div>
+    data.forEach(i=>{
+      const c=i.Category||"Others";
+      cats[c]=cats[c]||[];
+      cats[c].push(i);
+    });
+    let first=true;
+    Object.keys(cats).forEach(cat=>{
+      const id=k(cat);
+      tabs.insertAdjacentHTML("beforeend", `<button type="button" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`);
+      menu.insertAdjacentHTML("beforeend",`
+        <div class="tab-content ${first?'active':''}" id="${id}">
+          <div class="grid">${cats[cat].map(i=>{
+            const key=k(i.Item); prices[key]=i.Price;
+            return `<div class="item">
+              <img src="${i.ImageURL || 'https://via.placeholder.com/300x200'}" onclick="viewImage(this.src)">
+              <div class="body">
+                <div><strong>${i.Item}</strong><div class="price">₱${i.Price}</div></div>
+                <div class="actions">
+                  ${i.SoldOut ? '<div class="soldout">SOLD OUT</div>' : 
+                  `<input type="checkbox" name="i_${key}" class="item-check">
+                   <input type="number" name="q_${key}" value="1" min="1" style="display:none" class="item-qty">`}
                 </div>
-              </div>`;
-          }).join('')}</div>
+              </div>
+            </div>`;
+          }).join("")}</div>
         </div>`);
+      first=false;
     });
   });
 }
 
-function openTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
-
-function updateCart() {
+function getCartState() {
   let total = 0, count = 0;
+  const items = [], itemStrings = [];
   document.querySelectorAll('.item-check').forEach(cb => {
-    const key = cb.getAttribute('data-key');
-    const qtyInput = document.getElementById('q_'+key);
-    if(cb.checked) {
+    const key = cb.name.replace("i_", ""), qtyInput = document.querySelector(`input[name="q_${key}"]`);
+    if (cb.checked) {
       qtyInput.style.display = "block";
-      total += prices[key] * qtyInput.value;
-      count += parseInt(qtyInput.value);
-    } else {
-      qtyInput.style.display = "none";
-    }
+      const qty = parseInt(qtyInput.value) || 1;
+      total += (prices[key] * qty); count += qty;
+      items.push({ name: key.replace(/_/g, " ").toUpperCase(), qty, subtotal: prices[key]*qty });
+      itemStrings.push(`${key.replace(/_/g, " ")} (x${qty})`);
+    } else qtyInput.style.display = "none";
   });
-  document.getElementById('cartSum').textContent = total;
-  document.getElementById('cartCount').textContent = count;
+  return { total, count, items, itemStrings };
 }
 
-document.getElementById('form').onsubmit = (e) => {
-  e.preventDefault();
-  const s = getSummary();
-  if(!s.count) return alert("Please select items first!");
-  document.getElementById('preview').innerHTML = s.html;
-  document.getElementById('modal').style.display = 'flex';
-  pendingData = s;
-};
-
-function getSummary() {
-  let html = "", total = 0, count = 0, items = [];
-  document.querySelectorAll('.item-check:checked').forEach(cb => {
-    const key = cb.getAttribute('data-key');
-    const qty = document.getElementById('q_'+key).value;
-    const sub = prices[key] * qty;
-    html += `<div style="display:flex; justify:space-between"><span>${key.replace(/_/g,' ')} x${qty}</span> <span>₱${sub}</span></div>`;
-    total += sub; count++;
-    items.push(`${key.replace(/_/g,' ')} (x${qty})`);
-  });
-  const method = document.querySelector('input[name="payment"]:checked').value;
-  html += `<hr><div style="text-align:right"><b>TOTAL: ₱${total}</b><br><small>Method: ${method}</small></div>`;
-  return { html, total, items: items.join(', '), payment: method };
+function updateCartUI() {
+  const s = getCartState();
+  document.getElementById('totalDisplay').textContent = `Total: ₱${s.total}`;
+  document.getElementById('cartSum').textContent = s.total;
+  document.getElementById('cartCount').textContent = s.count;
 }
 
-async function confirmOrder() {
+function showSummary() {
+  const s = getCartState();
+  if (s.count === 0) return alert("Cart is empty!");
+  let html = s.items.map(i => `<div class="summary-item"><span>${i.name} x${i.qty}</span><span>₱${i.subtotal}</span></div>`).join("");
+  const pay = document.querySelector('input[name="payment"]:checked').value;
+  html += `<div class="summary-item" style="color:gray"><span>Method:</span><span>${pay}</span></div>`;
+  html += `<div class="summary-total">TOTAL: ₱${s.total}</div>`;
+  document.getElementById('preview').innerHTML = html;
+  pending = { items: s.itemStrings, total: s.total, payment: pay };
+  document.getElementById('modal').style.display = "flex";
+}
+
+document.addEventListener("change", (e) => { if (e.target.matches('.item-check, .item-qty')) updateCartUI(); });
+document.getElementById('cart').onclick = () => showSummary();
+document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
+
+async function confirmOrder(){
+  const name = document.getElementById('userName').value.trim();
+  const contact = document.getElementById('userContact').value.trim();
+  const address = document.getElementById('userAddress').value.trim();
+
+  if (!name || !contact || !address) {
+    alert("Please complete Delivery Details first!");
+    document.getElementById('modal').style.display = "none";
+    return;
+  }
+
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.textContent = "SENDING...";
-  
-  const fd = new URLSearchParams({
-    func: "order",
-    name: document.getElementById('userName').value,
-    contact: document.getElementById('userContact').value,
-    address: document.getElementById('userAddress').value,
+
+  const params = new URLSearchParams({
+    func: "order", name, contact, address,
     notes: document.querySelector('textarea[name="notes"]').value,
-    items: pendingData.items,
-    total: pendingData.total,
-    payment: pendingData.payment
+    payment: pending.payment,
+    items: pending.items.join(", "),
+    total: pending.total
   });
 
+  // Saving to Backend
   try {
-    const resp = await fetch(BASE, { method: "POST", body: fd, mode: "no-cors" });
-    // Since no-cors can't read response, we wait 1.5s then fetch the last Order ID or generate a local estimate
-    // To be 100% accurate, we would usually use a normal fetch, but Google Apps Script POST requires no-cors for simple setups.
-    // IMPROVED: Generate the ID pattern here to match Backend Logic exactly.
-    const now = new Date();
-    const dateStr = now.getFullYear()+("0"+(now.getMonth()+1)).slice(-2)+("0"+now.getDate()).slice(-2);
-    const timeStr = ("0"+now.getHours()).slice(-2)+("0"+now.getMinutes()).slice(-2);
-    const refID = `AK-${dateStr}-${timeStr}-XXX`; // The Backend creates the random part.
-
+    await fetch(BASE, { method: "POST", mode: "no-cors", body: params });
+    const id = "AK-" + Math.floor(Date.now() / 1000).toString().slice(-6);
     document.getElementById('modalContent').innerHTML = `
-      <h2 style="color:green">ORDER RECEIVED!</h2>
-      <p>Please save your Order ID for reference:</p>
-      <div class="order-id-display">PROCESSING...</div>
-      <p>We will contact you shortly via phone.</p>
-      <button class="main" onclick="location.reload()">CLOSE</button>
-    `;
-    
-    // Attempt to get the real ID from the backend (requires a short delay for sheet to update)
-    setTimeout(async () => {
-        const r = await fetch(BASE + "?func=getOrders");
-        const orders = await r.json();
-        const myOrder = orders[orders.length - 1];
-        document.querySelector('.order-id-display').textContent = myOrder.OrderID;
-    }, 2000);
-
-  } catch(e) { alert("Error sending order."); btn.disabled = false; }
+      <h2>ORDER PLACED!</h2><p>Ref ID: <span class="order-id-display">${id}</span></p>
+      <button class="main" onclick="location.reload()">OK</button>`;
+  } catch (e) {
+    alert("Error saving order. Check your connection.");
+    btn.disabled = false; btn.textContent = "CONFIRM & SEND";
+  }
 }
 
-function togglePay() {
+function togglePay(){
   const val = document.querySelector('input[name="payment"]:checked').value;
-  const box = document.getElementById('payInstructions');
-  box.style.display = (val === "Cash") ? "none" : "block";
-  document.getElementById('payLabel').textContent = val;
-  document.getElementById('payNum').textContent = (val === "GCash") ? settings.gcash_number : settings.maya_number;
-}
-
-function copyNum() {
-  const num = document.getElementById('payNum').textContent;
-  navigator.clipboard.writeText(num);
-  alert("Number copied: " + num);
+  const inst = document.getElementById('payInstructions');
+  inst.style.display = val === "Cash" ? "none" : "block";
+  if(val !== "Cash") {
+    document.getElementById('payLabel').textContent = val;
+    document.getElementById('payNum').textContent = val === "GCash" ? settings.gcash_number : settings.maya_number;
+  }
 }
 
 loadMenu();
