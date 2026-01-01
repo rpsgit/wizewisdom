@@ -353,8 +353,7 @@ document.getElementById('cart').onclick=()=>{
     alert("Please select items first");
     return;
   }
-  // Trigger form submit to populate "pending"
-  document.getElementById('orderBtn').click();
+  document.getElementById('orderBtn').scrollIntoView({behavior: 'smooth'});
 };
 
 /* ================= ORDER ================= */
@@ -383,13 +382,13 @@ document.getElementById('form').onsubmit=e=>{
 
 function confirmOrder(){
   const orderBtn = document.getElementById('orderBtn');
-  const savingOverlay = document.getElementById('savingOverlay');
-  const savingMessage = document.getElementById('savingMessage');
   const form = document.getElementById('form');
+  const modal = document.getElementById('modal');
 
-  orderBtn.disabled=true;
-  savingOverlay.style.display="flex";
-  savingMessage.textContent = "Saving your order… please wait";
+  // Simple feedback: Disable button and change text
+  orderBtn.disabled = true;
+  orderBtn.textContent = "SAVING ORDER... PLEASE WAIT";
+  modal.style.display = "none"; 
 
   const fd = new URLSearchParams();
   const formData = new FormData(form);
@@ -401,25 +400,22 @@ function confirmOrder(){
   fd.append("items",pending.items.join(", "));
   fd.append("total",pending.total);
 
-  // Use no-cors to prevent redirection blocks from Google Apps Script
   fetch(ORDER_URL,{
     method:"POST",
     mode: "no-cors", 
     cache: "no-cache",
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-    },
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: fd.toString()
   })
   .then(() => {
-    // Because of 'no-cors', we assume success if the request finishes
-    savingMessage.textContent="Order sent! Thank you.";
-    setTimeout(()=>location.reload(), 1500);
+    alert("Order saved successfully!");
+    location.reload();
   })
   .catch(err=>{
     console.error(err);
-    savingMessage.textContent="Error connecting to server.";
-    orderBtn.disabled=false;
+    alert("Failed to save order. Please try again.");
+    orderBtn.disabled = false;
+    orderBtn.textContent = "PLACE ORDER";
   });
 }
 
