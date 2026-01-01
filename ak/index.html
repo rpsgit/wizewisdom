@@ -232,7 +232,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbxDiWx11BkIjkYX8JCMakqiyOwcPExoSkXLPZvDyluBWfjBFU7_7sPX2LYVGusQVEwCFw/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzivly5C8FmsGD90bbqFgscqXRpCpreeOoIiB1cah8Ys9-JScXkZDlfx8O7R1d38NrxIg/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 const ORDER_URL = BASE;
@@ -357,11 +357,9 @@ document.getElementById('form').onsubmit = (e) => {
 function confirmOrder(){
   const form = document.getElementById('form');
   
-  // New Fix: Validate form before allowing order confirmation
   if (!form.checkValidity()) {
     alert("Please enter your Name, Contact, and Address before confirming your order.");
-    document.getElementById('modal').style.display = 'none'; // Close modal to show form
-    // Focus on the first empty required field
+    document.getElementById('modal').style.display = 'none';
     if(!document.getElementById('userName').value) document.getElementById('userName').focus();
     else if(!document.getElementById('userContact').value) document.getElementById('userContact').focus();
     else if(!document.getElementById('userAddress').value) document.getElementById('userAddress').focus();
