@@ -4,25 +4,96 @@ title: ADIMUP ADMIN
 ---
 
 <style>
-:root{--primary:#ff5722;--secondary:#ff7e5f;--bg:#f4f4f4}
-body{margin:0;font-family:Poppins,Arial,sans-serif;background:var(--bg)}
-.page{max-width:1000px;margin:20px auto;padding:16px;background:#fff;border-radius:24px}
-h1,h2{text-align:center;margin-bottom:20px}
-button{border:none;padding:10px 16px;border-radius:999px;background:linear-gradient(135deg,var(--secondary),var(--primary));color:#fff;font-weight:700;cursor:pointer;margin:5px}
-table{width:100%;border-collapse:collapse;margin-top:16px}
-th,td{border:1px solid #ccc;padding:8px;text-align:left}
-td input[type=checkbox]{transform:scale(1.2)}
-.completed{color:green;font-weight:800}
+:root{
+  --primary:#ff5722;
+  --secondary:#ff7e5f;
+  --bg:#f4f4f4;
+}
+body{
+  margin:0;
+  font-family:Poppins,Arial,sans-serif;
+  background:var(--bg);
+}
+.page{
+  max-width:1000px;
+  margin:20px auto;
+  padding:16px;
+  background:#fff;
+  border-radius:24px;
+}
+h1,h2{
+  text-align:center;
+  margin:20px 0;
+}
+button{
+  border:none;
+  padding:10px 16px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+button.secondary{
+  background:#ccc;
+  color:#000;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+}
+th,td{
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:left;
+  font-size:.9rem;
+}
+.completed{
+  color:green;
+  font-weight:800;
+}
+.center{
+  text-align:center;
+}
+/* New order highlight */
+.new-order {
+  animation: highlight 1.5s ease-in-out;
+}
+@keyframes highlight {
+  0% { background-color: #ffff99; }
+  100% { background-color: transparent; }
+}
 </style>
 
 <div class="page">
-  <h1>Adimup Admin Panel</h1>
+  <h1>ADIMUP ADMIN PANEL</h1>
 
-  <div style="text-align:center;margin-bottom:20px">
-    <button id="toggleStore">Toggle Store Open/Close</button>
-    <span id="storeStatus" style="margin-left:10px;font-weight:800"></span>
+  <!-- STORE TOGGLE -->
+  <div class="center">
+    <button id="toggleStore">LOADING…</button>
+    <div id="storeStatus" style="margin-top:8px;font-weight:800"></div>
   </div>
 
+  <!-- RECENT ORDERS -->
+  <h2>Recent Orders</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Address</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Notes</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="ordersBody"></tbody>
+  </table>
+
+  <!-- MENU -->
   <h2>Menu Items</h2>
   <table>
     <thead>
@@ -35,23 +106,6 @@ td input[type=checkbox]{transform:scale(1.2)}
     </thead>
     <tbody id="menuTable"></tbody>
   </table>
-
-  <h2>Recent Orders</h2>
-  <table id="ordersTable">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Name</th>
-        <th>Contact</th>
-        <th>Address</th>
-        <th>Items</th>
-        <th>Total</th>
-        <th>Notes</th>
-        <th>Completed</th>
-      </tr>
-    </thead>
-    <tbody id="ordersBody"></tbody>
-  </table>
 </div>
 
 <script>
@@ -59,84 +113,148 @@ td input[type=checkbox]{transform:scale(1.2)}
 const BASE = "https://script.google.com/macros/s/AKfycbzcg9KQ88cIhiW6nTyK-gIJcRCJ1A2RTRS2c60CXNHxzX53klf1XX9ydLdof1GF6E_gHA/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
-const ORDER_URL = BASE;
-
-/* ================= STATE ================= */
-let storeClosed = false;
-const menuData = [];
 
 /* ================= SETTINGS ================= */
+let storeClosed = false;
+
 function loadSettings(){
-  fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
-    storeClosed = s.closed_today || s.auto_closed;
-    storeStatus.textContent = storeClosed ? "Store is CLOSED" : "Store is OPEN";
-  });
+  fetch(SETTINGS_URL)
+    .then(r=>r.json())
+    .then(s=>{
+      storeClosed = !!(s.closed_today || s.auto_closed);
+      updateStoreUI();
+    });
 }
 
-toggleStore.onclick = () => {
+function updateStoreUI(){
+  toggleStore.textContent = storeClosed ? "OPEN STORE" : "CLOSE STORE";
+  storeStatus.textContent = storeClosed ? "Store is CLOSED" : "Store is OPEN";
+}
+
+toggleStore.onclick = ()=>{
   storeClosed = !storeClosed;
-  fetch(BASE,{method:"POST",body:new URLSearchParams({func:"toggleClose",value:storeClosed})})
-    .then(()=>storeStatus.textContent = storeClosed?"Store is CLOSED":"Store is OPEN");
+  updateStoreUI();
+
+  fetch(BASE,{
+    method:"POST",
+    body:new URLSearchParams({
+      func:"toggleClose",
+      value:storeClosed
+    })
+  });
 };
 
-/* ================= MENU ================= */
-function loadMenu(){
-  fetch(MENU_URL).then(r=>r.json()).then(data=>{
-    menuData.push(...data);
-    const cats = {};
-    data.forEach(i=>{
-      const c = i.Category||"Others";
-      cats[c] = cats[c]||[];
-      cats[c].push(i);
-    });
-    const sortedCats = Object.keys(cats).sort((a,b)=>cats[a][0].Sort-cats[b][0].Sort);
-    menuTable.innerHTML="";
-    sortedCats.forEach(cat=>{
-      cats[cat].forEach(item=>{
-        const tr=document.createElement("tr");
-        const soldCheckbox=document.createElement("input");
-        soldCheckbox.type="checkbox";
-        soldCheckbox.checked=item.SoldOut;
-        soldCheckbox.onchange=()=>toggleSold(item.Item,soldCheckbox.checked);
-        tr.innerHTML=`<td>${item.Item}</td><td>${item.Category}</td><td>₱${item.Price}</td><td></td>`;
-        tr.querySelector("td:last-child").appendChild(soldCheckbox);
-        menuTable.appendChild(tr);
-      });
-    });
-  });
-}
-
-function toggleSold(item,value){
-  fetch(BASE,{method:"POST",body:new URLSearchParams({func:"toggleSold",item:item,value:value})});
-}
-
 /* ================= ORDERS ================= */
+let lastOrderIDs = new Set();
+const newOrderSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+
 function loadOrders(){
-  fetch(BASE+"?func=getOrders").then(r=>r.json()).then(data=>{
-    ordersBody.innerHTML="";
-    data.forEach(o=>{
-      const tr=document.createElement("tr");
-      const completedBtn=document.createElement("button");
-      completedBtn.textContent=o.Completed?"Completed":"Mark Completed";
-      completedBtn.disabled=o.Completed;
-      completedBtn.onclick=()=>markCompleted(o.ID,completedBtn);
-      tr.innerHTML=`<td>${o.Time}</td><td>${o.Name}</td><td>${o.Contact}</td>
-                    <td>${o.Address}</td><td>${o.Items}</td><td>₱${o.Total}</td>
-                    <td>${o.Notes||""}</td><td></td>`;
-      tr.querySelector("td:last-child").appendChild(completedBtn);
-      ordersBody.appendChild(tr);
+  fetch(BASE + "?func=getOrders")
+    .then(r=>r.json())
+    .then(data=>{
+      ordersBody.innerHTML = "";
+
+      if(!Array.isArray(data) || data.length===0){
+        ordersBody.innerHTML =
+          `<tr><td colspan="8" class="center">No orders yet</td></tr>`;
+        lastOrderIDs.clear();
+        return;
+      }
+
+      // newest first
+      data.sort((a,b)=>new Date(b.Time)-new Date(a.Time));
+
+      data.forEach(o=>{
+        const tr=document.createElement("tr");
+
+        const btn=document.createElement("button");
+        btn.textContent = o.Completed ? "Completed" : "Mark Completed";
+        btn.disabled = o.Completed;
+        btn.onclick = ()=>markCompleted(o.ID,btn);
+
+        tr.innerHTML = `
+          <td>${o.Time}</td>
+          <td>${o.Name}</td>
+          <td>${o.Contact}</td>
+          <td>${o.Address}</td>
+          <td>${o.Items}</td>
+          <td>₱${o.Total}</td>
+          <td>${o.Notes||""}</td>
+          <td></td>
+        `;
+        tr.lastElementChild.appendChild(btn);
+        if(o.Completed) tr.classList.add("completed");
+
+        // NEW ORDER ALERT
+        if(!lastOrderIDs.has(o.ID)){
+          tr.classList.add("new-order");
+          newOrderSound.play().catch(()=>{});
+        }
+
+        lastOrderIDs.add(o.ID);
+        ordersBody.appendChild(tr);
+      });
+
+      // cleanup old IDs
+      if(lastOrderIDs.size > 1000) lastOrderIDs.clear();
     });
-  });
 }
 
 function markCompleted(id,btn){
-  fetch(BASE,{method:"POST",body:new URLSearchParams({func:"markCompleted",id:id})})
-    .then(()=>{btn.textContent="Completed";btn.disabled=true;});
+  fetch(BASE,{
+    method:"POST",
+    body:new URLSearchParams({func:"markCompleted",id})
+  }).then(()=>{
+    btn.textContent="Completed";
+    btn.disabled=true;
+  });
+}
+
+/* ================= MENU ================= */
+function loadMenu(){
+  fetch(MENU_URL)
+    .then(r=>r.json())
+    .then(data=>{
+      menuTable.innerHTML="";
+
+      if(!Array.isArray(data)) return;
+
+      data
+        .sort((a,b)=>(a.Sort||0)-(b.Sort||0))
+        .forEach(item=>{
+          const tr=document.createElement("tr");
+
+          const cb=document.createElement("input");
+          cb.type="checkbox";
+          cb.checked=!!item.SoldOut;
+          cb.onchange=()=>toggleSold(item.Item,cb.checked);
+
+          tr.innerHTML=`
+            <td>${item.Item}</td>
+            <td>${item.Category||""}</td>
+            <td>₱${item.Price}</td>
+            <td></td>
+          `;
+          tr.lastElementChild.appendChild(cb);
+          menuTable.appendChild(tr);
+        });
+    });
+}
+
+function toggleSold(item,value){
+  fetch(BASE,{
+    method:"POST",
+    body:new URLSearchParams({
+      func:"toggleSold",
+      item,
+      value
+    })
+  });
 }
 
 /* ================= INIT ================= */
 loadSettings();
-loadMenu();
 loadOrders();
-setInterval(loadOrders,30000); // refresh orders every 30s
+loadMenu();
+setInterval(loadOrders,30000);
 </script>
