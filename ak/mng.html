@@ -68,6 +68,14 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
           <input type="email" id="adminEmail" placeholder="admin@example.com">
       </div>
       <div>
+          <label>Telegram Token</label>
+          <input type="password" id="tgToken" placeholder="Bot API Token">
+      </div>
+      <div>
+          <label>Telegram Chat ID</label>
+          <input type="text" id="tgChat" placeholder="Chat ID Number">
+      </div>
+      <div>
           <button onclick="saveSettingsInfo()" style="width: 100%;">Update Settings</button>
       </div>
   </div>
@@ -111,7 +119,7 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 </div> 
 
 <script> 
-const BASE = "https://script.google.com/macros/s/AKfycbyHiSUTMbXEQZdEHJVK8jq4xapeDoKeBd_TtKqVfEl2hYlciDjVUSyI35rdRNde1w6G_w/exec"; 
+const BASE = "https://script.google.com/macros/s/AKfycbzQxxOKG9wIRCptLkzbzJBkbu7XCCb-TrefrXD3Iyg0vVCxATUhHdQU95C2TsloXHBDKg/exec"; 
 
 let isStoreClosed = false;
 
@@ -138,9 +146,13 @@ function loadSettings(){
     btn.textContent = isStoreClosed ? "OPEN STORE NOW" : "CLOSE STORE NOW"; 
     status.textContent = isStoreClosed ? "● STORE IS CURRENTLY CLOSED" : "● STORE IS CURRENTLY OPEN"; 
     status.className = isStoreClosed ? "status-closed" : "status-open"; 
+    
+    // Fill the inputs
     document.getElementById('gcashNum').value = s.gcash_number || '';
     document.getElementById('mayaNum').value = s.maya_number || '';
     document.getElementById('adminEmail').value = s.notification_email || '';
+    document.getElementById('tgToken').value = s.telegram_token || '';
+    document.getElementById('tgChat').value = s.telegram_chat_id || '';
   }); 
 } 
 
@@ -149,9 +161,11 @@ async function saveSettingsInfo(){
         func: "updatePaymentInfo", 
         gcash_number: document.getElementById('gcashNum').value, 
         maya_number: document.getElementById('mayaNum').value,
-        notification_email: document.getElementById('adminEmail').value
+        notification_email: document.getElementById('adminEmail').value,
+        telegram_token: document.getElementById('tgToken').value,
+        telegram_chat_id: document.getElementById('tgChat').value
     });
-    if(ok) alert("Settings updated successfully!");
+    if(ok) alert("Settings saved successfully!");
 }
 
 async function toggleStoreStatus(){
