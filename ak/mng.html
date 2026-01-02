@@ -16,7 +16,7 @@ h2{ margin-top: 40px; border-bottom: 3px solid var(--primary); display: inline-b
 
 .settings-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
     gap: 15px; 
     background: #f9f9f9; 
     padding: 20px; 
@@ -43,7 +43,6 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 .pay-tag { background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
 .menu-input { width: 100%; border: 1px solid #ddd; padding: 5px; border-radius: 4px; font-family: 'Lato'; }
 .btn-sm { font-size: 0.8rem; padding: 5px 12px; margin: 2px; }
-.available-check { width: 22px; height: 22px; cursor: pointer; vertical-align: middle; }
 </style> 
 
 <div class="page"> 
@@ -65,7 +64,11 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
           <input type="text" id="mayaNum" placeholder="09xxxxxxxxx">
       </div>
       <div>
-          <button onclick="savePaymentInfo()" style="width: 100%;">Update Info</button>
+          <label>Notification Email</label>
+          <input type="email" id="adminEmail" placeholder="admin@example.com">
+      </div>
+      <div>
+          <button onclick="saveSettingsInfo()" style="width: 100%;">Update Settings</button>
       </div>
   </div>
   
@@ -81,7 +84,7 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
           <th>Total</th> 
           <th>Payment</th> 
           <th>Notes</th> 
-          <th>Action</th> 
+          <th>Order Status</th> 
         </tr> 
       </thead> 
       <tbody id="ordersBody"> 
@@ -108,17 +111,15 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 </div> 
 
 <script> 
-// Replace this with your exact "Web App URL" from the deployment
-const BASE = "https://script.google.com/macros/s/AKfycbxWlfb2GlXj3Bw5rvkvPSEYeALJgUp58huGSKxhSnKBNO4NCf0MdhtnCypOcNo8OBwAog/exec"; 
+const BASE = "https://script.google.com/macros/s/AKfycbyHiSUTMbXEQZdEHJVK8jq4xapeDoKeBd_TtKqVfEl2hYlciDjVUSyI35rdRNde1w6G_w/exec"; 
 
 let isStoreClosed = false;
-let lastOrderIDs = new Set(); 
 
 async function apiPost(params) {
     try {
         await fetch(BASE, {
             method: "POST",
-            mode: "no-cors", // Re-added because Apps Script redirects cause CORS blocks on simple sites
+            mode: "no-cors", 
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams(params).toString()
         });
@@ -139,16 +140,18 @@ function loadSettings(){
     status.className = isStoreClosed ? "status-closed" : "status-open"; 
     document.getElementById('gcashNum').value = s.gcash_number || '';
     document.getElementById('mayaNum').value = s.maya_number || '';
+    document.getElementById('adminEmail').value = s.notification_email || '';
   }); 
 } 
 
-async function savePaymentInfo(){
+async function saveSettingsInfo(){
     const ok = await apiPost({ 
         func: "updatePaymentInfo", 
         gcash_number: document.getElementById('gcashNum').value, 
-        maya_number: document.getElementById('mayaNum').value 
+        maya_number: document.getElementById('mayaNum').value,
+        notification_email: document.getElementById('adminEmail').value
     });
-    if(ok) alert("Payment information sent! It may take a few seconds to reflect in the sheet.");
+    if(ok) alert("Settings updated successfully!");
 }
 
 async function toggleStoreStatus(){
@@ -168,7 +171,7 @@ function loadMenu(){
         <td><input type="text" class="menu-input" value="${m.Category}" id="cat-${m.row}"></td>
         <td><input type="number" class="menu-input" value="${m.Price}" id="price-${m.row}"></td>
         <td class="center">
-            <input type="checkbox" class="available-check" id="sold-${m.row}" ${String(m.SoldOut) === 'true' ? 'checked' : ''}>
+            <input type="checkbox" id="sold-${m.row}" ${String(m.SoldOut) === 'true' ? 'checked' : ''}>
         </td>
         <td class="center">
             <button class="btn-sm" onclick="saveMenuRow(${m.row}, this)">UPDATE</button>
@@ -179,19 +182,14 @@ function loadMenu(){
 }
 
 async function saveMenuRow(rowId, btn){
-    const item = document.getElementById(`name-${rowId}`).value;
-    const cat = document.getElementById(`cat-${rowId}`).value;
-    const price = document.getElementById(`price-${rowId}`).value;
-    const soldOut = document.getElementById(`sold-${rowId}`).checked;
-
     btn.textContent = "...";
     await apiPost({
         func: "updateMenuItem",
         row: rowId,
-        item: item,
-        category: cat,
-        price: price,
-        soldOut: String(soldOut)
+        item: document.getElementById(`name-${rowId}`).value,
+        category: document.getElementById(`cat-${rowId}`).value,
+        price: document.getElementById(`price-${rowId}`).value,
+        soldOut: String(document.getElementById(`sold-${rowId}`).checked)
     });
     btn.textContent = "SAVED";
     setTimeout(() => { btn.textContent = "UPDATE"; }, 2000);
@@ -202,22 +200,17 @@ function loadOrders(){
     const ob = document.getElementById('ordersBody'); 
     if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
     ob.innerHTML = "";
-    
     [...data].reverse().forEach(o => {
       const tr = document.createElement("tr");
-      const currentStatus = o.Status || "Received";
-      const isDone = currentStatus === "Delivered";
-      
-      if(isDone) tr.classList.add("completed-row");
-      
-      // Define the options for the dropdown
-      const statusOptions = ["Received", "Cooking", "Packing", "Delivering", "Delivered"];
-      let selectHtml = `<select class="menu-input" onchange="updateStatus('${o.OrderID}', this)" ${isDone ? 'disabled' : ''}>`;
+      const currentStatus = o.Completed || "Order Placed"; 
+      const isDelivered = currentStatus === "Delivered";
+      if(isDelivered) tr.classList.add("completed-row");
+      const statusOptions = ["Order Placed", "Received", "Cooking", "Packing", "Delivering", "Delivered"];
+      let selectHtml = `<select class="menu-input" onchange="updateOrderStatus('${o.OrderID}', this)" ${isDelivered ? 'disabled' : ''}>`;
       statusOptions.forEach(opt => {
         selectHtml += `<option value="${opt}" ${currentStatus === opt ? 'selected' : ''}>${opt}</option>`;
       });
       selectHtml += `</select>`;
-
       tr.innerHTML = `
         <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleString() : ''}</small><br><b>${o.OrderID}</b></td>
         <td><b>${o.Name}</b></td>
@@ -233,17 +226,12 @@ function loadOrders(){
   });
 }
 
-// New helper function to handle dropdown changes
-async function updateStatus(orderID, selectElement){
-    const newStatus = selectElement.value;
+async function updateOrderStatus(orderID, selectElement){
     selectElement.style.opacity = "0.5";
-    await apiPost({func: "markCompleted", id: orderID, status: newStatus});
-    setTimeout(loadOrders, 1000); // Refresh to apply styling
+    await apiPost({ func: "markCompleted", id: orderID, status: selectElement.value });
+    setTimeout(loadOrders, 1000); 
 }
 
-    
-loadSettings(); 
-loadMenu(); 
-loadOrders(); 
+loadSettings(); loadMenu(); loadOrders(); 
 setInterval(loadOrders, 30000); 
 </script>
