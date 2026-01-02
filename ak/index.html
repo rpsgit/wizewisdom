@@ -24,10 +24,21 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 
 .page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:16px; background:#fff; border-radius:24px; }
 
-.track-btn {
-  position: absolute; top: 16px; left: 16px; background: #eee; border: none;
-  padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: bold;
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
+
+.track-btn, .share-btn {
+  background: #eee; border: none;
+  padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: bold;
+  font-size: 0.8rem;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.share-btn { background: var(--secondary); }
 
 #logo{ display:block; margin:0 auto 8px; max-width:200px; width:100%; }
 
@@ -59,19 +70,27 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 
 #modal, #statusModal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; }
 .modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; text-align: center; }
-.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; }
-.status-badge { font-size: 1.2rem; padding: 8px; border-radius: 8px; background: #eee; display: block; margin-top: 10px; }
+.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; width: 100%; }
+.status-badge { 
+    font-size: 1.2rem; padding: 12px; border-radius: 8px; 
+    background: #111; color: var(--primary); 
+    display: block; margin-top: 10px; 
+    border: 2px solid var(--primary);
+}
 .summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 0.9rem; }
 </style>
 
 <div id="closedBanner">🚫 ORDERING IS CLOSED</div>
 
 <div class="page">
-  <button class="track-btn" onclick="openStatusModal()">🔍 TRACK ORDER</button>
+  <div class="header-actions">
+    <button class="track-btn" onclick="openStatusModal()">🔍 TRACK ORDER</button>
+    <button class="share-btn" onclick="shareSite()">🔗 SHARE</button>
+  </div>
   
   <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
   <div id="logoFallback" style="display:none; text-align:center; font-size:1.4rem;">ADIMUP KITCHEN</div>
-  <h1 style="text-align:center">ADIMUP KITCHEN</h1>
+  <h1 style="text-align:center; margin-top: 10px;">ADIMUP KITCHEN</h1>
 
   <div class="tabs" id="tabs"></div>
 
@@ -232,6 +251,19 @@ function copyNumber() {
     navigator.clipboard.writeText(num).then(() => alert("Number copied to clipboard!"));
 }
 
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => alert("Order ID copied!"));
+}
+
+function shareSite() {
+    if (navigator.share) {
+        navigator.share({ title: 'Adimup Kitchen', url: window.location.href });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied!");
+    }
+}
+
 function showSummary() {
     const state = updateCartUI();
     if (state.total === 0) return alert("Your cart is empty!");
@@ -278,7 +310,6 @@ async function confirmOrder(){
     
     const orderID = generateOrderID();
     
-    // Process Notes (Include Change Info)
     let finalNotes = document.getElementById('userNotes').value;
     if(pending.payment === "Cash") {
         const change = document.getElementById('changeFor').value;
@@ -303,6 +334,7 @@ async function confirmOrder(){
             <h2>SUCCESS!</h2>
             <p>Reference ID:</p>
             <div class="order-id-display">${orderID}</div>
+            <button class="main" onclick="copyText('${orderID}')" style="background:#eee; color:#111; font-size:1rem; margin-bottom:15px;">📋 COPY ORDER ID</button>
             <p>Order details sent! Keep this ID to track your order.</p>
             <button class="main" onclick="location.reload()">CLOSE</button>`;
     }, 1500);
@@ -321,7 +353,7 @@ async function checkStatus() {
         const response = await fetch(`${BASE}?func=checkStatus&id=${id}`);
         const data = await response.json();
         if(data.found) {
-            resDiv.innerHTML = `<p>Order: <strong>${data.id}</strong></p><span class="status-badge">${data.status}</span>`;
+            resDiv.innerHTML = `<p>Order: <strong>${data.id}</strong></p><div style="font-size:0.8rem; color:gray; margin-bottom:5px;">CURRENT STATUS:</div><span class="status-badge">${data.status}</span>`;
         } else {
             resDiv.innerHTML = "<p style='color:red;'>Order not found. Please check the ID.</p>";
         }
