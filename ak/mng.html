@@ -44,9 +44,6 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 .menu-input { width: 100%; border: 1px solid #ddd; padding: 5px; border-radius: 4px; font-family: 'Lato'; }
 .btn-sm { font-size: 0.8rem; padding: 5px 12px; margin: 2px; }
 .available-check { width: 22px; height: 22px; cursor: pointer; vertical-align: middle; }
-
-.new-order { animation: highlight 3s ease-in-out; } 
-@keyframes highlight { 0% { background-color: #fff9c4; } 100% { background-color: transparent; } } 
 </style> 
 
 <div class="page"> 
@@ -111,12 +108,26 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 </div> 
 
 <script> 
-// IMPORTANT: Ensure this URL matches your LATEST Deployment URL
+// Replace this with your exact "Web App URL" from the deployment
 const BASE = "https://script.google.com/macros/s/AKfycbyjtVLfIVNjQITWqBPC--YRwGICdCCfz0ZDVVo4tvAKsGzrGa3QYUJXUK239Q001usw/exec"; 
 
 let isStoreClosed = false;
 let lastOrderIDs = new Set(); 
-const newOrderSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3"); 
+
+async function apiPost(params) {
+    try {
+        await fetch(BASE, {
+            method: "POST",
+            mode: "no-cors", // Re-added because Apps Script redirects cause CORS blocks on simple sites
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams(params).toString()
+        });
+        return true;
+    } catch (e) {
+        console.error("API Error:", e);
+        return false;
+    }
+}
 
 function loadSettings(){ 
   fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{ 
@@ -132,23 +143,20 @@ function loadSettings(){
 } 
 
 async function savePaymentInfo(){
-    const fd = new URLSearchParams({ 
+    const ok = await apiPost({ 
         func: "updatePaymentInfo", 
         gcash_number: document.getElementById('gcashNum').value, 
         maya_number: document.getElementById('mayaNum').value 
     });
-    await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-    alert("Payment information updated!");
+    if(ok) alert("Payment information sent! It may take a few seconds to reflect in the sheet.");
 }
 
 async function toggleStoreStatus(){
-    const fd = new URLSearchParams({ func: "toggleClose", status: !isStoreClosed });
     const btn = document.getElementById('toggleStore');
     btn.disabled = true;
     btn.textContent = "...";
-    await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-    setTimeout(loadSettings, 1000); 
-    btn.disabled = false;
+    await apiPost({ func: "toggleClose", status: String(!isStoreClosed) });
+    setTimeout(() => { loadSettings(); btn.disabled = false; }, 2000);
 }
 
 function loadMenu(){
@@ -160,34 +168,31 @@ function loadMenu(){
         <td><input type="text" class="menu-input" value="${m.Category}" id="cat-${m.row}"></td>
         <td><input type="number" class="menu-input" value="${m.Price}" id="price-${m.row}"></td>
         <td class="center">
-            <input type="checkbox" class="available-check" id="sold-${m.row}" ${m.SoldOut ? 'checked' : ''}>
+            <input type="checkbox" class="available-check" id="sold-${m.row}" ${String(m.SoldOut) === 'true' ? 'checked' : ''}>
         </td>
         <td class="center">
-            <button class="btn-sm" onclick="saveMenuRow(${m.row})">UPDATE</button>
+            <button class="btn-sm" onclick="saveMenuRow(${m.row}, this)">UPDATE</button>
         </td>
       </tr>
     `).join('');
   });
 }
 
-async function saveMenuRow(rowId){
+async function saveMenuRow(rowId, btn){
     const item = document.getElementById(`name-${rowId}`).value;
     const cat = document.getElementById(`cat-${rowId}`).value;
     const price = document.getElementById(`price-${rowId}`).value;
     const soldOut = document.getElementById(`sold-${rowId}`).checked;
 
-    const fd = new URLSearchParams({
+    btn.textContent = "...";
+    await apiPost({
         func: "updateMenuItem",
         row: rowId,
         item: item,
         category: cat,
         price: price,
-        soldOut: soldOut
+        soldOut: String(soldOut)
     });
-
-    const btn = event.target;
-    btn.textContent = "...";
-    await fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
     btn.textContent = "SAVED";
     setTimeout(() => { btn.textContent = "UPDATE"; }, 2000);
 }
@@ -196,22 +201,13 @@ function loadOrders(){
   fetch(BASE + "?func=getOrders").then(r=>r.json()).then(data=>{ 
     const ob = document.getElementById('ordersBody'); 
     if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
-    
     ob.innerHTML = "";
-    // Show newest orders at the top
     [...data].reverse().forEach(o => {
       const tr = document.createElement("tr");
       const isDone = String(o.Completed) === "true";
       if(isDone) tr.classList.add("completed-row");
-      
-      if(lastOrderIDs.size > 0 && !lastOrderIDs.has(o.OrderID) && !isDone){
-        tr.classList.add("new-order");
-        newOrderSound.play().catch(()=>{});
-      }
-      lastOrderIDs.add(o.OrderID);
-
       tr.innerHTML = `
-        <td><small>${new Date(o.Timestamp).toLocaleString()}</small><br><b>${o.OrderID}</b></td>
+        <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleString() : ''}</small><br><b>${o.OrderID}</b></td>
         <td><b>${o.Name}</b></td>
         <td><small>${o.Contact}</small><br><small style="color:#666">${o.Address}</small></td>
         <td>• ${o.Items ? o.Items.split(',').join('<br>• ') : ''}</td>
@@ -227,12 +223,10 @@ function loadOrders(){
 
 async function markDone(orderID, btn){
     btn.textContent = "...";
-    const fd = new URLSearchParams({func:"markCompleted", id: orderID});
-    await fetch(BASE, { method:"POST", mode: 'no-cors', body: fd.toString() });
-    setTimeout(loadOrders, 1000);
+    await apiPost({func:"markCompleted", id: orderID});
+    setTimeout(loadOrders, 1500);
 }
 
-/* ================= INIT ================= */ 
 loadSettings(); 
 loadMenu(); 
 loadOrders(); 
