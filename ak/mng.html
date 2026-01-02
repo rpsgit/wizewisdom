@@ -109,7 +109,7 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 
 <script> 
 // Replace this with your exact "Web App URL" from the deployment
-const BASE = "https://script.google.com/macros/s/AKfycbyjtVLfIVNjQITWqBPC--YRwGICdCCfz0ZDVVo4tvAKsGzrGa3QYUJXUK239Q001usw/exec"; 
+const BASE = "https://script.google.com/macros/s/AKfycbwZ6o6IoM9X8R-JKfqZrqE4EAUCkgNRFL5aPlJ9v_CJ80iwZ8QaQ5cdVca480I8qvlsqw/exec"; 
 
 let isStoreClosed = false;
 let lastOrderIDs = new Set(); 
@@ -202,10 +202,22 @@ function loadOrders(){
     const ob = document.getElementById('ordersBody'); 
     if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
     ob.innerHTML = "";
+    
     [...data].reverse().forEach(o => {
       const tr = document.createElement("tr");
-      const isDone = String(o.Completed) === "true";
+      const currentStatus = o.Status || "Received";
+      const isDone = currentStatus === "Delivered";
+      
       if(isDone) tr.classList.add("completed-row");
+      
+      // Define the options for the dropdown
+      const statusOptions = ["Received", "Cooking", "Packing", "Delivering", "Delivered"];
+      let selectHtml = `<select class="menu-input" onchange="updateStatus('${o.OrderID}', this)" ${isDone ? 'disabled' : ''}>`;
+      statusOptions.forEach(opt => {
+        selectHtml += `<option value="${opt}" ${currentStatus === opt ? 'selected' : ''}>${opt}</option>`;
+      });
+      selectHtml += `</select>`;
+
       tr.innerHTML = `
         <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleString() : ''}</small><br><b>${o.OrderID}</b></td>
         <td><b>${o.Name}</b></td>
@@ -214,19 +226,22 @@ function loadOrders(){
         <td><b>₱${o.Total}</b></td>
         <td><span class="pay-tag">${o.Payment}</span></td>
         <td style="font-style:italic; color:#666; font-size:0.85rem">${o.Notes || "-"}</td>
-        <td><button class="btn-sm" ${isDone ? 'disabled' : ''} onclick="markDone('${o.OrderID}', this)">${isDone ? 'DONE' : 'MARK DONE'}</button></td>
+        <td>${selectHtml}</td>
       `;
       ob.appendChild(tr);
     });
   });
 }
 
-async function markDone(orderID, btn){
-    btn.textContent = "...";
-    await apiPost({func:"markCompleted", id: orderID});
-    setTimeout(loadOrders, 1500);
+// New helper function to handle dropdown changes
+async function updateStatus(orderID, selectElement){
+    const newStatus = selectElement.value;
+    selectElement.style.opacity = "0.5";
+    await apiPost({func: "markCompleted", id: orderID, status: newStatus});
+    setTimeout(loadOrders, 1000); // Refresh to apply styling
 }
 
+    
 loadSettings(); 
 loadMenu(); 
 loadOrders(); 
