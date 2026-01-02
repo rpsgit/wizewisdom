@@ -70,7 +70,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 
 #modal, #statusModal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999; }
 .modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; text-align: center; }
-.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-block; width: 100%; }
+.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-flex; justify-content: center; align-items: center; width: 100%; gap: 10px; }
 .status-badge { 
     font-size: 1.2rem; padding: 12px; border-radius: 8px; 
     background: #111; color: var(--primary); 
@@ -147,7 +147,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbxWlfb2GlXj3Bw5rvkvPSEYeALJgUp58huGSKxhSnKBNO4NCf0MdhtnCypOcNo8OBwAog/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzQxxOKG9wIRCptLkzbzJBkbu7XCCb-TrefrXD3Iyg0vVCxATUhHdQU95C2TsloXHBDKg/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
 
@@ -326,7 +326,6 @@ async function confirmOrder(){
     fd.append("total", pending.total);
     fd.append("payment", pending.payment);
     fd.append("notes", finalNotes);
-    // Explicitly set the status for the Google Sheet
     fd.append("status", "Order Placed");
 
     fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString(), headers: {"Content-Type": "application/x-www-form-urlencoded"} });
@@ -335,9 +334,11 @@ async function confirmOrder(){
         document.getElementById('modalContent').innerHTML = `
             <h2>SUCCESS!</h2>
             <p>Reference ID:</p>
-            <div class="order-id-display">${orderID}</div>
-            <button class="main" onclick="copyText('${orderID}')" style="background:#eee; color:#111; font-size:1rem; margin-bottom:15px;">📋 COPY ORDER ID</button>
-            <p>Order details sent! Keep this ID to track your order.</p>
+            <div class="order-id-display">
+                ${orderID}
+                <svg class="copy-icon" onclick="copyText('${orderID}')" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
+            <p style="margin-bottom:20px;">Order details sent! Keep this ID to track your order.</p>
             <button class="main" onclick="location.reload()">CLOSE</button>`;
     }, 1500);
 }
@@ -352,7 +353,6 @@ async function checkStatus() {
     resDiv.innerHTML = "Checking...";
     
     try {
-        // This fetch expects the Google Apps Script to return the value from the 'Order' sheet, Column J
         const response = await fetch(`${BASE}?func=checkStatus&id=${id}`);
         const data = await response.json();
         if(data.found) {
