@@ -63,7 +63,7 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 .price{ color:#d4af37; font-weight:700; }
 .actions input[type=number]{ display:none; width:60px; text-align: center; border: 1px solid #ddd; border-radius: 4px;}
 
-/* Payment Styling */
+/* Payment Styling Fixed */
 .pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; }
 .pay-option {
     display: flex;
@@ -74,9 +74,10 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
     border-radius: 10px;
     border: 1px solid #eee;
     cursor: pointer;
+    justify-content: flex-start; /* Keeps items on the left */
 }
-.pay-option input { margin-right: 12px; }
-.brand-icon { width: 22px; height: 22px; margin-right: 8px; border-radius: 4px; }
+.pay-option input { margin-right: 12px; margin-left: 0; }
+.brand-icon { width: 24px; height: 24px; margin-right: 10px; object-fit: contain; }
 .gcash-label { color: var(--gcash); font-weight: 900; }
 .maya-label { color: var(--maya); font-weight: 900; }
 
@@ -90,7 +91,6 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 #cart{ position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,var(--secondary),var(--primary)); padding:15px 20px; border-radius:999px; cursor:pointer; z-index: 100; font-family:'Bebas Neue'; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .total-display{ font-size:1.5rem; margin:20px 0; text-align: right; font-family:'Bebas Neue'; }
 
-/* Floating Messenger Button */
 #floatingMessenger {
   position: fixed;
   bottom: 85px;
@@ -120,12 +120,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 .close-zoom { position: absolute; top: -40px; right: 0; color: #fff; font-size: 2rem; cursor: pointer; font-weight: bold; }
 
 .order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-flex; justify-content: center; align-items: center; width: 100%; gap: 10px; }
-.status-badge { 
-    font-size: 1.2rem; padding: 12px; border-radius: 8px; 
-    background: #111; color: var(--primary); 
-    display: block; margin-top: 10px; 
-    border: 2px solid var(--primary);
-}
+.status-badge { font-size: 1.2rem; padding: 12px; border-radius: 8px; background: #111; color: var(--primary); display: block; margin-top: 10px; border: 2px solid var(--primary); }
 .summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 0.9rem; }
 </style>
 
@@ -158,21 +153,22 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
     <h3>PAYMENT</h3>
     <div class="pay-box">
         <label class="pay-option">
-            <input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 💵 Cash
+            <input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 
+            <span>💵 Cash</span>
         </label>
-        <div id="cashLogic" style="margin-left: 30px; margin-bottom: 15px;">
+        <div id="cashLogic" style="margin-left: 36px; margin-bottom: 15px;">
             <input type="text" id="changeFor" placeholder="Change for? (e.g. 1000)" style="margin-bottom:0;">
         </div>
 
         <label class="pay-option">
             <input type="radio" name="payment" value="GCash" onclick="togglePay()">
-            <img class="brand-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/GCash_logo.svg/512px-GCash_logo.svg.png">
+            <svg class="brand-icon" viewBox="0 0 48 48"><path fill="#007dfe" d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm11.5 21.5h-5v5h-3v-5h-5v-3h5v-5h3v5h5v3z"/></svg>
             <span class="gcash-label">GCash</span>
         </label>
 
         <label class="pay-option">
             <input type="radio" name="payment" value="Maya" onclick="togglePay()">
-            <img class="brand-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Maya_logo.svg/512px-Maya_logo.svg.png">
+            <svg class="brand-icon" viewBox="0 0 48 48"><rect width="40" height="40" x="4" y="4" fill="#00d26a" rx="8"/><path fill="#fff" d="M14 16h20v4H14zM14 24h20v4H14zM14 32h12v4H14z"/></svg>
             <span class="maya-label">Maya</span>
         </label>
         
@@ -197,36 +193,6 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.453 5.527 3.734 7.28l-.01 2.266 2.11-1.154c.734.204 1.516.314 2.32.314 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.074 12.553l-2.583-2.753-5.043 2.753 5.543-5.889 2.66 2.753 4.965-2.753-5.542 5.889z"/></svg>
 </a>
 
-<div id="imageModal" onclick="closeImage()">
-  <div class="modal-box">
-    <span class="close-zoom">&times;</span>
-    <img id="enlargedImg" src="">
-  </div>
-</div>
-
-<div id="statusModal">
-  <div class="modal-box">
-    <h3>CHECK ORDER STATUS</h3>
-    <input type="text" id="statusIdInput" placeholder="Enter Order ID">
-    <button class="main" onclick="checkStatus()">SEARCH</button>
-    <div id="statusResult" style="margin-top:20px;"></div>
-    <button onclick="closeStatusModal()" style="margin-top:10px; background:none; border:none; cursor:pointer; color:gray;">Close</button>
-  </div>
-</div>
-
-<div id="cart" onclick="showSummary()">🛒 <span id="cartCount">0</span> | ₱<span id="cartSum">0</span></div>
-
-<div id="modal">
-  <div class="modal-box" id="modalContent">
-    <h3>ORDER SUMMARY</h3>
-    <div id="preview" style="text-align: left; margin-bottom: 15px;"></div>
-    <div style="display:flex; gap:10px; margin-top:20px;">
-        <button class="main" onclick="confirmOrder()" id="finalBtn" style="flex:2;">CONFIRM</button>
-        <button onclick="document.getElementById('modal').style.display='none'" style="flex:1; border-radius:999px; border:none; background:#eee; cursor:pointer;">BACK</button>
-    </div>
-  </div>
-</div>
-
 <script>
 const BASE = "https://script.google.com/macros/s/AKfycbxz_DMJQPvWIvxNAO-q_qpqk-V3modhKdesLsFflYbPupq_fuAj4KIHt9U1AavnYalcjw/exec";
 const MENU_URL = BASE + "?func=getMenu";
@@ -238,13 +204,11 @@ let pending = null;
 
 fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   settings = s;
-  
   if (s.closed_today || s.auto_closed) {
     document.getElementById('closedBanner').style.display="block";
     document.getElementById('form').style.display="none";
     document.getElementById('cart').style.display="none";
   }
-
   if(s.messenger_link) {
       const el = document.getElementById('floatingMessenger');
       el.href = s.messenger_link;
@@ -291,14 +255,6 @@ function loadMenu(){
   });
 }
 
-function zoomImage(src) {
-  document.getElementById('enlargedImg').src = src;
-  document.getElementById('imageModal').style.display = "flex";
-}
-function closeImage() {
-  document.getElementById('imageModal').style.display = "none";
-}
-
 function openTab(id,btn){
   document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
@@ -341,18 +297,10 @@ function togglePay(){
         cashBox.style.display = "none";
         inst.style.display = "block";
         document.getElementById('payLabel').textContent = val;
-        
-        // Update Number and QR
         const isGCash = val === "GCash";
         document.getElementById('payNum').textContent = isGCash ? settings.gcash_number : settings.maya_number;
-        
         const qrUrl = isGCash ? settings.gcash_qr : settings.maya_qr;
-        if(qrUrl) {
-            qrImg.src = qrUrl;
-            qrSec.style.display = "block";
-        } else {
-            qrSec.style.display = "none";
-        }
+        if(qrUrl) { qrImg.src = qrUrl; qrSec.style.display = "block"; } else { qrSec.style.display = "none"; }
     }
 }
 
@@ -377,25 +325,17 @@ function shareSite() {
 function showSummary() {
     const state = updateCartUI();
     if (state.total === 0) return alert("Your cart is empty!");
-    
     let summaryHtml = '';
-    state.items.forEach(item => {
-        summaryHtml += `<div class="summary-item"><span>${item.name} (x${item.qty})</span><span>₱${item.sub}</span></div>`;
-    });
-    
+    state.items.forEach(item => { summaryHtml += `<div class="summary-item"><span>${item.name} (x${item.qty})</span><span>₱${item.sub}</span></div>`; });
     const payMethod = document.querySelector('input[name="payment"]:checked').value;
     summaryHtml += `<div class="summary-item" style="margin-top:10px; font-weight:bold;"><span>TOTAL</span><span>₱${state.total}</span></div>`;
     summaryHtml += `<p style="font-size:0.8rem; color:gray; margin-top:10px;">Payment: ${payMethod}</p>`;
-    
     document.getElementById('preview').innerHTML = summaryHtml;
     pending = { ...state, payment: payMethod };
     document.getElementById('modal').style.display = "flex";
 }
 
-document.getElementById('form').onsubmit = (e) => {
-    e.preventDefault();
-    showSummary();
-};
+document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
 
 function generateOrderID() {
     const now = new Date();
@@ -408,24 +348,15 @@ async function confirmOrder(){
     const name = document.getElementById('userName').value;
     const contact = document.getElementById('userContact').value;
     const address = document.getElementById('userAddress').value;
-    
-    if(!name || !contact || !address) {
-        alert("Please fill in delivery details.");
-        document.getElementById('modal').style.display = 'none';
-        return;
-    }
-
+    if(!name || !contact || !address) { alert("Please fill in delivery details."); return; }
     const btn = document.getElementById('finalBtn');
     btn.disabled = true; btn.textContent = "SENDING...";
-    
     const orderID = generateOrderID();
-    
     let finalNotes = document.getElementById('userNotes').value;
     if(pending.payment === "Cash") {
         const change = document.getElementById('changeFor').value;
         if(change) finalNotes = `[CHANGE FOR ₱${change}] ` + finalNotes;
     }
-
     const fd = new URLSearchParams();
     fd.append("func", "order"); 
     fd.append("orderID", orderID);
@@ -436,16 +367,9 @@ async function confirmOrder(){
     fd.append("total", pending.total);
     fd.append("payment", pending.payment);
     fd.append("notes", finalNotes);
-
     fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString(), headers: {"Content-Type": "application/x-www-form-urlencoded"} });
-
     setTimeout(() => {
-        document.getElementById('modalContent').innerHTML = `
-            <h2>SUCCESS!</h2>
-            <p>Reference ID:</p>
-            <div class="order-id-display">${orderID} <svg class="copy-icon" onclick="copyText('${orderID}')" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></div>
-            <p style="margin-bottom:20px;">Order details sent! Keep this ID to track your order.</p>
-            <button class="main" onclick="location.reload()">CLOSE</button>`;
+        document.getElementById('modalContent').innerHTML = `<h2>SUCCESS!</h2><p>Reference ID:</p><div class="order-id-display">${orderID} <svg class="copy-icon" onclick="copyText('${orderID}')" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></div><p style="margin-bottom:20px;">Order details sent! Keep this ID to track your order.</p><button class="main" onclick="location.reload()">CLOSE</button>`;
     }, 1500);
 }
 
@@ -460,15 +384,12 @@ async function checkStatus() {
     try {
         const response = await fetch(`${BASE}?func=checkStatus&id=${id}`);
         const data = await response.json();
-        if(data.found) {
-            resDiv.innerHTML = `
-                <p>Order: <strong>${data.id}</strong></p>
-                <span class="status-badge">${data.status}</span>`;
-        } else {
-            resDiv.innerHTML = "<p style='color:red;'>Order not found.</p>";
-        }
+        if(data.found) { resDiv.innerHTML = `<p>Order: <strong>${data.id}</strong></p><span class="status-badge">${data.status}</span>`; } else { resDiv.innerHTML = "<p style='color:red;'>Order not found.</p>"; }
     } catch (e) { resDiv.innerHTML = "Error checking status."; }
 }
 
 loadMenu();
 </script>
+
+<div id="imageModal" onclick="closeImage()"><div class="modal-box"><span class="close-zoom">&times;</span><img id="enlargedImg" src=""></div></div>
+<div id="statusModal"><div class="modal-box"><h3>CHECK ORDER STATUS</h3><input type="text" id="statusIdInput" placeholder="Enter Order ID"><button class="main" onclick="checkStatus()">SEARCH</button><div id="statusResult" style="margin-top:20px;"></div><button onclick="closeStatusModal()" style="margin-top:10px; background:none; border:none; cursor:pointer; color:gray;">Close</button></div></div>
