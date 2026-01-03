@@ -63,8 +63,8 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 .price{ color:#d4af37; font-weight:700; }
 .actions input[type=number]{ display:none; width:60px; text-align: center; border: 1px solid #ddd; border-radius: 4px;}
 
-/* Payment Styling Fixed */
-.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; }
+/* Payment Styling Fixed - Forced Left Alignment */
+.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; text-align: left; }
 .pay-option {
     display: flex;
     align-items: center;
@@ -74,16 +74,17 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
     border-radius: 10px;
     border: 1px solid #eee;
     cursor: pointer;
-    justify-content: flex-start; /* Keeps items on the left */
+    justify-content: flex-start !important; 
 }
-.pay-option input { margin-right: 12px; margin-left: 0; }
+.pay-option input { margin-right: 12px; margin-left: 0; width: auto; margin-bottom: 0; }
 .brand-icon { width: 24px; height: 24px; margin-right: 10px; object-fit: contain; }
 .gcash-label { color: var(--gcash); font-weight: 900; }
 .maya-label { color: var(--maya); font-weight: 900; }
 
+/* QR and Instructions Section */
 #payInstructions { display: none; margin-top: 10px; padding: 15px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; text-align: center; }
-.qr-container { margin-top: 10px; padding: 10px; background: #f4f4f4; border-radius: 8px; }
-.qr-container img { max-width: 180px; width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
+.qr-container { margin-top: 10px; padding: 10px; background: #f4f4f4; border-radius: 8px; display: none; }
+.qr-container img { max-width: 200px; width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
 
 .copy-icon { cursor: pointer; margin-left: 8px; vertical-align: middle; fill: #666; width: 18px; height: 18px; }
 .copy-icon:active { fill: var(--primary); }
@@ -283,12 +284,15 @@ function updateCartUI() {
     return { total, items };
 }
 
+// Fixed QR Toggle Logic
 function togglePay(){
     const val = document.querySelector('input[name="payment"]:checked').value;
     const inst = document.getElementById('payInstructions');
     const cashBox = document.getElementById('cashLogic');
     const qrSec = document.getElementById('qrSection');
     const qrImg = document.getElementById('qrImage');
+    const payNum = document.getElementById('payNum');
+    const payLabel = document.getElementById('payLabel');
     
     if(val === "Cash") {
         inst.style.display = "none";
@@ -296,16 +300,26 @@ function togglePay(){
     } else {
         cashBox.style.display = "none";
         inst.style.display = "block";
-        document.getElementById('payLabel').textContent = val;
+        payLabel.textContent = val;
+
         const isGCash = val === "GCash";
-        document.getElementById('payNum').textContent = isGCash ? settings.gcash_number : settings.maya_number;
+        const phone = isGCash ? settings.gcash_number : settings.maya_number;
         const qrUrl = isGCash ? settings.gcash_qr : settings.maya_qr;
-        if(qrUrl) { qrImg.src = qrUrl; qrSec.style.display = "block"; } else { qrSec.style.display = "none"; }
+
+        payNum.textContent = phone || "Not set";
+        
+        if(qrUrl && qrUrl.trim() !== "") {
+            qrImg.src = qrUrl;
+            qrSec.style.display = "block";
+        } else {
+            qrSec.style.display = "none";
+        }
     }
 }
 
 function copyNumber() {
     const num = document.getElementById('payNum').innerText;
+    if(num === "Not set") return;
     navigator.clipboard.writeText(num).then(() => alert("Number copied!"));
 }
 
@@ -386,6 +400,14 @@ async function checkStatus() {
         const data = await response.json();
         if(data.found) { resDiv.innerHTML = `<p>Order: <strong>${data.id}</strong></p><span class="status-badge">${data.status}</span>`; } else { resDiv.innerHTML = "<p style='color:red;'>Order not found.</p>"; }
     } catch (e) { resDiv.innerHTML = "Error checking status."; }
+}
+
+function zoomImage(src) {
+  document.getElementById('enlargedImg').src = src;
+  document.getElementById('imageModal').style.display = "flex";
+}
+function closeImage() {
+  document.getElementById('imageModal').style.display = "none";
 }
 
 loadMenu();
