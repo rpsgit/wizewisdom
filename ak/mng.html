@@ -34,15 +34,19 @@ table{ width:100%; border-collapse:collapse; background: #fff; }
 th{ background: #f8f8f8; padding: 12px; text-align: left; border-bottom: 2px solid #ddd; } 
 td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-align: top; } 
 
+.completed-row { background-color: #f2f2f2 !important; color: #888; opacity: 0.7; } 
 .center{ text-align:center; } 
 #storeStatus { display: inline-block; padding: 5px 15px; border-radius: 8px; margin-top: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; } 
 .status-open { color: #2e7d32; background: #e8f5e9; } 
 .status-closed { color: #c62828; background: #ffebee; } 
 
+.pay-tag { background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
 .menu-input { width: 100%; border: 1px solid #ddd; padding: 5px; border-radius: 4px; font-family: 'Lato'; }
-.btn-sm { font-size: 0.75rem; padding: 5px 10px; margin: 2px; }
-.btn-del { background: #ff5252; color: white; }
-.add-row { background-color: #fff9c4; position: sticky; bottom: 0; }
+.btn-sm { font-size: 0.8rem; padding: 5px 12px; margin: 2px; }
+
+/* Styling for the Add Row */
+.add-row { background-color: #fff9c4; }
+.add-row input { border-color: #fbc02d; }
 </style> 
 
 <div class="page"> 
@@ -57,28 +61,49 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
   <div class="settings-grid">
       <div>
           <label>GCash Number</label>
-          <input type="text" id="gcashNum">
+          <input type="text" id="gcashNum" placeholder="09xxxxxxxxx">
       </div>
       <div>
           <label>Maya Number</label>
-          <input type="text" id="mayaNum">
+          <input type="text" id="mayaNum" placeholder="09xxxxxxxxx">
       </div>
       <div>
           <label>Notification Email</label>
-          <input type="email" id="adminEmail">
+          <input type="email" id="adminEmail" placeholder="admin@example.com">
       </div>
       <div>
           <label>Telegram Token</label>
-          <input type="password" id="tgToken">
+          <input type="password" id="tgToken" placeholder="Bot API Token">
       </div>
       <div>
           <label>Telegram Chat ID</label>
-          <input type="text" id="tgChat">
+          <input type="text" id="tgChat" placeholder="Chat ID Number">
       </div>
       <div>
           <button onclick="saveSettingsInfo()" style="width: 100%;">Update Settings</button>
       </div>
   </div>
+  
+  <h2>Recent Orders</h2> 
+  <div class="table-container"> 
+    <table> 
+      <thead> 
+        <tr> 
+          <th>Time / ID</th> 
+          <th>Customer</th> 
+          <th>Contact / Address</th> 
+          <th>Items</th> 
+          <th>Total</th> 
+          <th>Payment</th> 
+          <th>Notes</th> 
+          <th>Order Status</th> 
+        </tr> 
+      </thead> 
+      <tbody id="ordersBody"> 
+        <tr><td colspan="8" class="center">Loading orders...</td></tr> 
+      </tbody> 
+    </table> 
+  </div> 
   
   <h2>Menu Management</h2> 
   <div class="table-container"> 
@@ -89,7 +114,7 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
           <th style="width: 20%;">Category</th> 
           <th style="width: 15%;">Price</th> 
           <th class="center">Sold Out?</th> 
-          <th class="center" style="width: 20%;">Action</th> 
+          <th class="center">Action</th> 
         </tr> 
       </thead> 
       <tbody id="menuBody"></tbody>
@@ -100,20 +125,18 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
             <td><input type="number" id="newPrice" class="menu-input" placeholder="0.00"></td>
             <td class="center"><input type="checkbox" id="newSold"></td>
             <td class="center">
-                <button class="btn-sm" onclick="addNewMenuItem(this)" style="background: #2e7d32; color: white;">+ ADD ITEM</button>
+                <button class="btn-sm" onclick="addNewMenuItem(this)" style="background: #2e7d32; color: white;">ADD NEW</button>
             </td>
         </tr>
       </tbody>
     </table> 
-  </div>
-
-  <h2>Recent Orders</h2> 
-  <div id="ordersBodyContainer" class="table-container">
-      </div>
+  </div> 
 </div> 
 
 <script> 
 const BASE = "https://script.google.com/macros/s/AKfycbzl2jbv4Pjrcn5a4HAaJqF2Ahw6WOJTY3-MaAGP_6-tyhZJcL4-z260EBjtf-a8P0w7Uw/exec"; 
+
+let isStoreClosed = false;
 
 async function apiPost(params) {
     try {
@@ -124,10 +147,50 @@ async function apiPost(params) {
             body: new URLSearchParams(params).toString()
         });
         return true;
-    } catch (e) { return false; }
+    } catch (e) {
+        console.error("API Error:", e);
+        return false;
+    }
 }
 
-// LOAD MENU WITH DELETE BUTTON
+function loadSettings(){ 
+  fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{ 
+    isStoreClosed = !!(s.closed_today || s.auto_closed); 
+    const btn = document.getElementById('toggleStore');
+    const status = document.getElementById('storeStatus');
+    btn.textContent = isStoreClosed ? "OPEN STORE NOW" : "CLOSE STORE NOW"; 
+    status.textContent = isStoreClosed ? "● STORE IS CURRENTLY CLOSED" : "● STORE IS CURRENTLY OPEN"; 
+    status.className = isStoreClosed ? "status-closed" : "status-open"; 
+    
+    // Fill the inputs
+    document.getElementById('gcashNum').value = s.gcash_number || '';
+    document.getElementById('mayaNum').value = s.maya_number || '';
+    document.getElementById('adminEmail').value = s.notification_email || '';
+    document.getElementById('tgToken').value = s.telegram_token || '';
+    document.getElementById('tgChat').value = s.telegram_chat_id || '';
+  }); 
+} 
+
+async function saveSettingsInfo(){
+    const ok = await apiPost({ 
+        func: "updatePaymentInfo", 
+        gcash_number: document.getElementById('gcashNum').value, 
+        maya_number: document.getElementById('mayaNum').value,
+        notification_email: document.getElementById('adminEmail').value,
+        telegram_token: document.getElementById('tgToken').value,
+        telegram_chat_id: document.getElementById('tgChat').value
+    });
+    if(ok) alert("Settings saved successfully!");
+}
+
+async function toggleStoreStatus(){
+    const btn = document.getElementById('toggleStore');
+    btn.disabled = true;
+    btn.textContent = "...";
+    await apiPost({ func: "toggleClose", status: String(!isStoreClosed) });
+    setTimeout(() => { loadSettings(); btn.disabled = false; }, 2000);
+}
+
 function loadMenu(){
   fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
     const mb = document.getElementById('menuBody');
@@ -136,10 +199,11 @@ function loadMenu(){
         <td><input type="text" class="menu-input" value="${m.Item}" id="name-${m.row}"></td>
         <td><input type="text" class="menu-input" value="${m.Category}" id="cat-${m.row}"></td>
         <td><input type="number" class="menu-input" value="${m.Price}" id="price-${m.row}"></td>
-        <td class="center"><input type="checkbox" id="sold-${m.row}" ${String(m.SoldOut) === 'true' ? 'checked' : ''}></td>
         <td class="center">
-            <button class="btn-sm" onclick="saveMenuRow(${m.row}, this)">SAVE</button>
-            <button class="btn-sm btn-del" onclick="deleteItem(${m.row}, this)">DEL</button>
+            <input type="checkbox" id="sold-${m.row}" ${String(m.SoldOut) === 'true' ? 'checked' : ''}>
+        </td>
+        <td class="center">
+            <button class="btn-sm" onclick="saveMenuRow(${m.row}, this)">UPDATE</button>
         </td>
       </tr>
     `).join('');
@@ -156,40 +220,83 @@ async function saveMenuRow(rowId, btn){
         price: document.getElementById(`price-${rowId}`).value,
         soldOut: String(document.getElementById(`sold-${rowId}`).checked)
     });
-    btn.textContent = "DONE";
-    setTimeout(() => { btn.textContent = "SAVE"; }, 1500);
+    btn.textContent = "SAVED";
+    setTimeout(() => { btn.textContent = "UPDATE"; }, 2000);
 }
 
-async function deleteItem(rowId, btn) {
-    if(!confirm("Are you sure you want to delete this item?")) return;
-    btn.textContent = "...";
-    const ok = await apiPost({ func: "deleteItem", row: rowId });
-    if(ok) {
-        btn.closest('tr').style.opacity = "0.3";
-        setTimeout(loadMenu, 1000); // Reload to fix row indexing
-    }
-}
-
+// NEW FUNCTION: ADD ITEM
 async function addNewMenuItem(btn) {
     const item = document.getElementById('newName').value;
     const cat = document.getElementById('newCat').value;
     const price = document.getElementById('newPrice').value;
-    if(!item || !price) return alert("Missing Info");
+    const sold = document.getElementById('newSold').checked;
+
+    if(!item || !price) return alert("Please enter Name and Price.");
+
     btn.disabled = true;
+    btn.textContent = "ADDING...";
+
     const ok = await apiPost({
         func: "addNewItem",
         item: item,
         category: cat || "General",
         price: price,
-        soldOut: String(document.getElementById('newSold').checked)
+        soldOut: String(sold)
     });
+
     if(ok) {
+        // Clear inputs
         document.getElementById('newName').value = "";
+        document.getElementById('newCat').value = "";
         document.getElementById('newPrice').value = "";
-        setTimeout(() => { loadMenu(); btn.disabled = false; }, 1500);
+        document.getElementById('newSold').checked = false;
+        
+        // Refresh menu list
+        setTimeout(() => { 
+            loadMenu(); 
+            btn.disabled = false;
+            btn.textContent = "ADD NEW";
+        }, 2000);
     }
 }
 
-// ... (Rest of your loadSettings and loadOrders functions remain unchanged) ...
-loadSettings(); loadMenu();
+function loadOrders(){ 
+  fetch(BASE + "?func=getOrders").then(r=>r.json()).then(data=>{ 
+    const ob = document.getElementById('ordersBody'); 
+    if(!data.length) { ob.innerHTML = "<tr><td colspan='8' class='center'>No orders found.</td></tr>"; return; }
+    ob.innerHTML = "";
+    [...data].reverse().forEach(o => {
+      const tr = document.createElement("tr");
+      const currentStatus = o.Completed || "Order Placed"; 
+      const isDelivered = currentStatus === "Delivered";
+      if(isDelivered) tr.classList.add("completed-row");
+      const statusOptions = ["Order Placed", "Received", "Cooking", "Packing", "Delivering", "Delivered"];
+      let selectHtml = `<select class="menu-input" onchange="updateOrderStatus('${o.OrderID}', this)" ${isDelivered ? 'disabled' : ''}>`;
+      statusOptions.forEach(opt => {
+        selectHtml += `<option value="${opt}" ${currentStatus === opt ? 'selected' : ''}>${opt}</option>`;
+      });
+      selectHtml += `</select>`;
+      tr.innerHTML = `
+        <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleString() : ''}</small><br><b>${o.OrderID}</b></td>
+        <td><b>${o.Name}</b></td>
+        <td><small>${o.Contact}</small><br><small style="color:#666">${o.Address}</small></td>
+        <td>• ${o.Items ? o.Items.split(',').join('<br>• ') : ''}</td>
+        <td><b>₱${o.Total}</b></td>
+        <td><span class="pay-tag">${o.Payment}</span></td>
+        <td style="font-style:italic; color:#666; font-size:0.85rem">${o.Notes || "-"}</td>
+        <td>${selectHtml}</td>
+      `;
+      ob.appendChild(tr);
+    });
+  });
+}
+
+async function updateOrderStatus(orderID, selectElement){
+    selectElement.style.opacity = "0.5";
+    await apiPost({ func: "markCompleted", id: orderID, status: selectElement.value });
+    setTimeout(loadOrders, 1000); 
+}
+
+loadSettings(); loadMenu(); loadOrders(); 
+setInterval(loadOrders, 30000); 
 </script>
