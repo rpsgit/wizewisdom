@@ -34,7 +34,7 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
   flex-wrap: wrap;
 }
 
-.track-btn, .share-btn, .msg-btn-top {
+.track-btn, .share-btn {
   background: #eee; border: none;
   padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: bold;
   font-size: 0.8rem;
@@ -42,7 +42,6 @@ h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge 
 }
 
 .share-btn { background: var(--secondary); }
-.msg-btn-top { background: var(--messenger); color: white; display: none; }
 
 #logo{ display:block; margin:0 auto 8px; max-width:200px; width:100%; }
 
@@ -116,7 +115,6 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
   <div class="header-actions">
     <div style="display:flex; gap:5px;">
         <button class="track-btn" onclick="openStatusModal()">🔍 TRACK</button>
-        <a id="msgBtnHeader" href="#" target="_blank" class="msg-btn-top">💬 CHAT</a>
     </div>
     <button class="share-btn" onclick="shareSite()">🔗 SHARE</button>
   </div>
@@ -202,21 +200,17 @@ let pending = null;
 fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
   settings = s;
   
-  // Apply Closed Status
   if (s.closed_today || s.auto_closed) {
     document.getElementById('closedBanner').style.display="block";
     document.getElementById('form').style.display="none";
     document.getElementById('cart').style.display="none";
   }
 
-  // Set Messenger Links if available
+  // Messenger Logic - Only updates floating icon
   if(s.messenger_link) {
-      const links = ['msgBtnHeader', 'floatingMessenger'];
-      links.forEach(id => {
-          const el = document.getElementById(id);
-          el.href = s.messenger_link;
-          el.style.display = (id === 'floatingMessenger') ? "flex" : "flex";
-      });
+      const el = document.getElementById('floatingMessenger');
+      el.href = s.messenger_link;
+      el.style.display = "flex";
   }
 });
 
