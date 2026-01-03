@@ -47,7 +47,6 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
 .add-row { background-color: #fff9c4; }
 .add-row input { border-color: #fbc02d; }
 
-/* Floating Messenger Button Style */
 #floatingMessenger {
     position: fixed;
     bottom: 25px;
@@ -57,7 +56,7 @@ td{ padding: 12px; border-bottom: 1px solid #eee; font-size: .95rem; vertical-al
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    display: none; /* Shown via JS */
+    display: none; 
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -188,7 +187,6 @@ function loadSettings(){
     status.textContent = isStoreClosed ? "● STORE IS CURRENTLY CLOSED" : "● STORE IS CURRENTLY OPEN"; 
     status.className = isStoreClosed ? "status-closed" : "status-open"; 
     
-    // Fill the inputs
     document.getElementById('gcashNum').value = s.gcash_number || '';
     document.getElementById('mayaNum').value = s.maya_number || '';
     document.getElementById('adminEmail').value = s.notification_email || '';
@@ -196,7 +194,6 @@ function loadSettings(){
     document.getElementById('tgToken').value = s.telegram_token || '';
     document.getElementById('tgChat').value = s.telegram_chat_id || '';
 
-    // Handle Floating Messenger visibility
     const floatMsg = document.getElementById('floatingMessenger');
     if(s.messenger_link) {
         floatMsg.href = s.messenger_link;
@@ -217,7 +214,7 @@ async function saveSettingsInfo(){
     });
     if(ok) {
         alert("Settings saved successfully!");
-        loadSettings(); // Refresh to update messenger icon link
+        loadSettings();
     }
 }
 
@@ -262,11 +259,18 @@ async function saveMenuRow(rowId, btn){
     setTimeout(() => { btn.textContent = "UPDATE"; }, 2000);
 }
 
+/**
+ * UPDATED: addNewMenuItem
+ * Now sends a dummy image URL to be saved in column E.
+ */
 async function addNewMenuItem(btn) {
     const item = document.getElementById('newName').value;
     const cat = document.getElementById('newCat').value;
     const price = document.getElementById('newPrice').value;
     const sold = document.getElementById('newSold').checked;
+
+    // Dummy Image URL for "Image Not Available"
+    const dummyImage = "https://placehold.co/600x400?text=Image+Not+Available";
 
     if(!item || !price) return alert("Please enter Name and Price.");
 
@@ -278,7 +282,8 @@ async function addNewMenuItem(btn) {
         item: item,
         category: cat || "General",
         price: price,
-        soldOut: String(sold)
+        soldOut: String(sold),
+        image: dummyImage // This will be saved in Column E
     });
 
     if(ok) {
