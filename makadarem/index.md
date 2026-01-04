@@ -182,7 +182,7 @@ h1 { text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: bold
   <p>Door-to-door delivery within VS2 only</p>
   <h3 style="color: red; font-weight: bold;">NOTE: SOME OF THE PRICES HAVE CHANGED. </h3>
   <h2 style="color: red; font-weight: bold;">Delivery Schedule for January 4, 2026 - Sun </h2>
-  <h3 style="color: red;">TBA. Salamat po!</h3>
+  <h3 style="color: red;">5:30 PM  to 11 PM. Salamat po!</h3>
 
   <form id="menuForm">
     <div id="menuContainer">Loading menu...</div>
