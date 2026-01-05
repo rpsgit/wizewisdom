@@ -350,7 +350,7 @@ async function confirmOrder() {
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.innerText = "PROCESSING...";
   
-  const orderID = "AK-" + Date.now().toString().slice(-6);
+  const orderID = "MFC-" + Date.now().toString().slice(-6);
   const fd = new URLSearchParams();
   fd.append("func", "order");
   fd.append("orderID", orderID);
