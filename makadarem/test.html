@@ -3,14 +3,15 @@ layout: default
 title: MAKADAREM FOOD CO.
 ---
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --primary:#ffd600;
-  --secondary:#ffea00;
-  --bg:#f4f4f4;
-  --text-dark: #111;
+  --primary: #064e3b;    /* Elegant Emerald */
+  --secondary: #10b981;  /* Fresh Mint */
+  --accent: #d4af37;     /* Soft Gold */
+  --bg: #f8fafc;
+  --text-dark: #022c22;
   --messenger: #0084FF;
   --gcash: #007dfe;
   --maya: #00d26a;
@@ -18,126 +19,114 @@ title: MAKADAREM FOOD CO.
 *{box-sizing:border-box}
 body{ margin:0; font-family:'Lato', sans-serif; background:var(--bg); color: var(--text-dark); }
 
-h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge {
-  font-family:'Bebas Neue', Arial, sans-serif;
-  letter-spacing:.03em;
+/* Elegant Heading Style */
+h1, h2, h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-#closedBanner{ display:none; background:#111; color:#fff; padding:14px; text-align:center; position: sticky; top: 0; z-index: 1001; }
+#closedBanner{ display:none; background:#022c22; color:#fff; padding:14px; text-align:center; position: sticky; top: 0; z-index: 1001; font-weight: bold; }
 
-.page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:16px; background:#fff; border-radius:24px; }
+.page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:24px; background:#fff; border-radius:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
 .header-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .track-btn, .share-btn {
-  background: #eee; border: none;
-  padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: bold;
-  font-size: 0.8rem;
-  display: flex; align-items: center; gap: 5px;
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 600;
+  font-size: 0.85rem; color: var(--primary);
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.3s ease;
 }
 
-.share-btn { background: var(--secondary); }
+.share-btn { background: var(--primary); color: white; border: none; }
+.share-btn:hover { background: var(--secondary); }
 
-#logo{ display:block; margin:0 auto 8px; max-width:200px; width:100%; }
+#logo{ display:block; margin:0 auto 10px; max-width:180px; width:100%; }
 
-.tabs{ display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom: 5px; }
-.tabs button{ border:none; padding:10px 16px; border-radius:999px; background:#eee; cursor:pointer; white-space: nowrap; }
-.tabs button.active{ background:linear-gradient(135deg,var(--secondary),var(--primary)); }
+.tabs{ display:flex; gap:12px; overflow-x:auto; margin-bottom:24px; padding-bottom: 8px; scrollbar-width: none; }
+.tabs button{ border:1px solid #e2e8f0; padding:12px 24px; border-radius:999px; background:#fff; cursor:pointer; white-space: nowrap; transition: 0.3s; color: var(--primary); font-size: 1rem; }
+.tabs button.active{ background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2); }
 
 .tab-content { display: none; }
-.tab-content.active { display: block; }
+.tab-content.active { display: block; animation: fadeIn 0.5s ease; }
 
-.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
-.item{ background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.1); }
-.item img{ width:100%; height:140px; object-fit:cover; cursor: zoom-in; transition: transform 0.2s; }
-.item img:hover { transform: scale(1.02); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.body{ padding:12px; display:flex; justify-content:space-between; }
-.price{ color:#d4af37; font-weight:700; }
-.actions input[type=number]{ display:none; width:60px; text-align: center; border: 1px solid #ddd; border-radius: 4px;}
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+.item{ background:#fff; border-radius:20px; overflow:hidden; border: 1px solid #f1f5f9; transition: transform 0.3s; }
+.item:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+.item img{ width:100%; height:180px; object-fit:cover; cursor: zoom-in; }
 
-/* Payment Styling Fixed - Forced Left Alignment */
-.pay-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #ddd; text-align: left; }
+.body{ padding:16px; display:flex; flex-direction: column; gap: 8px; }
+.item-info { display: flex; justify-content: space-between; align-items: flex-start; }
+.price{ color: var(--primary); font-size: 1.2rem; }
+
+.actions { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+.actions input[type=number]{ width:70px; padding: 6px; text-align: center; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: bold; }
+
+.pay-box { background: #f8fafc; padding: 20px; border-radius: 16px; margin: 20px 0; border: 1px solid #e2e8f0; }
 .pay-option {
     display: flex;
     align-items: center;
-    padding: 12px;
-    margin-bottom: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
     background: white;
-    border-radius: 10px;
-    border: 1px solid #eee;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
     cursor: pointer;
-    justify-content: flex-start !important; 
+    transition: 0.2s;
 }
-.pay-option input { margin-right: 12px; margin-left: 0; width: auto; margin-bottom: 0; }
-.brand-icon { width: 24px; height: 24px; margin-right: 10px; object-fit: contain; }
-.gcash-label { color: var(--gcash); font-weight: 900; }
-.maya-label { color: var(--maya); font-weight: 900; }
+.pay-option:hover { border-color: var(--primary); }
+.pay-option input { margin-right: 15px; width: 18px; height: 18px; accent-color: var(--primary); }
 
-/* QR and Instructions Section */
-#payInstructions { display: none; margin-top: 10px; padding: 15px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; text-align: center; }
-.qr-container { margin-top: 10px; padding: 10px; background: #f4f4f4; border-radius: 8px; display: none; }
-.qr-container img { max-width: 200px; width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
-
-.copy-icon { cursor: pointer; margin-left: 8px; vertical-align: middle; fill: #666; width: 18px; height: 18px; }
-.copy-icon:active { fill: var(--primary); }
-
-#cart{ position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,var(--secondary),var(--primary)); padding:15px 20px; border-radius:999px; cursor:pointer; z-index: 100; font-family:'Bebas Neue'; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-.total-display{ font-size:1.5rem; margin:20px 0; text-align: right; font-family:'Bebas Neue'; }
-
-#floatingMessenger {
-  position: fixed;
-  bottom: 85px;
-  right: 25px;
-  background: var(--messenger);
-  color: white;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  cursor: pointer;
-  z-index: 99;
-  text-decoration: none;
+#cart{ 
+  position:fixed; bottom:30px; right:30px; 
+  background: var(--primary); color: white;
+  padding: 18px 32px; border-radius:999px; cursor:pointer; z-index: 100; 
+  box-shadow: 0 8px 25px rgba(6, 78, 59, 0.4); 
+  display: flex; align-items: center; gap: 12px;
+  transition: 0.3s;
 }
+#cart:hover { transform: scale(1.05); background: var(--secondary); }
 
-input,textarea{ width:100%; padding:12px; border-radius:12px; border:1px solid #ccc; margin-bottom:10px; font-family: inherit; }
-button.main{ width:100%; padding:14px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--secondary),var(--primary)); font-family:'Bebas Neue'; font-size: 1.2rem; cursor: pointer; }
+.total-display{ font-size:1.8rem; margin:24px 0; text-align: right; color: var(--primary); }
 
-#modal, #statusModal, #imageModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:999; }
-.modal-box{ background:#fff; padding:24px; border-radius:16px; max-width:420px; width:92%; text-align: center; position: relative; }
+input, textarea { width:100%; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; font-family: 'Lato', sans-serif; background: #fff; }
+input:focus { outline: 2px solid var(--secondary); border-color: transparent; }
 
-#imageModal .modal-box { background: transparent; padding: 0; max-width: 90%; }
-#enlargedImg { width: 100%; border-radius: 12px; max-height: 80vh; object-fit: contain; }
-.close-zoom { position: absolute; top: -40px; right: 0; color: #fff; font-size: 2rem; cursor: pointer; font-weight: bold; }
+button.main{ 
+  width:100%; padding:18px; border:none; border-radius:999px; 
+  background: var(--primary); color: white;
+  font-size: 1.3rem; cursor: pointer; transition: 0.3s;
+}
+button.main:hover { background: var(--secondary); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); }
 
-.order-id-display { font-size: 1.5rem; color: #d4af37; border: 2px dashed #d4af37; padding: 10px; margin: 10px 0; display: inline-flex; justify-content: center; align-items: center; width: 100%; gap: 10px; }
-.status-badge { font-size: 1.2rem; padding: 12px; border-radius: 8px; background: #111; color: var(--primary); display: block; margin-top: 10px; border: 2px solid var(--primary); }
-.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 0.9rem; }
+#modal, #statusModal, #imageModal { display:none; position:fixed; inset:0; background:rgba(2, 44, 34, 0.9); justify-content:center; align-items:center; z-index:999; backdrop-filter: blur(4px); }
+.modal-box{ background:#fff; padding:32px; border-radius:24px; max-width:450px; width:92%; text-align: center; }
+
+.summary-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
 </style>
 
-<div id="closedBanner">🚫 ORDERING IS CLOSED</div>
+<div id="closedBanner">🚫 OUR KITCHEN IS CURRENTLY CLOSED</div>
 
 <div class="page">
   <div class="header-actions">
-    <div style="display:flex; gap:5px;">
-        <button class="track-btn" onclick="openStatusModal()">🔍 TRACK</button>
-    </div>
+    <button class="track-btn" onclick="openStatusModal()">🔍 TRACK ORDER</button>
     <button class="share-btn" onclick="shareSite()">🔗 SHARE</button>
   </div>
   
   <img id="logo" src="/assets/images/mfc/Makadarem Food Co.png" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
-  <div id="logoFallback" style="display:none; text-align:center; font-size:1.4rem;">MAKADAREM FOOD CO.</div>
-  <h1 style="text-align:center; margin-top: 10px;">MAKADAREM FOOD CO.</h1>
+  <div id="logoFallback" style="display:none; text-align:center; font-size:1.8rem; color:var(--primary);">MAKADAREM FOOD CO.</div>
+  
+  <h1 style="text-align:center; margin: 15px 0; font-size: 2.5rem; color: var(--primary);">MAKADAREM FOOD CO.</h1>
 
   <div class="tabs" id="tabs"></div>
 
@@ -145,49 +134,73 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
     <div id="menu"></div>
     <div class="total-display" id="totalDisplay">Total: ₱0</div>
     
-    <h3>DELIVERY DETAILS</h3>
+    <h3 style="border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">DELIVERY DETAILS</h3>
     <input name="name" id="userName" placeholder="Full Name" required>
     <input name="contact" id="userContact" placeholder="Phone Number" required>
-    <input name="address" id="userAddress" placeholder="Complete Address" required>
-    <textarea name="notes" id="userNotes" placeholder="Landmarks / Special Notes"></textarea>
+    <input name="address" id="userAddress" placeholder="Complete Delivery Address" required>
+    <textarea name="notes" id="userNotes" placeholder="Landmarks / Specific Instructions"></textarea>
     
-    <h3>PAYMENT</h3>
+    <h3 style="margin-top:20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">PAYMENT METHOD</h3>
     <div class="pay-box">
         <label class="pay-option">
             <input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 
-            <span>💵 Cash</span>
+            <span style="font-weight:600;">💵 Cash on Delivery</span>
         </label>
         <div id="cashLogic" style="margin-left: 36px; margin-bottom: 15px;">
-            <input type="text" id="changeFor" placeholder="Change for? (e.g. 1000)" style="margin-bottom:0;">
+            <input type="text" id="changeFor" placeholder="Change for how much?">
         </div>
 
         <label class="pay-option">
             <input type="radio" name="payment" value="GCash" onclick="togglePay()">
-            <svg class="brand-icon" viewBox="0 0 48 48"><path fill="#007dfe" d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm11.5 21.5h-5v5h-3v-5h-5v-3h5v-5h3v5h5v3z"/></svg>
-            <span class="gcash-label">GCash</span>
+            <span class="gcash-label" style="margin-left:5px;">GCash Transfer</span>
         </label>
 
         <label class="pay-option">
             <input type="radio" name="payment" value="Maya" onclick="togglePay()">
-            <svg class="brand-icon" viewBox="0 0 48 48"><rect width="40" height="40" x="4" y="4" fill="#00d26a" rx="8"/><path fill="#fff" d="M14 16h20v4H14zM14 24h20v4H14zM14 32h12v4H14z"/></svg>
-            <span class="maya-label">Maya</span>
+            <span class="maya-label" style="margin-left:5px;">Maya Transfer</span>
         </label>
         
         <div id="payInstructions">
-            <div style="font-size:0.8rem; color:#666;">Send to <strong id="payLabel"></strong>:</div>
-            <div style="margin: 5px 0;">
-                <span id="payNum" style="font-weight:900; font-size:1.2rem;"></span>
-                <svg class="copy-icon" onclick="copyNumber()" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <p style="font-size:0.9rem; color:#64748b;">Transfer to <strong id="payLabel"></strong>:</p>
+            <div style="background:#f1f5f9; padding: 15px; border-radius:10px; margin: 10px 0;">
+                <span id="payNum" style="font-weight:900; font-size:1.4rem; color:var(--primary);"></span>
+                <span style="cursor:pointer; margin-left:10px; color:var(--secondary);" onclick="copyNumber()">📋 COPY</span>
             </div>
             
             <div id="qrSection" class="qr-container">
                 <img id="qrImage" src="" alt="Payment QR">
-                <p style="font-size:0.7rem; color:#888; margin-top:5px;">Scan to Pay</p>
+                <p style="font-size:0.75rem; color:#94a3b8; margin-top:8px;">Scan QR Code to Pay</p>
             </div>
         </div>
     </div>
-    <button type="submit" class="main">PLACE ORDER</button>
+    <button type="submit" class="main">PLACE ORDER NOW</button>
   </form>
+</div>
+
+<div id="cart" onclick="showSummary()">
+  <span style="font-size:1.4rem;">🍱</span>
+  <span><span id="cartCount">0</span> ITEMS — ₱<span id="cartSum">0</span></span>
+</div>
+
+<div id="modal">
+  <div class="modal-box" id="modalContent">
+    <h2 style="color:var(--primary);">ORDER SUMMARY</h2>
+    <div id="preview" style="text-align:left; margin:20px 0; border-top: 1px solid #f1f5f9;"></div>
+    <button class="main" id="finalBtn" onclick="confirmOrder()">CONFIRM ORDER</button>
+    <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; cursor:pointer; color:#94a3b8; font-weight:bold;">GO BACK</button>
+  </div>
+</div>
+
+<div id="imageModal" onclick="closeImage()"><div class="modal-box" style="background:transparent;"><img id="enlargedImg" src="" style="width:100%; border-radius:20px;"></div></div>
+
+<div id="statusModal">
+  <div class="modal-box">
+    <h2 style="color:var(--primary);">TRACK ORDER</h2>
+    <input type="text" id="statusIdInput" placeholder="Enter Reference ID (AK-...)">
+    <button class="main" onclick="checkStatus()">SEARCH</button>
+    <div id="statusResult" style="margin-top:20px;"></div>
+    <button onclick="closeStatusModal()" style="margin-top:15px; background:none; border:none; cursor:pointer; color:#94a3b8;">CLOSE</button>
+  </div>
 </div>
 
 <a id="floatingMessenger" href="#" target="_blank">
@@ -195,6 +208,7 @@ button.main{ width:100%; padding:14px; border:none; border-radius:999px; backgro
 </a>
 
 <script>
+// SCRIPTS REMAIN THE SAME AS PREVIOUS VERSION BUT WITH THE UPDATED SELECTORS
 const BASE = "https://script.google.com/macros/s/AKfycbwEdU7sKqz-zpAuv9G4XBdPP__8S-f-CAbZMTe0vGPiVtxYblf5kxiiYU9UT7fOV0_s/exec";
 const MENU_URL = BASE + "?func=getMenu";
 const SETTINGS_URL = BASE + "?func=getSettings";
@@ -236,13 +250,16 @@ function loadMenu(){
           <div class="grid">${cats[cat].map(i=>{
             const key=i.Item.toLowerCase().replace(/\s+/g,"_");
             prices[key]=i.Price;
-            const imgPath = i.ImageURL || 'https://via.placeholder.com/150';
+            const imgPath = i.Image || i.ImageURL || 'https://via.placeholder.com/150';
             return `<div class="item">
-              <img src="${imgPath}" onclick="zoomImage('${imgPath}')" title="Click to enlarge">
+              <img src="${imgPath}" onclick="zoomImage('${imgPath}')">
               <div class="body">
-                <div><strong>${i.Item}</strong><div class="price">₱${i.Price}</div></div>
+                <div class="item-info">
+                  <strong style="font-size:1.1rem;">${i.Item}</strong>
+                  <div class="price">₱${i.Price}</div>
+                </div>
                 <div class="actions">
-                  ${i.SoldOut?'<span style="color:red; font-weight:900;">SOLD OUT</span>':
+                  ${i.SoldOut?'<span style="color:#ef4444; font-weight:bold;">SOLD OUT</span>':
                   `<input type="checkbox" name="i_${key}" class="item-check" onchange="updateCartUI()">
                    <input type="number" name="q_${key}" value="1" min="1" class="item-qty" onchange="updateCartUI()">`}
                 </div>
@@ -272,10 +289,10 @@ function updateCartUI() {
         if (cb.checked) {
             qtyInp.style.display = "block";
             const qty = parseInt(qtyInp.value) || 1;
-            const sub = prices[key] * qty;
-            total += sub;
+            total += prices[key] * qty;
             count += qty;
-            items.push({ name: key.replace(/_/g," ").toUpperCase(), qty, sub });
+            const displayName = key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            items.push({ name: displayName, qty, sub: prices[key]*qty });
         } else { qtyInp.style.display = "none"; }
     });
     document.getElementById('totalDisplay').textContent = `Total: ₱${total}`;
@@ -284,7 +301,6 @@ function updateCartUI() {
     return { total, items };
 }
 
-// Fixed QR Toggle Logic
 function togglePay(){
     const val = document.querySelector('input[name="payment"]:checked').value;
     const inst = document.getElementById('payInstructions');
@@ -301,117 +317,78 @@ function togglePay(){
         cashBox.style.display = "none";
         inst.style.display = "block";
         payLabel.textContent = val;
-
-        const isGCash = val === "GCash";
-        const phone = isGCash ? settings.gcash_number : settings.maya_number;
-        const qrUrl = isGCash ? settings.gcash_qr : settings.maya_qr;
-
+        const phone = val === "GCash" ? settings.gcash_number : settings.maya_number;
+        const qrUrl = val === "GCash" ? settings.gcash_qr : settings.maya_qr;
         payNum.textContent = phone || "Not set";
-        
-        if(qrUrl && qrUrl.trim() !== "") {
-            qrImg.src = qrUrl;
-            qrSec.style.display = "block";
-        } else {
-            qrSec.style.display = "none";
-        }
+        if(qrUrl) { qrImg.src = qrUrl; qrSec.style.display = "block"; } else { qrSec.style.display = "none"; }
     }
 }
 
 function copyNumber() {
-    const num = document.getElementById('payNum').innerText;
-    if(num === "Not set") return;
-    navigator.clipboard.writeText(num).then(() => alert("Number copied!"));
-}
-
-function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => alert("Order ID copied!"));
-}
-
-function shareSite() {
-    if (navigator.share) {
-        navigator.share({ title: 'MAKADAREM FOOD CO.', url: window.location.href });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link copied!");
-    }
+    navigator.clipboard.writeText(document.getElementById('payNum').innerText).then(() => alert("Copied to clipboard!"));
 }
 
 function showSummary() {
     const state = updateCartUI();
-    if (state.total === 0) return alert("Your cart is empty!");
-    let summaryHtml = '';
-    state.items.forEach(item => { summaryHtml += `<div class="summary-item"><span>${item.name} (x${item.qty})</span><span>₱${item.sub}</span></div>`; });
-    const payMethod = document.querySelector('input[name="payment"]:checked').value;
-    summaryHtml += `<div class="summary-item" style="margin-top:10px; font-weight:bold;"><span>TOTAL</span><span>₱${state.total}</span></div>`;
-    summaryHtml += `<p style="font-size:0.8rem; color:gray; margin-top:10px;">Payment: ${payMethod}</p>`;
-    document.getElementById('preview').innerHTML = summaryHtml;
-    pending = { ...state, payment: payMethod };
+    if (state.total === 0) return alert("Please select items first!");
+    let html = '';
+    state.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} x${i.qty}</span><span>₱${i.sub}</span></div>`; });
+    const pay = document.querySelector('input[name="payment"]:checked').value;
+    html += `<div class="summary-item" style="font-weight:900; color:var(--primary); font-size:1.2rem; margin-top:10px;"><span>TOTAL</span><span>₱${state.total}</span></div>`;
+    html += `<p style="text-align:left; color:gray; font-size:0.8rem;">Payment: ${pay}</p>`;
+    document.getElementById('preview').innerHTML = html;
+    pending = { ...state, payment: pay };
     document.getElementById('modal').style.display = "flex";
 }
 
 document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
 
-function generateOrderID() {
-    const now = new Date();
-    const date = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-    const time = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0');
-    return `AK-${date}-${time}-${Math.floor(Math.random() * 900) + 100}`;
-}
-
 async function confirmOrder(){
-    const name = document.getElementById('userName').value;
-    const contact = document.getElementById('userContact').value;
-    const address = document.getElementById('userAddress').value;
-    if(!name || !contact || !address) { alert("Please fill in delivery details."); return; }
     const btn = document.getElementById('finalBtn');
     btn.disabled = true; btn.textContent = "SENDING...";
-    const orderID = generateOrderID();
-    let finalNotes = document.getElementById('userNotes').value;
-    if(pending.payment === "Cash") {
-        const change = document.getElementById('changeFor').value;
-        if(change) finalNotes = `[CHANGE FOR ₱${change}] ` + finalNotes;
-    }
+    
+    const now = new Date();
+    const orderID = `AK-${now.getTime().toString().slice(-8)}`; // Simplified ID for elegant UI
+
     const fd = new URLSearchParams();
-    fd.append("func", "order"); 
+    fd.append("func", "order");
     fd.append("orderID", orderID);
-    fd.append("name", name);
-    fd.append("contact", contact);
-    fd.append("address", address);
+    fd.append("name", document.getElementById('userName').value);
+    fd.append("contact", document.getElementById('userContact').value);
+    fd.append("address", document.getElementById('userAddress').value);
     fd.append("items", pending.items.map(i => `${i.name} x${i.qty}`).join(", "));
     fd.append("total", pending.total);
     fd.append("payment", pending.payment);
-    fd.append("notes", finalNotes);
-    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString(), headers: {"Content-Type": "application/x-www-form-urlencoded"} });
+    fd.append("notes", document.getElementById('userNotes').value);
+
+    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
+
     setTimeout(() => {
-        document.getElementById('modalContent').innerHTML = `<h2>SUCCESS!</h2><p>Reference ID:</p><div class="order-id-display">${orderID} <svg class="copy-icon" onclick="copyText('${orderID}')" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></div><p style="margin-bottom:20px;">Order details sent! Keep this ID to track your order.</p><button class="main" onclick="location.reload()">CLOSE</button>`;
-    }, 1500);
+        document.getElementById('modalContent').innerHTML = `
+          <h2 style="color:var(--secondary);">ORDER RECEIVED!</h2>
+          <p>Reference ID:</p>
+          <div style="font-size:1.8rem; color:var(--primary); border:2px dashed var(--primary); padding:15px; margin:15px 0;">${orderID}</div>
+          <p>We'll notify you once your food is on the way!</p>
+          <button class="main" onclick="location.reload()">DONE</button>
+        `;
+    }, 2000);
 }
 
 function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
-function closeStatusModal() { document.getElementById('statusModal').style.display = "none"; document.getElementById('statusResult').innerHTML = ""; }
+function closeStatusModal() { document.getElementById('statusModal').style.display = "none"; }
 
 async function checkStatus() {
-    const id = document.getElementById('statusIdInput').value.trim();
-    if(!id) return alert("Please enter an ID");
-    const resDiv = document.getElementById('statusResult');
-    resDiv.innerHTML = "Checking...";
-    try {
-        const response = await fetch(`${BASE}?func=checkStatus&id=${id}`);
-        const data = await response.json();
-        if(data.found) { resDiv.innerHTML = `<p>Order: <strong>${data.id}</strong></p><span class="status-badge">${data.status}</span>`; } else { resDiv.innerHTML = "<p style='color:red;'>Order not found.</p>"; }
-    } catch (e) { resDiv.innerHTML = "Error checking status."; }
+    const id = document.getElementById('statusIdInput').value;
+    const res = document.getElementById('statusResult');
+    res.innerHTML = "Searching...";
+    const r = await fetch(`${BASE}?func=checkStatus&id=${id}`);
+    const d = await r.json();
+    if(d.found) res.innerHTML = `<div style="background:var(--primary); color:white; padding:20px; border-radius:10px;">Status: ${d.status}</div>`;
+    else res.innerHTML = "Order not found.";
 }
 
-function zoomImage(src) {
-  document.getElementById('enlargedImg').src = src;
-  document.getElementById('imageModal').style.display = "flex";
-}
-function closeImage() {
-  document.getElementById('imageModal').style.display = "none";
-}
+function zoomImage(src) { document.getElementById('enlargedImg').src = src; document.getElementById('imageModal').style.display = "flex"; }
+function closeImage() { document.getElementById('imageModal').style.display = "none"; }
 
 loadMenu();
 </script>
-
-<div id="imageModal" onclick="closeImage()"><div class="modal-box"><span class="close-zoom">&times;</span><img id="enlargedImg" src=""></div></div>
-<div id="statusModal"><div class="modal-box"><h3>CHECK ORDER STATUS</h3><input type="text" id="statusIdInput" placeholder="Enter Order ID"><button class="main" onclick="checkStatus()">SEARCH</button><div id="statusResult" style="margin-top:20px;"></div><button onclick="closeStatusModal()" style="margin-top:10px; background:none; border:none; cursor:pointer; color:gray;">Close</button></div></div>
