@@ -45,11 +45,9 @@ h1, h2, h3, .price, .tab-btn, #logoFallback, .order-id-display {
   background: #fff; border: 1px solid #ddd; padding: 10px 20px; 
   border-radius: 4px; cursor: pointer; font-size: 0.75rem; 
   text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
-  transition: all 0.2s;
 }
 .share-btn { background: var(--premium-dark); color: white; border: none; }
 
-/* Larger Logo */
 #logo { display: block; margin: 0 auto 15px; max-width: 240px; width: 100%; height: auto; }
 
 .tabs { 
@@ -99,7 +97,6 @@ button.main {
 }
 button.main:hover { background: var(--premium-gold); }
 
-/* Bag on Right */
 #cart {
   position: fixed; bottom: 30px; right: 30px;
   background: var(--premium-dark); color: white; padding: 16px 32px;
@@ -107,7 +104,6 @@ button.main:hover { background: var(--premium-gold); }
   font-weight: 600; font-size: 0.9rem;
 }
 
-/* Messenger Button above Cart */
 #floatingMessenger {
   position: fixed; bottom: 100px; right: 30px;
   background: var(--messenger); color: white; width: 56px; height: 56px;
@@ -142,6 +138,7 @@ button.main:hover { background: var(--premium-gold); }
     
     <h3 style="margin-bottom: 20px;">Delivery Address</h3>
     <input name="name" id="userName" placeholder="Recipient Name" required>
+    <input type="email" name="email" id="userEmail" placeholder="Email Address (for order receipt)" required>
     <input name="contact" id="userContact" placeholder="Mobile Number" required>
     <input name="address" id="userAddress" placeholder="Full Delivery Address" required>
     <textarea name="notes" id="userNotes" rows="2" placeholder="Nearby landmarks or instructions..."></textarea>
@@ -212,10 +209,9 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbz6_lrswqDpAotgsP-Q0rRKHVC2mOC6F5nOYx3DfBzgRplAAiAZjTqFN-QOGYs5jI9R/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbxZv7qBvY1lH5mjzPXcjufjCCIChInyNcIHZsEfpDFInb-RLKs0-E1X1zpa0gVGo0FC/exec";
 let settings = {}, prices = {}, pending = null;
 
-// Initial Setup
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   settings = s;
   if (s.closed_today || s.auto_closed) {
@@ -349,11 +345,11 @@ async function confirmOrder() {
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
   
-  // Using URLSearchParams for more reliable delivery to Google Apps Script
   const params = new URLSearchParams({
     func: "order",
     orderID: orderID,
     name: document.getElementById('userName').value,
+    email: document.getElementById('userEmail').value,
     contact: document.getElementById('userContact').value,
     address: document.getElementById('userAddress').value,
     items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
@@ -362,10 +358,8 @@ async function confirmOrder() {
     notes: document.getElementById('userNotes').value || ""
   });
 
-  // Fetch as a GET or a POST without 'no-cors' restriction if possible
-  // For GAS, appending params to URL is often more successful in redirecting environments
   fetch(`${BASE}?${params.toString()}`, { method: "POST" })
-    .catch(err => console.log("Silent record created."));
+    .catch(err => console.log("Order submitted."));
 
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
@@ -377,7 +371,7 @@ async function confirmOrder() {
            <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
         </div>
       </div>
-      <p style="font-size:0.8rem; color:#888;">Screenshot this for your records.</p>
+      <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${document.getElementById('userEmail').value}</p>
       <button class="main" onclick="location.reload()" style="margin-top:20px;">Return Home</button>
     `;
   }, 1500);
