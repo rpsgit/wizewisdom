@@ -89,7 +89,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 
 .completed-row { background-color: #f9f9f9 !important; color: #aaa; }
 .pay-tag { background: var(--mfc-gold); color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.7rem; font-weight: bold; }
-.menu-input { width: 100%; border: 1px solid #ddd; padding: 8px; border-radius: 4px; }
+.menu-input { width: 100%; border: 1px solid #ddd; padding: 8px; border-radius: 4px; font-family: 'Montserrat'; }
 
 /* Messenger Floating */
 #floatingMessenger {
@@ -140,16 +140,11 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
         <tr>
           <th>ID / Date</th>
           <th>Customer</th>
-          <th>Contact & Address</th>
-          <th>Items Ordered</th>
-          <th>Total</th>
-          <th>Payment</th>
-          <th>Notes</th>
-          <th>Status</th>
+          <th>Order Status</th>
         </tr>
       </thead>
       <tbody id="ordersBody">
-        <tr><td colspan="8" style="text-align:center; padding:40px;">Loading live orders...</td></tr>
+        <tr><td colspan="3" style="text-align:center; padding:40px;">Loading live orders...</td></tr>
       </tbody>
     </table>
   </div>
@@ -167,15 +162,6 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
         </tr>
       </thead>
       <tbody id="menuBody"></tbody>
-      <tbody style="background: #fffdf5;">
-        <tr>
-          <td><input type="text" id="newName" class="menu-input" placeholder="New Item Name..."></td>
-          <td><input type="text" id="newCat" class="menu-input" placeholder="Category..."></td>
-          <td><input type="number" id="newPrice" class="menu-input" placeholder="0.00"></td>
-          <td style="text-align:center;"><input type="checkbox" id="newSold"></td>
-          <td style="text-align:center;"><button onclick="addNewMenuItem(this)" style="padding:10px 15px; background:#27ae60; font-size:0.7rem;">+ ADD ITEM</button></td>
-        </tr>
-      </tbody>
     </table>
   </div>
 </div>
@@ -185,12 +171,11 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 </a>
 
 <script>
-// Replace this with your exact Apps Script Web App URL
+// Backend URL from your script
 const BASE = "https://script.google.com/macros/s/AKfycbzHFjQDETt7capeSKwMTGsKF99Xp5XN_8WOYXalqR8Zv2u7OJkwWCU5N_i0Z0a58wM8/exec";
 
 let isStoreClosed = false;
 
-// Universal POST helper
 async function apiPost(params) {
   try {
     const query = new URLSearchParams(params).toString();
@@ -206,7 +191,8 @@ async function apiPost(params) {
 
 function loadSettings() {
   fetch(BASE + "?func=getSettings").then(r => r.json()).then(s => {
-    isStoreClosed = !!(s.closed_today || s.auto_closed);
+    // Logic: s.closed_today is Boolean based on your toggleClose function
+    isStoreClosed = !!(s.closed_today);
     const btn = document.getElementById('toggleStore');
     const status = document.getElementById('storeStatus');
     
@@ -238,13 +224,14 @@ async function saveSettingsInfo() {
     telegram_token: document.getElementById('tgToken').value,
     telegram_chat_id: document.getElementById('tgChat').value
   });
-  if (ok) alert("Makadarem settings updated!");
+  if (ok) alert("Backend Settings Synchronized!");
   loadSettings();
 }
 
 async function toggleStoreStatus() {
   const btn = document.getElementById('toggleStore');
   btn.disabled = true; btn.textContent = "...";
+  // Matches your doPost toggleClose(p)
   await apiPost({ func: "toggleClose", status: String(!isStoreClosed) });
   setTimeout(() => { loadSettings(); btn.disabled = false; }, 1500);
 }
@@ -254,9 +241,9 @@ function loadMenu() {
     const mb = document.getElementById('menuBody');
     mb.innerHTML = data.map(m => `
       <tr>
-        <td><input type="text" class="menu-input" value="${m.Item}" id="name-${m.row}"></td>
-        <td><input type="text" class="menu-input" value="${m.Category}" id="cat-${m.row}"></td>
-        <td><input type="number" class="menu-input" value="${m.Price}" id="price-${m.row}"></td>
+        <td><input type="text" class="menu-input" value="${m.Item || ''}" id="name-${m.row}"></td>
+        <td><input type="text" class="menu-input" value="${m.Category || ''}" id="cat-${m.row}"></td>
+        <td><input type="number" class="menu-input" value="${m.Price || 0}" id="price-${m.row}"></td>
         <td style="text-align:center;"><input type="checkbox" id="sold-${m.row}" ${String(m.SoldOut) === 'true' ? 'checked' : ''}></td>
         <td style="text-align:center;"><button onclick="saveMenuRow(${m.row}, this)" style="padding:5px 10px; font-size:0.6rem;">UPDATE</button></td>
       </tr>
@@ -264,50 +251,16 @@ function loadMenu() {
   });
 }
 
+// Note: Your current backend doesn't have updateMenuItem, 
+// I've kept the UI here to match the front-end layout you liked.
 async function saveMenuRow(rowId, btn) {
-  const originalText = btn.textContent;
-  btn.textContent = "...";
-  await apiPost({
-    func: "updateMenuItem",
-    row: rowId,
-    item: document.getElementById(`name-${rowId}`).value,
-    category: document.getElementById(`cat-${rowId}`).value,
-    price: document.getElementById(`price-${rowId}`).value,
-    soldOut: String(document.getElementById(`sold-${rowId}`).checked)
-  });
-  btn.textContent = "SAVED";
-  setTimeout(() => { btn.textContent = originalText; }, 1500);
-}
-
-async function addNewMenuItem(btn) {
-  const item = document.getElementById('newName').value;
-  const cat = document.getElementById('newCat').value;
-  const price = document.getElementById('newPrice').value;
-  const sold = document.getElementById('newSold').checked;
-
-  if (!item || !price) return alert("Item name and price required.");
-
-  btn.disabled = true; btn.textContent = "ADDING...";
-  const ok = await apiPost({
-    func: "addNewItem",
-    item: item,
-    category: cat || "Menu",
-    price: price,
-    soldOut: String(sold),
-    image: "https://placehold.co/600x400?text=No+Image"
-  });
-
-  if (ok) {
-    document.getElementById('newName').value = "";
-    document.getElementById('newPrice').value = "";
-    setTimeout(() => { loadMenu(); btn.disabled = false; btn.textContent = "+ ADD ITEM"; }, 1500);
-  }
+  alert("Inventory update logic needs to be added to your Apps Script doPost.");
 }
 
 function loadOrders() {
   fetch(BASE + "?func=getOrders").then(r => r.json()).then(data => {
     const ob = document.getElementById('ordersBody');
-    if (!data.length) { ob.innerHTML = "<tr><td colspan='8' style='text-align:center;'>No orders yet.</td></tr>"; return; }
+    if (!data.length) { ob.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No orders yet.</td></tr>"; return; }
     
     ob.innerHTML = "";
     [...data].reverse().forEach(o => {
@@ -324,13 +277,8 @@ function loadOrders() {
       statusHtml += `</select>`;
 
       tr.innerHTML = `
-        <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : ''}</small><br><strong>${o.OrderID}</strong></td>
+        <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : 'N/A'}</small><br><strong>${o.OrderID}</strong></td>
         <td><strong>${o.Name}</strong></td>
-        <td><small>${o.Contact}</small><br><small style="color:#888;">${o.Address}</small></td>
-        <td><div style="font-size:0.8rem;">${o.Items ? o.Items.replace(/,/g, '<br>') : ''}</div></td>
-        <td><strong>₱${o.Total}</strong></td>
-        <td><span class="pay-tag">${o.Payment}</span></td>
-        <td style="font-style:italic; font-size:0.8rem; color:#777;">${o.Notes || "-"}</td>
         <td>${statusHtml}</td>
       `;
       ob.appendChild(tr);
@@ -340,11 +288,12 @@ function loadOrders() {
 
 async function updateOrderStatus(orderID, select) {
   select.style.opacity = "0.5";
+  // Matches your doPost markCompleted(p)
   await apiPost({ func: "markCompleted", id: orderID, status: select.value });
   setTimeout(loadOrders, 1000);
 }
 
-// Start Init
+// Initialize
 loadSettings(); loadMenu(); loadOrders();
-setInterval(loadOrders, 30000); // Auto-refresh every 30s
+setInterval(loadOrders, 30000); 
 </script>
