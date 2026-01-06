@@ -79,10 +79,14 @@ h1, h2, h3, .price, .tab-btn, #logoFallback, .order-id-display {
 input, textarea {
   width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #e0e0e0;
   border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;
+  outline: none;
 }
 
-/* Red border for invalid inputs when user tries to submit */
-input:invalid { border-color: #ff4d4d; }
+/* Red outline ONLY if user tried to submit and forgot a field */
+form.submitted input:invalid, 
+form.submitted textarea:invalid { 
+  border: 2px solid #ff4d4d !important; 
+}
 
 .pay-box { background: #fafafa; padding: 25px; border-radius: 8px; margin: 20px 0; border: 1px solid #eee; }
 .pay-option { 
@@ -135,7 +139,7 @@ button.main:hover { background: var(--premium-gold); }
 
   <div class="tabs" id="tabs"></div>
 
-  <form id="form">
+  <form id="form" novalidate>
     <div id="menu"></div>
     <div class="total-display" id="totalDisplay">₱0</div>
     
@@ -144,7 +148,7 @@ button.main:hover { background: var(--premium-gold); }
     <input type="email" name="email" id="userEmail" placeholder="Email Address (Optional)">
     
     <input name="contact" id="userContact" placeholder="Mobile Number (e.g. 09171234567) *" 
-           required type="tel" pattern="^(09|\+639)\d{9}$" title="Please enter a valid PH mobile number (e.g., 09171234567)">
+           required type="tel" pattern="^(09|\+639)\d{9}$" title="Please enter a valid PH mobile number">
     
     <input name="address" id="userAddress" placeholder="Full Delivery Address *" required>
     <textarea name="notes" id="userNotes" rows="2" placeholder="Nearby landmarks or instructions (Optional)"></textarea>
@@ -156,7 +160,7 @@ button.main:hover { background: var(--premium-gold); }
         <span>Cash on Delivery</span>
       </label>
       <div id="cashLogic" style="margin-left: 45px; margin-bottom: 15px;">
-        <input type="text" id="changeFor" placeholder="Change for how much? *" required>
+        <input type="text" id="changeFor" placeholder="Change for how much? (Optional)">
       </div>
 
       <label class="pay-option">
@@ -215,7 +219,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbyX1UAFV0dIiR5rTDLC88mWfcoIPFY-jl9Z-GRnMdqQzmbhAtNS1RcUEZ4KH27qgI_b/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzTS6QmdzoH47Dg2nIOzR0g0IuJ7DxAA6auZUx1m8qF6Ecdb9f6PbSkvi_TqYLaYowJ/exec";
 let settings = {}, prices = {}, pending = null;
 
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
@@ -302,16 +306,12 @@ function updateUI() {
 function togglePay() {
   const method = document.querySelector('input[name="payment"]:checked').value;
   const inst = document.getElementById('payInstructions'), cash = document.getElementById('cashLogic');
-  const changeInput = document.getElementById('changeFor');
-  
   if(method === "Cash") {
     inst.style.display = "none"; 
     cash.style.display = "block";
-    changeInput.required = true;
   } else {
     cash.style.display = "none"; 
     inst.style.display = "block";
-    changeInput.required = false;
     document.getElementById('payLabel').innerText = method;
     const num = method === "GCash" ? settings.gcash_number : settings.maya_number;
     const qr = method === "GCash" ? settings.gcash_qr : settings.maya_qr;
@@ -341,20 +341,13 @@ function showSummary() {
   const cart = updateUI();
   if(cart.total === 0) return alert("Your bag is empty.");
   
-  // Trigger Form Validation check
-  const form = document.getElementById('form');
-  if (!form.checkValidity()) {
-      form.reportValidity(); // Shows the "Please fill out this field" tooltips
-      return;
-  }
-
   let html = '';
   cart.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>₱${i.sub}</span></div>`; });
   const method = document.querySelector('input[name="payment"]:checked').value;
   html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px;"><span>Total</span><span>₱${cart.total}</span></div>`;
   document.getElementById('preview').innerHTML = html;
   
-  // Store details for confirmation
+  // Prepare data even if incomplete (will be validated on confirm)
   pending = { 
     ...cart, 
     payment: method,
@@ -363,7 +356,7 @@ function showSummary() {
     contact: document.getElementById('userContact').value,
     address: document.getElementById('userAddress').value,
     notes: document.getElementById('userNotes').value || "None",
-    changeFor: document.getElementById('changeFor').value || "N/A"
+    changeFor: document.getElementById('changeFor').value || "Exact Amount"
   };
   
   document.getElementById('modal').style.display = "flex";
@@ -375,6 +368,22 @@ document.getElementById('form').onsubmit = (e) => {
 };
 
 async function confirmOrder() {
+  const form = document.getElementById('form');
+  
+  // Validation Check
+  if (!form.checkValidity()) {
+    document.getElementById('modal').style.display = "none"; // Close modal to show errors
+    form.classList.add('submitted'); // Enable red outlines
+    form.reportValidity(); // Show browser tooltips and scroll to first error
+    return;
+  }
+
+  // Final Data Capture after validation passes
+  pending.name = document.getElementById('userName').value;
+  pending.contact = document.getElementById('userContact').value;
+  pending.address = document.getElementById('userAddress').value;
+  pending.changeFor = document.getElementById('changeFor').value || "Exact Amount";
+
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.innerText = "SENDING...";
   
@@ -396,9 +405,7 @@ async function confirmOrder() {
 
   try {
     await fetch(`${BASE}?${params.toString()}`, { method: "POST" });
-  } catch (err) {
-    console.log("Order submitted.");
-  }
+  } catch (err) { console.log("Sent."); }
 
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
