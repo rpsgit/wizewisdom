@@ -137,11 +137,11 @@ button.main:hover { background: var(--premium-gold); }
     <div class="total-display" id="totalDisplay">₱0</div>
     
     <h3 style="margin-bottom: 20px;">Delivery Address</h3>
-    <input name="name" id="userName" placeholder="Recipient Name" required>
-    <input type="email" name="email" id="userEmail" placeholder="Email Address (for order receipt)" required>
-    <input name="contact" id="userContact" placeholder="Mobile Number" required>
-    <input name="address" id="userAddress" placeholder="Full Delivery Address" required>
-    <textarea name="notes" id="userNotes" rows="2" placeholder="Nearby landmarks or instructions..."></textarea>
+    <input name="name" id="userName" placeholder="Recipient Name *" required>
+    <input type="email" name="email" id="userEmail" placeholder="Email Address (Optional - for receipt)">
+    <input name="contact" id="userContact" placeholder="Mobile Number *" required>
+    <input name="address" id="userAddress" placeholder="Full Delivery Address *" required>
+    <textarea name="notes" id="userNotes" rows="2" placeholder="Nearby landmarks or instructions (Optional)"></textarea>
     
     <h3 style="margin-top: 30px; margin-bottom: 20px;">Payment Method</h3>
     <div class="pay-box">
@@ -150,7 +150,7 @@ button.main:hover { background: var(--premium-gold); }
         <span>Cash on Delivery</span>
       </label>
       <div id="cashLogic" style="margin-left: 45px; margin-bottom: 15px;">
-        <input type="text" id="changeFor" placeholder="Change for how much?">
+        <input type="text" id="changeFor" placeholder="Change for how much? *" required>
       </div>
 
       <label class="pay-option">
@@ -209,7 +209,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbxZv7qBvY1lH5mjzPXcjufjCCIChInyNcIHZsEfpDFInb-RLKs0-E1X1zpa0gVGo0FC/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbwGeK54VcWMWlR4LFRJLYStRdKIOyLEmof6xD0Tah6sae9Rm17uGfgfTdHBaOovOlPA/exec";
 let settings = {}, prices = {}, pending = null;
 
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
@@ -296,10 +296,16 @@ function updateUI() {
 function togglePay() {
   const method = document.querySelector('input[name="payment"]:checked').value;
   const inst = document.getElementById('payInstructions'), cash = document.getElementById('cashLogic');
+  const changeInput = document.getElementById('changeFor');
+  
   if(method === "Cash") {
-    inst.style.display = "none"; cash.style.display = "block";
+    inst.style.display = "none"; 
+    cash.style.display = "block";
+    changeInput.required = true;
   } else {
-    cash.style.display = "none"; inst.style.display = "block";
+    cash.style.display = "none"; 
+    inst.style.display = "block";
+    changeInput.required = false;
     document.getElementById('payLabel').innerText = method;
     const num = method === "GCash" ? settings.gcash_number : settings.maya_number;
     const qr = method === "GCash" ? settings.gcash_qr : settings.maya_qr;
@@ -337,29 +343,37 @@ function showSummary() {
   document.getElementById('modal').style.display = "flex";
 }
 
-document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
+document.getElementById('form').onsubmit = (e) => { 
+  e.preventDefault(); 
+  showSummary(); 
+};
 
 async function confirmOrder() {
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.innerText = "SENDING...";
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
+  const userEmail = document.getElementById('userEmail').value || "Not Provided";
   
   const params = new URLSearchParams({
     func: "order",
     orderID: orderID,
     name: document.getElementById('userName').value,
-    email: document.getElementById('userEmail').value,
+    email: userEmail,
     contact: document.getElementById('userContact').value,
     address: document.getElementById('userAddress').value,
     items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
     total: pending.total,
     payment: pending.payment,
-    notes: document.getElementById('userNotes').value || ""
+    changeFor: document.getElementById('changeFor').value || "N/A",
+    notes: document.getElementById('userNotes').value || "None"
   });
 
-  fetch(`${BASE}?${params.toString()}`, { method: "POST" })
-    .catch(err => console.log("Order submitted."));
+  try {
+    await fetch(`${BASE}?${params.toString()}`, { method: "POST" });
+  } catch (err) {
+    console.log("Order submitted.");
+  }
 
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
@@ -371,7 +385,7 @@ async function confirmOrder() {
            <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
         </div>
       </div>
-      <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${document.getElementById('userEmail').value}</p>
+      <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${userEmail}</p>
       <button class="main" onclick="location.reload()" style="margin-top:20px;">Return Home</button>
     `;
   }, 1500);
