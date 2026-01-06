@@ -81,6 +81,9 @@ input, textarea {
   border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;
 }
 
+/* Red border for invalid inputs when user tries to submit */
+input:invalid { border-color: #ff4d4d; }
+
 .pay-box { background: #fafafa; padding: 25px; border-radius: 8px; margin: 20px 0; border: 1px solid #eee; }
 .pay-option { 
   display: flex; align-items: center; justify-content: flex-start;
@@ -138,8 +141,11 @@ button.main:hover { background: var(--premium-gold); }
     
     <h3 style="margin-bottom: 20px;">Delivery Address</h3>
     <input name="name" id="userName" placeholder="Recipient Name *" required>
-    <input type="email" name="email" id="userEmail" placeholder="Email Address (Optional - for receipt)">
-    <input name="contact" id="userContact" placeholder="Mobile Number *" required>
+    <input type="email" name="email" id="userEmail" placeholder="Email Address (Optional)">
+    
+    <input name="contact" id="userContact" placeholder="Mobile Number (e.g. 09171234567) *" 
+           required type="tel" pattern="^(09|\+639)\d{9}$" title="Please enter a valid PH mobile number (e.g., 09171234567)">
+    
     <input name="address" id="userAddress" placeholder="Full Delivery Address *" required>
     <textarea name="notes" id="userNotes" rows="2" placeholder="Nearby landmarks or instructions (Optional)"></textarea>
     
@@ -209,7 +215,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbwsNIQluNG14GtFy7gnPmb1mP0S73mmxKo1JII0EISQPAOkw3TWoFjg_oBIbB60rZCz/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbyX1UAFV0dIiR5rTDLC88mWfcoIPFY-jl9Z-GRnMdqQzmbhAtNS1RcUEZ4KH27qgI_b/exec";
 let settings = {}, prices = {}, pending = null;
 
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
@@ -334,12 +340,32 @@ function shareSite() {
 function showSummary() {
   const cart = updateUI();
   if(cart.total === 0) return alert("Your bag is empty.");
+  
+  // Trigger Form Validation check
+  const form = document.getElementById('form');
+  if (!form.checkValidity()) {
+      form.reportValidity(); // Shows the "Please fill out this field" tooltips
+      return;
+  }
+
   let html = '';
   cart.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>₱${i.sub}</span></div>`; });
   const method = document.querySelector('input[name="payment"]:checked').value;
   html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px;"><span>Total</span><span>₱${cart.total}</span></div>`;
   document.getElementById('preview').innerHTML = html;
-  pending = { ...cart, payment: method };
+  
+  // Store details for confirmation
+  pending = { 
+    ...cart, 
+    payment: method,
+    name: document.getElementById('userName').value,
+    email: document.getElementById('userEmail').value || "Not Provided",
+    contact: document.getElementById('userContact').value,
+    address: document.getElementById('userAddress').value,
+    notes: document.getElementById('userNotes').value || "None",
+    changeFor: document.getElementById('changeFor').value || "N/A"
+  };
+  
   document.getElementById('modal').style.display = "flex";
 }
 
@@ -353,20 +379,19 @@ async function confirmOrder() {
   btn.disabled = true; btn.innerText = "SENDING...";
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
-  const userEmail = document.getElementById('userEmail').value || "Not Provided";
   
   const params = new URLSearchParams({
     func: "order",
     orderID: orderID,
-    name: document.getElementById('userName').value,
-    email: userEmail,
-    contact: document.getElementById('userContact').value,
-    address: document.getElementById('userAddress').value,
+    name: pending.name,
+    email: pending.email,
+    contact: pending.contact,
+    address: pending.address,
     items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
     total: pending.total,
     payment: pending.payment,
-    changeFor: document.getElementById('changeFor').value || "N/A",
-    notes: document.getElementById('userNotes').value || "None"
+    changeFor: pending.changeFor,
+    notes: pending.notes
   });
 
   try {
@@ -385,7 +410,7 @@ async function confirmOrder() {
            <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
         </div>
       </div>
-      <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${userEmail}</p>
+      <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${pending.email}</p>
       <button class="main" onclick="location.reload()" style="margin-top:20px;">Return Home</button>
     `;
   }, 1500);
