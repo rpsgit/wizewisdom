@@ -45,6 +45,7 @@ h1, h2, h3, .price, .tab-btn, #logoFallback, .order-id-display {
   background: #fff; border: 1px solid #ddd; padding: 10px 20px; 
   border-radius: 4px; cursor: pointer; font-size: 0.75rem; 
   text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+  transition: all 0.2s;
 }
 .share-btn { background: var(--premium-dark); color: white; border: none; }
 
@@ -84,7 +85,7 @@ input, textarea {
 
 .pay-box { background: #fafafa; padding: 25px; border-radius: 8px; margin: 20px 0; border: 1px solid #eee; }
 .pay-option { 
-  display: flex; align-items: center; justify-content: flex-start; /* Left Aligned */
+  display: flex; align-items: center; justify-content: flex-start;
   padding: 14px; border: 1px solid #ddd; border-radius: 6px; 
   margin-bottom: 10px; cursor: pointer; background: white; width: 100%;
 }
@@ -98,7 +99,7 @@ button.main {
 }
 button.main:hover { background: var(--premium-gold); }
 
-/* Bag/Cart on the Right */
+/* Bag on Right */
 #cart {
   position: fixed; bottom: 30px; right: 30px;
   background: var(--premium-dark); color: white; padding: 16px 32px;
@@ -120,12 +121,6 @@ button.main:hover { background: var(--premium-gold); }
 }
 .modal-box { background: #fff; padding: 40px; border-radius: 8px; max-width: 500px; width: 92%; text-align: center; }
 .summary-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-
-/* Copy Icon styling */
-.copy-icon-btn {
-    background: none; border: 1px solid #ccc; border-radius: 4px; padding: 5px 10px;
-    cursor: pointer; margin-left: 10px; vertical-align: middle;
-}
 </style>
 
 <div id="closedBanner">OUR KITCHEN IS CURRENTLY CLOSED</div>
@@ -217,7 +212,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbxE0rQKpAHR87u0h-4b5BCvE6wyV2tQV80VAZjsNP8on_LW9dsKzmDt31ZAj_6s9dP7/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbz6_lrswqDpAotgsP-Q0rRKHVC2mOC6F5nOYx3DfBzgRplAAiAZjTqFN-QOGYs5jI9R/exec";
 let settings = {}, prices = {}, pending = null;
 
 // Initial Setup
@@ -352,19 +347,25 @@ async function confirmOrder() {
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.innerText = "SENDING...";
   
-  const orderID = "AK-" + Date.now().toString().slice(-6);
-  const fd = new URLSearchParams();
-  fd.append("func", "order");
-  fd.append("orderID", orderID);
-  fd.append("name", document.getElementById('userName').value);
-  fd.append("contact", document.getElementById('userContact').value);
-  fd.append("address", document.getElementById('userAddress').value);
-  fd.append("items", pending.items.map(i => `${i.name} x${i.qty}`).join(", "));
-  fd.append("total", pending.total);
-  fd.append("payment", pending.payment);
-  fd.append("notes", document.getElementById('userNotes').value);
+  const orderID = "MFC-" + Date.now().toString().slice(-6);
+  
+  // Using URLSearchParams for more reliable delivery to Google Apps Script
+  const params = new URLSearchParams({
+    func: "order",
+    orderID: orderID,
+    name: document.getElementById('userName').value,
+    contact: document.getElementById('userContact').value,
+    address: document.getElementById('userAddress').value,
+    items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
+    total: pending.total,
+    payment: pending.payment,
+    notes: document.getElementById('userNotes').value || ""
+  });
 
-  fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
+  // Fetch as a GET or a POST without 'no-cors' restriction if possible
+  // For GAS, appending params to URL is often more successful in redirecting environments
+  fetch(`${BASE}?${params.toString()}`, { method: "POST" })
+    .catch(err => console.log("Silent record created."));
 
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
@@ -372,7 +373,9 @@ async function confirmOrder() {
       <p style="font-size:0.9rem;">Reference ID:</p>
       <div style="margin: 20px 0;">
         <span class="order-id-display" id="finalID" style="font-size:1.8rem;">${orderID}</span>
-        <button onclick="copyText('finalID')" class="copy-icon-btn">📄📄</button>
+        <div style="margin-top:10px;">
+           <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
+        </div>
       </div>
       <p style="font-size:0.8rem; color:#888;">Screenshot this for your records.</p>
       <button class="main" onclick="location.reload()" style="margin-top:20px;">Return Home</button>
