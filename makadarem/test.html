@@ -82,7 +82,6 @@ input, textarea {
   outline: none;
 }
 
-/* Red outline ONLY if user tried to submit and forgot a field */
 form.submitted input:invalid, 
 form.submitted textarea:invalid { 
   border: 2px solid #ff4d4d !important; 
@@ -124,6 +123,13 @@ button.main:hover { background: var(--premium-gold); }
 }
 .modal-box { background: #fff; padding: 40px; border-radius: 8px; max-width: 500px; width: 92%; text-align: center; }
 .summary-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+
+@media print {
+  body * { visibility: hidden; }
+  #modalContent, #modalContent * { visibility: visible; }
+  #modalContent { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+  .track-btn, .main { display: none !important; }
+}
 </style>
 
 <div id="closedBanner">OUR KITCHEN IS CURRENTLY CLOSED</div>
@@ -219,8 +225,19 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbzGNh5XXnw4XHm1nigLtto3paW-TWHtMTP0Ix6CfbNzDxbiuP0qap9urjx6E09yhEFM/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbxvsB5NU11jD8wZ_vBtCYEjxcsiNxxxeRmzUGIYvqxoVoa1Ibf0nrbbnyYKgYQXnEIj/exec";
 let settings = {}, prices = {}, pending = null;
+
+// AUTO-TRACKING LOGIC: Check URL for ?track=MFC-XXXXXX
+window.onload = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const trackId = urlParams.get('track');
+  if (trackId) {
+    document.getElementById('statusIdInput').value = trackId;
+    openStatusModal();
+    checkStatus(trackId);
+  }
+};
 
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   settings = s;
@@ -347,7 +364,6 @@ function showSummary() {
   html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px;"><span>Total</span><span>₱${cart.total}</span></div>`;
   document.getElementById('preview').innerHTML = html;
   
-  // Prepare data even if incomplete (will be validated on confirm)
   pending = { 
     ...cart, 
     payment: method,
@@ -377,7 +393,6 @@ async function confirmOrder() {
     return;
   }
 
-  // Update pending values one last time
   pending.name = document.getElementById('userName').value;
   pending.email = document.getElementById('userEmail').value || "Not Provided";
   pending.contact = document.getElementById('userContact').value;
@@ -390,7 +405,6 @@ async function confirmOrder() {
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
   
-  // Construct the data object
   const payload = {
     func: "order",
     orderID: orderID,
@@ -406,16 +420,14 @@ async function confirmOrder() {
   };
 
   try {
-    // We send as POST with a body to ensure the back-end triggers all alerts correctly
     await fetch(BASE, { 
       method: "POST",
-      mode: "no-cors", // Required for Google Apps Script web apps
+      mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
   } catch (err) { console.log("Request sent"); }
 
-  // Show Success UI
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
       <h2 style="color:var(--premium-gold);">Order Received</h2>
@@ -426,17 +438,25 @@ async function confirmOrder() {
            <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
         </div>
       </div>
-      <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${pending.email}</p>
-      <button class="main" onclick="location.reload()" style="margin-top:20px;">Return Home</button>
+      <div id="printArea" style="text-align:left; border: 1px solid #eee; padding:15px; font-size:0.8rem; margin-bottom:20px;">
+         <strong>Customer:</strong> ${pending.name}<br>
+         <strong>Address:</strong> ${pending.address}<br>
+         <strong>Total:</strong> ₱${pending.total} (${pending.payment})<br><br>
+         ${pending.items.map(i => i.name + ' x' + i.qty).join('<br>')}
+      </div>
+      <button class="track-btn" onclick="window.print()" style="width:100%; margin-bottom:10px; background:#f4f4f4;">Print Receipt</button>
+      <button class="main" onclick="location.reload()">Return Home</button>
     `;
   }, 1000);
 }
+
 function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
-async function checkStatus() {
-  const id = document.getElementById('statusIdInput').value;
+
+async function checkStatus(id) {
+  const searchId = id || document.getElementById('statusIdInput').value;
   const res = document.getElementById('statusResult');
   res.innerText = "Checking...";
-  const r = await fetch(BASE + "?func=checkStatus&id=" + id);
+  const r = await fetch(BASE + "?func=checkStatus&id=" + searchId);
   const d = await r.json();
   res.innerHTML = d.found ? `<div style="background:#f9f9f9; padding:15px; border:1px solid #eee;">Status: <strong style="color:var(--premium-gold)">${d.status}</strong></div>` : "ID not found.";
 }
