@@ -219,7 +219,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbyQZbXK6aR6fPMegnlF4g_phpW32UPQnpPG_0T8WcZwdJ1dYR3eEpXiWoaDkLlWJW7G/exec";
+const BASE = "https://script.google.com/macros/s/AKfycby9MvzHr2WDRrA45ou-2mJ6h7PLeZOiT89I__PUwywhkZF8XAw5HdRYLoEMmvKKowr9/exec";
 let settings = {}, prices = {}, pending = null;
 
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
@@ -370,18 +370,19 @@ document.getElementById('form').onsubmit = (e) => {
 async function confirmOrder() {
   const form = document.getElementById('form');
   
-  // Validation Check
   if (!form.checkValidity()) {
-    document.getElementById('modal').style.display = "none"; // Close modal to show errors
-    form.classList.add('submitted'); // Enable red outlines
-    form.reportValidity(); // Show browser tooltips and scroll to first error
+    document.getElementById('modal').style.display = "none";
+    form.classList.add('submitted');
+    form.reportValidity();
     return;
   }
 
-  // Final Data Capture after validation passes
+  // Update pending values one last time
   pending.name = document.getElementById('userName').value;
+  pending.email = document.getElementById('userEmail').value || "Not Provided";
   pending.contact = document.getElementById('userContact').value;
   pending.address = document.getElementById('userAddress').value;
+  pending.notes = document.getElementById('userNotes').value || "None";
   pending.changeFor = document.getElementById('changeFor').value || "Exact Amount";
 
   const btn = document.getElementById('finalBtn');
@@ -389,7 +390,8 @@ async function confirmOrder() {
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
   
-  const params = new URLSearchParams({
+  // Construct the data object
+  const payload = {
     func: "order",
     orderID: orderID,
     name: pending.name,
@@ -401,12 +403,19 @@ async function confirmOrder() {
     payment: pending.payment,
     changeFor: pending.changeFor,
     notes: pending.notes
-  });
+  };
 
   try {
-    await fetch(`${BASE}?${params.toString()}`, { method: "POST" });
-  } catch (err) { console.log("Sent."); }
+    // We send as POST with a body to ensure the back-end triggers all alerts correctly
+    await fetch(BASE, { 
+      method: "POST",
+      mode: "no-cors", // Required for Google Apps Script web apps
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) { console.log("Request sent"); }
 
+  // Show Success UI
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
       <h2 style="color:var(--premium-gold);">Order Received</h2>
@@ -420,9 +429,8 @@ async function confirmOrder() {
       <p style="font-size:0.8rem; color:#888;">Receipt sent to: ${pending.email}</p>
       <button class="main" onclick="location.reload()" style="margin-top:20px;">Return Home</button>
     `;
-  }, 1500);
+  }, 1000);
 }
-
 function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
 async function checkStatus() {
   const id = document.getElementById('statusIdInput').value;
