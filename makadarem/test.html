@@ -3,392 +3,377 @@ layout: default
 title: MAKADAREM FOOD CO.
 ---
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --primary: #064e3b;    /* Elegant Emerald */
-  --secondary: #10b981;  /* Fresh Mint */
-  --accent: #d4af37;     /* Soft Gold */
-  --bg: #f8fafc;
-  --text-dark: #022c22;
+:root {
+  --premium-dark: #1a1a1a;  /* Matches logo background */
+  --premium-gold: #c5a059;  /* Champagne Gold from logo */
+  --premium-light: #fdfdfd; 
+  --text-muted: #666;
+  --bg-soft: #f4f4f4;
   --messenger: #0084FF;
-  --gcash: #007dfe;
-  --maya: #00d26a;
 }
-*{box-sizing:border-box}
-body{ margin:0; font-family:'Lato', sans-serif; background:var(--bg); color: var(--text-dark); }
 
-/* Elegant Heading Style */
-h1, h2, h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge {
+* { box-sizing: border-box; }
+body { 
+  margin: 0; 
+  font-family: 'Montserrat', sans-serif; 
+  background: var(--bg-soft); 
+  color: var(--premium-dark); 
+}
+
+/* Typography Consistency */
+h1, h2, h3, .price, .tab-btn, #logoFallback, .order-id-display {
   font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  letter-spacing: 0.01em;
 }
 
-#closedBanner{ display:none; background:#022c22; color:#fff; padding:14px; text-align:center; position: sticky; top: 0; z-index: 1001; font-weight: bold; }
-
-.page{ position: relative; max-width:1200px; margin:20px auto 200px; padding:24px; background:#fff; border-radius:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-
-.header-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  gap: 8px;
+#closedBanner { 
+  display: none; background: var(--premium-dark); color: #fff; 
+  padding: 12px; text-align: center; position: sticky; top: 0; z-index: 1001; font-size: 0.85rem; letter-spacing: 1px;
 }
+
+.page { 
+  max-width: 1100px; margin: 20px auto 150px; padding: 30px; 
+  background: var(--premium-light); border-radius: 12px; 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05); 
+}
+
+.header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
 
 .track-btn, .share-btn {
-  background: #f1f5f9; border: 1px solid #e2e8f0;
-  padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 600;
-  font-size: 0.85rem; color: var(--primary);
-  display: flex; align-items: center; gap: 6px;
-  transition: all 0.3s ease;
+  background: none; border: 1px solid #ddd; padding: 8px 18px; 
+  border-radius: 4px; cursor: pointer; font-size: 0.7rem; 
+  text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+  font-weight: 600;
 }
+.share-btn { background: var(--premium-dark); color: white; border: none; }
+.track-btn:hover { border-color: var(--premium-gold); color: var(--premium-gold); }
 
-.share-btn { background: var(--primary); color: white; border: none; }
-.share-btn:hover { background: var(--secondary); }
+#logo { display: block; margin: 0 auto 10px; max-width: 160px; }
 
-#logo{ display:block; margin:0 auto 10px; max-width:180px; width:100%; }
+.tabs { 
+  display: flex; gap: 15px; overflow-x: auto; 
+  margin-bottom: 35px; padding-bottom: 10px; border-bottom: 1px solid #eee;
+  scrollbar-width: none;
+}
+.tab-btn {
+  background: none; border: none; padding: 8px 12px; cursor: pointer;
+  font-size: 1rem; color: var(--text-muted); white-space: nowrap; transition: 0.3s;
+}
+.tab-btn.active { color: var(--premium-dark); border-bottom: 2px solid var(--premium-gold); }
 
-.tabs{ display:flex; gap:12px; overflow-x:auto; margin-bottom:24px; padding-bottom: 8px; scrollbar-width: none; }
-.tabs button{ border:1px solid #e2e8f0; padding:12px 24px; border-radius:999px; background:#fff; cursor:pointer; white-space: nowrap; transition: 0.3s; color: var(--primary); font-size: 1rem; }
-.tabs button.active{ background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2); }
-
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.5s ease; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
-.item{ background:#fff; border-radius:20px; overflow:hidden; border: 1px solid #f1f5f9; transition: transform 0.3s; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.item { background: #fff; border-radius: 8px; overflow: hidden; transition: 0.4s; border: 1px solid #f0f0f0; }
 .item:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-.item img{ width:100%; height:180px; object-fit:cover; cursor: zoom-in; }
+.item img { width: 100%; height: 210px; object-fit: cover; cursor: zoom-in; }
 
-.body{ padding:16px; display:flex; flex-direction: column; gap: 8px; }
-.item-info { display: flex; justify-content: space-between; align-items: flex-start; }
-.price{ color: var(--primary); font-size: 1.2rem; }
+.body { padding: 18px; }
+.item-info { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.item-info strong { font-size: 1rem; font-weight: 600; }
+.price { color: var(--premium-gold); font-size: 1.1rem; }
 
-.actions { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
-.actions input[type=number]{ width:70px; padding: 6px; text-align: center; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: bold; }
+.actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+.item-check { transform: scale(1.2); accent-color: var(--premium-dark); cursor: pointer; }
+.item-qty { width: 55px; padding: 4px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 0.85rem; }
 
-.pay-box { background: #f8fafc; padding: 20px; border-radius: 16px; margin: 20px 0; border: 1px solid #e2e8f0; }
-.pay-option {
-    display: flex;
-    align-items: center;
-    padding: 14px;
-    margin-bottom: 10px;
-    background: white;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    cursor: pointer;
-    transition: 0.2s;
+.total-display { font-size: 2rem; margin: 30px 0; text-align: right; color: var(--premium-dark); }
+
+input, textarea {
+  width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #e0e0e0;
+  border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.85rem;
 }
-.pay-option:hover { border-color: var(--primary); }
-.pay-option input { margin-right: 15px; width: 18px; height: 18px; accent-color: var(--primary); }
+input:focus { border-color: var(--premium-gold); outline: none; }
 
-#cart{ 
-  position:fixed; bottom:30px; right:30px; 
-  background: var(--primary); color: white;
-  padding: 18px 32px; border-radius:999px; cursor:pointer; z-index: 100; 
-  box-shadow: 0 8px 25px rgba(6, 78, 59, 0.4); 
-  display: flex; align-items: center; gap: 12px;
-  transition: 0.3s;
+.pay-box { background: #fcfcfc; padding: 20px; border: 1px solid #f0f0f0; border-radius: 8px; margin: 20px 0; }
+.pay-option { 
+  display: flex; align-items: center; padding: 12px; border: 1px solid #eee; 
+  border-radius: 6px; margin-bottom: 8px; cursor: pointer; background: white;
+  font-size: 0.9rem;
 }
-#cart:hover { transform: scale(1.05); background: var(--secondary); }
+.pay-option:has(input:checked) { border-color: var(--premium-gold); }
 
-.total-display{ font-size:1.8rem; margin:24px 0; text-align: right; color: var(--primary); }
-
-input, textarea { width:100%; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; font-family: 'Lato', sans-serif; background: #fff; }
-input:focus { outline: 2px solid var(--secondary); border-color: transparent; }
-
-button.main{ 
-  width:100%; padding:18px; border:none; border-radius:999px; 
-  background: var(--primary); color: white;
-  font-size: 1.3rem; cursor: pointer; transition: 0.3s;
+button.main {
+  width: 100%; padding: 18px; background: var(--premium-dark); color: white;
+  border: none; border-radius: 4px; cursor: pointer; font-family: 'Montserrat', sans-serif;
+  font-weight: 600; letter-spacing: 2px; transition: 0.3s; font-size: 0.95rem;
 }
-button.main:hover { background: var(--secondary); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); }
+button.main:hover { background: var(--premium-gold); }
 
-#modal, #statusModal, #imageModal { display:none; position:fixed; inset:0; background:rgba(2, 44, 34, 0.9); justify-content:center; align-items:center; z-index:999; backdrop-filter: blur(4px); }
-.modal-box{ background:#fff; padding:32px; border-radius:24px; max-width:450px; width:92%; text-align: center; }
+#cart {
+  position: fixed; bottom: 30px; left: 30px;
+  background: var(--premium-dark); color: white; padding: 14px 28px;
+  border-radius: 50px; cursor: pointer; z-index: 1000; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  font-weight: 600; font-size: 0.85rem; transition: 0.3s;
+}
 
-.summary-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+/* Floating Messenger Button */
+#floatingMessenger {
+  position: fixed; bottom: 30px; right: 30px;
+  background: var(--messenger); color: white; width: 56px; height: 56px;
+  border-radius: 50%; display: none; justify-content: center; align-items: center;
+  box-shadow: 0 8px 20px rgba(0,132,255,0.3); z-index: 1001; transition: 0.3s;
+}
+#floatingMessenger:hover { transform: scale(1.1); }
+
+#modal, #statusModal, #imageModal {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 2000;
+}
+.modal-box { background: #fff; padding: 35px; border-radius: 8px; max-width: 480px; width: 90%; text-align: center; }
+.summary-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
 </style>
 
-<div id="closedBanner">🚫 OUR KITCHEN IS CURRENTLY CLOSED</div>
+<div id="closedBanner">KITCHEN CURRENTLY CLOSED</div>
 
 <div class="page">
   <div class="header-actions">
-    <button class="track-btn" onclick="openStatusModal()">🔍 TRACK ORDER</button>
-    <button class="share-btn" onclick="shareSite()">🔗 SHARE</button>
+    <button class="track-btn" onclick="openStatusModal()">Track Order</button>
+    <button class="share-btn" onclick="shareSite()">Share Menu</button>
   </div>
   
   <img id="logo" src="/assets/images/mfc/Makadarem Food Co.png" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
-  <div id="logoFallback" style="display:none; text-align:center; font-size:1.8rem; color:var(--primary);">MAKADAREM FOOD CO.</div>
-  
-  <h1 style="text-align:center; margin: 15px 0; font-size: 2.5rem; color: var(--primary);">MAKADAREM FOOD CO.</h1>
+  <div id="logoFallback" style="display:none; text-align:center; font-size:1.4rem; margin-bottom: 20px;">MAKADAREM FOOD CO.</div>
 
   <div class="tabs" id="tabs"></div>
 
   <form id="form">
     <div id="menu"></div>
-    <div class="total-display" id="totalDisplay">Total: ₱0</div>
+    <div class="total-display" id="totalDisplay">₱0</div>
     
-    <h3 style="border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">DELIVERY DETAILS</h3>
+    <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Delivery Details</h3>
     <input name="name" id="userName" placeholder="Full Name" required>
-    <input name="contact" id="userContact" placeholder="Phone Number" required>
-    <input name="address" id="userAddress" placeholder="Complete Delivery Address" required>
-    <textarea name="notes" id="userNotes" placeholder="Landmarks / Specific Instructions"></textarea>
+    <input name="contact" id="userContact" placeholder="Mobile Number" required>
+    <input name="address" id="userAddress" placeholder="Full Delivery Address" required>
+    <textarea name="notes" id="userNotes" rows="2" placeholder="Instructions for the rider..."></textarea>
     
-    <h3 style="margin-top:20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">PAYMENT METHOD</h3>
+    <h3 style="margin-top: 25px; margin-bottom: 15px; font-size: 1.2rem;">Payment Method</h3>
     <div class="pay-box">
-        <label class="pay-option">
-            <input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 
-            <span style="font-weight:600;">💵 Cash on Delivery</span>
-        </label>
-        <div id="cashLogic" style="margin-left: 36px; margin-bottom: 15px;">
-            <input type="text" id="changeFor" placeholder="Change for how much?">
-        </div>
+      <label class="pay-option">
+        <input type="radio" name="payment" value="Cash" checked onclick="togglePay()">
+        <span style="margin-left:10px;">Cash on Delivery</span>
+      </label>
+      <div id="cashLogic" style="margin-left: 36px;">
+        <input type="text" id="changeFor" placeholder="Change for how much?">
+      </div>
 
-        <label class="pay-option">
-            <input type="radio" name="payment" value="GCash" onclick="togglePay()">
-            <span class="gcash-label" style="margin-left:5px;">GCash Transfer</span>
-        </label>
+      <label class="pay-option">
+        <input type="radio" name="payment" value="GCash" onclick="togglePay()">
+        <span style="margin-left:10px;">GCash Transfer</span>
+      </label>
 
-        <label class="pay-option">
-            <input type="radio" name="payment" value="Maya" onclick="togglePay()">
-            <span class="maya-label" style="margin-left:5px;">Maya Transfer</span>
-        </label>
-        
-        <div id="payInstructions">
-            <p style="font-size:0.9rem; color:#64748b;">Transfer to <strong id="payLabel"></strong>:</p>
-            <div style="background:#f1f5f9; padding: 15px; border-radius:10px; margin: 10px 0;">
-                <span id="payNum" style="font-weight:900; font-size:1.4rem; color:var(--primary);"></span>
-                <span style="cursor:pointer; margin-left:10px; color:var(--secondary);" onclick="copyNumber()">📋 COPY</span>
-            </div>
-            
-            <div id="qrSection" class="qr-container">
-                <img id="qrImage" src="" alt="Payment QR">
-                <p style="font-size:0.75rem; color:#94a3b8; margin-top:8px;">Scan QR Code to Pay</p>
-            </div>
+      <label class="pay-option">
+        <input type="radio" name="payment" value="Maya" onclick="togglePay()">
+        <span style="margin-left:10px;">Maya Transfer</span>
+      </label>
+      
+      <div id="payInstructions" style="display:none; margin-top: 15px; padding: 15px; background: #fff; border: 1px dashed #ddd;">
+        <p style="font-size: 0.8rem; margin: 0;">Send payment to <span id="payLabel" style="font-weight:600;"></span>:</p>
+        <div style="font-size: 1.2rem; font-weight: 700; color: var(--premium-gold); margin: 5px 0;" id="payNum"></div>
+        <button type="button" onclick="copyNumber()" style="font-size: 0.7rem; background: none; border: 1px solid #ddd; padding: 4px 8px; cursor: pointer;">Copy Number</button>
+        <div id="qrSection" style="margin-top:10px; display:none;">
+          <img id="qrImage" src="" style="max-width: 140px; border-radius: 4px;">
         </div>
+      </div>
     </div>
-    <button type="submit" class="main">PLACE ORDER NOW</button>
+
+    <button type="submit" class="main">PLACE ORDER</button>
   </form>
 </div>
 
 <div id="cart" onclick="showSummary()">
-  <span style="font-size:1.4rem;">🍱</span>
-  <span><span id="cartCount">0</span> ITEMS — ₱<span id="cartSum">0</span></span>
-</div>
-
-<div id="modal">
-  <div class="modal-box" id="modalContent">
-    <h2 style="color:var(--primary);">ORDER SUMMARY</h2>
-    <div id="preview" style="text-align:left; margin:20px 0; border-top: 1px solid #f1f5f9;"></div>
-    <button class="main" id="finalBtn" onclick="confirmOrder()">CONFIRM ORDER</button>
-    <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; cursor:pointer; color:#94a3b8; font-weight:bold;">GO BACK</button>
-  </div>
-</div>
-
-<div id="imageModal" onclick="closeImage()"><div class="modal-box" style="background:transparent;"><img id="enlargedImg" src="" style="width:100%; border-radius:20px;"></div></div>
-
-<div id="statusModal">
-  <div class="modal-box">
-    <h2 style="color:var(--primary);">TRACK ORDER</h2>
-    <input type="text" id="statusIdInput" placeholder="Enter Reference ID (AK-...)">
-    <button class="main" onclick="checkStatus()">SEARCH</button>
-    <div id="statusResult" style="margin-top:20px;"></div>
-    <button onclick="closeStatusModal()" style="margin-top:15px; background:none; border:none; cursor:pointer; color:#94a3b8;">CLOSE</button>
-  </div>
+  BAG (<span id="cartCount">0</span>) • ₱<span id="cartSum">0</span>
 </div>
 
 <a id="floatingMessenger" href="#" target="_blank">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.453 5.527 3.734 7.28l-.01 2.266 2.11-1.154c.734.204 1.516.314 2.32.314 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.074 12.553l-2.583-2.753-5.043 2.753 5.543-5.889 2.66 2.753 4.965-2.753-5.542 5.889z"/></svg>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.453 5.527 3.734 7.28l-.01 2.266 2.11-1.154c.734.204 1.516.314 2.32.314 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.074 12.553l-2.583-2.753-5.043 2.753 5.543-5.889 2.66 2.753 4.965-2.753-5.542 5.889z"/></svg>
 </a>
 
+<div id="modal">
+  <div class="modal-box" id="modalContent">
+    <h2 style="margin-bottom: 20px;">Review Order</h2>
+    <div id="preview" style="margin-bottom: 25px;"></div>
+    <button class="main" id="finalBtn" onclick="confirmOrder()">CONFIRM & SEND</button>
+    <button type="button" onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; color: #999; cursor:pointer; font-size:0.8rem;">Edit Bag</button>
+  </div>
+</div>
+
+<div id="imageModal" onclick="this.style.display='none'">
+  <img id="enlargedImg" src="" style="max-width: 90%; max-height: 80vh; border-radius: 8px;">
+</div>
+
+<div id="statusModal">
+  <div class="modal-box">
+    <h3>Track Your Order</h3>
+    <input type="text" id="statusIdInput" placeholder="Enter Reference ID (e.g., AK-...)">
+    <button class="main" onclick="checkStatus()">Search</button>
+    <div id="statusResult" style="margin-top: 20px;"></div>
+    <button onclick="document.getElementById('statusModal').style.display='none'" style="margin-top:15px; border:none; background:none; cursor:pointer; color:#888;">Close</button>
+  </div>
+</div>
+
 <script>
-// SCRIPTS REMAIN THE SAME AS PREVIOUS VERSION BUT WITH THE UPDATED SELECTORS
 const BASE = "https://script.google.com/macros/s/AKfycbwEdU7sKqz-zpAuv9G4XBdPP__8S-f-CAbZMTe0vGPiVtxYblf5kxiiYU9UT7fOV0_s/exec";
-const MENU_URL = BASE + "?func=getMenu";
-const SETTINGS_URL = BASE + "?func=getSettings";
+let settings = {}, prices = {}, pending = null;
 
-let settings = {};
-let prices = {};
-let pending = null;
-
-fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+// Initial Load: Settings & Messenger
+fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   settings = s;
   if (s.closed_today || s.auto_closed) {
     document.getElementById('closedBanner').style.display="block";
-    document.getElementById('form').style.display="none";
-    document.getElementById('cart').style.display="none";
+    document.getElementById('form').style.opacity="0.4";
+    document.getElementById('form').style.pointerEvents="none";
   }
   if(s.messenger_link) {
-      const el = document.getElementById('floatingMessenger');
-      el.href = s.messenger_link;
-      el.style.display = "flex";
+    document.getElementById('floatingMessenger').href = s.messenger_link;
+    document.getElementById('floatingMessenger').style.display = "flex";
   }
 });
 
 function loadMenu(){
-  fetch(MENU_URL).then(r=>r.json()).then(data=>{
-    const tabs = document.getElementById('tabs');
-    const menu = document.getElementById('menu');
-    const cats={};
-    data.forEach(i=>{
-      const c=i.Category||"Others";
-      cats[c]=cats[c]||[];
+  fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
+    const tabs = document.getElementById('tabs'), menu = document.getElementById('menu');
+    const cats = {};
+    data.forEach(i => {
+      const c = i.Category || "Menu";
+      if(!cats[c]) cats[c] = [];
       cats[c].push(i);
     });
-    let first=true;
-    Object.keys(cats).forEach(cat=>{
-      const id=cat.toLowerCase().replace(/\s+/g,"_");
-      tabs.insertAdjacentHTML("beforeend", `<button type="button" id="tabbtn_${id}" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`);
-      menu.insertAdjacentHTML("beforeend",`
-        <div class="tab-content ${first?'active':''}" id="${id}">
-          <div class="grid">${cats[cat].map(i=>{
-            const key=i.Item.toLowerCase().replace(/\s+/g,"_");
-            prices[key]=i.Price;
-            const imgPath = i.Image || i.ImageURL || 'https://via.placeholder.com/150';
-            return `<div class="item">
-              <img src="${imgPath}" onclick="zoomImage('${imgPath}')">
-              <div class="body">
-                <div class="item-info">
-                  <strong style="font-size:1.1rem;">${i.Item}</strong>
-                  <div class="price">₱${i.Price}</div>
+    
+    Object.keys(cats).forEach((cat, idx) => {
+      const id = "cat_" + idx;
+      tabs.insertAdjacentHTML('beforeend', `<button type="button" class="tab-btn ${idx===0?'active':''}" onclick="openTab('${id}', this)">${cat}</button>`);
+      menu.insertAdjacentHTML('beforeend', `
+        <div id="${id}" class="tab-content" style="display:${idx===0?'block':'none'}">
+          <div class="grid">${cats[cat].map(i => {
+            const key = i.Item.toLowerCase().replace(/\s+/g, "_");
+            prices[key] = i.Price;
+            return `
+              <div class="item">
+                <img src="${i.Image || i.ImageURL || 'https://via.placeholder.com/300'}" onclick="zoomImg(this.src)">
+                <div class="body">
+                  <div class="item-info">
+                    <strong>${i.Item}</strong>
+                    <div class="price">₱${i.Price}</div>
+                  </div>
+                  <div class="actions">
+                    ${i.SoldOut ? '<span style="color:#ef4444; font-size:0.75rem; font-weight:600;">SOLD OUT</span>' : `
+                      <input type="number" name="q_${key}" value="1" min="1" class="item-qty" style="display:none" onchange="updateUI()">
+                      <input type="checkbox" name="i_${key}" class="item-check" onchange="updateUI()">
+                    `}
+                  </div>
                 </div>
-                <div class="actions">
-                  ${i.SoldOut?'<span style="color:#ef4444; font-weight:bold;">SOLD OUT</span>':
-                  `<input type="checkbox" name="i_${key}" class="item-check" onchange="updateCartUI()">
-                   <input type="number" name="q_${key}" value="1" min="1" class="item-qty" onchange="updateCartUI()">`}
-                </div>
-              </div>
-            </div>`;
-          }).join("")}</div>
-        </div>
-      `);
-      first=false;
+              </div>`;
+          }).join('')}</div>
+        </div>`);
     });
   });
 }
 
-function openTab(id,btn){
-  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
-  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  btn.classList.add("active");
+function openTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).style.display = 'block';
+  btn.classList.add('active');
 }
 
-function updateCartUI() {
-    let total = 0, count = 0;
-    const items = [];
-    document.querySelectorAll('.item-check').forEach(cb => {
-        const key = cb.name.replace("i_", "");
-        const qtyInp = document.querySelector(`input[name="q_${key}"]`);
-        if (cb.checked) {
-            qtyInp.style.display = "block";
-            const qty = parseInt(qtyInp.value) || 1;
-            total += prices[key] * qty;
-            count += qty;
-            const displayName = key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-            items.push({ name: displayName, qty, sub: prices[key]*qty });
-        } else { qtyInp.style.display = "none"; }
-    });
-    document.getElementById('totalDisplay').textContent = `Total: ₱${total}`;
-    document.getElementById('cartSum').textContent = total;
-    document.getElementById('cartCount').textContent = count;
-    return { total, items };
+function updateUI() {
+  let total = 0, count = 0;
+  const items = [];
+  document.querySelectorAll('.item-check').forEach(cb => {
+    const key = cb.name.replace("i_", "");
+    const qtyInput = document.querySelector(`input[name="q_${key}"]`);
+    if(cb.checked) {
+      qtyInput.style.display = "block";
+      const q = parseInt(qtyInput.value) || 1;
+      total += prices[key] * q;
+      count += q;
+      items.push({ name: key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), qty: q, sub: prices[key]*q });
+    } else { qtyInput.style.display = "none"; }
+  });
+  document.getElementById('totalDisplay').textContent = "₱" + total;
+  document.getElementById('cartSum').textContent = total;
+  document.getElementById('cartCount').textContent = count;
+  return { total, items };
 }
 
-function togglePay(){
-    const val = document.querySelector('input[name="payment"]:checked').value;
-    const inst = document.getElementById('payInstructions');
-    const cashBox = document.getElementById('cashLogic');
-    const qrSec = document.getElementById('qrSection');
-    const qrImg = document.getElementById('qrImage');
-    const payNum = document.getElementById('payNum');
-    const payLabel = document.getElementById('payLabel');
-    
-    if(val === "Cash") {
-        inst.style.display = "none";
-        cashBox.style.display = "block";
-    } else {
-        cashBox.style.display = "none";
-        inst.style.display = "block";
-        payLabel.textContent = val;
-        const phone = val === "GCash" ? settings.gcash_number : settings.maya_number;
-        const qrUrl = val === "GCash" ? settings.gcash_qr : settings.maya_qr;
-        payNum.textContent = phone || "Not set";
-        if(qrUrl) { qrImg.src = qrUrl; qrSec.style.display = "block"; } else { qrSec.style.display = "none"; }
-    }
+function togglePay() {
+  const method = document.querySelector('input[name="payment"]:checked').value;
+  const inst = document.getElementById('payInstructions'), cash = document.getElementById('cashLogic');
+  if(method === "Cash") {
+    inst.style.display = "none"; cash.style.display = "block";
+  } else {
+    cash.style.display = "none"; inst.style.display = "block";
+    document.getElementById('payLabel').textContent = method;
+    const num = method === "GCash" ? settings.gcash_number : settings.maya_number;
+    const qr = method === "GCash" ? settings.gcash_qr : settings.maya_qr;
+    document.getElementById('payNum').textContent = num || "Account Details Pending";
+    document.getElementById('qrSection').style.display = qr ? "block" : "none";
+    if(qr) document.getElementById('qrImage').src = qr;
+  }
 }
 
 function copyNumber() {
-    navigator.clipboard.writeText(document.getElementById('payNum').innerText).then(() => alert("Copied to clipboard!"));
+  navigator.clipboard.writeText(document.getElementById('payNum').innerText).then(() => alert("Copied!"));
+}
+
+function zoomImg(src) {
+  document.getElementById('enlargedImg').src = src;
+  document.getElementById('imageModal').style.display = "flex";
 }
 
 function showSummary() {
-    const state = updateCartUI();
-    if (state.total === 0) return alert("Please select items first!");
-    let html = '';
-    state.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} x${i.qty}</span><span>₱${i.sub}</span></div>`; });
-    const pay = document.querySelector('input[name="payment"]:checked').value;
-    html += `<div class="summary-item" style="font-weight:900; color:var(--primary); font-size:1.2rem; margin-top:10px;"><span>TOTAL</span><span>₱${state.total}</span></div>`;
-    html += `<p style="text-align:left; color:gray; font-size:0.8rem;">Payment: ${pay}</p>`;
-    document.getElementById('preview').innerHTML = html;
-    pending = { ...state, payment: pay };
-    document.getElementById('modal').style.display = "flex";
+  const cart = updateUI();
+  if(cart.total === 0) return alert("Select items first!");
+  let html = '';
+  cart.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} x ${i.qty}</span><span>₱${i.sub}</span></div>`; });
+  const method = document.querySelector('input[name="payment"]:checked').value;
+  html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px;"><span>Total</span><span>₱${cart.total}</span></div>`;
+  document.getElementById('preview').innerHTML = html;
+  pending = { ...cart, payment: method };
+  document.getElementById('modal').style.display = "flex";
 }
 
 document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
 
-async function confirmOrder(){
-    const btn = document.getElementById('finalBtn');
-    btn.disabled = true; btn.textContent = "SENDING...";
-    
-    const now = new Date();
-    const orderID = `AK-${now.getTime().toString().slice(-8)}`; // Simplified ID for elegant UI
+async function confirmOrder() {
+  const btn = document.getElementById('finalBtn');
+  btn.disabled = true; btn.innerText = "Processing...";
+  
+  const orderID = "AK-" + Date.now().toString().slice(-6);
+  const fd = new URLSearchParams();
+  fd.append("func", "order");
+  fd.append("orderID", orderID);
+  fd.append("name", document.getElementById('userName').value);
+  fd.append("contact", document.getElementById('userContact').value);
+  fd.append("address", document.getElementById('userAddress').value);
+  fd.append("items", pending.items.map(i => `${i.name} x${i.qty}`).join(", "));
+  fd.append("total", pending.total);
+  fd.append("payment", pending.payment);
+  fd.append("notes", document.getElementById('userNotes').value);
 
-    const fd = new URLSearchParams();
-    fd.append("func", "order");
-    fd.append("orderID", orderID);
-    fd.append("name", document.getElementById('userName').value);
-    fd.append("contact", document.getElementById('userContact').value);
-    fd.append("address", document.getElementById('userAddress').value);
-    fd.append("items", pending.items.map(i => `${i.name} x${i.qty}`).join(", "));
-    fd.append("total", pending.total);
-    fd.append("payment", pending.payment);
-    fd.append("notes", document.getElementById('userNotes').value);
+  fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
 
-    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString() });
-
-    setTimeout(() => {
-        document.getElementById('modalContent').innerHTML = `
-          <h2 style="color:var(--secondary);">ORDER RECEIVED!</h2>
-          <p>Reference ID:</p>
-          <div style="font-size:1.8rem; color:var(--primary); border:2px dashed var(--primary); padding:15px; margin:15px 0;">${orderID}</div>
-          <p>We'll notify you once your food is on the way!</p>
-          <button class="main" onclick="location.reload()">DONE</button>
-        `;
-    }, 2000);
+  setTimeout(() => {
+    document.getElementById('modalContent').innerHTML = `
+      <h2 style="color:var(--premium-gold);">Order Sent!</h2>
+      <p style="font-size:0.85rem;">Reference Number:</p>
+      <div class="order-id-display" style="font-size:1.8rem; margin: 15px 0;">${orderID}</div>
+      <p style="font-size:0.75rem; color:#888;">We will contact you shortly.</p>
+      <button class="main" onclick="location.reload()" style="margin-top:15px;">Close</button>
+    `;
+  }, 1500);
 }
 
 function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
-function closeStatusModal() { document.getElementById('statusModal').style.display = "none"; }
-
 async function checkStatus() {
-    const id = document.getElementById('statusIdInput').value;
-    const res = document.getElementById('statusResult');
-    res.innerHTML = "Searching...";
-    const r = await fetch(`${BASE}?func=checkStatus&id=${id}`);
-    const d = await r.json();
-    if(d.found) res.innerHTML = `<div style="background:var(--primary); color:white; padding:20px; border-radius:10px;">Status: ${d.status}</div>`;
-    else res.innerHTML = "Order not found.";
+  const id = document.getElementById('statusIdInput').value;
+  const res = document.getElementById('statusResult');
+  res.innerText = "Checking...";
+  const r = await fetch(BASE + "?func=checkStatus&id=" + id);
+  const d = await r.json();
+  res.innerHTML = d.found ? `<div style="background:#f9f9f9; padding:15px; border-radius:4px;">Status: <strong style="color:var(--premium-gold)">${d.status}</strong></div>` : "Reference ID not found.";
 }
-
-function zoomImage(src) { document.getElementById('enlargedImg').src = src; document.getElementById('imageModal').style.display = "flex"; }
-function closeImage() { document.getElementById('imageModal').style.display = "none"; }
 
 loadMenu();
 </script>
