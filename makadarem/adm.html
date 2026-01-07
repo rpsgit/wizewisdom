@@ -26,6 +26,10 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .completed-row { background: #f9f9f9; opacity: 0.7; }
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; }
 .note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; }
+
+/* New Style for Order Save Button */
+.order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; }
 </style>
 
 <div class="page">
@@ -55,7 +59,11 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
     </div>
   </div>
 
-  <h2>Live Orders</h2>
+  <div class="order-header-flex">
+    <h2>Live Orders</h2>
+    <button onclick="saveAllOrderStatuses()" class="btn-save-orders" id="saveOrdersBtn">Save All Status Changes</button>
+  </div>
+  
   <div class="table-container">
     <table>
       <thead>
@@ -81,7 +89,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbwSh6JHeR_aTv47aXyY_k4K4jgGn2reyNvwcoRiAegy2aG4FLS0FAe7c0iJHbf9hESj/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzjKAk8JnwrQx_2QGka3_f0nwTUxdJNzMS4cqkY2DINb9-MVhDUac8UkVI7LLQckjxw/exec";
 
 async function apiPost(params) {
   try {
@@ -181,7 +189,7 @@ function loadOrders() {
             ${o.Notes ? `<span class="note-tag">Note: ${o.Notes}</span>` : ''}
           </td>
           <td>
-            <select class="menu-input" onchange="updateStatus('${o.OrderID}', this)" ${isDelivered ? 'disabled' : ''}>
+            <select class="menu-input status-select" data-id="${o.OrderID}" ${isDelivered ? 'disabled' : ''}>
               ${options}
             </select>
           </td>
@@ -191,10 +199,35 @@ function loadOrders() {
   });
 }
 
-async function updateStatus(id, select) {
-  select.style.opacity = "0.5";
-  await apiPost({ func: "markCompleted", id: id, status: select.value });
-  setTimeout(loadOrders, 1000);
+// NEW: Function to save all order statuses at once
+async function saveAllOrderStatuses() {
+  const btn = document.getElementById('saveOrdersBtn');
+  const selects = document.querySelectorAll('.status-select:not([disabled])');
+  
+  if (selects.length === 0) return;
+
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "SAVING CHANGES...";
+
+  // We loop through and send updates. 
+  // Note: Since Apps Script handles these via no-cors, we fire them off.
+  const promises = Array.from(selects).map(sel => {
+    return apiPost({ 
+      func: "markCompleted", 
+      id: sel.getAttribute('data-id'), 
+      status: sel.value 
+    });
+  });
+
+  await Promise.all(promises);
+  
+  btn.textContent = "ALL SAVED!";
+  setTimeout(() => { 
+    btn.disabled = false; 
+    btn.textContent = originalText;
+    loadOrders(); 
+  }, 1500);
 }
 
 // Initial Load
