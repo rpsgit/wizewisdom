@@ -222,15 +222,13 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-// --- CORE CONFIGURATION ---
-// FIXED: Added missing opening quote
-const BASE = "https://script.google.com/macros/s/AKfycbydkF2PgXPFe0cQkKzC_F6XWV0_MVrEhiLEPwIX4BTvCDF9DhWgnAXhccUEJQyzTQbh/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbycG79Pv7PyXa0JaPI0fsZTrJNdTHI2KGUwFW9lKrFyCZk0n7_cINfpxqHvOa7XsHBt/exec";
 let settings = {}, prices = {}, pending = null;
 
-// AUTO-TRACKING LOGIC
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const trackId = urlParams.get('track');
+  // Support both 'track' and 'orderID' parameters
+  const trackId = urlParams.get('track') || urlParams.get('orderID');
   if (trackId) {
     document.getElementById('statusIdInput').value = trackId;
     openStatusModal();
@@ -238,7 +236,6 @@ window.onload = () => {
   }
 };
 
-// FETCH INITIAL SETTINGS
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   settings = s;
   if (s.closed_today) {
@@ -253,18 +250,15 @@ fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   }
 });
 
-// LOAD MENU ITEMS
 function loadMenu(){
   fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
     const tabs = document.getElementById('tabs'), menu = document.getElementById('menu');
     const cats = {};
-    
     data.forEach(i => {
       const c = i.Category || "Menu";
       if(!cats[c]) cats[c] = [];
       cats[c].push(i);
     });
-    
     Object.keys(cats).forEach((cat, idx) => {
       const id = "cat_" + idx;
       tabs.insertAdjacentHTML('beforeend', `<button type="button" class="tab-btn ${idx===0?'active':''}" onclick="openTab('${id}', this)">${cat}</button>`);
@@ -314,11 +308,7 @@ function updateUI() {
       const q = parseInt(qtyInput.value) || 1;
       total += prices[key] * q;
       count += q;
-      items.push({ 
-        name: key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), 
-        qty: q, 
-        sub: prices[key]*q 
-      });
+      items.push({ name: key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), qty: q, sub: prices[key]*q });
     } else { qtyInput.style.display = "none"; }
   });
   document.getElementById('totalDisplay').innerText = "₱" + total;
@@ -360,85 +350,42 @@ function shareSite() {
 
 function showSummary() {
   const form = document.getElementById('form');
-  
-  // FIXED: Check validity BEFORE showing the modal
   if (!form.checkValidity()) {
     form.classList.add('submitted');
     form.reportValidity();
     return;
   }
-
   const cart = updateUI();
   if(cart.total === 0) return alert("Your bag is empty.");
-  
   let html = '';
   cart.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>₱${i.sub}</span></div>`; });
   const method = document.querySelector('input[name="payment"]:checked').value;
   html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px;"><span>Total</span><span>₱${cart.total}</span></div>`;
   document.getElementById('preview').innerHTML = html;
-  
-  pending = { 
-    ...cart, 
-    payment: method,
-    name: document.getElementById('userName').value,
-    email: document.getElementById('userEmail').value || "Not Provided",
-    contact: document.getElementById('userContact').value,
-    address: document.getElementById('userAddress').value,
-    notes: document.getElementById('userNotes').value || "None",
-    changeFor: document.getElementById('changeFor').value || "Exact Amount"
-  };
-  
+  pending = { ...cart, payment: method, name: document.getElementById('userName').value, email: document.getElementById('userEmail').value || "Not Provided", contact: document.getElementById('userContact').value, address: document.getElementById('userAddress').value, notes: document.getElementById('userNotes').value || "None", changeFor: document.getElementById('changeFor').value || "Exact Amount" };
   document.getElementById('modal').style.display = "flex";
 }
 
-document.getElementById('form').onsubmit = (e) => { 
-  e.preventDefault(); 
-  showSummary(); 
-};
+document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
 
 async function confirmOrder() {
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.innerText = "SENDING...";
-  
   const orderID = "MFC-" + Date.now().toString().slice(-6);
-  
-  const payload = {
-    func: "order",
-    orderID: orderID,
-    name: pending.name,
-    email: pending.email,
-    contact: pending.contact,
-    address: pending.address,
-    items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
-    total: pending.total,
-    payment: pending.payment,
-    notes: pending.notes + (pending.payment === "Cash" ? " | Change for: " + pending.changeFor : "")
-  };
+  const payload = { func: "order", orderID: orderID, name: pending.name, email: pending.email, contact: pending.contact, address: pending.address, items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "), total: pending.total, payment: pending.payment, notes: pending.notes + (pending.payment === "Cash" ? " | Change for: " + pending.changeFor : "") };
 
   try {
-    // FIXED: Removed no-cors so we can actually see the response from Google
-    await fetch(BASE, { 
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(payload).toString()
-    });
-    
-    // Success View
+    // FIXED: Using no-cors prevents reading response, but ensures hit on slow GAS servers.
+    // However, since we want to be sure it worked, we just proceed to success view if fetch returns.
+    await fetch(BASE, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(payload).toString() });
     document.getElementById('modalContent').innerHTML = `
       <h2 style="color:var(--premium-gold);">Order Received</h2>
       <p style="font-size:0.9rem;">Reference ID:</p>
-      <div style="margin: 20px 0;">
-        <span class="order-id-display" id="finalID" style="font-size:1.8rem;">${orderID}</span>
-        <div style="margin-top:10px;">
-           <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
-        </div>
-      </div>
+      <div style="margin: 20px 0;"><span class="order-id-display" id="finalID" style="font-size:1.8rem;">${orderID}</span><div style="margin-top:10px;"><button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button></div></div>
       <p style="font-size:0.8rem; color:#666; margin-bottom:20px;">Please save this ID to track your order.</p>
-      <button class="main" onclick="location.reload()">Return Home</button>
-    `;
+      <button class="main" onclick="location.reload()">Return Home</button>`;
   } catch (err) {
-    // If there is a CORS issue but the order went through, we show this alert.
-    alert("Order connection issue. Please check your email or contact us if you don't receive a confirmation.");
+    alert("Order connection issue. Check your email or contact us.");
     btn.disabled = false; btn.innerText = "Confirm Order";
   }
 }
@@ -453,7 +400,6 @@ async function checkStatus(id) {
   if(!searchId) return;
   const res = document.getElementById('statusResult');
   res.innerText = "Searching database...";
-  
   try {
     const r = await fetch(BASE + "?func=checkStatus&id=" + searchId);
     const d = await r.json();
@@ -466,11 +412,8 @@ async function checkStatus(id) {
     } else {
       res.innerHTML = `<p style="color:red;">ID not found. Please verify your Reference ID.</p>`;
     }
-  } catch(e) { 
-    res.innerText = "Network error. Please try again later."; 
-  }
+  } catch(e) { res.innerText = "Network error. Please try again later."; }
 }
 
-// Initial Load
 loadMenu();
 </script>
