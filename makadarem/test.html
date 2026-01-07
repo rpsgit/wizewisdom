@@ -121,8 +121,11 @@ button.main:hover { background: var(--premium-gold); }
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
   backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 2000;
 }
-.modal-box { background: #fff; padding: 40px; border-radius: 8px; max-width: 500px; width: 92%; text-align: center; }
-.summary-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+.modal-box { background: #fff; padding: 30px; border-radius: 8px; max-width: 500px; width: 92%; text-align: left; max-height: 90vh; overflow-y: auto; }
+.summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; text-align: left; }
+.review-section { margin-top: 20px; padding-top: 15px; border-top: 2px solid #eee; }
+.review-section h4 { margin: 0 0 10px 0; font-size: 0.8rem; color: var(--premium-gold); text-transform: uppercase; letter-spacing: 1px; }
+.review-data { font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
 
 @media print {
   body * { visibility: hidden; }
@@ -200,10 +203,22 @@ button.main:hover { background: var(--premium-gold); }
 
 <div id="modal">
   <div class="modal-box" id="modalContent">
-    <h2 style="margin-bottom: 25px;">Review Order</h2>
-    <div id="preview" style="margin-bottom: 30px;"></div>
+    <h2 style="margin-bottom: 15px; font-size: 1.4rem; text-align: center;">Review Order</h2>
+    
+    <div class="review-section">
+        <h4>Items Ordered</h4>
+        <div id="preview"></div>
+    </div>
+
+    <div class="review-section">
+        <h4>Delivery Details</h4>
+        <div id="detailsReview" class="review-data"></div>
+    </div>
+
     <button class="main" id="finalBtn" onclick="confirmOrder()">Confirm Order</button>
-    <button type="button" onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; color: #999; cursor:pointer;">Go Back</button>
+    <div style="text-align: center;">
+        <button type="button" onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; color: #999; cursor:pointer; font-size: 0.8rem;">Go Back & Edit</button>
+    </div>
   </div>
 </div>
 
@@ -212,7 +227,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <div id="statusModal">
-  <div class="modal-box">
+  <div class="modal-box" style="text-align: center;">
     <h3>Track Your Order</h3>
     <input type="text" id="statusIdInput" placeholder="Enter Reference ID">
     <button class="main" onclick="checkStatus()">Search</button>
@@ -227,7 +242,6 @@ let settings = {}, prices = {}, pending = null;
 
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  // Support both 'track' and 'orderID' parameters
   const trackId = urlParams.get('track') || urlParams.get('orderID');
   if (trackId) {
     document.getElementById('statusIdInput').value = trackId;
@@ -357,12 +371,40 @@ function showSummary() {
   }
   const cart = updateUI();
   if(cart.total === 0) return alert("Your bag is empty.");
-  let html = '';
-  cart.items.forEach(i => { html += `<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>₱${i.sub}</span></div>`; });
+  
+  // Format items as a numbered list
+  let html = '<ol style="padding-left: 18px; margin: 0;">';
+  cart.items.forEach(i => { 
+    html += `<li style="margin-bottom: 10px;">
+                <div class="summary-item" style="border:none; padding:0;">
+                    <span>${i.name} × ${i.qty}</span>
+                    <span>₱${i.sub}</span>
+                </div>
+             </li>`; 
+  });
+  html += '</ol>';
+  
   const method = document.querySelector('input[name="payment"]:checked').value;
-  html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px;"><span>Total</span><span>₱${cart.total}</span></div>`;
+  html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px; font-size: 1rem;"><span>Total</span><span>₱${cart.total}</span></div>`;
   document.getElementById('preview').innerHTML = html;
-  pending = { ...cart, payment: method, name: document.getElementById('userName').value, email: document.getElementById('userEmail').value || "Not Provided", contact: document.getElementById('userContact').value, address: document.getElementById('userAddress').value, notes: document.getElementById('userNotes').value || "None", changeFor: document.getElementById('changeFor').value || "Exact Amount" };
+
+  // Build the details review
+  const name = document.getElementById('userName').value;
+  const contact = document.getElementById('userContact').value;
+  const address = document.getElementById('userAddress').value;
+  const notes = document.getElementById('userNotes').value || "None";
+  const change = method === "Cash" ? (document.getElementById('changeFor').value || "Exact Amount") : "N/A";
+
+  let detailsHtml = `
+    <strong>Recipient:</strong> ${name}<br>
+    <strong>Contact:</strong> ${contact}<br>
+    <strong>Address:</strong> ${address}<br>
+    <strong>Payment:</strong> ${method} ${method === "Cash" ? `(Change: ${change})` : ""}<br>
+    <strong>Notes:</strong> ${notes}
+  `;
+  document.getElementById('detailsReview').innerHTML = detailsHtml;
+
+  pending = { ...cart, payment: method, name, email: document.getElementById('userEmail').value || "Not Provided", contact, address, notes, changeFor: change };
   document.getElementById('modal').style.display = "flex";
 }
 
@@ -375,9 +417,8 @@ async function confirmOrder() {
   const payload = { func: "order", orderID: orderID, name: pending.name, email: pending.email, contact: pending.contact, address: pending.address, items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "), total: pending.total, payment: pending.payment, notes: pending.notes + (pending.payment === "Cash" ? " | Change for: " + pending.changeFor : "") };
 
   try {
-    // FIXED: Using no-cors prevents reading response, but ensures hit on slow GAS servers.
-    // However, since we want to be sure it worked, we just proceed to success view if fetch returns.
     await fetch(BASE, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(payload).toString() });
+    document.getElementById('modalContent').style.textAlign = "center";
     document.getElementById('modalContent').innerHTML = `
       <h2 style="color:var(--premium-gold);">Order Received</h2>
       <p style="font-size:0.9rem;">Reference ID:</p>
@@ -405,12 +446,12 @@ async function checkStatus(id) {
     const d = await r.json();
     if(d.found) {
       res.innerHTML = `
-        <div style="background:#f9f9f9; padding:15px; border:1px solid #eee; border-radius:8px;">
+        <div style="background:#f9f9f9; padding:15px; border:1px solid #eee; border-radius:8px; text-align: center;">
           <p style="margin:0; font-size:0.8rem; color:#666;">Current Status for ${searchId}:</p>
           <strong style="color:var(--premium-gold); font-size:1.4rem;">${d.status}</strong>
         </div>`;
     } else {
-      res.innerHTML = `<p style="color:red;">ID not found. Please verify your Reference ID.</p>`;
+      res.innerHTML = `<p style="color:red; text-align: center;">ID not found. Please verify your Reference ID.</p>`;
     }
   } catch(e) { res.innerText = "Network error. Please try again later."; }
 }
