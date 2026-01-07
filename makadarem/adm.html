@@ -23,10 +23,10 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .status-open { color: #27ae60; background: #eafaf1; padding: 8px 15px; border-radius: 4px; font-weight: bold; }
 .status-closed { color: #e74c3c; background: #fdedec; padding: 8px 15px; border-radius: 4px; font-weight: bold; }
 .menu-input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Montserrat'; }
-.completed-row { background: #f9f9f9; opacity: 0.7; }
+.completed-row { background: #f2f2f2; opacity: 0.6; }
+.cancelled-row { background: #fdedec; opacity: 0.6; }
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; }
 .note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; }
-
 .order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; }
 </style>
@@ -92,7 +92,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbwJXyy9xKw9jgp7XxjeFkbUL1a737OUNcFs64gcfkFDVpycsFvyszyQ-874DaRuwRRU/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbzPSb7cOfdthLZp0LX1sJlNayKiekCgFIu8eHcq7Tbdg7Le5mv1a_lPnqoLm4kdlcWg/exec";
 
 async function apiPost(params) {
   try {
@@ -113,14 +113,12 @@ function loadSettings() {
     btn.textContent = closed ? "Open Kitchen" : "Close Kitchen";
     status.textContent = closed ? "KITCHEN IS CLOSED" : "KITCHEN IS OPEN & ACCEPTING ORDERS";
     status.className = closed ? "status-closed" : "status-open";
-    
     document.getElementById('gcashNum').value = s.gcash_number || '';
     document.getElementById('mayaNum').value = s.maya_number || '';
     document.getElementById('adminEmail').value = s.notification_email || '';
     document.getElementById('messengerLink').value = s.messenger_link || '';
     document.getElementById('tgToken').value = s.telegram_token || '';
     document.getElementById('tgChat').value = s.telegram_chat_id || '';
-    // Load Pushover settings
     document.getElementById('pushUser').value = s.pushover_user_key || '';
     document.getElementById('pushToken').value = s.pushover_api_token || '';
   });
@@ -130,7 +128,6 @@ async function saveSettingsInfo() {
   const btn = event.target;
   const original = btn.textContent;
   btn.textContent = "SYNCING...";
-  
   await apiPost({
     func: "updatePaymentInfo",
     gcash_number: document.getElementById('gcashNum').value,
@@ -142,10 +139,8 @@ async function saveSettingsInfo() {
     pushover_user_key: document.getElementById('pushUser').value,
     pushover_api_token: document.getElementById('pushToken').value
   });
-  
   btn.textContent = "SUCCESS!";
   setTimeout(() => { btn.textContent = original; }, 2000);
-  alert("System Settings Synchronized!");
 }
 
 async function toggleStoreStatus() {
@@ -189,13 +184,19 @@ function loadOrders() {
     const ob = document.getElementById('ordersBody');
     if (!data || !data.length) { ob.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No orders found.</td></tr>"; return; }
     
-    const stages = ["Order Placed", "Order Received", "Cooking", "Packing", "Delivering", "Delivered"];
+    // Updated Status Array
+    const stages = ["Order Placed", "Order Received", "Cooking", "Packing", "Delivering", "Delivered", "Cancelled"];
+    
     ob.innerHTML = [...data].reverse().map(o => {
       const isDelivered = o.Status === 'Delivered';
+      const isCancelled = o.Status === 'Cancelled';
+      const isInactive = isDelivered || isCancelled;
+      
       let options = stages.map(s => `<option value="${s}" ${o.Status === s ? 'selected' : ''}>${s}</option>`).join('');
+      let rowClass = isDelivered ? 'completed-row' : (isCancelled ? 'cancelled-row' : '');
       
       return `
-        <tr class="${isDelivered ? 'completed-row' : ''}">
+        <tr class="${rowClass}">
           <td><small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : 'N/A'}</small><br><strong>${o.OrderID}</strong></td>
           <td><strong>${o.Name}</strong><br><small>${o.Contact || ''}</small></td>
           <td class="details-text">${o.Items ? o.Items.split(',').join('<br>• ') : ''}</td>
@@ -204,7 +205,7 @@ function loadOrders() {
             ${o.Notes ? `<span class="note-tag">Note: ${o.Notes}</span>` : ''}
           </td>
           <td>
-            <select class="menu-input status-select" data-id="${o.OrderID}" ${isDelivered ? 'disabled' : ''}>
+            <select class="menu-input status-select" data-id="${o.OrderID}" ${isInactive ? 'disabled' : ''}>
               ${options}
             </select>
           </td>
@@ -217,7 +218,6 @@ function loadOrders() {
 async function saveAllOrderStatuses() {
   const btn = document.getElementById('saveOrdersBtn');
   const selects = document.querySelectorAll('.status-select:not([disabled])');
-  
   if (selects.length === 0) return;
 
   const originalText = btn.textContent;
@@ -225,25 +225,17 @@ async function saveAllOrderStatuses() {
   btn.textContent = "SAVING CHANGES...";
 
   const promises = Array.from(selects).map(sel => {
-    return apiPost({ 
-      func: "markCompleted", 
-      id: sel.getAttribute('data-id'), 
-      status: sel.value 
-    });
+    return apiPost({ func: "markCompleted", id: sel.getAttribute('data-id'), status: sel.value });
   });
 
   await Promise.all(promises);
-  
   btn.textContent = "ALL SAVED!";
   setTimeout(() => { 
-    btn.disabled = false; 
-    btn.textContent = originalText;
+    btn.disabled = false; btn.textContent = originalText;
     loadOrders(); 
   }, 1500);
 }
 
-// Initial Load
 loadSettings(); loadMenu(); loadOrders();
-// Refresh orders every 30 seconds
 setInterval(loadOrders, 30000);
 </script>
