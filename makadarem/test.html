@@ -225,7 +225,8 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbzHFjQDETt7capeSKwMTGsKF99Xp5XN_8WOYXalqR8Zv2u7OJkwWCU5N_i0Z0a58wM8/exec";
+// --- CORE CONFIGURATION ---
+const BASE = "https://script.google.com/macros/s/AKfycbwjAni-ei8i3VK7QFWyrEOjDy1_c4G0q03NtixHa4Xu35qghQWPQM3ELFu02n8cCxWu/exec";
 let settings = {}, prices = {}, pending = null;
 
 // AUTO-TRACKING LOGIC: Check URL for ?track=MFC-XXXXXX
@@ -239,13 +240,16 @@ window.onload = () => {
   }
 };
 
+// FETCH INITIAL SETTINGS
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   settings = s;
-  if (s.closed_today || s.auto_closed) {
+  // Handle Kitchen Closed status
+  if (s.closed_today) {
     document.getElementById('closedBanner').style.display="block";
     document.getElementById('form').style.opacity="0.3";
     document.getElementById('form').style.pointerEvents="none";
   }
+  // Setup Messenger Link
   if(s.messenger_link) {
     const el = document.getElementById('floatingMessenger');
     el.href = s.messenger_link;
@@ -253,10 +257,12 @@ fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   }
 });
 
+// LOAD MENU ITEMS
 function loadMenu(){
   fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
     const tabs = document.getElementById('tabs'), menu = document.getElementById('menu');
     const cats = {};
+    
     data.forEach(i => {
       const c = i.Category || "Menu";
       if(!cats[c]) cats[c] = [];
@@ -280,7 +286,7 @@ function loadMenu(){
                     <div class="price">₱${i.Price}</div>
                   </div>
                   <div class="actions">
-                    ${i.SoldOut ? '<span style="color:red; font-size:0.7rem; font-weight:600;">SOLD OUT</span>' : `
+                    ${String(i.SoldOut) === 'true' ? '<span style="color:red; font-size:0.7rem; font-weight:600;">SOLD OUT</span>' : `
                       <input type="number" name="q_${key}" value="1" min="1" class="item-qty" style="display:none" oninput="updateUI()">
                       <input type="checkbox" name="i_${key}" class="item-check" onchange="updateUI()">
                     `}
@@ -331,10 +337,7 @@ function togglePay() {
     inst.style.display = "block";
     document.getElementById('payLabel').innerText = method;
     const num = method === "GCash" ? settings.gcash_number : settings.maya_number;
-    const qr = method === "GCash" ? settings.gcash_qr : settings.maya_qr;
     document.getElementById('payNum').innerText = num || "No account found";
-    document.getElementById('qrSection').style.display = qr ? "block" : "none";
-    if(qr) document.getElementById('qrImage').src = qr;
   }
 }
 
@@ -351,7 +354,7 @@ function zoomImg(src) {
 function shareSite() {
   const shareData = { title: 'Makadarem Food Co.', text: 'Check out our menu!', url: window.location.href };
   if (navigator.share) { navigator.share(shareData); } 
-  else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
+  else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
 }
 
 function showSummary() {
@@ -385,7 +388,6 @@ document.getElementById('form').onsubmit = (e) => {
 
 async function confirmOrder() {
   const form = document.getElementById('form');
-  
   if (!form.checkValidity()) {
     document.getElementById('modal').style.display = "none";
     form.classList.add('submitted');
@@ -393,18 +395,12 @@ async function confirmOrder() {
     return;
   }
 
-  pending.name = document.getElementById('userName').value;
-  pending.email = document.getElementById('userEmail').value || "Not Provided";
-  pending.contact = document.getElementById('userContact').value;
-  pending.address = document.getElementById('userAddress').value;
-  pending.notes = document.getElementById('userNotes').value || "None";
-  pending.changeFor = document.getElementById('changeFor').value || "Exact Amount";
-
   const btn = document.getElementById('finalBtn');
   btn.disabled = true; btn.innerText = "SENDING...";
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
   
+  // SYNCED WITH BACKEND DOPost
   const payload = {
     func: "order",
     orderID: orderID,
@@ -415,19 +411,21 @@ async function confirmOrder() {
     items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
     total: pending.total,
     payment: pending.payment,
+    notes: pending.notes,
     changeFor: pending.changeFor,
-    notes: pending.notes
+    status: "Order Placed" // Matches your new status list
   };
 
   try {
     await fetch(BASE, { 
       method: "POST",
       mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(payload).toString()
     });
-  } catch (err) { console.log("Request sent"); }
+  } catch (err) { }
 
+  // Show Success View
   setTimeout(() => {
     document.getElementById('modalContent').innerHTML = `
       <h2 style="color:var(--premium-gold);">Order Received</h2>
@@ -438,13 +436,6 @@ async function confirmOrder() {
            <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
         </div>
       </div>
-      <div id="printArea" style="text-align:left; border: 1px solid #eee; padding:15px; font-size:0.8rem; margin-bottom:20px;">
-         <strong>Customer:</strong> ${pending.name}<br>
-         <strong>Address:</strong> ${pending.address}<br>
-         <strong>Total:</strong> ₱${pending.total} (${pending.payment})<br><br>
-         ${pending.items.map(i => i.name + ' x' + i.qty).join('<br>')}
-      </div>
-      <button class="track-btn" onclick="window.print()" style="width:100%; margin-bottom:10px; background:#f4f4f4;">Print Receipt</button>
       <button class="main" onclick="location.reload()">Return Home</button>
     `;
   }, 1000);
@@ -456,9 +447,13 @@ async function checkStatus(id) {
   const searchId = id || document.getElementById('statusIdInput').value;
   const res = document.getElementById('statusResult');
   res.innerText = "Checking...";
-  const r = await fetch(BASE + "?func=checkStatus&id=" + searchId);
-  const d = await r.json();
-  res.innerHTML = d.found ? `<div style="background:#f9f9f9; padding:15px; border:1px solid #eee;">Status: <strong style="color:var(--premium-gold)">${d.status}</strong></div>` : "ID not found.";
+  try {
+    const r = await fetch(BASE + "?func=checkStatus&id=" + searchId);
+    const d = await r.json();
+    res.innerHTML = d.found 
+      ? `<div style="background:#f9f9f9; padding:15px; border:1px solid #eee;">Current Status: <br><strong style="color:var(--premium-gold); font-size:1.2rem;">${d.status}</strong></div>` 
+      : "ID not found. Please check your Reference ID.";
+  } catch(e) { res.innerText = "Error checking status."; }
 }
 
 loadMenu();
