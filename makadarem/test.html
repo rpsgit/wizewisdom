@@ -183,9 +183,6 @@ button.main:hover { background: var(--premium-gold); }
         <p style="font-size: 0.8rem; margin-bottom: 10px;">Send to <span id="payLabel" style="font-weight:600;"></span>:</p>
         <div style="font-size: 1.3rem; font-weight: 700; color: var(--premium-gold); margin-bottom: 10px;" id="payNum"></div>
         <button type="button" onclick="copyText('payNum')" class="track-btn" style="font-size:0.65rem;">Copy Number</button>
-        <div id="qrSection" style="margin-top:20px; display:none;">
-          <img id="qrImage" src="" style="max-width: 160px; border-radius: 8px;">
-        </div>
       </div>
     </div>
 
@@ -226,10 +223,11 @@ button.main:hover { background: var(--premium-gold); }
 
 <script>
 // --- CORE CONFIGURATION ---
+// Ensure this URL matches your deployed Apps Script URL
 const BASE = "https://script.google.com/macros/s/AKfycbwjAni-ei8i3VK7QFWyrEOjDy1_c4G0q03NtixHa4Xu35qghQWPQM3ELFu02n8cCxWu/exec";
 let settings = {}, prices = {}, pending = null;
 
-// AUTO-TRACKING LOGIC: Check URL for ?track=MFC-XXXXXX
+// AUTO-TRACKING LOGIC
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const trackId = urlParams.get('track');
@@ -243,13 +241,11 @@ window.onload = () => {
 // FETCH INITIAL SETTINGS
 fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
   settings = s;
-  // Handle Kitchen Closed status
   if (s.closed_today) {
     document.getElementById('closedBanner').style.display="block";
     document.getElementById('form').style.opacity="0.3";
     document.getElementById('form').style.pointerEvents="none";
   }
-  // Setup Messenger Link
   if(s.messenger_link) {
     const el = document.getElementById('floatingMessenger');
     el.href = s.messenger_link;
@@ -277,8 +273,9 @@ function loadMenu(){
           <div class="grid">${cats[cat].map(i => {
             const key = i.Item.toLowerCase().replace(/\s+/g, "_");
             prices[key] = i.Price;
+            const isSoldOut = String(i.SoldOut) === 'true';
             return `
-              <div class="item">
+              <div class="item" style="${isSoldOut ? 'opacity:0.6;' : ''}">
                 <img src="${i.Image || i.ImageURL || 'https://via.placeholder.com/300'}" loading="lazy" onclick="zoomImg(this.src)">
                 <div class="body">
                   <div class="item-info">
@@ -286,7 +283,7 @@ function loadMenu(){
                     <div class="price">₱${i.Price}</div>
                   </div>
                   <div class="actions">
-                    ${String(i.SoldOut) === 'true' ? '<span style="color:red; font-size:0.7rem; font-weight:600;">SOLD OUT</span>' : `
+                    ${isSoldOut ? '<span style="color:red; font-size:0.7rem; font-weight:600;">SOLD OUT</span>' : `
                       <input type="number" name="q_${key}" value="1" min="1" class="item-qty" style="display:none" oninput="updateUI()">
                       <input type="checkbox" name="i_${key}" class="item-check" onchange="updateUI()">
                     `}
@@ -317,7 +314,11 @@ function updateUI() {
       const q = parseInt(qtyInput.value) || 1;
       total += prices[key] * q;
       count += q;
-      items.push({ name: key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), qty: q, sub: prices[key]*q });
+      items.push({ 
+        name: key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), 
+        qty: q, 
+        sub: prices[key]*q 
+      });
     } else { qtyInput.style.display = "none"; }
   });
   document.getElementById('totalDisplay').innerText = "₱" + total;
@@ -400,7 +401,6 @@ async function confirmOrder() {
   
   const orderID = "MFC-" + Date.now().toString().slice(-6);
   
-  // SYNCED WITH BACKEND DOPost
   const payload = {
     func: "order",
     orderID: orderID,
@@ -411,9 +411,7 @@ async function confirmOrder() {
     items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "),
     total: pending.total,
     payment: pending.payment,
-    notes: pending.notes,
-    changeFor: pending.changeFor,
-    status: "Order Placed" // Matches your new status list
+    notes: pending.notes + (pending.payment === "Cash" ? " | Change for: " + pending.changeFor : "")
   };
 
   try {
@@ -423,10 +421,8 @@ async function confirmOrder() {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams(payload).toString()
     });
-  } catch (err) { }
-
-  // Show Success View
-  setTimeout(() => {
+    
+    // Success View
     document.getElementById('modalContent').innerHTML = `
       <h2 style="color:var(--premium-gold);">Order Received</h2>
       <p style="font-size:0.9rem;">Reference ID:</p>
@@ -436,25 +432,43 @@ async function confirmOrder() {
            <button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button>
         </div>
       </div>
+      <p style="font-size:0.8rem; color:#666; margin-bottom:20px;">Please save this ID to track your order.</p>
       <button class="main" onclick="location.reload()">Return Home</button>
     `;
-  }, 1000);
+  } catch (err) {
+    alert("There was an error placing your order. Please try again.");
+    btn.disabled = false; btn.innerText = "Confirm Order";
+  }
 }
 
-function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
+function openStatusModal() { 
+  document.getElementById('statusModal').style.display = "flex"; 
+  document.getElementById('statusResult').innerHTML = "";
+}
 
 async function checkStatus(id) {
   const searchId = id || document.getElementById('statusIdInput').value;
+  if(!searchId) return;
   const res = document.getElementById('statusResult');
-  res.innerText = "Checking...";
+  res.innerText = "Searching database...";
+  
   try {
     const r = await fetch(BASE + "?func=checkStatus&id=" + searchId);
     const d = await r.json();
-    res.innerHTML = d.found 
-      ? `<div style="background:#f9f9f9; padding:15px; border:1px solid #eee;">Current Status: <br><strong style="color:var(--premium-gold); font-size:1.2rem;">${d.status}</strong></div>` 
-      : "ID not found. Please check your Reference ID.";
-  } catch(e) { res.innerText = "Error checking status."; }
+    if(d.found) {
+      res.innerHTML = `
+        <div style="background:#f9f9f9; padding:15px; border:1px solid #eee; border-radius:8px;">
+          <p style="margin:0; font-size:0.8rem; color:#666;">Current Status for ${searchId}:</p>
+          <strong style="color:var(--premium-gold); font-size:1.4rem;">${d.status}</strong>
+        </div>`;
+    } else {
+      res.innerHTML = `<p style="color:red;">ID not found. Please verify your Reference ID.</p>`;
+    }
+  } catch(e) { 
+    res.innerText = "Network error. Please try again later."; 
+  }
 }
 
+// Initial Load
 loadMenu();
 </script>
