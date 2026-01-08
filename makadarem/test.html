@@ -127,11 +127,13 @@ button.main:hover { background: var(--premium-gold); }
 .review-section h4 { margin: 0 0 10px 0; font-size: 0.8rem; color: var(--premium-gold); text-transform: uppercase; letter-spacing: 1px; }
 .review-data { font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
 
+/* Print Specific Styles */
 @media print {
   body * { visibility: hidden; }
-  #modalContent, #modalContent * { visibility: visible; }
-  #modalContent { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
-  .track-btn, .main { display: none !important; }
+  #modal, #modalContent, #modalContent * { visibility: visible; }
+  #modal { position: absolute; left: 0; top: 0; display: block !important; background: white; }
+  .modal-box { box-shadow: none; border: none; max-width: 100%; width: 100%; margin: 0; padding: 0; }
+  button, .track-btn, #floatingMessenger, #cart { display: none !important; }
 }
 </style>
 
@@ -203,7 +205,12 @@ button.main:hover { background: var(--premium-gold); }
 
 <div id="modal">
   <div class="modal-box" id="modalContent">
-    <h2 style="margin-bottom: 15px; font-size: 1.4rem; text-align: center;">Review Order</h2>
+    <div id="receiptHeader" style="display:none; text-align:center; margin-bottom:20px;">
+        <h2 style="margin:0; font-family:'Playfair Display'; color:var(--premium-gold);">MAKADAREM FOOD CO.</h2>
+        <p style="font-size:0.7rem; margin-top:5px;">Order Receipt - Please keep this copy.</p>
+    </div>
+
+    <h2 id="modalTitle" style="margin-bottom: 15px; font-size: 1.4rem; text-align: center;">Review Order</h2>
     
     <div class="review-section">
         <h4>Items Ordered</h4>
@@ -216,8 +223,8 @@ button.main:hover { background: var(--premium-gold); }
     </div>
 
     <button class="main" id="finalBtn" onclick="confirmOrder()">Confirm Order</button>
-    <div style="text-align: center;">
-        <button type="button" onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; color: #999; cursor:pointer; font-size: 0.8rem;">Go Back & Edit</button>
+    <div id="postOrderActions" style="text-align: center;">
+        <button type="button" id="backBtn" onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; color: #999; cursor:pointer; font-size: 0.8rem;">Go Back & Edit</button>
     </div>
   </div>
 </div>
@@ -237,7 +244,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbwtHX_jPqD7-g5Qk9wiX3qYhooVzphsxwyqE1h9CW5fB5ZZXZJnYjeKhlYjB5T030_4/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbweGJA7QG42qtsLxtFDMLOoPV_CVuQuLPsIKjnn8Lk0dOs4Clmjd9Nf-gMybQDzNCP0/exec";
 let settings = {}, prices = {}, pending = null;
 
 window.onload = () => {
@@ -372,7 +379,14 @@ function showSummary() {
   const cart = updateUI();
   if(cart.total === 0) return alert("Your bag is empty.");
   
-  // Format items as a numbered list
+  // Re-enable buttons and hide receipt header if user returns to edit
+  document.getElementById('finalBtn').style.display = "block";
+  document.getElementById('finalBtn').disabled = false;
+  document.getElementById('finalBtn').innerText = "Confirm Order";
+  document.getElementById('backBtn').style.display = "inline-block";
+  document.getElementById('receiptHeader').style.display = "none";
+  document.getElementById('modalTitle').innerText = "Review Order";
+  
   let html = '<ol style="padding-left: 18px; margin: 0;">';
   cart.items.forEach(i => { 
     html += `<li style="margin-bottom: 10px;">
@@ -380,7 +394,7 @@ function showSummary() {
                   <span>${i.name} × ${i.qty}</span>
                   <span>₱${i.sub}</span>
                 </div>
-             </li>`; 
+              </li>`; 
   });
   html += '</ol>';
   
@@ -388,7 +402,6 @@ function showSummary() {
   html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px; font-size: 1rem;"><span>Total</span><span>₱${cart.total}</span></div>`;
   document.getElementById('preview').innerHTML = html;
 
-  // Build the details review
   const name = document.getElementById('userName').value;
   const email = document.getElementById('userEmail').value || "Not Provided";
   const contact = document.getElementById('userContact').value;
@@ -420,13 +433,26 @@ async function confirmOrder() {
 
   try {
     await fetch(BASE, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(payload).toString() });
-    document.getElementById('modalContent').style.textAlign = "center";
-    document.getElementById('modalContent').innerHTML = `
-      <h2 style="color:var(--premium-gold);">Order Received</h2>
-      <p style="font-size:0.9rem;">Reference ID:</p>
-      <div style="margin: 20px 0;"><span class="order-id-display" id="finalID" style="font-size:1.8rem;">${orderID}</span><div style="margin-top:10px;"><button onclick="copyText('finalID')" class="track-btn" style="font-size:0.65rem;">Copy ID</button></div></div>
-      <p style="font-size:0.8rem; color:#666; margin-bottom:20px;">Please save this ID to track your order.</p>
-      <button class="main" onclick="location.reload()">Return Home</button>`;
+    
+    // Transform modal into Success/Receipt view
+    document.getElementById('modalTitle').innerText = "Order Confirmed";
+    document.getElementById('receiptHeader').style.display = "block";
+    
+    // Update Details review to include Order ID
+    document.getElementById('detailsReview').insertAdjacentHTML('afterbegin', `<strong>Reference ID:</strong> <span style="color:var(--premium-gold); font-weight:700;">${orderID}</span><br>`);
+    
+    // Replace Confirm Button with Print and Home buttons
+    document.getElementById('finalBtn').style.display = "none";
+    document.getElementById('backBtn').style.display = "none";
+    
+    document.getElementById('postOrderActions').innerHTML = `
+      <div style="margin: 20px 0;">
+        <button class="main" onclick="window.print()" style="background:var(--premium-gold); margin-bottom:10px;">Print / Save Receipt</button>
+        <button class="main" onclick="location.reload()" style="background:var(--premium-dark);">Return Home</button>
+      </div>
+      <p style="font-size:0.75rem; color:#666;">Please capture a screenshot or print this for your records.</p>
+    `;
+
   } catch (err) {
     alert("Order connection issue. Check your email or contact us.");
     btn.disabled = false; btn.innerText = "Confirm Order";
