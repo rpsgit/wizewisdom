@@ -377,8 +377,8 @@ function showSummary() {
   cart.items.forEach(i => { 
     html += `<li style="margin-bottom: 10px;">
                 <div class="summary-item" style="border:none; padding:0;">
-                    <span>${i.name} × ${i.qty}</span>
-                    <span>₱${i.sub}</span>
+                  <span>${i.name} × ${i.qty}</span>
+                  <span>₱${i.sub}</span>
                 </div>
              </li>`; 
   });
@@ -390,6 +390,7 @@ function showSummary() {
 
   // Build the details review
   const name = document.getElementById('userName').value;
+  const email = document.getElementById('userEmail').value || "Not Provided";
   const contact = document.getElementById('userContact').value;
   const address = document.getElementById('userAddress').value;
   const notes = document.getElementById('userNotes').value || "None";
@@ -397,6 +398,7 @@ function showSummary() {
 
   let detailsHtml = `
     <strong>Recipient:</strong> ${name}<br>
+    <strong>Email:</strong> ${email}<br>
     <strong>Contact:</strong> ${contact}<br>
     <strong>Address:</strong> ${address}<br>
     <strong>Payment:</strong> ${method} ${method === "Cash" ? `(Change: ${change})` : ""}<br>
@@ -404,7 +406,7 @@ function showSummary() {
   `;
   document.getElementById('detailsReview').innerHTML = detailsHtml;
 
-  pending = { ...cart, payment: method, name, email: document.getElementById('userEmail').value || "Not Provided", contact, address, notes, changeFor: change };
+  pending = { ...cart, payment: method, name, email: email, contact, address, notes, changeFor: change };
   document.getElementById('modal').style.display = "flex";
 }
 
