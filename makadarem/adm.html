@@ -198,9 +198,11 @@ function loadOrders() {
       let options = stages.map(s => `<option value="${s}" ${o.Status === s ? 'selected' : ''}>${s}</option>`).join('');
       let rowClass = isDelivered ? 'completed-row' : (isCancelled ? 'cancelled-row' : '');
       
-      // Fixed: Items now numbered correctly
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
       
+      // Fetches payment from column H (assigned as o.Payment in the backend/GAS getOrders function)
+      const payDisplay = o.Payment ? o.Payment : 'N/A';
+
       return `
         <tr class="${rowClass}">
           <td>
@@ -210,7 +212,7 @@ function loadOrders() {
           <td><strong>${o.Name}</strong><br><small>${o.Contact || ''}</small></td>
           <td class="details-text">${itemList}</td>
           <td class="details-text">
-            <span class="payment-tag">💳 Method: ${o.Payment || 'N/A'}</span>
+            <span class="payment-tag">💳 ${payDisplay}</span>
             ${o.Address || ''}
             ${o.Notes ? `<span class="note-tag">Note: ${o.Notes}</span>` : ''}
           </td>
