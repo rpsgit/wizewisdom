@@ -27,6 +27,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .cancelled-row { background: #fdedec; opacity: 0.6; }
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; }
 .note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; }
+.payment-tag { font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.75rem; }
 .order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; }
 .paid-badge { color: #27ae60; font-weight: bold; font-size: 0.75rem; border: 1px solid #27ae60; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-top: 5px; }
@@ -75,7 +76,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
           <th style="width: 12%;">ID / Date</th>
           <th style="width: 15%;">Customer</th>
           <th style="width: 20%;">Items</th>
-          <th style="width: 25%;">Address & Notes</th>
+          <th style="width: 25%;">Address, Notes & Payment</th>
           <th style="width: 8%; text-align:center;">Paid</th>
           <th style="width: 20%;">Update Status</th>
         </tr>
@@ -197,6 +198,9 @@ function loadOrders() {
       let options = stages.map(s => `<option value="${s}" ${o.Status === s ? 'selected' : ''}>${s}</option>`).join('');
       let rowClass = isDelivered ? 'completed-row' : (isCancelled ? 'cancelled-row' : '');
       
+      // Fixed: Items now numbered correctly
+      const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
+      
       return `
         <tr class="${rowClass}">
           <td>
@@ -204,8 +208,9 @@ function loadOrders() {
             ${isPaid ? '<br><span class="paid-badge">PAID</span>' : ''}
           </td>
           <td><strong>${o.Name}</strong><br><small>${o.Contact || ''}</small></td>
-          <td class="details-text">${o.Items ? o.Items.split(',').join('<br>• ') : ''}</td>
+          <td class="details-text">${itemList}</td>
           <td class="details-text">
+            <span class="payment-tag">💳 Method: ${o.Payment || 'N/A'}</span>
             ${o.Address || ''}
             ${o.Notes ? `<span class="note-tag">Note: ${o.Notes}</span>` : ''}
           </td>
