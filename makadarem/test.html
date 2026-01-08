@@ -207,7 +207,6 @@ button.main:hover { background: var(--premium-gold); }
   <div class="modal-box" id="modalContent">
     <div id="receiptHeader" style="display:none; text-align:center; margin-bottom:20px;">
         <h2 style="margin:0; font-family:'Playfair Display'; color:var(--premium-gold);">MAKADAREM FOOD CO.</h2>
-        <p style="font-size:0.7rem; margin-top:5px;">Order Receipt - Please keep this copy.</p>
     </div>
 
     <h2 id="modalTitle" style="margin-bottom: 15px; font-size: 1.4rem; text-align: center;">Review Order</h2>
@@ -244,7 +243,7 @@ button.main:hover { background: var(--premium-gold); }
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbweGJA7QG42qtsLxtFDMLOoPV_CVuQuLPsIKjnn8Lk0dOs4Clmjd9Nf-gMybQDzNCP0/exec";
+const BASE = "https://script.google.com/macros/s/AKfycbwTvt4QH4wvyuCM9d-5VWfWsXuSsoQ_Z6y2Rd9XeLHfaqRl3uSplOYCJuLIW5tjdVv7/exec";
 let settings = {}, prices = {}, pending = null;
 
 window.onload = () => {
@@ -435,7 +434,7 @@ async function confirmOrder() {
     await fetch(BASE, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(payload).toString() });
     
     // Transform modal into Success/Receipt view
-    document.getElementById('modalTitle').innerText = "Order Confirmed";
+    document.getElementById('modalTitle').innerText = "Order Placed";
     document.getElementById('receiptHeader').style.display = "block";
     
     // Update Details review to include Order ID
@@ -450,7 +449,6 @@ async function confirmOrder() {
         <button class="main" onclick="window.print()" style="background:var(--premium-gold); margin-bottom:10px;">Print / Save Receipt</button>
         <button class="main" onclick="location.reload()" style="background:var(--premium-dark);">Return Home</button>
       </div>
-      <p style="font-size:0.75rem; color:#666;">Please capture a screenshot or print this for your records.</p>
     `;
 
   } catch (err) {
