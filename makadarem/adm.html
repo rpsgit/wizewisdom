@@ -26,7 +26,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .completed-row { background: #f2f2f2; opacity: 0.6; }
 .cancelled-row { background: #fdedec; opacity: 0.6; }
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; }
-.note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; }
+.note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; font-weight: 600; }
 .payment-tag { font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.75rem; }
 .order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; }
@@ -190,38 +190,39 @@ function loadOrders() {
     const stages = ["Order Placed", "Order Received", "Cooking", "Packing", "Delivering", "Delivered", "Cancelled"];
     
     ob.innerHTML = [...data].reverse().map(o => {
-      const isDelivered = o.Status === 'Delivered';
-      const isCancelled = o.Status === 'Cancelled';
+      const isDelivered = o['Order Status'] === 'Delivered' || o.Status === 'Delivered';
+      const isCancelled = o['Order Status'] === 'Cancelled' || o.Status === 'Cancelled';
       const isInactive = isDelivered || isCancelled;
-      const isPaid = (o.Paid === "PAID");
+      const isPaid = (o.Paid === "PAID" || o.paid === "PAID");
       
-      let options = stages.map(s => `<option value="${s}" ${o.Status === s ? 'selected' : ''}>${s}</option>`).join('');
+      const currentStatus = o['Order Status'] || o.Status || "Order Placed";
+      let options = stages.map(s => `<option value="${s}" ${currentStatus === s ? 'selected' : ''}>${s}</option>`).join('');
       let rowClass = isDelivered ? 'completed-row' : (isCancelled ? 'cancelled-row' : '');
       
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
       
-      // FIXED: Added a check for multiple possible key names (Payment or payment) 
-      // based on column H in your Orders sheet.
-      const payDisplay = o.Payment || o.payment || 'N/A';
+      // Look for the exact Google Sheet header "Payment Method"
+      const payDisplay = o['Payment Method'] || o.Payment || o.payment || 'N/A';
+      const notesDisplay = o.Notes || o.notes || '';
 
       return `
         <tr class="${rowClass}">
           <td>
-            <small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : 'N/A'}</small><br><strong>${o.OrderID}</strong>
+            <small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : 'N/A'}</small><br><strong>${o.OrderID || o['Order ID']}</strong>
             ${isPaid ? '<br><span class="paid-badge">PAID</span>' : ''}
           </td>
           <td><strong>${o.Name}</strong><br><small>${o.Contact || ''}</small></td>
           <td class="details-text">${itemList}</td>
           <td class="details-text">
             <span class="payment-tag">💳 ${payDisplay}</span>
-            <div style="margin-bottom:5px;">${o.Address || ''}</div>
-            ${o.Notes ? `<span class="note-tag">Note: ${o.Notes}</span>` : ''}
+            <div style="margin-bottom:5px; color:#333;">${o.Address || ''}</div>
+            ${notesDisplay ? `<span class="note-tag">Note: ${notesDisplay}</span>` : ''}
           </td>
           <td style="text-align:center;">
-             <input type="checkbox" class="paid-toggle" data-id="${o.OrderID}" ${isPaid ? 'checked' : ''}>
+             <input type="checkbox" class="paid-toggle" data-id="${o.OrderID || o['Order ID']}" ${isPaid ? 'checked' : ''}>
           </td>
           <td>
-            <select class="menu-input status-select" data-id="${o.OrderID}" ${isInactive ? 'disabled' : ''}>
+            <select class="menu-input status-select" data-id="${o.OrderID || o['Order ID']}" ${isInactive ? 'disabled' : ''}>
               ${options}
             </select>
           </td>
