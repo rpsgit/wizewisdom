@@ -200,8 +200,9 @@ function loadOrders() {
       
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
       
-      // Fetches payment from column H (assigned as o.Payment in the backend/GAS getOrders function)
-      const payDisplay = o.Payment ? o.Payment : 'N/A';
+      // FIXED: Added a check for multiple possible key names (Payment or payment) 
+      // based on column H in your Orders sheet.
+      const payDisplay = o.Payment || o.payment || 'N/A';
 
       return `
         <tr class="${rowClass}">
@@ -213,7 +214,7 @@ function loadOrders() {
           <td class="details-text">${itemList}</td>
           <td class="details-text">
             <span class="payment-tag">💳 ${payDisplay}</span>
-            ${o.Address || ''}
+            <div style="margin-bottom:5px;">${o.Address || ''}</div>
             ${o.Notes ? `<span class="note-tag">Note: ${o.Notes}</span>` : ''}
           </td>
           <td style="text-align:center;">
