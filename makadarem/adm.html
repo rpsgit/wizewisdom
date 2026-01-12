@@ -117,7 +117,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 const BASE = "https://script.google.com/macros/s/AKfycbxpkVursbR5CH-6Ko5MHaujepVGGnum12-mtO-qnqvpHNUnYi0DMJpc2RZGcjo-TQf3/exec";
 let globalSettings = {}; // Store settings globally after fetch
 
-// --- LOGIN LOGIC ---
+// --- LOGIN LOGIC (FIXED & ROBUST) ---
 async function verifyPassword() {
   const input = document.getElementById('adminPasswordInput').value;
   const btn = document.getElementById('loginBtn');
@@ -129,19 +129,30 @@ async function verifyPassword() {
   err.style.display = 'none';
 
   try {
-    // We fetch settings first. If password matches what is in the sheet, we unlock.
+    // 1. Fetch data
     const response = await fetch(BASE + "?func=getSettings");
     const settings = await response.json();
-    globalSettings = settings; // Save for later use
-    
-    // Check against Column A "Password" (case insensitive key match)
-    // IMPORTANT: We wrap in String() to handle numbers (like 1234) from the sheet correctly
-    const sheetPass = String(settings.Password || settings.password || settings.PASSWORD || "").trim();
+    globalSettings = settings;
 
-    if (input.trim() === sheetPass) {
+    // 2. Find the password key intelligently
+    // This ignores case (Password vs password) and whitespace (password vs "password ")
+    const keys = Object.keys(settings);
+    const passwordKey = keys.find(key => key.toLowerCase().trim() === "password");
+
+    if (!passwordKey) {
+        alert("CRITICAL ERROR: 'password' row not found in Sheet.\nPlease check your Google Sheet Admin tab.");
+        btn.textContent = "LOGIN";
+        return;
+    }
+
+    // 3. Get value and FORCE convert to string for comparison
+    const sheetPass = String(settings[passwordKey]).trim();
+    const inputPass = input.trim();
+
+    if (inputPass === sheetPass) {
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('mainDashboard').style.display = 'block';
-      initializeDashboard(settings); // Load the rest of the app
+      initializeDashboard(settings); 
     } else {
       btn.textContent = "LOGIN";
       err.style.display = 'block';
@@ -151,7 +162,7 @@ async function verifyPassword() {
     console.error(e);
     btn.textContent = "LOGIN";
     err.style.display = 'block';
-    err.textContent = "Connection Error. Refresh.";
+    err.textContent = "Connection Error or Sheet Error.";
   }
 }
 
@@ -270,7 +281,7 @@ function loadOrders() {
       
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
       
-      // FIXED: Even more robust check for Payment Method keys (including MOP, Mode, etc.)
+      // FIXED: Robust Search for Payment Method
       let payDisplay = 'N/A';
       
       // 1. Try explicit keys
@@ -282,7 +293,7 @@ function loadOrders() {
       else if (o.MOP) payDisplay = o.MOP;
       else if (o['Mode of Payment']) payDisplay = o['Mode of Payment'];
       else {
-          // 2. Fuzzy search for keys containing 'payment', 'mop', 'mode', 'method'
+          // 2. Fuzzy search for keys containing common payment words
           const lowerKeys = Object.keys(o);
           const match = lowerKeys.find(k => 
              k.toLowerCase().includes('payment') || 
