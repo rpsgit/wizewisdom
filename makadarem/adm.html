@@ -9,7 +9,16 @@ title: MFC ADMIN PANEL
 :root { --mfc-gold: #c5a059; --mfc-dark: #1a1a1a; --mfc-bg: #f4f4f4; --mfc-white: #ffffff; }
 body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--mfc-bg); color: var(--mfc-dark); }
 h1, h2, th { font-family: 'Playfair Display', serif; }
-.page { max-width: 1300px; margin: 20px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+
+/* Login Overlay Styles */
+#loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--mfc-dark); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+.login-box { background: #fff; padding: 40px; border-radius: 8px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-top: 5px solid var(--mfc-gold); }
+.login-box h2 { margin-top: 0; color: var(--mfc-dark); }
+.login-box input { width: 100%; padding: 15px; margin: 20px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; text-align: center; }
+.err-msg { color: #e74c3c; font-size: 0.85rem; display: none; margin-bottom: 10px; font-weight: bold; }
+
+/* Main Page Styles */
+.page { max-width: 1300px; margin: 20px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none; /* Hidden by default */ }
 h1 { text-align: center; border-bottom: 2px solid var(--mfc-gold); padding-bottom: 10px; }
 .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; background: #fafafa; padding: 25px; border-radius: 8px; margin-bottom: 30px; }
 .settings-grid label { display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: #666; }
@@ -33,7 +42,17 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .paid-badge { color: #27ae60; font-weight: bold; font-size: 0.75rem; border: 1px solid #27ae60; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-top: 5px; }
 </style>
 
-<div class="page">
+<div id="loginOverlay">
+  <div class="login-box">
+    <h2>ADMIN ACCESS</h2>
+    <p style="font-size:0.9rem; color:#666;">Enter password to access control panel.</p>
+    <div id="loginError" class="err-msg">Incorrect Password</div>
+    <input type="password" id="adminPasswordInput" placeholder="Enter Password" onkeypress="if(event.key==='Enter') verifyPassword()">
+    <button onclick="verifyPassword()" id="loginBtn" style="width:100%;">LOGIN</button>
+  </div>
+</div>
+
+<div class="page" id="mainDashboard">
   <h1>MFC ADMIN CONTROL</h1>
 
   <div style="text-align: center; margin: 30px 0;">
@@ -96,6 +115,54 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 
 <script>
 const BASE = "https://script.google.com/macros/s/AKfycbxpkVursbR5CH-6Ko5MHaujepVGGnum12-mtO-qnqvpHNUnYi0DMJpc2RZGcjo-TQf3/exec";
+let globalSettings = {}; // Store settings globally after fetch
+
+// --- LOGIN LOGIC ---
+async function verifyPassword() {
+  const input = document.getElementById('adminPasswordInput').value;
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+  
+  if(!input) return;
+  
+  btn.textContent = "VERIFYING...";
+  err.style.display = 'none';
+
+  try {
+    // We fetch settings first. If password matches what is in the sheet, we unlock.
+    const response = await fetch(BASE + "?func=getSettings");
+    const settings = await response.json();
+    globalSettings = settings; // Save for later use
+    
+    // Check against Column A "Password" (case insensitive key match)
+    const sheetPass = settings.Password || settings.password || settings.PASSWORD;
+
+    if (input === sheetPass) {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('mainDashboard').style.display = 'block';
+      initializeDashboard(settings); // Load the rest of the app
+    } else {
+      btn.textContent = "LOGIN";
+      err.style.display = 'block';
+      err.textContent = "Incorrect Password";
+    }
+  } catch (e) {
+    btn.textContent = "LOGIN";
+    err.style.display = 'block';
+    err.textContent = "Connection Error. Refresh.";
+  }
+}
+
+function initializeDashboard(s) {
+    // Populate settings immediately since we already fetched them
+    populateSettingsUI(s);
+    // Load other data
+    loadMenu(); 
+    loadOrders();
+    setInterval(loadOrders, 30000);
+}
+
+// --- CORE FUNCTIONS ---
 
 async function apiPost(params) {
   try {
@@ -108,8 +175,7 @@ async function apiPost(params) {
   } catch (e) { return false; }
 }
 
-function loadSettings() {
-  fetch(BASE + "?func=getSettings").then(r => r.json()).then(s => {
+function populateSettingsUI(s) {
     const closed = !!s.closed_today;
     const btn = document.getElementById('toggleStore');
     const status = document.getElementById('storeStatus');
@@ -124,7 +190,6 @@ function loadSettings() {
     document.getElementById('tgChat').value = s.telegram_chat_id || '';
     document.getElementById('pushUser').value = s.pushover_user_key || '';
     document.getElementById('pushToken').value = s.pushover_api_token || '';
-  });
 }
 
 async function saveSettingsInfo() {
@@ -151,7 +216,12 @@ async function toggleStoreStatus() {
   const currentState = (btn.textContent === "Close Kitchen");
   btn.disabled = true; btn.textContent = "...";
   await apiPost({ func: "toggleClose", status: String(currentState) });
-  setTimeout(() => { loadSettings(); btn.disabled = false; }, 1200);
+  
+  // Re-fetch settings to confirm status
+  fetch(BASE + "?func=getSettings").then(r => r.json()).then(s => {
+      populateSettingsUI(s);
+      btn.disabled = false;
+  });
 }
 
 function loadMenu() {
@@ -201,8 +271,19 @@ function loadOrders() {
       
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
       
-      // Look for the exact Google Sheet header "Payment Method"
-      const payDisplay = o['Payment Method'] || o.Payment || o.payment || 'N/A';
+      // FIXED: Robust check for Payment Method keys (handles spaces, camelCase, etc.)
+      let payDisplay = 'N/A';
+      // Try standard keys first
+      if (o['Payment Method']) payDisplay = o['Payment Method'];
+      else if (o['PaymentMethod']) payDisplay = o['PaymentMethod'];
+      else if (o.paymentMethod) payDisplay = o.paymentMethod;
+      else if (o.Payment) payDisplay = o.Payment;
+      // If still failed, search all keys case-insensitively for "payment"
+      else {
+          const key = Object.keys(o).find(k => k.toLowerCase().includes('payment'));
+          if(key) payDisplay = o[key];
+      }
+      
       const notesDisplay = o.Notes || o.notes || '';
 
       return `
@@ -260,6 +341,6 @@ async function saveAllOrderStatuses() {
   }, 1500);
 }
 
-loadSettings(); loadMenu(); loadOrders();
-setInterval(loadOrders, 30000);
+// NOTE: We do not auto-load here anymore. 
+// We wait for verifyPassword() to trigger initializeDashboard().
 </script>
