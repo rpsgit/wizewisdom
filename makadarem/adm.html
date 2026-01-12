@@ -135,9 +135,10 @@ async function verifyPassword() {
     globalSettings = settings; // Save for later use
     
     // Check against Column A "Password" (case insensitive key match)
-    const sheetPass = settings.Password || settings.password || settings.PASSWORD;
+    // IMPORTANT: We wrap in String() to handle numbers (like 1234) from the sheet correctly
+    const sheetPass = String(settings.Password || settings.password || settings.PASSWORD || "").trim();
 
-    if (input === sheetPass) {
+    if (input.trim() === sheetPass) {
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('mainDashboard').style.display = 'block';
       initializeDashboard(settings); // Load the rest of the app
@@ -147,6 +148,7 @@ async function verifyPassword() {
       err.textContent = "Incorrect Password";
     }
   } catch (e) {
+    console.error(e);
     btn.textContent = "LOGIN";
     err.style.display = 'block';
     err.textContent = "Connection Error. Refresh.";
@@ -154,9 +156,7 @@ async function verifyPassword() {
 }
 
 function initializeDashboard(s) {
-    // Populate settings immediately since we already fetched them
     populateSettingsUI(s);
-    // Load other data
     loadMenu(); 
     loadOrders();
     setInterval(loadOrders, 30000);
@@ -217,7 +217,6 @@ async function toggleStoreStatus() {
   btn.disabled = true; btn.textContent = "...";
   await apiPost({ func: "toggleClose", status: String(currentState) });
   
-  // Re-fetch settings to confirm status
   fetch(BASE + "?func=getSettings").then(r => r.json()).then(s => {
       populateSettingsUI(s);
       btn.disabled = false;
@@ -271,17 +270,27 @@ function loadOrders() {
       
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : '';
       
-      // FIXED: Robust check for Payment Method keys (handles spaces, camelCase, etc.)
+      // FIXED: Even more robust check for Payment Method keys (including MOP, Mode, etc.)
       let payDisplay = 'N/A';
-      // Try standard keys first
+      
+      // 1. Try explicit keys
       if (o['Payment Method']) payDisplay = o['Payment Method'];
       else if (o['PaymentMethod']) payDisplay = o['PaymentMethod'];
       else if (o.paymentMethod) payDisplay = o.paymentMethod;
       else if (o.Payment) payDisplay = o.Payment;
-      // If still failed, search all keys case-insensitively for "payment"
+      else if (o.payment) payDisplay = o.payment;
+      else if (o.MOP) payDisplay = o.MOP;
+      else if (o['Mode of Payment']) payDisplay = o['Mode of Payment'];
       else {
-          const key = Object.keys(o).find(k => k.toLowerCase().includes('payment'));
-          if(key) payDisplay = o[key];
+          // 2. Fuzzy search for keys containing 'payment', 'mop', 'mode', 'method'
+          const lowerKeys = Object.keys(o);
+          const match = lowerKeys.find(k => 
+             k.toLowerCase().includes('payment') || 
+             k.toLowerCase().includes('mop') || 
+             k.toLowerCase().includes('mode') ||
+             k.toLowerCase().includes('method')
+          );
+          if(match) payDisplay = o[match];
       }
       
       const notesDisplay = o.Notes || o.notes || '';
@@ -340,7 +349,4 @@ async function saveAllOrderStatuses() {
     loadOrders(); 
   }, 1500);
 }
-
-// NOTE: We do not auto-load here anymore. 
-// We wait for verifyPassword() to trigger initializeDashboard().
 </script>
