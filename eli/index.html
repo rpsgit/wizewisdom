@@ -1,0 +1,536 @@
+---
+layout: default
+title: Eli's Gotohan
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* --- THEME SETTINGS: BLACK & RED (HOT FOOD) --- */
+:root{
+  --primary: #d00000;    /* Deep Red */
+  --secondary: #ff4d00;  /* Fire Orange */
+  --bg: #050505;         /* Pure Black */
+  --card-bg: #1a1a1a;    /* Dark Charcoal */
+  --input-bg: #2a2a2a;   /* Input Background */
+  --text-main: #ffffff;
+  --text-muted: #b0b0b0;
+  --messenger: #0084FF;
+  --gcash: #007dfe;
+  --maya: #00d26a;
+}
+
+*{box-sizing:border-box}
+
+body{ 
+  margin:0; 
+  font-family:'Lato', sans-serif; 
+  background:var(--bg); 
+  color: var(--text-main); 
+}
+
+h1,h2,h3, .tabs button, .price, #logoFallback, .order-id-display, .status-badge {
+  font-family:'Bebas Neue', Arial, sans-serif;
+  letter-spacing:.05em;
+}
+
+/* Red glow for the main page container */
+.page{ 
+  position: relative; 
+  max-width:1200px; 
+  margin:20px auto 200px; 
+  padding:16px; 
+  background: var(--card-bg); 
+  border-radius:24px; 
+  box-shadow: 0 0 25px rgba(208, 0, 0, 0.15); /* Hot glow effect */
+  border: 1px solid #333;
+}
+
+/* CLOSED BANNER */
+#closedBanner{ display:none; background: #8a0000; color:#fff; padding:14px; text-align:center; position: sticky; top: 0; z-index: 1001; font-weight: bold; border-bottom: 2px solid red; }
+
+/* HEADERS */
+h1 { color: var(--primary); text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem; }
+h3 { border-bottom: 1px solid #333; padding-bottom: 5px; margin-top: 30px; color: var(--secondary); }
+
+/* HEADER BUTTONS */
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.track-btn, .share-btn {
+  background: #333; 
+  color: #fff;
+  border: 1px solid #444;
+  padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: bold;
+  font-size: 0.8rem;
+  display: flex; align-items: center; gap: 5px;
+  transition: 0.2s;
+}
+.track-btn:hover, .share-btn:hover { background: #444; border-color: var(--primary); }
+.share-btn { background: var(--primary); border: none; }
+
+#logo{ display:block; margin:0 auto 8px; max-width:200px; width:100%; filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); }
+
+/* TABS */
+.tabs{ display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom: 5px; }
+.tabs button{ 
+  border: 1px solid #333; 
+  padding:10px 18px; 
+  border-radius:999px; 
+  background: #222; 
+  color: #888;
+  cursor:pointer; 
+  white-space: nowrap; 
+  font-size: 1.1rem;
+  transition: 0.3s;
+}
+/* Fire Gradient for Active Tabs */
+.tabs button.active{ 
+  background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+  color: white; 
+  border: none;
+  box-shadow: 0 4px 12px rgba(255, 77, 0, 0.4);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* MENU GRID */
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+
+.item{ 
+  background: #252525; /* Darker card */
+  border-radius:16px; 
+  overflow:hidden; 
+  border: 1px solid #333;
+  box-shadow:0 4px 10px rgba(0,0,0,0.5); 
+}
+.item img{ width:100%; height:140px; object-fit:cover; cursor: zoom-in; transition: transform 0.2s; opacity: 0.9; }
+.item img:hover { transform: scale(1.02); opacity: 1; }
+
+.body{ padding:12px; display:flex; justify-content:space-between; align-items: flex-start; }
+
+/* Price is now fiery orange */
+.price{ color: var(--secondary); font-weight:700; font-size: 1.2rem; }
+
+.actions input[type=number]{ 
+  display:none; width:50px; text-align: center; 
+  border: 1px solid var(--secondary); 
+  border-radius: 4px;
+  background: #fff; color: #000; font-weight: bold;
+}
+
+/* Custom Checkbox */
+.item-check { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; }
+
+/* FORMS & INPUTS */
+input, textarea { 
+  width:100%; 
+  padding:12px; 
+  border-radius:12px; 
+  border:1px solid #444; 
+  margin-bottom:10px; 
+  font-family: inherit; 
+  background: var(--input-bg);
+  color: white;
+}
+input::placeholder, textarea::placeholder { color: #666; }
+input:focus, textarea:focus { outline: none; border-color: var(--secondary); background: #333; }
+
+/* PAYMENT SECTION */
+.pay-box { 
+  background: #222; 
+  padding: 15px; 
+  border-radius: 12px; 
+  margin: 15px 0; 
+  border: 1px solid #333; 
+  text-align: left; 
+}
+.pay-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    border: 1px solid #333;
+    cursor: pointer;
+    justify-content: flex-start !important; 
+    color: white;
+    transition: 0.2s;
+}
+.pay-option:hover { border-color: var(--secondary); }
+.pay-option input { margin-right: 12px; margin-left: 0; width: auto; margin-bottom: 0; accent-color: var(--secondary); }
+
+.brand-icon { width: 24px; height: 24px; margin-right: 10px; object-fit: contain; }
+.gcash-label { color: var(--gcash); font-weight: 900; }
+.maya-label { color: var(--maya); font-weight: 900; }
+
+/* QR SECTION */
+#payInstructions { display: none; margin-top: 10px; padding: 15px; background: #fff; color: #000; border: 1px dashed var(--primary); border-radius: 8px; text-align: center; }
+.qr-container { margin-top: 10px; padding: 10px; background: #f4f4f4; border-radius: 8px; display: none; }
+.qr-container img { max-width: 200px; width: 100%; border-radius: 8px; display: block; margin: 0 auto; }
+
+.copy-icon { cursor: pointer; margin-left: 8px; vertical-align: middle; fill: #555; width: 18px; height: 18px; }
+.copy-icon:active { fill: var(--primary); }
+
+/* FLOATING CART */
+#cart{ 
+  position:fixed; bottom:20px; right:20px; 
+  background: linear-gradient(135deg, var(--secondary), var(--primary)); 
+  padding:15px 25px; 
+  border-radius:999px; cursor:pointer; 
+  z-index: 100; font-family:'Bebas Neue'; 
+  box-shadow: 0 4px 15px rgba(255, 77, 0, 0.5); 
+  color: white;
+  border: 2px solid #fff;
+}
+.total-display{ font-size:1.5rem; margin:20px 0; text-align: right; font-family:'Bebas Neue'; color: var(--secondary); text-shadow: 0 0 10px rgba(255, 77, 0, 0.2); }
+
+/* MAIN BUTTON */
+button.main{ 
+  width:100%; padding:14px; border:none; border-radius:999px; 
+  background: linear-gradient(135deg, var(--secondary), var(--primary)); 
+  font-family:'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px;
+  cursor: pointer; color: white;
+  box-shadow: 0 4px 15px rgba(208, 0, 0, 0.4);
+  transition: 0.2s;
+}
+button.main:active { transform: scale(0.98); }
+
+/* FLOATING MESSENGER */
+#floatingMessenger {
+  position: fixed; bottom: 85px; right: 25px;
+  background: var(--messenger); color: white;
+  width: 50px; height: 50px; border-radius: 50%;
+  display: none; justify-content: center; align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  cursor: pointer; z-index: 99; text-decoration: none;
+}
+
+/* MODALS */
+#modal, #statusModal, #imageModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.9); justify-content:center; align-items:center; z-index:999; backdrop-filter: blur(2px); }
+.modal-box{ background: var(--card-bg); padding:24px; border-radius:16px; max-width:420px; width:92%; text-align: center; position: relative; border: 1px solid #444; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+
+#imageModal .modal-box { background: transparent; padding: 0; max-width: 90%; border:none; box-shadow: none; }
+#enlargedImg { width: 100%; border-radius: 12px; max-height: 80vh; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+.close-zoom { position: absolute; top: -40px; right: 0; color: #fff; font-size: 2rem; cursor: pointer; font-weight: bold; }
+
+/* STATUS & SUMMARY */
+.order-id-display { font-size: 1.5rem; color: var(--secondary); border: 2px dashed var(--secondary); padding: 10px; margin: 10px 0; display: inline-flex; justify-content: center; align-items: center; width: 100%; gap: 10px; background: rgba(255, 77, 0, 0.1); }
+.status-badge { font-size: 1.2rem; padding: 12px; border-radius: 8px; background: #000; color: var(--primary); display: block; margin-top: 10px; border: 2px solid var(--primary); }
+.summary-item { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 8px 0; font-size: 0.95rem; }
+</style>
+
+<div id="closedBanner">🚫 ORDERING IS CLOSED</div>
+
+<div class="page">
+  <div class="header-actions">
+    <div style="display:flex; gap:5px;">
+        <button class="track-btn" onclick="openStatusModal()">🔍 TRACK</button>
+    </div>
+    <button class="share-btn" onclick="shareSite()">🔗 SHARE</button>
+  </div>
+  
+  <img id="logo" src="/assets/images/ak/Adimup%20Kitchen.png" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
+  <div id="logoFallback" style="display:none; text-align:center; font-size:1.4rem; color: var(--primary);">ADIMUP KITCHEN</div>
+  <h1 style="text-align:center; margin-top: 10px;">ADIMUP KITCHEN</h1>
+
+  <div class="tabs" id="tabs"></div>
+
+  <form id="form">
+    <div id="menu"></div>
+    <div class="total-display" id="totalDisplay">Total: ₱0</div>
+    
+    <h3>DELIVERY DETAILS</h3>
+    <input name="name" id="userName" placeholder="Full Name" required>
+    <input name="contact" id="userContact" placeholder="Phone Number" required>
+    <input name="address" id="userAddress" placeholder="Complete Address" required>
+    <textarea name="notes" id="userNotes" placeholder="Landmarks / Special Notes / Spiciness Level"></textarea>
+    
+    <h3>PAYMENT</h3>
+    <div class="pay-box">
+        <label class="pay-option">
+            <input type="radio" name="payment" value="Cash" checked onclick="togglePay()"> 
+            <span>💵 Cash</span>
+        </label>
+        <div id="cashLogic" style="margin-left: 36px; margin-bottom: 15px;">
+            <input type="text" id="changeFor" placeholder="Change for? (e.g. 1000)" style="margin-bottom:0;">
+        </div>
+
+        <label class="pay-option">
+            <input type="radio" name="payment" value="GCash" onclick="togglePay()">
+            <svg class="brand-icon" viewBox="0 0 48 48"><path fill="#007dfe" d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm11.5 21.5h-5v5h-3v-5h-5v-3h5v-5h3v5h5v3z"/></svg>
+            <span class="gcash-label">GCash</span>
+        </label>
+
+        <label class="pay-option">
+            <input type="radio" name="payment" value="Maya" onclick="togglePay()">
+            <svg class="brand-icon" viewBox="0 0 48 48"><rect width="40" height="40" x="4" y="4" fill="#00d26a" rx="8"/><path fill="#fff" d="M14 16h20v4H14zM14 24h20v4H14zM14 32h12v4H14z"/></svg>
+            <span class="maya-label">Maya</span>
+        </label>
+        
+        <div id="payInstructions">
+            <div style="font-size:0.8rem; color:#666;">Send to <strong id="payLabel"></strong>:</div>
+            <div style="margin: 5px 0;">
+                <span id="payNum" style="font-weight:900; font-size:1.2rem;"></span>
+                <svg class="copy-icon" onclick="copyNumber()" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
+            
+            <div id="qrSection" class="qr-container">
+                <img id="qrImage" src="" alt="Payment QR">
+                <p style="font-size:0.7rem; color:#333; margin-top:5px;">Scan to Pay</p>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="main">🔥 PLACE ORDER</button>
+  </form>
+</div>
+
+<div id="cart" onclick="showSummary()">
+  <span style="font-size:1.2rem;">🛒</span> 
+  <span id="cartCount">0</span> items • ₱<span id="cartSum">0</span>
+</div>
+
+<a id="floatingMessenger" href="#" target="_blank">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.453 5.527 3.734 7.28l-.01 2.266 2.11-1.154c.734.204 1.516.314 2.32.314 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.074 12.553l-2.583-2.753-5.043 2.753 5.543-5.889 2.66 2.753 4.965-2.753-5.542 5.889z"/></svg>
+</a>
+
+<div id="modal">
+  <div class="modal-box" id="modalContent">
+    <h2 style="color:var(--primary); margin-top:0;">ORDER SUMMARY</h2>
+    <div id="preview" style="text-align:left; max-height:300px; overflow-y:auto; margin-bottom:20px; color: #ddd;"></div>
+    <div style="display:flex; gap:10px;">
+        <button class="main" style="background:#444; font-size:1rem;" onclick="document.getElementById('modal').style.display='none'">CANCEL</button>
+        <button class="main" id="finalBtn" onclick="confirmOrder()" style="font-size:1rem;">CONFIRM</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE = "https://script.google.com/macros/s/AKfycbwFFuZDty7TqPODQTH0l9bKz3RUl7CExKsooWfv9sr00FFqxQ19jwow452e8Dx5IVBCJw/exec";
+const MENU_URL = BASE + "?func=getMenu";
+const SETTINGS_URL = BASE + "?func=getSettings";
+
+let settings = {};
+let prices = {};
+let pending = null;
+
+fetch(SETTINGS_URL).then(r=>r.json()).then(s=>{
+  settings = s;
+  if (s.closed_today || s.auto_closed) {
+    document.getElementById('closedBanner').style.display="block";
+    document.getElementById('form').style.display="none";
+    document.getElementById('cart').style.display="none";
+  }
+  if(s.messenger_link) {
+      const el = document.getElementById('floatingMessenger');
+      el.href = s.messenger_link;
+      el.style.display = "flex";
+  }
+});
+
+function loadMenu(){
+  fetch(MENU_URL).then(r=>r.json()).then(data=>{
+    const tabs = document.getElementById('tabs');
+    const menu = document.getElementById('menu');
+    const cats={};
+    data.forEach(i=>{
+      const c=i.Category||"Others";
+      cats[c]=cats[c]||[];
+      cats[c].push(i);
+    });
+    let first=true;
+    Object.keys(cats).forEach(cat=>{
+      const id=cat.toLowerCase().replace(/\s+/g,"_");
+      tabs.insertAdjacentHTML("beforeend", `<button type="button" id="tabbtn_${id}" class="${first?'active':''}" onclick="openTab('${id}',this)">${cat}</button>`);
+      menu.insertAdjacentHTML("beforeend",`
+        <div class="tab-content ${first?'active':''}" id="${id}">
+          <div class="grid">${cats[cat].map(i=>{
+            const key=i.Item.toLowerCase().replace(/\s+/g,"_");
+            prices[key]=i.Price;
+            const imgPath = i.ImageURL || 'https://via.placeholder.com/150';
+            return `<div class="item">
+              <img src="${imgPath}" onclick="zoomImage('${imgPath}')" title="Click to enlarge">
+              <div class="body">
+                <div><strong style="color:white;">${i.Item}</strong><div class="price">₱${i.Price}</div></div>
+                <div class="actions">
+                  ${i.SoldOut?'<span style="color:red; font-weight:900;">SOLD OUT</span>':
+                  `<input type="checkbox" name="i_${key}" class="item-check" onchange="updateCartUI()">
+                   <input type="number" name="q_${key}" value="1" min="1" class="item-qty" onchange="updateCartUI()">`}
+                </div>
+              </div>
+            </div>`;
+          }).join("")}</div>
+        </div>
+      `);
+      first=false;
+    });
+  });
+}
+
+function openTab(id,btn){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  btn.classList.add("active");
+}
+
+function updateCartUI() {
+    let total = 0, count = 0;
+    const items = [];
+    document.querySelectorAll('.item-check').forEach(cb => {
+        const key = cb.name.replace("i_", "");
+        const qtyInp = document.querySelector(`input[name="q_${key}"]`);
+        if (cb.checked) {
+            qtyInp.style.display = "block";
+            const qty = parseInt(qtyInp.value) || 1;
+            const sub = prices[key] * qty;
+            total += sub;
+            count += qty;
+            items.push({ name: key.replace(/_/g," ").toUpperCase(), qty, sub });
+        } else { qtyInp.style.display = "none"; }
+    });
+    document.getElementById('totalDisplay').textContent = `Total: ₱${total}`;
+    document.getElementById('cartSum').textContent = total;
+    document.getElementById('cartCount').textContent = count;
+    return { total, items };
+}
+
+// Fixed QR Toggle Logic
+function togglePay(){
+    const val = document.querySelector('input[name="payment"]:checked').value;
+    const inst = document.getElementById('payInstructions');
+    const cashBox = document.getElementById('cashLogic');
+    const qrSec = document.getElementById('qrSection');
+    const qrImg = document.getElementById('qrImage');
+    const payNum = document.getElementById('payNum');
+    const payLabel = document.getElementById('payLabel');
+    
+    if(val === "Cash") {
+        inst.style.display = "none";
+        cashBox.style.display = "block";
+    } else {
+        cashBox.style.display = "none";
+        inst.style.display = "block";
+        payLabel.textContent = val;
+
+        const isGCash = val === "GCash";
+        const phone = isGCash ? settings.gcash_number : settings.maya_number;
+        const qrUrl = isGCash ? settings.gcash_qr : settings.maya_qr;
+
+        payNum.textContent = phone || "Not set";
+        
+        if(qrUrl && qrUrl.trim() !== "") {
+            qrImg.src = qrUrl;
+            qrSec.style.display = "block";
+        } else {
+            qrSec.style.display = "none";
+        }
+    }
+}
+
+function copyNumber() {
+    const num = document.getElementById('payNum').innerText;
+    if(num === "Not set") return;
+    navigator.clipboard.writeText(num).then(() => alert("Number copied!"));
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => alert("Order ID copied!"));
+}
+
+function shareSite() {
+    if (navigator.share) {
+        navigator.share({ title: 'Adimup Kitchen', url: window.location.href });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied!");
+    }
+}
+
+function showSummary() {
+    const state = updateCartUI();
+    if (state.total === 0) return alert("Your cart is empty!");
+    let summaryHtml = '';
+    state.items.forEach(item => { summaryHtml += `<div class="summary-item"><span>${item.name} (x${item.qty})</span><span>₱${item.sub}</span></div>`; });
+    const payMethod = document.querySelector('input[name="payment"]:checked').value;
+    summaryHtml += `<div class="summary-item" style="margin-top:10px; font-weight:bold; color: var(--secondary);"><span>TOTAL</span><span>₱${state.total}</span></div>`;
+    summaryHtml += `<p style="font-size:0.8rem; color:gray; margin-top:10px;">Payment: ${payMethod}</p>`;
+    document.getElementById('preview').innerHTML = summaryHtml;
+    pending = { ...state, payment: payMethod };
+    document.getElementById('modal').style.display = "flex";
+}
+
+document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
+
+function generateOrderID() {
+    const now = new Date();
+    const date = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+    const time = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0');
+    return `AK-${date}-${time}-${Math.floor(Math.random() * 900) + 100}`;
+}
+
+async function confirmOrder(){
+    const name = document.getElementById('userName').value;
+    const contact = document.getElementById('userContact').value;
+    const address = document.getElementById('userAddress').value;
+    if(!name || !contact || !address) { alert("Please fill in delivery details."); return; }
+    const btn = document.getElementById('finalBtn');
+    btn.disabled = true; btn.textContent = "SENDING...";
+    const orderID = generateOrderID();
+    let finalNotes = document.getElementById('userNotes').value;
+    if(pending.payment === "Cash") {
+        const change = document.getElementById('changeFor').value;
+        if(change) finalNotes = `[CHANGE FOR ₱${change}] ` + finalNotes;
+    }
+    const fd = new URLSearchParams();
+    fd.append("func", "order"); 
+    fd.append("orderID", orderID);
+    fd.append("name", name);
+    fd.append("contact", contact);
+    fd.append("address", address);
+    fd.append("items", pending.items.map(i => `${i.name} x${i.qty}`).join(", "));
+    fd.append("total", pending.total);
+    fd.append("payment", pending.payment);
+    fd.append("notes", finalNotes);
+    fetch(BASE, { method: "POST", mode: "no-cors", body: fd.toString(), headers: {"Content-Type": "application/x-www-form-urlencoded"} });
+    setTimeout(() => {
+        document.getElementById('modalContent').innerHTML = `<h2 style="color:var(--maya)">SUCCESS!</h2><p style="color:white">Reference ID:</p><div class="order-id-display">${orderID} <svg class="copy-icon" onclick="copyText('${orderID}')" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></div><p style="margin-bottom:20px; color:#aaa">Order details sent! Keep this ID to track your order.</p><button class="main" onclick="location.reload()">CLOSE</button>`;
+    }, 1500);
+}
+
+function openStatusModal() { document.getElementById('statusModal').style.display = "flex"; }
+function closeStatusModal() { document.getElementById('statusModal').style.display = "none"; document.getElementById('statusResult').innerHTML = ""; }
+
+async function checkStatus() {
+    const id = document.getElementById('statusIdInput').value.trim();
+    if(!id) return alert("Please enter an ID");
+    const resDiv = document.getElementById('statusResult');
+    resDiv.innerHTML = "Checking...";
+    try {
+        const response = await fetch(`${BASE}?func=checkStatus&id=${id}`);
+        const data = await response.json();
+        if(data.found) { resDiv.innerHTML = `<p style="color:white">Order: <strong>${data.id}</strong></p><span class="status-badge">${data.status}</span>`; } else { resDiv.innerHTML = "<p style='color:red;'>Order not found.</p>"; }
+    } catch (e) { resDiv.innerHTML = "Error checking status."; }
+}
+
+function zoomImage(src) {
+  document.getElementById('enlargedImg').src = src;
+  document.getElementById('imageModal').style.display = "flex";
+}
+function closeImage() {
+  document.getElementById('imageModal').style.display = "none";
+}
+
+loadMenu();
+</script>
+
+<div id="imageModal" onclick="closeImage()"><div class="modal-box"><span class="close-zoom">&times;</span><img id="enlargedImg" src=""></div></div>
+<div id="statusModal"><div class="modal-box"><h3 style="color:white; margin-top:0;">CHECK ORDER STATUS</h3><input type="text" id="statusIdInput" placeholder="Enter Order ID"><button class="main" onclick="checkStatus()">SEARCH</button><div id="statusResult" style="margin-top:20px;"></div><button onclick="closeStatusModal()" style="margin-top:10px; background:none; border:none; cursor:pointer; color:gray;">Close</button></div></div>
