@@ -25,7 +25,6 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .menu-input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Montserrat'; } 
 .completed-row { background: #f2f2f2; opacity: 0.6; } 
 .cancelled-row { background: #fdedec; opacity: 0.6; } 
-/* New Style for Delivered but Unpaid */
 .unpaid-delivered-row { background: #fff9c4 !important; border-left: 5px solid #fbc02d; } 
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; } 
 .note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; font-weight: 600; } 
@@ -33,6 +32,8 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } 
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; } 
 .paid-badge { color: #27ae60; font-weight: bold; font-size: 0.75rem; border: 1px solid #27ae60; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-top: 5px; } 
+/* New Style for the Total Amount display */
+.total-label { display: block; font-weight: 600; color: var(--mfc-gold); margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px dashed #ddd; padding-bottom: 4px; }
 </style> 
 
 <div class="page"> 
@@ -195,7 +196,7 @@ function loadOrders() {
     const stages = ["Order Placed", "Order Received", "Cooking", "Packing", "Delivering", "Delivered", "Cancelled"]; 
       
     ob.innerHTML = [...data].reverse().map(o => { 
-      const currentStatus = o['Order Status'] || o.Status || "Order Placed";
+      const currentStatus = o['Order Status'] || o.Status || "Order Placed"; 
       const isDelivered = currentStatus === 'Delivered'; 
       const isCancelled = currentStatus === 'Cancelled'; 
       const isPaid = (o.Paid === "PAID" || o.paid === "PAID"); 
@@ -203,31 +204,37 @@ function loadOrders() {
         
       let options = stages.map(s => `<option value="${s}" ${currentStatus === s ? 'selected' : ''}>${s}</option>`).join(''); 
       
-      // LOGIC: If Delivered and Unpaid, highlight yellow. Else if Delivered, highlight grey. Else if Cancelled, highlight red.
-      let rowClass = '';
-      if (isDelivered && !isPaid) {
-        rowClass = 'unpaid-delivered-row';
-      } else if (isDelivered) {
-        rowClass = 'completed-row';
-      } else if (isCancelled) {
-        rowClass = 'cancelled-row';
-      }
+      let rowClass = ''; 
+      if (isDelivered && !isPaid) { 
+        rowClass = 'unpaid-delivered-row'; 
+      } else if (isDelivered) { 
+        rowClass = 'completed-row'; 
+      } else if (isCancelled) { 
+        rowClass = 'cancelled-row'; 
+      } 
         
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : ''; 
-      const payDisplay = o['Payment Method'] || o.Payment || o.payment || 'N/A'; 
+      
+      // REMOVED N/A: using empty strings if values are missing
+      const payDisplay = o['Payment Method'] || o.Payment || o.payment || ''; 
       const notesDisplay = o.Notes || o.notes || ''; 
+      const addressDisplay = o.Address || o.address || '';
+      const orderTotal = o.Total || o['Order Total'] || o.total || '';
 
       return ` 
         <tr class="${rowClass}"> 
           <td> 
-            <small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : 'N/A'}</small><br><strong>${o.OrderID || o['Order ID']}</strong> 
+            <small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : ''}</small><br><strong>${o.OrderID || o['Order ID']}</strong> 
             ${isPaid ? '<br><span class="paid-badge">PAID</span>' : ''} 
           </td> 
           <td><strong>${o.Name}</strong><br><small>${o.Contact || ''}</small></td> 
-          <td class="details-text">${itemList}</td> 
+          <td class="details-text">
+            ${orderTotal ? `<span class="total-label">TOTAL: ₱${orderTotal}</span>` : ''}
+            ${itemList}
+          </td> 
           <td class="details-text"> 
-            <span class="payment-tag">💳 ${payDisplay}</span> 
-            <div style="margin-bottom:5px; color:#333;">${o.Address || ''}</div> 
+            ${payDisplay ? `<span class="payment-tag">💳 ${payDisplay}</span>` : ''} 
+            <div style="margin-bottom:5px; color:#333;">${addressDisplay}</div> 
             ${notesDisplay ? `<span class="note-tag">Note: ${notesDisplay}</span>` : ''} 
           </td> 
           <td style="text-align:center;"> 
