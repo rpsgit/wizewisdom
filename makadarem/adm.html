@@ -1,200 +1,103 @@
 --- 
-
 layout: default 
-
 title: MFC ADMIN PANEL 
-
 --- 
-
-  
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"> 
 
-  
-
 <style> 
-
 :root { --mfc-gold: #c5a059; --mfc-dark: #1a1a1a; --mfc-bg: #f4f4f4; --mfc-white: #ffffff; } 
-
 body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--mfc-bg); color: var(--mfc-dark); } 
-
 h1, h2, th { font-family: 'Playfair Display', serif; } 
-
 .page { max-width: 1300px; margin: 20px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); } 
-
 h1 { text-align: center; border-bottom: 2px solid var(--mfc-gold); padding-bottom: 10px; } 
-
 .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; background: #fafafa; padding: 25px; border-radius: 8px; margin-bottom: 30px; } 
-
 .settings-grid label { display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: #666; } 
-
 .settings-grid input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; box-sizing: border-box; } 
-
 button { background: var(--mfc-dark); color: white; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; text-transform: uppercase; border-radius: 4px; transition: 0.3s; } 
-
 button:hover { background: var(--mfc-gold); } 
-
 .table-container { overflow-x: auto; margin-top: 20px; } 
-
 table { width: 100%; border-collapse: collapse; } 
-
 th { text-align: left; padding: 15px; border-bottom: 2px solid var(--mfc-gold); background: #f8f8f8; font-size: 0.85rem; } 
-
 td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-align: top; } 
-
 .status-open { color: #27ae60; background: #eafaf1; padding: 8px 15px; border-radius: 4px; font-weight: bold; } 
-
 .status-closed { color: #e74c3c; background: #fdedec; padding: 8px 15px; border-radius: 4px; font-weight: bold; } 
-
 .menu-input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Montserrat'; } 
-
 .completed-row { background: #f2f2f2; opacity: 0.6; } 
-
 .cancelled-row { background: #fdedec; opacity: 0.6; } 
-
+/* New Style for Delivered but Unpaid */
+.unpaid-delivered-row { background: #fff9c4 !important; border-left: 5px solid #fbc02d; } 
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; } 
-
 .note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; font-weight: 600; } 
-
 .payment-tag { font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.75rem; } 
-
 .order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } 
-
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; } 
-
 .paid-badge { color: #27ae60; font-weight: bold; font-size: 0.75rem; border: 1px solid #27ae60; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-top: 5px; } 
-
 </style> 
 
-  
-
 <div class="page"> 
-
   <h1>MFC ADMIN CONTROL</h1> 
 
-  
-
   <div style="text-align: center; margin: 30px 0;"> 
-
     <button id="toggleStore" onclick="toggleStoreStatus()">SYNCING...</button> 
-
     <div id="storeStatus" style="margin-top:10px;">LOADING...</div> 
-
   </div> 
-
-  
 
   <h2>Store Settings</h2> 
-
   <div class="settings-grid"> 
-
     <div> 
-
       <label>GCash Number</label><input type="text" id="gcashNum"> 
-
       <label>Maya Number</label><input type="text" id="mayaNum"> 
-
     </div> 
-
     <div> 
-
       <label>Admin Email</label><input type="email" id="adminEmail"> 
-
       <label>Messenger Link</label><input type="text" id="messengerLink"> 
-
     </div> 
-
     <div> 
-
       <label>Pushover User Key</label><input type="password" id="pushUser"> 
-
       <label>Pushover API Token</label><input type="password" id="pushToken"> 
-
     </div> 
-
     <div> 
-
       <label>Telegram Token</label><input type="password" id="tgToken"> 
-
       <label>Telegram Chat ID</label><input type="text" id="tgChat"> 
-
     </div> 
-
     <div style="display:flex; align-items:flex-end; grid-column: 1 / -1;"> 
-
       <button onclick="saveSettingsInfo()" style="width:100%; background:var(--mfc-gold);">Update All System Settings</button> 
-
     </div> 
-
   </div> 
-
-  
 
   <div class="order-header-flex"> 
-
     <h2>Live Orders</h2> 
-
     <button onclick="saveAllOrderStatuses()" class="btn-save-orders" id="saveOrdersBtn">Save Order Changes</button> 
-
   </div> 
-
-   
 
   <div class="table-container"> 
-
     <table> 
-
       <thead> 
-
         <tr> 
-
           <th style="width: 12%;">ID / Date</th> 
-
           <th style="width: 15%;">Customer</th> 
-
           <th style="width: 20%;">Items</th> 
-
           <th style="width: 25%;">Address, Notes & Payment</th> 
-
           <th style="width: 8%; text-align:center;">Paid</th> 
-
           <th style="width: 20%;">Update Status</th> 
-
         </tr> 
-
       </thead> 
-
       <tbody id="ordersBody"></tbody> 
-
     </table> 
-
   </div> 
-
-  
 
   <h2>Inventory Management</h2> 
-
   <div class="table-container"> 
-
     <table> 
-
       <thead><tr><th>Item</th><th>Category</th><th>Price</th><th style="text-align:center;">Sold Out</th><th>Action</th></tr></thead> 
-
       <tbody id="menuBody"></tbody> 
-
     </table> 
-
   </div> 
-
 </div> 
 
-  
-
 <script> 
-
 const BASE = "https://script.google.com/macros/s/AKfycbxpkVursbR5CH-6Ko5MHaujepVGGnum12-mtO-qnqvpHNUnYi0DMJpc2RZGcjo-TQf3/exec"; 
-
-// Track if the user has touched anything to prevent auto-refresh from wiping changes
 let isDirty = false;
 
 async function apiPost(params) { 
@@ -283,7 +186,6 @@ async function saveMenuRow(rowId, btn) {
 } 
 
 function loadOrders() { 
-  // DO NOT refresh if the user is currently editing statuses/checkboxes
   if (isDirty) return; 
 
   fetch(BASE + "?func=getOrders").then(r => r.json()).then(data => { 
@@ -293,19 +195,28 @@ function loadOrders() {
     const stages = ["Order Placed", "Order Received", "Cooking", "Packing", "Delivering", "Delivered", "Cancelled"]; 
       
     ob.innerHTML = [...data].reverse().map(o => { 
-      const isDelivered = o['Order Status'] === 'Delivered' || o.Status === 'Delivered'; 
-      const isCancelled = o['Order Status'] === 'Cancelled' || o.Status === 'Cancelled'; 
-      const isInactive = isDelivered || isCancelled; 
+      const currentStatus = o['Order Status'] || o.Status || "Order Placed";
+      const isDelivered = currentStatus === 'Delivered'; 
+      const isCancelled = currentStatus === 'Cancelled'; 
       const isPaid = (o.Paid === "PAID" || o.paid === "PAID"); 
+      const isInactive = isDelivered || isCancelled; 
         
-      const currentStatus = o['Order Status'] || o.Status || "Order Placed"; 
       let options = stages.map(s => `<option value="${s}" ${currentStatus === s ? 'selected' : ''}>${s}</option>`).join(''); 
-      let rowClass = isDelivered ? 'completed-row' : (isCancelled ? 'cancelled-row' : ''); 
+      
+      // LOGIC: If Delivered and Unpaid, highlight yellow. Else if Delivered, highlight grey. Else if Cancelled, highlight red.
+      let rowClass = '';
+      if (isDelivered && !isPaid) {
+        rowClass = 'unpaid-delivered-row';
+      } else if (isDelivered) {
+        rowClass = 'completed-row';
+      } else if (isCancelled) {
+        rowClass = 'cancelled-row';
+      }
         
       const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : ''; 
       const payDisplay = o['Payment Method'] || o.Payment || o.payment || 'N/A'; 
       const notesDisplay = o.Notes || o.notes || ''; 
-  
+
       return ` 
         <tr class="${rowClass}"> 
           <td> 
@@ -355,8 +266,6 @@ async function saveAllOrderStatuses() {
   
   await Promise.all(promises); 
   btn.textContent = "ALL SAVED!"; 
-  
-  // Reset dirty flag so auto-refresh can start again
   isDirty = false; 
 
   setTimeout(() => {  
@@ -368,5 +277,3 @@ async function saveAllOrderStatuses() {
 loadSettings(); loadMenu(); loadOrders(); 
 setInterval(loadOrders, 30000); 
 </script>
-
-</script> 
