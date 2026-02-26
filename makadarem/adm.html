@@ -26,13 +26,14 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .completed-row { background: #f2f2f2; opacity: 0.6; } 
 .cancelled-row { background: #fdedec; opacity: 0.6; } 
 .unpaid-delivered-row { background: #fff9c4 !important; border-left: 5px solid #fbc02d; } 
+/* Tracking Style: Highlight rows that need saving */
+.needs-save { border-left: 5px solid var(--mfc-gold) !important; background: #fffdf5; }
 .details-text { font-size: 0.8rem; line-height: 1.4; color: #444; } 
 .note-tag { color: var(--mfc-gold); font-style: italic; display: block; margin-top: 5px; font-weight: 600; } 
 .payment-tag { font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.75rem; } 
 .order-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } 
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; } 
 .paid-badge { color: #27ae60; font-weight: bold; font-size: 0.75rem; border: 1px solid #27ae60; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-top: 5px; } 
-/* New Style for the Total Amount display */
 .total-label { display: block; font-weight: 600; color: var(--mfc-gold); margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px dashed #ddd; padding-bottom: 4px; }
 </style> 
 
@@ -69,7 +70,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 
   <div class="order-header-flex"> 
     <h2>Live Orders</h2> 
-    <button onclick="saveAllOrderStatuses()" class="btn-save-orders" id="saveOrdersBtn">Save Order Changes</button> 
+    <button onclick="saveAllOrderStatuses()" class="btn-save-orders" id="saveOrdersBtn">Save Changes</button> 
   </div> 
 
   <div class="table-container"> 
@@ -101,9 +102,9 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 const BASE = "https://script.google.com/macros/s/AKfycbxpkVursbR5CH-6Ko5MHaujepVGGnum12-mtO-qnqvpHNUnYi0DMJpc2RZGcjo-TQf3/exec"; 
 let isDirty = false;
 
+// Core communication function
 async function apiPost(params) { 
   try { 
-    // We use a URLSearchParams approach for compatibility
     await fetch(BASE, { 
       method: "POST", mode: "no-cors", 
       headers: { "Content-Type": "application/x-www-form-urlencoded" }, 
@@ -113,18 +114,91 @@ async function apiPost(params) {
   } catch (e) { return false; } 
 } 
 
-// ... (loadSettings, saveSettingsInfo, toggleStoreStatus, loadMenu, saveMenuRow remain the same) ...
-
-function markRowModified(el) {
-    isDirty = true;
-    // Add a visual indicator and a class we can select later
-    const row = el.closest('tr');
-    row.classList.add('is-modified');
-    row.style.borderLeft = "5px solid var(--mfc-gold)"; 
+// Tracking function: Marks a row as modified
+function markChanged(el) {
+  isDirty = true;
+  el.closest('tr').classList.add('needs-save');
 }
 
+// 1. Settings Functions
+function loadSettings() { 
+  fetch(BASE + "?func=getSettings").then(r => r.json()).then(s => { 
+    const closed = !!s.closed_today; 
+    const btn = document.getElementById('toggleStore'); 
+    const status = document.getElementById('storeStatus'); 
+    btn.textContent = closed ? "Open Kitchen" : "Close Kitchen"; 
+    status.textContent = closed ? "KITCHEN IS CLOSED" : "KITCHEN IS OPEN & ACCEPTING ORDERS"; 
+    status.className = closed ? "status-closed" : "status-open"; 
+    document.getElementById('gcashNum').value = s.gcash_number || ''; 
+    document.getElementById('mayaNum').value = s.maya_number || ''; 
+    document.getElementById('adminEmail').value = s.notification_email || ''; 
+    document.getElementById('messengerLink').value = s.messenger_link || ''; 
+    document.getElementById('tgToken').value = s.telegram_token || ''; 
+    document.getElementById('tgChat').value = s.telegram_chat_id || ''; 
+    document.getElementById('pushUser').value = s.pushover_user_key || ''; 
+    document.getElementById('pushToken').value = s.pushover_api_token || ''; 
+  }); 
+} 
+
+async function saveSettingsInfo() { 
+  const btn = event.target; 
+  const original = btn.textContent; 
+  btn.textContent = "SYNCING..."; 
+  await apiPost({ 
+    func: "updatePaymentInfo", 
+    gcash_number: document.getElementById('gcashNum').value, 
+    maya_number: document.getElementById('mayaNum').value, 
+    notification_email: document.getElementById('adminEmail').value, 
+    messenger_link: document.getElementById('messengerLink').value, 
+    telegram_token: document.getElementById('tgToken').value, 
+    telegram_chat_id: document.getElementById('tgChat').value, 
+    pushover_user_key: document.getElementById('pushUser').value, 
+    pushover_api_token: document.getElementById('pushToken').value 
+  }); 
+  btn.textContent = "SUCCESS!"; 
+  setTimeout(() => { btn.textContent = original; }, 2000); 
+} 
+
+async function toggleStoreStatus() { 
+  const btn = document.getElementById('toggleStore'); 
+  const currentState = (btn.textContent === "Close Kitchen"); 
+  btn.disabled = true; btn.textContent = "..."; 
+  await apiPost({ func: "toggleClose", status: String(currentState) }); 
+  setTimeout(() => { loadSettings(); btn.disabled = false; }, 1200); 
+} 
+
+// 2. Menu Functions
+function loadMenu() { 
+  fetch(BASE + "?func=getMenu").then(r => r.json()).then(data => { 
+    document.getElementById('menuBody').innerHTML = data.map(m => ` 
+      <tr> 
+        <td><input type="text" class="menu-input" value="${m.Item}" id="name-${m.row}"></td> 
+        <td><input type="text" class="menu-input" value="${m.Category}" id="cat-${m.row}"></td> 
+        <td><input type="number" class="menu-input" value="${m.Price}" id="price-${m.row}"></td> 
+        <td style="text-align:center;"><input type="checkbox" id="sold-${m.row}" ${String(m.SoldOut)==='true'?'checked':''}></td> 
+        <td><button onclick="saveMenuRow(${m.row}, this)" style="padding:5px 10px; font-size:0.6rem;">UPDATE</button></td> 
+      </tr> 
+    `).join(''); 
+  }); 
+} 
+
+async function saveMenuRow(rowId, btn) { 
+  const original = btn.textContent; btn.textContent = "..."; 
+  await apiPost({ 
+    func: "updateMenuItem", 
+    row: rowId, 
+    item: document.getElementById(`name-${rowId}`).value, 
+    category: document.getElementById(`cat-${rowId}`).value, 
+    price: document.getElementById(`price-${rowId}`).value, 
+    soldOut: String(document.getElementById(`sold-${rowId}`).checked) 
+  }); 
+  btn.textContent = "SAVED"; 
+  setTimeout(() => { btn.textContent = original; }, 1000); 
+} 
+
+// 3. Order Functions (Optimized)
 function loadOrders() { 
-  if (isDirty) return; 
+  if (isDirty) return; // Don't refresh if user is currently editing
 
   fetch(BASE + "?func=getOrders").then(r => r.json()).then(data => { 
     const ob = document.getElementById('ordersBody'); 
@@ -169,10 +243,10 @@ function loadOrders() {
             ${notesDisplay ? `<span class="note-tag">Note: ${notesDisplay}</span>` : ''} 
           </td> 
           <td style="text-align:center;"> 
-             <input type="checkbox" class="paid-toggle" onchange="markRowModified(this)" data-id="${o.OrderID || o['Order ID']}" ${isPaid ? 'checked' : ''}> 
+             <input type="checkbox" class="paid-toggle" onchange="markChanged(this)" data-id="${o.OrderID || o['Order ID']}" ${isPaid ? 'checked' : ''}> 
           </td> 
           <td> 
-             <select class="menu-input status-select" onchange="markRowModified(this)" data-id="${o.OrderID || o['Order ID']}" ${isInactive ? 'disabled' : ''}> 
+            <select class="menu-input status-select" onchange="markChanged(this)" data-id="${o.OrderID || o['Order ID']}" ${isInactive ? 'disabled' : ''}> 
               ${options} 
             </select> 
           </td> 
@@ -184,42 +258,38 @@ function loadOrders() {
 
 async function saveAllOrderStatuses() { 
   const btn = document.getElementById('saveOrdersBtn'); 
-  // OPTIMIZATION: Only select rows that were actually modified
-  const modifiedRows = document.querySelectorAll('.is-modified'); 
+  const modifiedRows = document.querySelectorAll('.needs-save'); 
   
   if (modifiedRows.length === 0) {
-      alert("No changes to save!");
-      return;
+    alert("No changes detected.");
+    return;
   }
   
   const originalText = btn.textContent; 
-  btn.disabled = true; 
-  btn.textContent = `SAVING ${modifiedRows.length} CHANGES...`; 
+  btn.disabled = true; btn.textContent = "SAVING..."; 
   
-  // We process only the rows that changed
   const promises = Array.from(modifiedRows).map(row => { 
     const sel = row.querySelector('.status-select');
     const orderId = sel.getAttribute('data-id'); 
     const paidBox = row.querySelector('.paid-toggle'); 
-    
     return apiPost({  
-      func: "markCompleted",  
-      id: orderId,  
-      status: sel.value, 
-      paid: String(paidBox.checked) 
+      func: "markCompleted", id: orderId, status: sel.value, paid: String(paidBox.checked) 
     }); 
   }); 
   
   await Promise.all(promises); 
-  btn.textContent = "CHANGES SAVED!"; 
+  btn.textContent = "SAVED!"; 
   isDirty = false; 
 
   setTimeout(() => {  
     btn.disabled = false; btn.textContent = originalText; 
     loadOrders();  
-  }, 1500); 
+  }, 1000); 
 } 
 
-loadSettings(); loadMenu(); loadOrders(); 
+// INITIALIZE EVERYTHING
+loadSettings(); 
+loadMenu(); 
+loadOrders(); 
 setInterval(loadOrders, 30000); 
 </script>
