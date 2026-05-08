@@ -2,167 +2,913 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>VS2 Residential Lights Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VS2 Residential — Lights Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial; padding: 20px; }
-    h1 { text-align: center; margin-bottom: 20px; }
-    #tower-select { font-size: 16px; padding: 5px; margin-bottom: 20px; }
-    .floor { margin-bottom: 30px; }
-    .floor-name { font-weight: bold; margin-bottom: 5px; }
-    .unit-grid { display: flex; flex-wrap: wrap; gap: 5px; }
-    .unit-btn { width: 50px; height: 30px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
-    .unit-btn.large { width: 70px; height: 40px; font-size: 14px; }
-    .on { background-color: yellow; color: black; }
-    .off { background-color: gray; }
-    .spacer { width: 10px; }
-    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); }
-    .modal.show { display:block; }
-    .modal-content { background:#fff; margin:15% auto; padding:20px; width:320px; border-radius:10px; text-align:center; }
-    #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:10px 20px; border-radius:5px; opacity:0; transition:opacity 0.5s; }
-    #toast.show { opacity:1; }
+    :root {
+      --bg: #0e0f13;
+      --surface: #16181f;
+      --surface2: #1e2029;
+      --border: #2a2d3a;
+      --accent: #f5c542;
+      --accent-dim: rgba(245,197,66,0.15);
+      --out: #ff4d4d;
+      --out-dim: rgba(255,77,77,0.15);
+      --ok: #f5c542;
+      --text: #e8e9f0;
+      --muted: #6b6f80;
+      --green: #4ade80;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    h1 span { color: var(--accent); }
+
+    .header-stats {
+      display: flex; gap: 20px; align-items: center;
+    }
+    .stat-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+    }
+    .stat-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .dot-ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .dot-out { background: var(--out); box-shadow: 0 0 6px var(--out); }
+
+    .refresh-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .refresh-btn.spinning svg { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Tower Tabs ── */
+    .tower-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0 28px;
+    }
+    .tower-tab {
+      padding: 12px 28px;
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .tower-tab:hover { color: var(--text); }
+    .tower-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tower-tab.both { color: var(--text); }
+    .tower-tab.both.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Layout ── */
+    .main {
+      padding: 24px 28px;
+      display: flex;
+      gap: 20px;
+      overflow: hidden;
+    }
+    .tower-panel {
+      flex: 1;
+      min-width: 0;
+    }
+    .tower-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .tower-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+    }
+    .tower-summary {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── Floor rows ── */
+    .floors-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .floor-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      transition: background 0.15s;
+      gap: 10px;
+    }
+    .floor-row:last-child { border-bottom: none; }
+    .floor-row:hover { background: var(--surface2); }
+
+    .floor-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      width: 36px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .floor-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .units-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      flex: 1;
+    }
+
+    /* ── Light bulb buttons ── */
+    .light-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+    }
+    .light-btn.ok {
+      background: var(--accent-dim);
+      border-color: rgba(245,197,66,0.3);
+      color: var(--accent);
+    }
+    .light-btn.ok::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+    .light-btn.out {
+      background: var(--out-dim);
+      border-color: rgba(255,77,77,0.2);
+      color: var(--out);
+    }
+    .light-btn.out::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 2px;
+      background: var(--out);
+      opacity: 0.15;
+    }
+    .light-btn.unknown {
+      background: var(--surface2);
+      border-color: var(--border);
+    }
+    .light-btn:hover {
+      transform: scale(1.25);
+      z-index: 5;
+      box-shadow: 0 0 10px rgba(245,197,66,0.3);
+    }
+    .light-btn.out:hover {
+      box-shadow: 0 0 10px rgba(255,77,77,0.3);
+    }
+
+    /* Special buttons PE/SE */
+    .light-btn.special {
+      width: 34px;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .light-btn.special::after { display: none; }
+
+    /* tooltip on hover */
+    .light-btn[data-tip]:hover::before {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #fff;
+      font-size: 10px;
+      white-space: nowrap;
+      padding: 3px 7px;
+      border-radius: 4px;
+      z-index: 999;
+      pointer-events: none;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── Floor jump nav ── */
+    .floor-jump {
+      position: fixed;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 50;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px 4px;
+    }
+    .jump-btn {
+      width: 28px;
+      height: 16px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      cursor: pointer;
+      border-radius: 3px;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .jump-btn:hover { background: var(--accent-dim); color: var(--accent); }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      width: 340px;
+      text-align: center;
+      animation: pop 0.2s ease;
+    }
+    @keyframes pop {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-unit-id {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .modal-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+    .modal-current {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .modal-current.ok { background: var(--accent-dim); color: var(--accent); }
+    .modal-current.out { background: var(--out-dim); color: var(--out); }
+    .modal-current.unknown { background: var(--surface2); color: var(--muted); }
+
+    .modal-btns { display: flex; gap: 10px; justify-content: center; }
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-ok {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-ok:hover { background: var(--accent); color: #000; }
+    .btn-out {
+      background: var(--out-dim);
+      border-color: var(--out);
+      color: var(--out);
+    }
+    .btn-out:hover { background: var(--out); color: #fff; }
+    .btn-cancel {
+      flex: none;
+      padding: 12px 16px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+      white-space: nowrap;
+      transform: translateX(-50%) translateY(10px);
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding: 10px 28px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface);
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch {
+      width: 14px; height: 14px; border-radius: 3px;
+    }
+    .swatch-ok { background: var(--accent); opacity: 0.7; }
+    .swatch-out { background: var(--out); opacity: 0.7; }
+    .swatch-unknown { background: var(--surface2); border: 1px solid var(--border); }
+
+    /* Single tower view */
+    .main.single .tower-panel { max-width: 820px; margin: 0 auto; }
+
+    /* Loading state */
+    .skeleton-row {
+      height: 38px;
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-bottom: 1px solid var(--border);
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .error-state {
+      padding: 48px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .error-state h3 { color: var(--out); font-family: 'Syne', sans-serif; margin-bottom: 8px; }
+
+    @media (max-width: 900px) {
+      .main { flex-direction: column; padding: 16px; }
+      .floor-jump { display: none; }
+      header { padding: 14px 16px; }
+      .header-stats { display: none; }
+    }
   </style>
 </head>
 <body>
 
-<h1 id="page-title">VS2 Residential Lights Status</h1>
-<select id="tower-select"></select>
-<div id="building"></div>
+<header>
+  <div class="header-left">
+    <div class="logo-icon">💡</div>
+    <div>
+      <h1>VS2 <span>Lights</span></h1>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill">
+      <div class="stat-dot dot-ok"></div>
+      <span id="stat-ok">— OK</span>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-dot dot-out"></div>
+      <span id="stat-out">— OUT</span>
+    </div>
+  </div>
+  <button class="refresh-btn" id="refresh-btn" onclick="handleRefresh()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Refresh
+  </button>
+</header>
 
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <p id="modal-text"></p>
-    <button id="on-btn">OK</button>
-    <button id="out-btn">OUT</button>
+<div class="tower-tabs" id="tower-tabs"></div>
+
+<div class="legend">
+  <span>Tap any light to update its status:</span>
+  <div class="legend-item"><div class="legend-swatch swatch-ok"></div> Working</div>
+  <div class="legend-item"><div class="legend-swatch swatch-out"></div> Out / Needs replacing</div>
+  <div class="legend-item"><div class="legend-swatch swatch-unknown"></div> Unknown</div>
+</div>
+
+<div class="main" id="main"></div>
+
+<!-- Jump nav -->
+<div class="floor-jump" id="floor-jump"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-unit-id" id="modal-unit-id">—</div>
+    <div class="modal-subtitle" id="modal-subtitle">Hallway light status</div>
+    <div id="modal-current" class="modal-current unknown">● Unknown</div>
+    <div class="modal-btns">
+      <button class="modal-btn btn-ok" onclick="saveStatus(1)">✓ Working</button>
+      <button class="modal-btn btn-out" onclick="saveStatus(0)">✕ Out</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwSQ1vJRFREMmMnnxh13pdb5DKkeuqBj2m8ZhhB8xhj7FFGsdX-cQXsmBX_ULlOtgZL/exec"; // Replace with your Web App URL
-const UNIT_COUNT = 61;
-const FLOORS = [...Array(32).keys()].map(i => 14+i).concat("PH");
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwSQ1vJRFREMmMnnxh13pdb5DKkeuqBj2m8ZhhB8xhj7FFGsdX-cQXsmBX_ULlOtgZL/exec";
 
-let lightData = {};
-let currentBtn = null;
-let currentTower = "";
+// State
+let towerData = {};      // { "Tower A": { floorKey: { unitKey: 0|1|null } } }
+let availableTowers = [];
+let currentView = "both"; // "both" | tower name
+let currentTarget = null; // { tower, floor, unit, btn }
 
-// Toast
-function showToast(msg){
-  const t=document.getElementById("toast");
-  t.textContent=msg;
+// ── Utilities ──────────────────────────────────────────
+
+function showToast(msg, type = "info") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.borderColor = type === "error" ? "var(--out)" : type === "success" ? "var(--green)" : "var(--border)";
   t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),2000);
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("show"), 2500);
 }
 
-// Fetch tower list
-async function fetchTowers(){
-  try {
-    const res = await fetch(WEB_APP_URL);
-    const data = await res.json();
-    if(!data.success) throw new Error(data.error || "Failed to load towers");
-    const select = document.getElementById("tower-select");
-    select.innerHTML = "";
-    data.availableTowers.forEach(t => {
-      const opt = document.createElement("option");
-      opt.value = t;
-      opt.textContent = t;
-      select.appendChild(opt);
-    });
-    currentTower = select.value;
-  } catch(e){ console.error(e); showToast("Error loading towers"); }
+function formatUnitId(tower, floor, unit) {
+  const suffix = tower.slice(-1); // "A" or "B"
+  if (unit === "PE" || unit === "SE") return `${floor}${unit}${suffix}`;
+  return `${floor}${String(unit).padStart(2, "0")}${suffix}`;
 }
 
-// Fetch lights
-async function fetchLightData(tower){
-  try {
-    const res = await fetch(`${WEB_APP_URL}?tower=${encodeURIComponent(tower)}`);
-    const data = await res.json();
-    if(!data.success) throw new Error(data.error || "Failed to load");
-    showToast(`Loaded ${tower}`);
-    return data.data;
-  } catch(e){ showToast("Error loading data"); console.error(e); return {}; }
+function getStatus(tower, floor, unit) {
+  return towerData[tower]?.[floor]?.[unit] ?? null;
 }
 
-// Update lights
-async function updateLightStatus(tower,floor,unit,value){
-  try {
-    const res = await fetch(WEB_APP_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({tower,floor,unit,value})
-    });
-    const data = await res.json();
-    if(!data.success) throw new Error(data.error || "Update failed");
-    showToast("Updated");
-  } catch(e){ showToast("Update failed"); console.error(e); }
-}
-
-// Render UI
-function renderLights(){
-  const container = document.getElementById("building");
-  container.innerHTML="";
-  for(const floor of Object.keys(lightData)){
-    const floorDiv = document.createElement("div"); floorDiv.className="floor";
-    const floorName = document.createElement("div"); floorName.className="floor-name"; floorName.textContent="Floor "+floor;
-    floorDiv.appendChild(floorName);
-    const grid = document.createElement("div"); grid.className="unit-grid";
-
-    ["PE","SE"].forEach(type=>{
-      const btn = document.createElement("button"); btn.textContent=type;
-      btn.className="unit-btn large "+(lightData[floor][type]==1?"on":"off");
-      btn.onclick=()=>openModal(btn,floor,type); grid.appendChild(btn);
-    });
-
-    const spacer = document.createElement("div"); spacer.className="spacer"; grid.appendChild(spacer);
-
-    for(let u=1; u<=UNIT_COUNT; u++){
-      const btn = document.createElement("button"); btn.textContent=u;
-      btn.className="unit-btn "+(lightData[floor][u]==1?"on":"off");
-      btn.onclick=()=>openModal(btn,floor,u); grid.appendChild(btn);
+function updateStats() {
+  let ok = 0, out = 0;
+  for (const tower of availableTowers) {
+    for (const floor of Object.keys(towerData[tower] || {})) {
+      for (const unit of Object.keys(towerData[tower][floor])) {
+        const v = towerData[tower][floor][unit];
+        if (v === 1) ok++;
+        else if (v === 0) out++;
+      }
     }
+  }
+  document.getElementById("stat-ok").textContent = `${ok} OK`;
+  document.getElementById("stat-out").textContent = `${out} OUT`;
+}
 
-    floorDiv.appendChild(grid);
-    container.appendChild(floorDiv);
+// ── API ────────────────────────────────────────────────
+
+async function fetchTowers() {
+  try {
+    const res = await fetch(WEB_APP_URL + "?action=getTowers");
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || "Failed");
+    return data.availableTowers || [];
+  } catch (e) {
+    // Fallback: try without action param (original API)
+    try {
+      const res = await fetch(WEB_APP_URL);
+      const data = await res.json();
+      if (data.availableTowers) return data.availableTowers;
+    } catch {}
+    console.warn("Could not fetch tower list, using defaults");
+    return ["Tower A", "Tower B"];
   }
 }
 
-// Modal
-function openModal(btn,floor,unit){ currentBtn={btn,floor,unit};
-  let formattedID = (unit==="PE"||unit==="SE") ? `${floor}${unit}${currentTower.slice(-1)}` : `${floor}${unit.toString().padStart(2,'0')}${currentTower.slice(-1)}`;
-  document.getElementById("modal-text").textContent=`Is ${formattedID} light OK or OUT?`;
+async function fetchTowerData(tower) {
+  try {
+    const res = await fetch(`${WEB_APP_URL}?tower=${encodeURIComponent(tower)}`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || "Failed");
+    return data.data || {};
+  } catch (e) {
+    console.error("fetchTowerData failed", tower, e);
+    return null;
+  }
+}
+
+async function postUpdate(tower, floor, unit, value) {
+  const res = await fetch(WEB_APP_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tower, floor: String(floor), unit: String(unit), value })
+  });
+  const data = await res.json();
+  if (!data.success) throw new Error(data.error || "Update failed");
+}
+
+// ── Render ─────────────────────────────────────────────
+
+function renderTabs() {
+  const tabs = document.getElementById("tower-tabs");
+  tabs.innerHTML = "";
+
+  const bothTab = document.createElement("div");
+  bothTab.className = "tower-tab both" + (currentView === "both" ? " active" : "");
+  bothTab.textContent = "All Towers";
+  bothTab.onclick = () => setView("both");
+  tabs.appendChild(bothTab);
+
+  for (const t of availableTowers) {
+    const tab = document.createElement("div");
+    tab.className = "tower-tab" + (currentView === t ? " active" : "");
+    tab.textContent = t;
+    tab.onclick = () => setView(t);
+    tabs.appendChild(tab);
+  }
+}
+
+function setView(view) {
+  currentView = view;
+  renderTabs();
+  renderMain();
+}
+
+function renderMain() {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+
+  const towersToShow = currentView === "both" ? availableTowers : [currentView];
+  main.className = "main" + (towersToShow.length === 1 ? " single" : "");
+
+  for (const tower of towersToShow) {
+    const panel = buildTowerPanel(tower);
+    main.appendChild(panel);
+  }
+
+  buildJumpNav();
+  updateStats();
+}
+
+function buildTowerPanel(tower) {
+  const data = towerData[tower];
+  const panel = document.createElement("div");
+  panel.className = "tower-panel";
+  panel.id = "panel-" + tower.replace(/\s/g, "-");
+
+  // Header
+  const header = document.createElement("div");
+  header.className = "tower-header";
+
+  const label = document.createElement("div");
+  label.className = "tower-label";
+  label.textContent = tower;
+
+  const summary = document.createElement("div");
+  summary.className = "tower-summary";
+  if (data) {
+    let ok = 0, out = 0, unk = 0;
+    for (const floor of Object.keys(data)) {
+      for (const unit of Object.keys(data[floor])) {
+        const v = data[floor][unit];
+        if (v === 1) ok++;
+        else if (v === 0) out++;
+        else unk++;
+      }
+    }
+    summary.textContent = `${ok} ok · ${out} out · ${unk} unknown`;
+    if (out > 0) summary.style.color = "var(--out)";
+  } else {
+    summary.textContent = "Failed to load";
+    summary.style.color = "var(--out)";
+  }
+
+  header.appendChild(label);
+  header.appendChild(summary);
+  panel.appendChild(header);
+
+  // Floors container
+  const floorsEl = document.createElement("div");
+  floorsEl.className = "floors-container";
+
+  if (!data) {
+    floorsEl.innerHTML = `<div class="error-state"><h3>Load Error</h3><p>Could not load data for ${tower}.</p></div>`;
+    panel.appendChild(floorsEl);
+    return panel;
+  }
+
+  const floorKeys = Object.keys(data);
+  for (const floor of floorKeys) {
+    const row = buildFloorRow(tower, floor, data[floor]);
+    row.id = `floor-${tower.replace(/\s/g, "-")}-${floor}`;
+    floorsEl.appendChild(row);
+  }
+
+  panel.appendChild(floorsEl);
+  return panel;
+}
+
+function buildFloorRow(tower, floor, units) {
+  const row = document.createElement("div");
+  row.className = "floor-row";
+
+  const label = document.createElement("div");
+  label.className = "floor-label";
+  label.textContent = floor;
+  row.appendChild(label);
+
+  const divider = document.createElement("div");
+  divider.className = "floor-divider";
+  row.appendChild(divider);
+
+  const unitsRow = document.createElement("div");
+  unitsRow.className = "units-row";
+
+  // PE and SE first
+  for (const type of ["PE", "SE"]) {
+    if (type in units) {
+      const btn = makeLight(tower, floor, type, units[type], true);
+      unitsRow.appendChild(btn);
+    }
+  }
+
+  // Numeric units
+  const numericUnits = Object.keys(units)
+    .filter(k => k !== "PE" && k !== "SE")
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  for (const u of numericUnits) {
+    const btn = makeLight(tower, floor, u, units[u], false);
+    unitsRow.appendChild(btn);
+  }
+
+  row.appendChild(unitsRow);
+  return row;
+}
+
+function makeLight(tower, floor, unit, value, isSpecial) {
+  const btn = document.createElement("button");
+  btn.className = "light-btn" + (isSpecial ? " special" : "");
+  btn.textContent = isSpecial ? unit : unit;
+
+  const id = formatUnitId(tower, floor, unit);
+  btn.dataset.tip = id;
+
+  applyLightClass(btn, value);
+
+  btn.onclick = () => openModal(tower, floor, unit, btn);
+  return btn;
+}
+
+function applyLightClass(btn, value) {
+  btn.classList.remove("ok", "out", "unknown");
+  if (value === 1) btn.classList.add("ok");
+  else if (value === 0) btn.classList.add("out");
+  else btn.classList.add("unknown");
+}
+
+// ── Jump nav ───────────────────────────────────────────
+
+function buildJumpNav() {
+  const nav = document.getElementById("floor-jump");
+  nav.innerHTML = "";
+  const firstTower = currentView === "both" ? availableTowers[0] : currentView;
+  const data = towerData[firstTower] || {};
+  const floors = Object.keys(data);
+  for (const floor of floors) {
+    const btn = document.createElement("button");
+    btn.className = "jump-btn";
+    btn.textContent = floor;
+    btn.onclick = () => {
+      const panelId = "panel-" + firstTower.replace(/\s/g, "-");
+      const floorId = `floor-${firstTower.replace(/\s/g, "-")}-${floor}`;
+      const el = document.getElementById(floorId);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+    nav.appendChild(btn);
+  }
+}
+
+// ── Modal ──────────────────────────────────────────────
+
+function openModal(tower, floor, unit, btn) {
+  currentTarget = { tower, floor, unit, btn };
+  const id = formatUnitId(tower, floor, unit);
+  const value = getStatus(tower, floor, unit);
+
+  document.getElementById("modal-unit-id").textContent = id;
+  document.getElementById("modal-subtitle").textContent = `Floor ${floor} · ${tower} hallway light`;
+
+  const curr = document.getElementById("modal-current");
+  curr.className = "modal-current";
+  if (value === 1) { curr.className += " ok"; curr.textContent = "● Currently Working"; }
+  else if (value === 0) { curr.className += " out"; curr.textContent = "● Currently Out"; }
+  else { curr.className += " unknown"; curr.textContent = "● Status Unknown"; }
+
   document.getElementById("modal").classList.add("show");
 }
-function closeModal(){ document.getElementById("modal").classList.remove("show"); currentBtn=null; }
 
-async function saveStatus(value){
-  if(!currentBtn) return;
-  const {btn,floor,unit}=currentBtn;
-  if(lightData[floor][unit]===value){ closeModal(); showToast("No changes made"); return; }
-  await updateLightStatus(currentTower,floor,unit,value);
-  lightData[floor][unit]=value;
-  btn.className="unit-btn"+(btn.classList.contains("large")?" large":"")+" "+(value==1?"on":"off");
+function closeModal() {
+  document.getElementById("modal").classList.remove("show");
+  currentTarget = null;
+}
+
+async function saveStatus(value) {
+  if (!currentTarget) return;
+  const { tower, floor, unit, btn } = currentTarget;
+  const current = getStatus(tower, floor, unit);
+  if (current === value) {
+    closeModal();
+    showToast("No change needed.");
+    return;
+  }
   closeModal();
+  try {
+    await postUpdate(tower, floor, unit, value);
+    towerData[tower][floor][unit] = value;
+    applyLightClass(btn, value);
+    updateStats();
+    // Update panel summary
+    const panelId = "panel-" + tower.replace(/\s/g, "-");
+    // Re-render just the summary
+    const panel = document.getElementById(panelId);
+    if (panel) {
+      const summaryEl = panel.querySelector(".tower-summary");
+      if (summaryEl) {
+        let ok = 0, out = 0, unk = 0;
+        for (const f of Object.keys(towerData[tower])) {
+          for (const u of Object.keys(towerData[tower][f])) {
+            const v = towerData[tower][f][u];
+            if (v === 1) ok++;
+            else if (v === 0) out++;
+            else unk++;
+          }
+        }
+        summaryEl.textContent = `${ok} ok · ${out} out · ${unk} unknown`;
+        summaryEl.style.color = out > 0 ? "var(--out)" : "var(--muted)";
+      }
+    }
+    showToast(value === 1 ? "Marked as working ✓" : "Reported as out ✕", value === 0 ? "error" : "success");
+  } catch (e) {
+    showToast("Update failed — please try again.", "error");
+    console.error(e);
+  }
 }
 
-document.getElementById("on-btn").onclick=()=>saveStatus(1);
-document.getElementById("out-btn").onclick=()=>saveStatus(0);
-document.getElementById("tower-select").addEventListener("change",loadTower);
+// ── Refresh ────────────────────────────────────────────
 
-async function loadTower(){
-  currentTower=document.getElementById("tower-select").value;
-  document.getElementById("page-title").textContent=`VS2 Residential Lights Status - ${currentTower}`;
-  lightData = await fetchLightData(currentTower);
-  renderLights();
+async function handleRefresh() {
+  const btn = document.getElementById("refresh-btn");
+  btn.classList.add("spinning");
+  await loadAll();
+  btn.classList.remove("spinning");
 }
 
-async function init(){
-  await fetchTowers();
-  await loadTower();
+// ── Loading skeleton ───────────────────────────────────
+
+function showLoading() {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  const count = currentView === "both" ? 2 : 1;
+  for (let p = 0; p < count; p++) {
+    const panel = document.createElement("div");
+    panel.className = "tower-panel";
+    const fc = document.createElement("div");
+    fc.className = "floors-container";
+    for (let i = 0; i < 10; i++) {
+      const s = document.createElement("div");
+      s.className = "skeleton-row";
+      s.style.animationDelay = `${i * 0.07}s`;
+      fc.appendChild(s);
+    }
+    panel.appendChild(fc);
+    main.appendChild(panel);
+  }
 }
+
+// ── Init ───────────────────────────────────────────────
+
+async function loadAll() {
+  showLoading();
+  const loadPromises = availableTowers.map(async t => {
+    const data = await fetchTowerData(t);
+    towerData[t] = data;
+  });
+  await Promise.all(loadPromises);
+  renderMain();
+}
+
+async function init() {
+  availableTowers = await fetchTowers();
+
+  // Ensure we always have at least Tower A and B
+  if (!availableTowers.length) availableTowers = ["Tower A", "Tower B"];
+
+  renderTabs();
+  await loadAll();
+}
+
+// Close modal on overlay click
+document.getElementById("modal").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
 
 window.onload = init;
 </script>
-
 </body>
 </html>
