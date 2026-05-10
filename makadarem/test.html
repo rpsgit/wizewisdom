@@ -1,486 +1,814 @@
 ---
 layout: default
-title: MAKADAREM FOOD CO.
+title: Makadarem Menu
 ---
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --premium-dark: #1a1a1a;
-  --premium-gold: #c5a059;
-  --premium-light: #fdfdfd; 
-  --text-muted: #666;
-  --bg-soft: #f4f4f4;
-  --messenger: #0084FF;
+  --ink: #1a0a00;
+  --paper: #fdf6ee;
+  --warm-white: #fff9f2;
+  --accent: #c0392b;
+  --accent-dark: #96231a;
+  --amber: #e8822a;
+  --amber-light: #f5c97a;
+  --tan: #d4a96a;
+  --tan-light: #f0dbb8;
+  --muted: #7a5c3f;
+  --border: rgba(180,120,60,0.18);
+  --shadow: 0 2px 12px rgba(80,30,0,0.10);
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { 
-  margin: 0; 
-  font-family: 'Montserrat', sans-serif; 
-  background: var(--bg-soft); 
-  color: var(--premium-dark); 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
   scroll-behavior: smooth;
+  background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
 }
 
-h1, h2, h3, .price, .tab-btn, #logoFallback, .order-id-display {
-  font-family: 'Playfair Display', serif;
+/* Background texture pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(200,130,50,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(192,57,43,0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-#closedBanner { 
-  display: none; background: var(--premium-dark); color: #fff; 
-  padding: 12px; text-align: center; position: sticky; top: 0; z-index: 1001; font-size: 0.85rem; letter-spacing: 1px;
+/* ── Header ── */
+.site-header {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  padding: 20px 16px 16px;
+  position: relative;
+}
+.site-header .mon { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--tan); margin-bottom: 6px; }
+.site-header h1 {
+  font-family: 'Kaisei Decol', serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.site-header .tagline { font-size: 12px; color: var(--tan); margin-top: 6px; letter-spacing: 0.5px; }
+.delivery-banner {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.delivery-banner span { color: var(--amber-light); }
+
+/* ── Layout ── */
+.page-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 12px 80px;
 }
 
-.page { 
-  max-width: 1100px; margin: 20px auto 150px; padding: 30px; 
-  background: var(--premium-light); border-radius: 12px; 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+/* ── Category header ── */
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 10px;
+}
+.cat-header h2 {
+  font-family: 'Kaisei Decol', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  letter-spacing: 0.3px;
+}
+.cat-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--tan-light), transparent);
+}
+.cat-header .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--amber);
+  flex-shrink: 0;
 }
 
-.header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-
-.track-btn, .share-btn {
-  background: #fff; border: 1px solid #ddd; padding: 10px 20px; 
-  border-radius: 4px; cursor: pointer; font-size: 0.75rem; 
-  text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+/* ── Menu grid ── */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
 }
-.share-btn { background: var(--premium-dark); color: white; border: none; }
 
-#logo { display: block; margin: 0 auto 15px; max-width: 240px; width: 100%; height: auto; }
-
-.tabs { 
-  display: flex; gap: 15px; overflow-x: auto; 
-  margin-bottom: 35px; padding-bottom: 10px; border-bottom: 1px solid #eee;
-  scrollbar-width: none;
+/* ── Menu card ── */
+.menu-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
-.tab-btn {
-  background: none; border: none; padding: 10px 15px; cursor: pointer;
-  font-size: 1rem; color: var(--text-muted); white-space: nowrap;
+.menu-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.menu-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
 }
-.tab-btn.active { color: var(--premium-dark); border-bottom: 2px solid var(--premium-gold); font-weight: 600; }
+.menu-card.sold-out { opacity: 0.55; pointer-events: none; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-.item { background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #f0f0f0; }
-.item img { width: 100%; height: 220px; object-fit: cover; cursor: pointer; display: block; }
+.card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--tan-light);
+}
+.card-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.menu-card:hover .card-img-wrap img { transform: scale(1.04); }
+.sold-out-badge {
+  position: absolute; inset: 0;
+  background: rgba(26,10,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff;
+  letter-spacing: 1px; text-transform: uppercase;
+}
 
-.body { padding: 18px; }
-.item-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.item-info strong { font-size: 1rem; font-weight: 600; line-height: 1.2; }
-.price { color: var(--premium-gold); font-size: 1.1rem; }
+.card-body {
+  padding: 8px 10px 10px;
+  flex: 1;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.card-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.card-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 6px;
+}
+.card-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
 
-.actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
-.item-check { width: 22px; height: 22px; accent-color: var(--premium-dark); cursor: pointer; }
-.item-qty { width: 55px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; }
+/* Qty stepper inside card */
+.card-qty {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  background: var(--tan-light);
+  border-radius: 20px;
+  padding: 2px;
+}
+.card-qty button {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: none; background: var(--amber); color: #fff;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.card-qty input {
+  width: 28px; text-align: center;
+  font-size: 12px; font-weight: 600;
+  border: none; background: transparent;
+  color: var(--ink);
+}
+.menu-card.selected .card-qty { display: flex; }
 
-.total-display { font-size: 2.2rem; margin: 30px 0; text-align: right; color: var(--premium-dark); }
+/* Select indicator */
+.select-ring {
+  position: absolute; top: 7px; right: 7px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.15s;
+}
+.menu-card.selected .select-ring {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.select-ring svg { display: none; }
+.menu-card.selected .select-ring svg { display: block; }
 
-input, textarea {
-  width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #e0e0e0;
-  border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;
+/* ── Order bar (sticky) ── */
+.order-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--ink);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.25);
+}
+.order-bar-total { color: var(--tan); font-size: 12px; }
+.order-bar-total strong { font-size: 18px; color: var(--amber-light); display: block; font-weight: 700; }
+.order-bar-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none; cursor: pointer;
+  border-radius: 24px;
+  padding: 10px 22px;
+  font-size: 14px; font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+  letter-spacing: 0.3px;
+}
+.order-bar-btn:hover { background: var(--accent-dark); }
+.order-bar-btn:disabled { background: #888; cursor: not-allowed; }
+
+/* ── Form drawer (slide up) ── */
+.form-drawer {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 200;
+  background: rgba(26,10,0,0.6);
+  align-items: flex-end;
+  justify-content: center;
+}
+.form-drawer.open { display: flex; }
+.form-inner {
+  background: var(--warm-white);
+  border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px 20px 32px;
+}
+.drawer-handle {
+  width: 40px; height: 4px; background: var(--tan-light);
+  border-radius: 2px; margin: 0 auto 20px;
+}
+.form-inner h3 {
+  font-family: 'Kaisei Decol', serif;
+  font-size: 1.15rem; margin-bottom: 16px;
+  color: var(--ink);
+}
+.form-row { margin-bottom: 12px; }
+.form-row label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.3px; display: block; margin-bottom: 4px; }
+.form-row input, .form-row textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--tan-light);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--ink);
+  background: #fff;
+  transition: border-color 0.15s;
   outline: none;
 }
-
-form.submitted input:invalid, 
-form.submitted textarea:invalid { 
-  border: 2px solid #ff4d4d !important; 
+.form-row input:focus, .form-row textarea:focus { border-color: var(--amber); }
+.form-row textarea { resize: vertical; min-height: 70px; }
+.order-summary-list {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  border: 1px solid var(--border);
 }
-
-.pay-box { background: #fafafa; padding: 25px; border-radius: 8px; margin: 20px 0; border: 1px solid #eee; }
-.pay-option { 
-  display: flex; align-items: center; justify-content: flex-start;
-  padding: 14px; border: 1px solid #ddd; border-radius: 6px; 
-  margin-bottom: 10px; cursor: pointer; background: white; width: 100%;
+.order-summary-list .sum-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--border);
 }
-.pay-option span { margin-left: 12px; font-weight: 400; font-size: 0.95rem; }
-.pay-option input { margin: 0; width: 18px; height: 18px; }
-
-button.main {
-  width: 100%; padding: 20px; background: var(--premium-dark); color: white;
-  border: none; border-radius: 4px; cursor: pointer; font-family: 'Montserrat', sans-serif;
-  font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+.order-summary-list .sum-item:last-child { border-bottom: none; }
+.order-total-row {
+  display: flex; justify-content: space-between;
+  font-weight: 700; font-size: 15px;
+  margin-top: 10px; padding-top: 8px;
+  border-top: 2px solid var(--tan-light);
+  color: var(--accent-dark);
 }
-button.main:hover { background: var(--premium-gold); }
-
-#cart {
-  position: fixed; bottom: 30px; right: 30px;
-  background: var(--premium-dark); color: white; padding: 16px 32px;
-  border-radius: 50px; cursor: pointer; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  font-weight: 600; font-size: 0.9rem;
+.submit-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--accent);
+  color: #fff; font-size: 15px; font-weight: 700;
+  border: none; border-radius: 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 16px;
+  transition: background 0.15s;
 }
+.submit-btn:hover { background: var(--accent-dark); }
+.submit-btn:disabled { background: #aaa; }
+#unitError { font-size: 11px; color: var(--accent); margin-top: 3px; display: none; }
 
-#floatingMessenger {
-  position: fixed; bottom: 100px; right: 30px;
-  background: var(--messenger); color: white; width: 56px; height: 56px;
-  border-radius: 50%; display: none; justify-content: center; align-items: center;
-  box-shadow: 0 8px 20px rgba(0,132,255,0.3); z-index: 1001;
+/* ── Confirm modal ── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,10,0,0.65);
+  z-index: 300;
+  align-items: center; justify-content: center;
 }
-
-#modal, #statusModal, #imageModal {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 2000;
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--warm-white);
+  border-radius: 16px;
+  width: 90%; max-width: 400px;
+  padding: 24px 20px;
 }
-.modal-box { background: #fff; padding: 30px; border-radius: 8px; max-width: 500px; width: 92%; text-align: left; max-height: 90vh; overflow-y: auto; }
-.summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; text-align: left; }
-.review-section { margin-top: 20px; padding-top: 15px; border-top: 2px solid #eee; }
-.review-section h4 { margin: 0 0 10px 0; font-size: 0.8rem; color: var(--premium-gold); text-transform: uppercase; letter-spacing: 1px; }
-.review-data { font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px; }
+.modal-box h3 {
+  font-family: 'Kaisei Decol', serif;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+.modal-box p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.modal-address-preview {
+  background: var(--paper);
+  border: 1.5px solid var(--amber);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px; font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.modal-summary {
+  font-size: 12.5px; color: #555;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+.modal-actions { display: flex; gap: 8px; }
+.modal-actions button {
+  flex: 1; padding: 11px;
+  border-radius: 10px; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px;
+  transition: 0.15s;
+}
+.btn-cancel { background: var(--tan-light); color: var(--muted); }
+.btn-cancel:hover { background: #e8d5b0; }
+.btn-confirm { background: var(--accent); color: #fff; }
+.btn-confirm:hover { background: var(--accent-dark); }
+.btn-confirm:disabled { background: #aaa; }
 
-/* Print Specific Styles */
-@media print {
-  body * { visibility: hidden; }
-  #modal, #modalContent, #modalContent * { visibility: visible; }
-  #modal { position: absolute; left: 0; top: 0; display: block !important; background: white; }
-  .modal-box { box-shadow: none; border: none; max-width: 100%; width: 100%; margin: 0; padding: 0; }
-  button, .track-btn, #floatingMessenger, #cart { display: none !important; }
+/* ── Success ── */
+.success-panel {
+  display: none;
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+.success-panel .check-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.success-panel h3 { font-family: 'Kaisei Decol', serif; font-size: 1.1rem; margin-bottom: 6px; }
+.success-panel p { font-size: 13px; color: var(--muted); }
+.gcash-box {
+  margin-top: 14px;
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px dashed var(--tan);
+}
+.gcash-box p { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.gcash-box .num { font-size: 18px; font-weight: 700; color: var(--accent-dark); letter-spacing: 1px; }
+
+/* ── Image zoom ── */
+#imgZoomOverlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 999;
+  align-items: center; justify-content: center;
+}
+#imgZoomOverlay.open { display: flex; }
+#imgZoomOverlay img { max-width: 92vw; max-height: 85vh; border-radius: 10px; }
+
+/* ── Misc ── */
+.empty-cart-hint { text-align: center; font-size: 13px; color: var(--muted); padding: 30px 0; }
+#menuLoading { text-align: center; padding: 40px; font-size: 14px; color: var(--muted); }
+
+@media (max-width: 400px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+@media (min-width: 600px) {
+  .menu-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }
 </style>
 
-<div id="closedBanner">OUR KITCHEN IS CURRENTLY CLOSED</div>
-
-<div class="page">
-  <div class="header-actions">
-    <button type="button" class="track-btn" onclick="openStatusModal()">Track Order</button>
-    <button type="button" class="share-btn" onclick="shareSite()">Share Menu</button>
-  </div>
-  
-  <img id="logo" src="/assets/images/mfc/Makadarem Food Co.png" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
-  <div id="logoFallback" style="display:none; text-align:center; font-size:1.8rem; margin-bottom: 25px;">MAKADAREM FOOD CO.</div>
-
-  <div class="tabs" id="tabs"></div>
-
-  <form id="form" novalidate>
-    <div id="menu"></div>
-    <div class="total-display" id="totalDisplay">₱0</div>
-    
-    <h3 style="margin-bottom: 20px;">Delivery Address</h3>
-    <input name="name" id="userName" placeholder="Recipient Name *" required>
-    <input type="email" name="email" id="userEmail" placeholder="Email Address (Optional)">
-    
-    <input name="contact" id="userContact" placeholder="Mobile Number (e.g. 09171234567) *" 
-           required type="tel" pattern="^(09|\+639)\d{9}$" title="Please enter a valid PH mobile number">
-    
-    <input name="address" id="userAddress" placeholder="[Full Delivery Address] OR [UNIT No in VS2]*" required>
-    <textarea name="notes" id="userNotes" rows="2" placeholder="Nearby landmarks or instructions (Optional)"></textarea>
-    
-    <h3 style="margin-top: 30px; margin-bottom: 20px;">Payment Method</h3>
-    <div class="pay-box">
-      <label class="pay-option">
-        <input type="radio" name="payment" value="Cash" checked onclick="togglePay()">
-        <span>Cash on Delivery</span>
-      </label>
-      <div id="cashLogic" style="margin-left: 45px; margin-bottom: 15px;">
-        <input type="text" id="changeFor" placeholder="Change for how much? (Optional)">
-      </div>
-
-      <label class="pay-option">
-        <input type="radio" name="payment" value="GCash" onclick="togglePay()">
-        <span>GCash Transfer</span>
-      </label>
-
-      <label class="pay-option">
-        <input type="radio" name="payment" value="Maya" onclick="togglePay()">
-        <span>Maya Transfer</span>
-      </label>
-      
-      <div id="payInstructions" style="display:none; margin-top: 15px; padding: 20px; background: #fff; border: 1px dashed #ccc;">
-        <p style="font-size: 0.8rem; margin-bottom: 10px;">Send to <span id="payLabel" style="font-weight:600;"></span>:</p>
-        <div style="font-size: 1.3rem; font-weight: 700; color: var(--premium-gold); margin-bottom: 10px;" id="payNum"></div>
-        <button type="button" onclick="copyText('payNum')" class="track-btn" style="font-size:0.65rem;">Copy Number</button>
-      </div>
-    </div>
-
-    <button type="submit" class="main">Place My Order</button>
-  </form>
+<!-- Header -->
+<div class="site-header">
+  <div class="mon">Makadarem for VS2</div>
+  <h1>MaKaDaReM</h1>
+  <div class="tagline">Door-to-door delivery within VS2 only</div>
+</div>
+<div class="delivery-banner">
+  Delivery: <span>Fri, Jan 9, 2026 · 3 PM – 10 PM</span> &nbsp;🍱&nbsp; Salamat po!
 </div>
 
-<div id="cart" onclick="showSummary()">
-  BAG (<span id="cartCount">0</span>) • ₱<span id="cartSum">0</span>
-</div>
+<div class="page-wrap">
+  <div id="menuLoading">Loading menu…</div>
+  <div id="menuContainer"></div>
 
-<a id="floatingMessenger" href="#" target="_blank">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.453 5.527 3.734 7.28l-.01 2.266 2.11-1.154c.734.204 1.516.314 2.32.314 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.074 12.553l-2.583-2.753-5.043 2.753 5.543-5.889 2.66 2.753 4.965-2.753-5.542 5.889z"/></svg>
-</a>
-
-<div id="modal">
-  <div class="modal-box" id="modalContent">
-    <div id="receiptHeader" style="display:none; text-align:center; margin-bottom:20px;">
-        <h2 style="margin:0; font-family:'Playfair Display'; color:var(--premium-gold);">MAKADAREM FOOD CO.</h2>
-    </div>
-
-    <h2 id="modalTitle" style="margin-bottom: 15px; font-size: 1.4rem; text-align: center;">Review Order</h2>
-    
-    <div class="review-section">
-        <h4>Items Ordered</h4>
-        <div id="preview"></div>
-    </div>
-
-    <div class="review-section">
-        <h4>Delivery Details</h4>
-        <div id="detailsReview" class="review-data"></div>
-    </div>
-
-    <button class="main" id="finalBtn" onclick="confirmOrder()">Confirm Order</button>
-    <div id="postOrderActions" style="text-align: center;">
-        <button type="button" id="backBtn" onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; border:none; color: #999; cursor:pointer; font-size: 0.8rem;">Go Back & Edit</button>
+  <div id="successPanel" class="success-panel">
+    <div class="check-icon">✅</div>
+    <h3>Order Placed!</h3>
+    <p>Pa-wait po ng confirmation, neighbor. 😊</p>
+    <div id="lastOrderSummary" style="margin-top:10px; font-size:13px; text-align:left;"></div>
+    <div class="gcash-box" id="gcashBox" style="display:none">
+      <p>GCash / Maya Payment</p>
+      <div class="num" id="gcashNum">09178664404</div>
+      <p style="margin-top:4px; font-size:12px; color:var(--muted);">Name: RE*A P</p>
     </div>
   </div>
 </div>
 
-<div id="imageModal" onclick="this.style.display='none'">
-  <img id="enlargedImg" src="" style="max-width: 92%; max-height: 85vh; border-radius: 8px;">
+<!-- Sticky order bar -->
+<div class="order-bar">
+  <div class="order-bar-total">
+    <span>Your order</span>
+    <strong id="barTotal">₱0</strong>
+  </div>
+  <button class="order-bar-btn" id="reviewOrderBtn" onclick="openFormDrawer()">Review Order →</button>
 </div>
 
-<div id="statusModal">
-  <div class="modal-box" style="text-align: center;">
-    <h3>Track Your Order</h3>
-    <input type="text" id="statusIdInput" placeholder="Enter Reference ID">
-    <button class="main" onclick="checkStatus()">Search</button>
-    <div id="statusResult" style="margin-top: 25px;"></div>
-    <button onclick="document.getElementById('statusModal').style.display='none'" style="margin-top:20px; border:none; background:none; cursor:pointer; color:#888;">Close</button>
+<!-- Form drawer -->
+<div class="form-drawer" id="formDrawer">
+  <div class="form-inner">
+    <div class="drawer-handle"></div>
+    <h3>Your Details</h3>
+
+    <div id="drawerSummary" class="order-summary-list"></div>
+
+    <div class="form-row">
+      <label>Full Name</label>
+      <input type="text" id="f_name" maxlength="60" placeholder="Juan dela Cruz" required>
+    </div>
+    <div class="form-row">
+      <label>Contact Number</label>
+      <input type="tel" id="f_contact" placeholder="09XXXXXXXXX" required>
+    </div>
+    <div class="form-row">
+      <label>Unit No.</label>
+      <input type="text" id="f_unit" maxlength="8" placeholder="e.g. 1234A" required>
+      <div id="unitError">Accepted: 1234A, A1234, 12A34, 12APH, PH12A…</div>
+    </div>
+    <div class="form-row">
+      <label>Email (optional – for order tracking)</label>
+      <input type="email" id="f_email" placeholder="you@email.com">
+    </div>
+    <div class="form-row">
+      <label>Payment Method</label>
+      <select id="f_payment" style="width:100%;padding:10px 12px;border:1.5px solid var(--tan-light);border-radius:10px;font-size:14px;color:var(--ink);background:#fff;font-family:'DM Sans',sans-serif;">
+        <option value="GCash">GCash</option>
+        <option value="Maya">Maya</option>
+        <option value="Cash">Cash on Delivery</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Notes / Special Instructions</label>
+      <textarea id="f_notes" placeholder="Allergies, special requests…"></textarea>
+    </div>
+
+    <button class="submit-btn" id="reviewBtn" onclick="openConfirmModal()">Review &amp; Confirm →</button>
+    <button class="btn-cancel" style="width:100%;margin-top:8px;padding:11px;border-radius:10px;border:none;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:600;" onclick="closeFormDrawer()">← Back to Menu</button>
   </div>
+</div>
+
+<!-- Confirm / address check modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <h3>Double-check your address 🏠</h3>
+    <p>Tama po ba ang inyong unit number?</p>
+    <div class="modal-address-preview" id="modalUnitPreview">—</div>
+    <div class="modal-summary" id="modalSummary"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeConfirmModal()">Edit</button>
+      <button class="btn-confirm" id="confirmBtn" onclick="submitOrder()">Yes, place order!</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image zoom overlay -->
+<div id="imgZoomOverlay" onclick="this.classList.remove('open')">
+  <img id="zoomImg" src="" alt="">
 </div>
 
 <script>
-const BASE = "https://script.google.com/macros/s/AKfycbwTvt4QH4wvyuCM9d-5VWfWsXuSsoQ_Z6y2Rd9XeLHfaqRl3uSplOYCJuLIW5tjdVv7/exec";
-let settings = {}, prices = {}, pending = null;
+const MENU_URL  = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec?func=getMenu";
+const ORDER_URL = "https://script.google.com/macros/s/AKfycbykjopHttTCH5TcgR_fkHjxDTFJbgKjZ5Qfs-wnJJdD5Z638xYjaAzSerNfsgtAuf41/exec";
+const UNIT_RE   = /^(?:\d{4}[AB]|[AB]\d{4}|\d{2}[AB]\d{2}|\d{2}[AB]PH|PH\d{2}[AB]|[AB]\d{2}PH|[AB]PH\d{2})$/i;
 
-window.onload = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const trackId = urlParams.get('track') || urlParams.get('orderID');
-  if (trackId) {
-    document.getElementById('statusIdInput').value = trackId;
-    openStatusModal();
-    checkStatus(trackId);
-  }
-};
+const GCASH_NO  = "09178664404";
+const MAYA_NO   = "09178664404"; // update if different
 
-fetch(BASE + "?func=getSettings").then(r=>r.json()).then(s=>{
-  settings = s;
-  if (s.closed_today) {
-    document.getElementById('closedBanner').style.display="block";
-    document.getElementById('form').style.opacity="0.3";
-    document.getElementById('form').style.pointerEvents="none";
-  }
-  if(s.messenger_link) {
-    const el = document.getElementById('floatingMessenger');
-    el.href = s.messenger_link;
-    el.style.display = "flex";
-  }
+let priceMap = {};
+let selectedItems = {};
+
+/* ── Fetch menu ── */
+document.addEventListener('DOMContentLoaded', () => {
+  fetch(MENU_URL)
+    .then(r => r.json())
+    .then(renderMenu)
+    .catch(() => {
+      document.getElementById('menuLoading').innerHTML =
+        '<p style="color:var(--accent)">❌ Failed to load menu. Please refresh.</p>';
+    });
+
+  document.getElementById('f_unit').addEventListener('input', function() {
+    this.value = this.value.toUpperCase();
+    document.getElementById('unitError').style.display =
+      UNIT_RE.test(this.value) ? 'none' : 'block';
+  });
 });
 
-function loadMenu(){
-  fetch(BASE + "?func=getMenu").then(r=>r.json()).then(data=>{
-    const tabs = document.getElementById('tabs'), menu = document.getElementById('menu');
-    const cats = {};
-    data.forEach(i => {
-      const c = i.Category || "Menu";
-      if(!cats[c]) cats[c] = [];
-      cats[c].push(i);
-    });
-    Object.keys(cats).forEach((cat, idx) => {
-      const id = "cat_" + idx;
-      tabs.insertAdjacentHTML('beforeend', `<button type="button" class="tab-btn ${idx===0?'active':''}" onclick="openTab('${id}', this)">${cat}</button>`);
-      menu.insertAdjacentHTML('beforeend', `
-        <div id="${id}" class="tab-content" style="display:${idx===0?'block':'none'}">
-          <div class="grid">${cats[cat].map(i => {
-            const key = i.Item.toLowerCase().replace(/\s+/g, "_");
-            prices[key] = i.Price;
-            const isSoldOut = String(i.SoldOut) === 'true';
-            return `
-              <div class="item" style="${isSoldOut ? 'opacity:0.6;' : ''}">
-                <img src="${i.Image || i.ImageURL || 'https://via.placeholder.com/300'}" loading="lazy" onclick="zoomImg(this.src)">
-                <div class="body">
-                  <div class="item-info">
-                    <strong>${i.Item}</strong>
-                    <div class="price">₱${i.Price}</div>
-                  </div>
-                  <div class="actions">
-                    ${isSoldOut ? '<span style="color:red; font-size:0.7rem; font-weight:600;">SOLD OUT</span>' : `
-                      <input type="number" name="q_${key}" value="1" min="1" class="item-qty" style="display:none" oninput="updateUI()">
-                      <input type="checkbox" name="i_${key}" class="item-check" onchange="updateUI()">
-                    `}
-                  </div>
-                </div>
-              </div>`;
-          }).join('')}</div>
-        </div>`);
-    });
+function renderMenu(data) {
+  document.getElementById('menuLoading').remove();
+  const container = document.getElementById('menuContainer');
+  const cats = {};
+  data.forEach(item => {
+    const cat = item.Category || 'Other';
+    if (!cats[cat]) cats[cat] = [];
+    cats[cat].push(item);
   });
-}
 
-function openTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).style.display = 'block';
-  btn.classList.add('active');
-}
-
-function updateUI() {
-  let total = 0, count = 0;
-  const items = [];
-  document.querySelectorAll('.item-check').forEach(cb => {
-    const key = cb.name.replace("i_", "");
-    const qtyInput = document.querySelector(`input[name="q_${key}"]`);
-    if(cb.checked) {
-      qtyInput.style.display = "block";
-      const q = parseInt(qtyInput.value) || 1;
-      total += prices[key] * q;
-      count += q;
-      items.push({ name: key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), qty: q, sub: prices[key]*q });
-    } else { qtyInput.style.display = "none"; }
-  });
-  document.getElementById('totalDisplay').innerText = "₱" + total;
-  document.getElementById('cartSum').innerText = total;
-  document.getElementById('cartCount').innerText = count;
-  return { total, items };
-}
-
-function togglePay() {
-  const method = document.querySelector('input[name="payment"]:checked').value;
-  const inst = document.getElementById('payInstructions'), cash = document.getElementById('cashLogic');
-  if(method === "Cash") {
-    inst.style.display = "none"; 
-    cash.style.display = "block";
-  } else {
-    cash.style.display = "none"; 
-    inst.style.display = "block";
-    document.getElementById('payLabel').innerText = method;
-    const num = method === "GCash" ? settings.gcash_number : settings.maya_number;
-    document.getElementById('payNum').innerText = num || "No account found";
-  }
-}
-
-function copyText(id) {
-    const text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text).then(() => alert("Copied: " + text));
-}
-
-function zoomImg(src) {
-  document.getElementById('enlargedImg').src = src;
-  document.getElementById('imageModal').style.display = "flex";
-}
-
-function shareSite() {
-  const shareData = { title: 'Makadarem Food Co.', text: 'Check out our menu!', url: window.location.href };
-  if (navigator.share) { navigator.share(shareData); } 
-  else { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
-}
-
-function showSummary() {
-  const form = document.getElementById('form');
-  if (!form.checkValidity()) {
-    form.classList.add('submitted');
-    form.reportValidity();
-    return;
-  }
-  const cart = updateUI();
-  if(cart.total === 0) return alert("Your bag is empty.");
-  
-  // Re-enable buttons and hide receipt header if user returns to edit
-  document.getElementById('finalBtn').style.display = "block";
-  document.getElementById('finalBtn').disabled = false;
-  document.getElementById('finalBtn').innerText = "Confirm Order";
-  document.getElementById('backBtn').style.display = "inline-block";
-  document.getElementById('receiptHeader').style.display = "none";
-  document.getElementById('modalTitle').innerText = "Review Order";
-  
-  let html = '<ol style="padding-left: 18px; margin: 0;">';
-  cart.items.forEach(i => { 
-    html += `<li style="margin-bottom: 10px;">
-                <div class="summary-item" style="border:none; padding:0;">
-                  <span>${i.name} × ${i.qty}</span>
-                  <span>₱${i.sub}</span>
-                </div>
-              </li>`; 
-  });
-  html += '</ol>';
-  
-  const method = document.querySelector('input[name="payment"]:checked').value;
-  html += `<div class="summary-item" style="font-weight:700; color:var(--premium-gold); border-top: 1px solid #eee; margin-top:10px; font-size: 1rem;"><span>Total</span><span>₱${cart.total}</span></div>`;
-  document.getElementById('preview').innerHTML = html;
-
-  const name = document.getElementById('userName').value;
-  const email = document.getElementById('userEmail').value || "Not Provided";
-  const contact = document.getElementById('userContact').value;
-  const address = document.getElementById('userAddress').value;
-  const notes = document.getElementById('userNotes').value || "None";
-  const change = method === "Cash" ? (document.getElementById('changeFor').value || "Exact Amount") : "N/A";
-
-  let detailsHtml = `
-    <strong>Recipient:</strong> ${name}<br>
-    <strong>Email:</strong> ${email}<br>
-    <strong>Contact:</strong> ${contact}<br>
-    <strong>Address:</strong> ${address}<br>
-    <strong>Payment:</strong> ${method} ${method === "Cash" ? `(Change: ${change})` : ""}<br>
-    <strong>Notes:</strong> ${notes}
-  `;
-  document.getElementById('detailsReview').innerHTML = detailsHtml;
-
-  pending = { ...cart, payment: method, name, email: email, contact, address, notes, changeFor: change };
-  document.getElementById('modal').style.display = "flex";
-}
-
-document.getElementById('form').onsubmit = (e) => { e.preventDefault(); showSummary(); };
-
-async function confirmOrder() {
-  const btn = document.getElementById('finalBtn');
-  btn.disabled = true; btn.innerText = "SENDING...";
-  const orderID = "MFC-" + Date.now().toString().slice(-6);
-  const payload = { func: "order", orderID: orderID, name: pending.name, email: pending.email, contact: pending.contact, address: pending.address, items: pending.items.map(i => `${i.name} x${i.qty}`).join(", "), total: pending.total, payment: pending.payment, notes: pending.notes + (pending.payment === "Cash" ? " | Change for: " + pending.changeFor : "") };
-
-  try {
-    await fetch(BASE, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(payload).toString() });
-    
-    // Transform modal into Success/Receipt view
-    document.getElementById('modalTitle').innerText = "Order Placed";
-    document.getElementById('receiptHeader').style.display = "block";
-    
-    // Update Details review to include Order ID
-    document.getElementById('detailsReview').insertAdjacentHTML('afterbegin', `<strong>Reference ID:</strong> <span style="color:var(--premium-gold); font-weight:700;">${orderID}</span><br>`);
-    
-    // Replace Confirm Button with Print and Home buttons
-    document.getElementById('finalBtn').style.display = "none";
-    document.getElementById('backBtn').style.display = "none";
-    
-    document.getElementById('postOrderActions').innerHTML = `
-      <div style="margin: 20px 0;">
-        <button class="main" onclick="window.print()" style="background:var(--premium-gold); margin-bottom:10px;">Print / Save Receipt</button>
-        <button class="main" onclick="location.reload()" style="background:var(--premium-dark);">Return Home</button>
+  Object.entries(cats).forEach(([cat, items]) => {
+    const sec = document.createElement('div');
+    sec.innerHTML = `
+      <div class="cat-header">
+        <span class="dot"></span>
+        <h2>${cat}</h2>
       </div>
     `;
+    const grid = document.createElement('div');
+    grid.className = 'menu-grid';
 
-  } catch (err) {
-    alert("Order connection issue. Check your email or contact us.");
-    btn.disabled = false; btn.innerText = "Confirm Order";
+    items.forEach(item => {
+      let rawName = item.Item || '';
+      let name = rawName, desc = '';
+      if (rawName.includes(' - ')) {
+        const parts = rawName.split(' - ');
+        name = parts.shift();
+        desc = parts.join(' - ');
+      }
+      const price  = Number(item.Price || 0);
+      const img    = item.Image || 'https://via.placeholder.com/160x120?text=No+Image';
+      const sold   = item.SoldOut === true || item.SoldOut === 'TRUE' || item.SoldOut === true;
+      const key    = name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_-]/g,'').toLowerCase();
+      priceMap[key] = { price, name, desc };
+
+      const card = document.createElement('div');
+      card.className = 'menu-card' + (sold ? ' sold-out' : '');
+      card.dataset.key = key;
+      card.innerHTML = `
+        <div class="card-img-wrap">
+          <img data-src="${img}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="${name}" loading="lazy">
+          ${sold ? '<div class="sold-out-badge">Sold Out</div>' : ''}
+        </div>
+        <div class="select-ring">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+            <path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-name">${name}</div>
+          ${desc ? `<div class="card-desc">${desc}</div>` : ''}
+          <div class="card-footer">
+            <span class="card-price">₱${price}</span>
+            <div class="card-qty" id="qty_${key}">
+              <button onclick="changeQty(event,'${key}',-1)">−</button>
+              <input type="number" id="qnum_${key}" value="1" min="1" max="99" onchange="updateQty('${key}',this.value)">
+              <button onclick="changeQty(event,'${key}',1)">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+      if (!sold) card.addEventListener('click', e => {
+        if (e.target.closest('.card-qty')) return;
+        toggleItem(key);
+      });
+      grid.appendChild(card);
+    });
+    sec.appendChild(grid);
+    container.appendChild(sec);
+  });
+
+  initLazy();
+  initZoom();
+}
+
+function toggleItem(key) {
+  const card = document.querySelector(`.menu-card[data-key="${key}"]`);
+  if (selectedItems[key]) {
+    delete selectedItems[key];
+    card.classList.remove('selected');
+  } else {
+    selectedItems[key] = 1;
+    card.classList.add('selected');
+    document.getElementById(`qnum_${key}`).value = 1;
   }
+  updateBar();
 }
 
-function openStatusModal() { 
-  document.getElementById('statusModal').style.display = "flex"; 
-  document.getElementById('statusResult').innerHTML = "";
+function changeQty(e, key, delta) {
+  e.stopPropagation();
+  const inp = document.getElementById(`qnum_${key}`);
+  let v = Math.max(1, Math.min(99, (parseInt(inp.value)||1) + delta));
+  inp.value = v;
+  selectedItems[key] = v;
+  updateBar();
 }
 
-async function checkStatus(id) {
-  const searchId = id || document.getElementById('statusIdInput').value;
-  if(!searchId) return;
-  const res = document.getElementById('statusResult');
-  res.innerText = "Searching database...";
-  try {
-    const r = await fetch(BASE + "?func=checkStatus&id=" + searchId);
-    const d = await r.json();
-    if(d.found) {
-      res.innerHTML = `
-        <div style="background:#f9f9f9; padding:15px; border:1px solid #eee; border-radius:8px; text-align: center;">
-          <p style="margin:0; font-size:0.8rem; color:#666;">Current Status for ${searchId}:</p>
-          <strong style="color:var(--premium-gold); font-size:1.4rem;">${d.status}</strong>
-        </div>`;
-    } else {
-      res.innerHTML = `<p style="color:red; text-align: center;">ID not found. Please verify your Reference ID.</p>`;
-    }
-  } catch(e) { res.innerText = "Network error. Please try again later."; }
+function updateQty(key, val) {
+  selectedItems[key] = Math.max(1, parseInt(val)||1);
+  updateBar();
 }
 
-loadMenu();
+function updateBar() {
+  let total = 0;
+  Object.entries(selectedItems).forEach(([k, qty]) => {
+    total += (priceMap[k]?.price || 0) * qty;
+  });
+  document.getElementById('barTotal').textContent = `₱${total.toLocaleString()}`;
+}
+
+/* ── Drawer ── */
+function openFormDrawer() {
+  if (Object.keys(selectedItems).length === 0) {
+    alert('Wala pang napili! Select at least one item.');
+    return;
+  }
+  renderDrawerSummary();
+  document.getElementById('formDrawer').classList.add('open');
+}
+function closeFormDrawer() {
+  document.getElementById('formDrawer').classList.remove('open');
+}
+
+function renderDrawerSummary() {
+  let html = '';
+  let total = 0;
+  Object.entries(selectedItems).forEach(([k, qty]) => {
+    const p = priceMap[k];
+    if (!p) return;
+    const sub = p.price * qty;
+    total += sub;
+    html += `<div class="sum-item"><span>${p.name} × ${qty}</span><span>₱${sub}</span></div>`;
+  });
+  html += `<div class="order-total-row"><span>Total</span><span>₱${total.toLocaleString()}</span></div>`;
+  document.getElementById('drawerSummary').innerHTML = html;
+}
+
+/* ── Confirm modal ── */
+function openConfirmModal() {
+  const name    = document.getElementById('f_name').value.trim();
+  const contact = document.getElementById('f_contact').value.trim();
+  const unit    = document.getElementById('f_unit').value.trim().toUpperCase();
+  const payment = document.getElementById('f_payment').value;
+
+  if (!name || !contact || !unit) { alert('Please fill in Name, Contact, and Unit No.'); return; }
+  if (!UNIT_RE.test(unit)) { alert('Invalid Unit No. format.'); return; }
+
+  document.getElementById('modalUnitPreview').textContent = `Unit ${unit}`;
+
+  let summaryHtml = `<b>${name}</b> · ${contact}<br>Payment: ${payment}<br><br>`;
+  let total = 0;
+  Object.entries(selectedItems).forEach(([k, qty]) => {
+    const p = priceMap[k];
+    if (!p) return;
+    total += p.price * qty;
+    summaryHtml += `${p.name} × ${qty} = ₱${p.price * qty}<br>`;
+  });
+  summaryHtml += `<br><b>Total: ₱${total.toLocaleString()}</b>`;
+  document.getElementById('modalSummary').innerHTML = summaryHtml;
+
+  closeFormDrawer();
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeConfirmModal() {
+  document.getElementById('confirmModal').classList.remove('open');
+  document.getElementById('formDrawer').classList.add('open');
+}
+
+/* ── Submit ── */
+function submitOrder() {
+  const btn = document.getElementById('confirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending… ✌️';
+
+  const name    = document.getElementById('f_name').value.trim();
+  const contact = document.getElementById('f_contact').value.trim();
+  const unit    = document.getElementById('f_unit').value.trim().toUpperCase();
+  const email   = document.getElementById('f_email').value.trim();
+  const payment = document.getElementById('f_payment').value;
+  const notes   = document.getElementById('f_notes').value.trim();
+
+  const orderID = 'MFC-' + Date.now();
+  const itemsList = [];
+  let total = 0;
+  Object.entries(selectedItems).forEach(([k, qty]) => {
+    const p = priceMap[k];
+    if (!p) return;
+    total += p.price * qty;
+    itemsList.push(`${p.name} × ${qty}`);
+  });
+
+  const gcashInfo = `GCash: ${GCASH_NO} | Maya: ${MAYA_NO} | Name: RE*A P`;
+
+  const fd = new FormData();
+  fd.append('func', 'order');
+  fd.append('orderID', orderID);
+  fd.append('name', name);
+  fd.append('contact', contact);
+  fd.append('address', unit);
+  fd.append('email', email);
+  fd.append('payment', payment);
+  fd.append('items', itemsList.join(', '));
+  fd.append('total', total);
+  fd.append('notes', notes + (notes ? '\n' : '') + gcashInfo);
+
+  fetch(ORDER_URL, { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(() => {
+      document.getElementById('confirmModal').classList.remove('open');
+      showSuccess(name, itemsList, total, payment);
+    })
+    .catch(() => {
+      alert('❌ Failed to place order. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Yes, place order!';
+    });
+}
+
+function showSuccess(name, items, total, payment) {
+  const panel = document.getElementById('successPanel');
+  panel.style.display = 'block';
+  document.getElementById('lastOrderSummary').innerHTML =
+    `<b>Order for ${name}</b><br>${items.join('<br>')}<br><b>Total: ₱${total.toLocaleString()}</b>`;
+
+  if (payment === 'GCash' || payment === 'Maya') {
+    const gcashBox = document.getElementById('gcashBox');
+    gcashBox.style.display = 'block';
+    document.getElementById('gcashNum').textContent =
+      payment === 'Maya' ? MAYA_NO : GCASH_NO;
+  }
+
+  selectedItems = {};
+  updateBar();
+  document.querySelectorAll('.menu-card.selected').forEach(c => c.classList.remove('selected'));
+  document.getElementById('reviewOrderBtn').textContent = 'Order Again →';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── Lazy load ── */
+function initLazy() {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('img[data-src]').forEach(img => { img.src = img.dataset.src; });
+    return;
+  }
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        img.onerror = () => img.src = 'https://via.placeholder.com/160x120?text=No+Image';
+        o.unobserve(img);
+      }
+    });
+  }, { rootMargin: '300px' });
+  document.querySelectorAll('img[data-src]').forEach(img => obs.observe(img));
+}
+
+/* ── Image zoom ── */
+function initZoom() {
+  document.querySelectorAll('.card-img-wrap img').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', e => {
+      e.stopPropagation();
+      document.getElementById('zoomImg').src = img.dataset.src || img.src;
+      document.getElementById('imgZoomOverlay').classList.add('open');
+    });
+  });
+}
 </script>
