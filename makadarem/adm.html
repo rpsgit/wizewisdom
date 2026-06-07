@@ -35,12 +35,6 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 .btn-save-orders { background: var(--mfc-gold); font-size: 0.8rem; } 
 .paid-badge { color: #27ae60; font-weight: bold; font-size: 0.75rem; border: 1px solid #27ae60; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-top: 5px; } 
 .total-label { display: block; font-weight: 600; color: var(--mfc-gold); margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px dashed #ddd; padding-bottom: 4px; }
-
-/* Filter UI Bar Styles */
-.filter-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; background: #fdfdfd; padding: 15px; border: 1px solid #eaeaea; border-radius: 6px; margin-bottom: 20px; }
-.filter-group { display: flex; flex-direction: column; }
-.filter-group label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: #555; }
-.filter-group input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; }
 </style> 
 
 <div class="page"> 
@@ -79,22 +73,6 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
     <button onclick="saveAllOrderStatuses()" class="btn-save-orders" id="saveOrdersBtn">Save Changes</button> 
   </div> 
 
-  <!-- Filter Controls Block -->
-  <div class="filter-bar">
-    <div class="filter-group">
-      <label for="filterMonth">Filter by Month</label>
-      <input type="text" id="filterMonth" placeholder="e.g. 06 or June" oninput="applyLiveFilters()">
-    </div>
-    <div class="filter-group">
-      <label for="filterName">Search Name</label>
-      <input type="text" id="filterName" placeholder="Customer Name..." oninput="applyLiveFilters()">
-    </div>
-    <div class="filter-group">
-      <label for="filterUnit">Search Unit Number</label>
-      <input type="text" id="filterUnit" placeholder="Unit / Room..." oninput="applyLiveFilters()">
-    </div>
-  </div>
-
   <div class="table-container"> 
     <table> 
       <thead> 
@@ -123,7 +101,6 @@ td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-a
 <script> 
 const BASE = "https://script.google.com/macros/s/AKfycbxpkVursbR5CH-6Ko5MHaujepVGGnum12-mtO-qnqvpHNUnYi0DMJpc2RZGcjo-TQf3/exec"; 
 let isDirty = false;
-let allOrdersRawData = []; // Cache variable to hold unfiltered array data
 
 // Core communication function
 async function apiPost(params) { 
@@ -163,39 +140,156 @@ function loadSettings() {
   }); 
 } 
 
-// Placeholder function mapping to capture array changes during initial load sequence
-function loadOrders() {
-  fetch(BASE + "?func=getOrders").then(r => r.json()).then(orders => {
-    allOrdersRawData = orders; // Save copy for local text inputs filtering
-    applyLiveFilters();
-  });
-}
+async function saveSettingsInfo() { 
+  const btn = event.target; 
+  const original = btn.textContent; 
+  btn.textContent = "SYNCING..."; 
+  await apiPost({ 
+    func: "updatePaymentInfo", 
+    gcash_number: document.getElementById('gcashNum').value, 
+    maya_number: document.getElementById('mayaNum').value, 
+    notification_email: document.getElementById('adminEmail').value, 
+    messenger_link: document.getElementById('messengerLink').value, 
+    telegram_token: document.getElementById('tgToken').value, 
+    telegram_chat_id: document.getElementById('tgChat').value, 
+    pushover_user_key: document.getElementById('pushUser').value, 
+    pushover_api_token: document.getElementById('pushToken').value 
+  }); 
+  btn.textContent = "SUCCESS!"; 
+  setTimeout(() => { btn.textContent = original; }, 2000); 
+} 
 
-// Evaluates structural base exclusions + text inputs constraints synchronously
-function applyLiveFilters() {
-  const monthVal = document.getElementById('filterMonth').value.trim().toLowerCase();
-  const nameVal = document.getElementById('filterName').value.trim().toLowerCase();
-  const unitVal = document.getElementById('filterUnit').value.trim().toLowerCase();
+async function toggleStoreStatus() { 
+  const btn = document.getElementById('toggleStore'); 
+  const currentState = (btn.textContent === "Close Kitchen"); 
+  btn.disabled = true; btn.textContent = "..."; 
+  await apiPost({ func: "toggleClose", status: String(currentState) }); 
+  setTimeout(() => { loadSettings(); btn.disabled = false; }, 1200); 
+} 
+
+// 2. Menu Functions
+function loadMenu() { 
+  fetch(BASE + "?func=getMenu").then(r => r.json()).then(data => { 
+    document.getElementById('menuBody').innerHTML = data.map(m => ` 
+      <tr> 
+        <td><input type="text" class="menu-input" value="${m.Item}" id="name-${m.row}"></td> 
+        <td><input type="text" class="menu-input" value="${m.Category}" id="cat-${m.row}"></td> 
+        <td><input type="number" class="menu-input" value="${m.Price}" id="price-${m.row}"></td> 
+        <td style="text-align:center;"><input type="checkbox" id="sold-${m.row}" ${String(m.SoldOut)==='true'?'checked':''}></td> 
+        <td><button onclick="saveMenuRow(${m.row}, this)" style="padding:5px 10px; font-size:0.6rem;">UPDATE</button></td> 
+      </tr> 
+    `).join(''); 
+  }); 
+} 
+
+async function saveMenuRow(rowId, btn) { 
+  const original = btn.textContent; btn.textContent = "..."; 
+  await apiPost({ 
+    func: "updateMenuItem", 
+    row: rowId, 
+    item: document.getElementById(`name-${rowId}`).value, 
+    category: document.getElementById(`cat-${rowId}`).value, 
+    price: document.getElementById(`price-${rowId}`).value, 
+    soldOut: String(document.getElementById(`sold-${rowId}`).checked) 
+  }); 
+  btn.textContent = "SAVED"; 
+  setTimeout(() => { btn.textContent = original; }, 1000); 
+} 
+
+// 3. Order Functions (Optimized)
+function loadOrders() { 
+  if (isDirty) return; // Don't refresh if user is currently editing
+
+  fetch(BASE + "?func=getOrders").then(r => r.json()).then(data => { 
+    const ob = document.getElementById('ordersBody'); 
+    if (!data || !data.length) { ob.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No orders found.</td></tr>"; return; } 
+      
+    const stages = ["Order Placed", "Order Received", "Cooking", "Packing", "Delivering", "Delivered", "Cancelled"]; 
+      
+    ob.innerHTML = [...data].reverse().map(o => { 
+      const currentStatus = o['Order Status'] || o.Status || "Order Placed"; 
+      const isDelivered = currentStatus === 'Delivered'; 
+      const isCancelled = currentStatus === 'Cancelled'; 
+      const isPaid = (o.Paid === "PAID" || o.paid === "PAID"); 
+      const isInactive = isDelivered || isCancelled; 
+        
+      let options = stages.map(s => `<option value="${s}" ${currentStatus === s ? 'selected' : ''}>${s}</option>`).join(''); 
+      
+      let rowClass = ''; 
+      if (isDelivered && !isPaid) { rowClass = 'unpaid-delivered-row'; } 
+      else if (isDelivered) { rowClass = 'completed-row'; } 
+      else if (isCancelled) { rowClass = 'cancelled-row'; } 
+        
+      const itemList = o.Items ? o.Items.split(',').map((item, index) => `${index + 1}. ${item.trim()}`).join('<br>') : ''; 
+      const payDisplay = o['Payment Method'] || o.Payment || o.payment || ''; 
+      const notesDisplay = o.Notes || o.notes || ''; 
+      const addressDisplay = o.Address || o.address || '';
+      const orderTotal = o.Total || o['Order Total'] || o.total || '';
+
+      return ` 
+        <tr class="${rowClass}"> 
+          <td> 
+            <small>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString() : ''}</small><br><strong>${o.OrderID || o['Order ID']}</strong> 
+            ${isPaid ? '<br><span class="paid-badge">PAID</span>' : ''} 
+          </td> 
+          <td><strong>${o.Name}</strong><br><small>${o.Contact || ''}</small></td> 
+          <td class="details-text">
+            ${orderTotal ? `<span class="total-label">TOTAL: ₱${orderTotal}</span>` : ''}
+            ${itemList}
+          </td> 
+          <td class="details-text"> 
+            ${payDisplay ? `<span class="payment-tag">💳 ${payDisplay}</span>` : ''} 
+            <div style="margin-bottom:5px; color:#333;">${addressDisplay}</div> 
+            ${notesDisplay ? `<span class="note-tag">Note: ${notesDisplay}</span>` : ''} 
+          </td> 
+          <td style="text-align:center;"> 
+             <input type="checkbox" class="paid-toggle" onchange="markChanged(this)" data-id="${o.OrderID || o['Order ID']}" ${isPaid ? 'checked' : ''}> 
+          </td> 
+          <td> 
+            <select class="menu-input status-select" onchange="markChanged(this)" data-id="${o.OrderID || o['Order ID']}" ${isInactive ? 'disabled' : ''}> 
+              ${options} 
+            </select> 
+          </td> 
+        </tr> 
+      `; 
+    }).join(''); 
+  }); 
+} 
+
+async function saveAllOrderStatuses() { 
+  const btn = document.getElementById('saveOrdersBtn'); 
+  const modifiedRows = document.querySelectorAll('.needs-save'); 
   
-  const tbody = document.getElementById('ordersBody');
-  tbody.innerHTML = '';
+  if (modifiedRows.length === 0) {
+    alert("No changes detected.");
+    return;
+  }
   
-  allOrdersRawData.forEach(o => {
-    const status = (o.status || '').toLowerCase();
-    const isPaid = !!o.paid;
-    
-    // Core structural exclusion requirement: 
-    // Do not show if it is Delivered, Cancelled, or already Paid.
-    if (status === 'delivered' || status === 'cancelled' || isPaid) {
-      return; 
-    }
-    
-    // Evaluate Custom Text Inputs Rules
-    const dateStr = (o.date || '').toLowerCase();
-    const nameStr = (o.name || '').toLowerCase();
-    const addressStr = (o.address || '').toLowerCase();
-    
-    if (monthVal && !dateStr.includes(monthVal)) return;
-    if (nameVal && !nameStr.includes(nameVal)) return;
-    if (unitVal && !addressStr.includes(unitVal)) return;
-    
+  const originalText = btn.textContent; 
+  btn.disabled = true; btn.textContent = "SAVING..."; 
+  
+  const promises = Array.from(modifiedRows).map(row => { 
+    const sel = row.querySelector('.status-select');
+    const orderId = sel.getAttribute('data-id'); 
+    const paidBox = row.querySelector('.paid-toggle'); 
+    return apiPost({  
+      func: "markCompleted", id: orderId, status: sel.value, paid: String(paidBox.checked) 
+    }); 
+  }); 
+  
+  await Promise.all(promises); 
+  btn.textContent = "SAVED!"; 
+  isDirty = false; 
+
+  setTimeout(() => {  
+    btn.disabled = false; btn.textContent = originalText; 
+    loadOrders();  
+  }, 1000); 
+} 
+
+// INITIALIZE EVERYTHING
+loadSettings(); 
+loadMenu(); 
+loadOrders(); 
+setInterval(loadOrders, 30000); 
+</script>
